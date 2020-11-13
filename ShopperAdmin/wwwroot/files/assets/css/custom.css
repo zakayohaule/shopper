@@ -1,0 +1,85 @@
+body {
+  font: 400 14px/20px Roboto,Helvetica Neue,sans-serif;
+}
+.img-logo {
+  width: 40%
+}
+.mboard .mboard-navbar .mboard-navigatio-lavel {
+  border: none;
+}
+
+.modal-backdrop {
+    background-color: #00000082;
+}
+.modal-dialog {
+    margin: 10em auto;
+}
+.modal-content {
+  box-shadow: 0 11px 15px -7px rgba(0,0,0,.2), 0 24px 38px 3px rgba(0,0,0,.14), 0 9px 46px 8px rgba(0,0,0,.12);
+}
+
+.form-control {
+    font-size: 16px;
+    border-radius: 6px;
+}
+.btn-success {
+  color: white !important;
+}
+
+.dataTables_wrapper > div[class='row']:first-child > div:first-child{
+  display: none
+}
+
+.dataTables_wrapper > div[class='row']:first-child > div{
+  width: 100%;
+  max-width: 100%;
+  flex: 0 0 99%;
+}
+.dataTables_wrapper .dataTables_filter {
+	width: 100%;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+	width: 100%;
+}
+div.dataTables_wrapper div.dataTables_filter input {
+  width: 100%;
+}
+
+.dataTables_wrapper .dataTables_filter label input {
+	border: none;
+	border-radius: 0px;
+	width: 100%;
+	border-bottom: 1.5px solid;
+  border-radius: none
+	transition: all .5s ease-in;
+}
+
+.dataTables_wrapper .dataTables_filter label input:active, .dataTables_wrapper .dataTables_filter label input:focus {
+	outline: none;
+	border: none;
+	border-bottom: 1.5px solid #e91e63;
+}
+
+.dataTables_wrapper thead tr td {
+	border-bottom: 1.5px solid;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+	border: none !important;
+	box-shadow: none;
+	padding: 0.2em .5em;
+	font-size: .9em;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button svg {
+	width: 16px;
+}
+
+.dataTables_wrapper tbody tr {
+	font-size: .92em;
+}
+
+.dataTables_wrapper .dataTables_info {
+	font-size: .9em;
+}

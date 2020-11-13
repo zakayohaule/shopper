@@ -1,0 +1,20 @@
+﻿@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <strong><p>@ViewBag.Success</p></strong>
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        <strong><p>@ViewBag.Error</p></strong>
+    </div>
+}
+
+@if (ViewBag.Info != null)
+{
+    <div class="alert alert-info">
+        <strong><p>@ViewBag.Info</p></strong>
+    </div>
+}

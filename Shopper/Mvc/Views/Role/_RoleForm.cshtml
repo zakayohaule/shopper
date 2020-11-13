@@ -1,0 +1,11 @@
+﻿@model Shared.Mvc.Entities.Identity.Role
+
+<div class="form-group col-12">
+    <th:label asp-for="DisplayName"></th:label>
+    <th:input asp-for="DisplayName" class="form-control"></th:input>
+    <th:span asp-validation-for="DisplayName" class="text-danger"></th:span>
+</div>
+
+<div class="form-group col-12 text-right">
+    <button type="submit" class="btn btn-primary" name="button">Submit</button>
+</div>

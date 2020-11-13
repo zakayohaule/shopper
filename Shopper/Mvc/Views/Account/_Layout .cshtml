@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 2 | Login</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <th:environment names="Development">
+        <th:link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css"/>
+        <th:link rel="stylesheet" href="~/lib/font-awesome/css/all.css"/>
+        <th:link rel="stylesheet" href="~/lib/ionicons/css/ionicons.css"/>
+
+        <th:link rel="stylesheet" href="~/css/animation.css"/>
+        <th:link rel="stylesheet" href="~/lib/admin-lte/dist/css/adminlte.min.css" asp-append-version="true"/>
+
+    </th:environment>
+    <th:environment names="Staging,Production">
+        <th:link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" asp-append-version="true"/>
+        <th:link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" asp-append-version="true"/>
+        <th:link rel="stylesheet" href="~/lib/ionicons/css/ionicons.min.css" asp-append-version="true"/>
+
+        <th:link rel="stylesheet" href="~/css/animation.css" asp-append-version="true"/>
+        <th:link rel="stylesheet" href="~/lib/admin-lte/dist/css/adminlte.min.css" asp-append-version="true"/>
+        @* <th:link rel="stylesheet" href="~/css/login.css" asp-append-version="true" /> *@
+
+    </th:environment>
+
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <a href="#"><b>Admin</b>LTE</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+      <div class="card-body login-card-body">
+          @await Component.InvokeAsync("PageAlert")
+          @RenderBody();
+      </div>
+    <!-- /.login-card-body -->
+  </div>
+</div>
+<th:environment names="Development">
+    <th:script src="~/lib/jquery/jquery.js" asp-append-version="true"></th:script>
+    <th:script src="~/lib/bootstrap/js/bootstrap.js" asp-append-version="true"></th:script>
+    <th:script src="~/lib/admin-lte/dist/js/adminlte.js" asp-append-version="true"></th:script>
+    <th:script src="~/js/site.js" asp-append-version="true"></th:script>
+</th:environment>
+<th:environment names="Staging,Production">
+    <th:script src="~/lib/jquery/jquery.min.js" asp-append-version="true"></th:script>
+    <th:script src="~/lib/bootstrap/js/bootstrap.min.js" asp-append-version="true"></th:script>
+    <th:script src="~/lib/admin-lte/dist/js/adminlte.min.js" asp-append-version="true"></th:script>
+    <th:script src="~/js/site.min.js" asp-append-version="true"></th:script>
+</th:environment>
+
+@section scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
+
+</body>
+</html>

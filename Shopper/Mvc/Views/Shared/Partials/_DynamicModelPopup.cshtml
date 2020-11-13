@@ -1,0 +1,49 @@
+﻿@using Shopper.Extensions.Helpers
+@using Shared.Extensions.Helpers
+@{
+    var title = ViewData["Modal-Title"] as string;
+    if (title.IsNull() || title?.Length == 0)
+    {
+        title = "Edit";
+    }
+    var size = ViewData["Modal-Size"] as string;
+    if (size.IsNull() || size?.Length == 0)
+    {
+        size = "";
+    }
+}
+<div class="modal" id="edit-modal">
+    <div class="modal-dialog @size">
+        <div class="modal-content">
+            <div class="col-12 mt-3">
+                <h5 id="modal-title">
+                    <b>@title</b>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <i class="zmdi zmdi-close-circle-o"></i>
+                </button>
+                <hr>
+            </div>
+            <div class="modal-body" id="edit-modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script >
+    var openFormModal = function(url, title=null){
+        $.ajax({
+            type: "GET",
+            url: url.toString(),
+            success:function(response){
+                if (title){
+                    $("#modal-title").html(title)
+                }
+                $("#edit-modal-body").html(response);
+                $("#edit-modal").modal("show");
+            } 
+           })
+    }
+    </script>

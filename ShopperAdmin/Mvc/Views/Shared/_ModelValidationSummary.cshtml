@@ -1,0 +1,5 @@
+﻿@using Microsoft.AspNetCore.Mvc.ModelBinding
+@if (ViewContext.ModelState.GetValidationState("") == ModelValidationState.Invalid)
+{
+    <th:div asp-validation-summary="ModelOnly" class="text-center alert alert-danger background-danger"></th:div>
+}

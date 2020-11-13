@@ -1,0 +1,16 @@
+﻿@using ShopperAdmin.Extensions.Helpers
+@using IdentityServer4.Extensions
+@{
+    ViewData["Title"] = "Home";
+}
+<div class="page-body">
+    <div class="row">
+        <div class="text-center">
+            <h1 class="display-4">Welcome</h1>
+            <h3>@User.GetUserFullName()</h3>
+            <h3>@User.GetDisplayName()</h3>
+            <h3>@User.Identity.Name</h3>
+        </div>
+
+    </div>
+</div>

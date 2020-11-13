@@ -1,0 +1,37 @@
+﻿<th:script src="~/lib/clippy/clippy.js"></th:script>
+<script>
+function setTooltip(buttonId, message = 'Copied to clipboard!') {
+  $(buttonId).tooltip('hide')
+    .attr('data-original-title', message)
+    .tooltip('show');
+}
+
+function hideTooltip(buttonId) {
+  setTimeout(function() {
+    $(buttonId).tooltip('hide');
+  }, 1000);
+}
+
+// Clipboard
+function copyToClipboard(buttonId){
+        buttonId = '#'+buttonId;
+        
+        $(buttonId).tooltip({
+          trigger: 'click',
+          placement: 'bottom'
+        });
+        
+        var clipboard = new Clipboard(buttonId);
+        clipboard.on('success', function(e) {
+            e.clearSelection();
+          setTooltip(buttonId);
+          hideTooltip(buttonId);
+        });
+        
+        clipboard.on('error', function(e) {
+            e.clearSelection();
+          setTooltip(buttonId, "Could not copy!");
+          hideTooltip(buttonId);
+        });
+    }
+</script>

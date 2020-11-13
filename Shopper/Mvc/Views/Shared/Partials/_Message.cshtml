@@ -1,0 +1,30 @@
+﻿@using Shopper.Extensions.Helpers
+@using Shared.Extensions.Helpers
+
+@if (TempData["Success"].IsNotNull())
+{
+    <div class="alert alert-success icons-alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="icofont icofont-close-line-circled"></i>
+        </button>
+        <p><strong>Success!</strong> @TempData["Success"]</p>
+    </div>
+}
+@if (TempData["Info"].IsNotNull())
+{
+    <div class="alert alert-info icons-alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="icofont icofont-close-line-circled"></i>
+        </button>
+        <p><strong>Info!</strong> @TempData["Info"]</p>
+    </div>
+}
+@if (TempData["Error"].IsNotNull())
+{
+    <div class="alert alert-danger icons-alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="icofont icofont-close-line-circled"></i>
+        </button>
+        <p><strong>Error!</strong> @TempData["Error"]</p>
+    </div>
+}

@@ -1,0 +1,28 @@
+﻿@if (Model == "verified")
+{
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <b><i class="icon fa fa-check"></i> Error!</b> Your email has been verified. Please login with the password that was sent in your verification email!
+    </div>
+}
+@if (Model == "unverified")
+{
+    <div class="alert alert-warning alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <b><i class="icon fa fa-warning"></i> Warning!</b>
+        <p>Your email has not been verified.!</p>
+        <p>
+            If you didn't receive a verification email,
+            <strong>
+                <th:a asp-controller="Account" asp-action="VerificationEmail">click here to resend</th:a>
+            </strong>
+        </p>
+    </div>
+}
+@if (Model == "sent")
+{
+    <div class="alert alert-info alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <b><i class="icon fa fa-info"></i> Error!</b> A verification link and a password has been sent to your email, please check your email to verify your email!
+    </div>
+}

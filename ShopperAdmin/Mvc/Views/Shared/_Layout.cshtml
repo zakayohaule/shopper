@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewData["Title"] - API Auth Server</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="#">
+    <meta name="keywords" content="">
+    <meta name="author" content="#">
+    <!-- Favicon icon -->
+    <th:link rel="icon" href="~/files/assets/images/favicon.ico" type="image/x-icon"></th:link>
+    <!-- Google font-->
+    @* <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet"> *@
+    <!-- Required Fremwork -->
+    <th:link rel="stylesheet" type="text/css" href="~/files/vendors/bootstrap/css/bootstrap.min.css"></th:link>
+    <th:link rel="stylesheet" type="text/css" href="~/files/assets/icon/feather/css/feather.css"></th:link>
+    <th:link rel="stylesheet" type="text/css" href="~/files/assets/icon/font-awesome/css/font-awesome.min.css"></th:link>
+    <th:link rel="stylesheet" type="text/css" href="~/files/assets/icon/material-design/css/material-design-iconic-font.min.css"></th:link>
+
+    <!-- Include stylesheet -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <!-- Style.css -->
+    <th:link rel="stylesheet" type="text/css" href="~/files/assets/css/style.css"></th:link>
+    <th:link rel="stylesheet" type="text/css" href="~/files/assets/css/jquery.mCustomScrollbar.css"></th:link>
+    <th:link rel="stylesheet" type="text/css" href="~/files/assets/css/custom.css"></th:link>
+    @await RenderSectionAsync("css", false)
+</head>
+
+<body>
+
+<div id="mboard" class="mboard">
+    <div class="mboard-overlay-box"></div>
+    <div class="mboard-container navbar-wrapper">
+
+        <th:partial name="Partials/_Header"/>
+
+        <div class="mboard-main-container">
+            <div class="mboard-wrapper">
+
+                <th:partial name="Partials/_SideBar"/>
+
+                <div class="mboard-content">
+                    <div class="mboard-inner-content">
+                        <div class="main-body">
+                            <div class="page-wrapper">
+                                @RenderBody()
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function searchSoftware(){
+    if ($("#software-search").hasClass("open")){
+       $("#searchSoftwareForm").submit(); 
+    } // Submit the form
+}
+</script>
+
+<!-- Required Jquery -->
+<th:script type="text/javascript" src="~/files/vendors/jquery/js/jquery.min.js"></th:script>
+<th:script type="text/javascript" src="~/files/vendors/jquery-ui/js/jquery-ui.min.js"></th:script>
+<th:script type="text/javascript" src="~/files/vendors/popper.js/js/popper.min.js"></th:script>
+<th:script type="text/javascript" src="~/files/vendors/bootstrap/js/bootstrap.min.js"></th:script>
+<!-- jquery slimscroll js -->
+<th:script type="text/javascript" src="~/files/vendors/jquery-slimscroll/js/jquery.slimscroll.js"></th:script>
+<!-- modernizr js -->
+<th:script type="text/javascript" src="~/files/vendors/modernizr/js/modernizr.js"></th:script>
+<!-- Include the Quill library -->
+<!-- Accordion js -->
+<th:script type="text/javascript" src="~/files/assets/pages/accordion/accordion.js"></th:script>
+<!-- Chart js -->
+<th:script type="text/javascript" src="~/files/vendors/chart.js/js/Chart.js"></th:script>
+<!-- amchart js -->
+
+<th:script src="~/files/vendors/datatables.net\js\jquery.dataTables.min.js"></th:script>
+<th:script src="~/files/vendors/datatables.net-buttons\js\dataTables.buttons.min.js"></th:script>
+<th:script src="~/files/vendors/datatables.net-buttons\js\buttons.print.min.js"></th:script>
+<th:script src="~/files/vendors/datatables.net-buttons\js\buttons.html5.min.js"></th:script>
+<th:script src="~/files/vendors/datatables.net-bs4\js\dataTables.bootstrap4.min.js"></th:script>
+<th:script src="~/files/vendors/datatables.net-responsive\js\dataTables.responsive.min.js"></th:script>
+<th:script src="~/files/vendors/datatables.net-responsive-bs4\js\responsive.bootstrap4.min.js"></th:script>
+<th:script src="~/files/assets/pages/widget/amchart/amcharts.js"></th:script>
+<th:script src="~/files/assets/pages/widget/amchart/serial.js"></th:script>
+<th:script src="~/files/assets/pages/widget/amchart/light.js"></th:script>
+<th:script src="~/files/assets/js/jquery.mCustomScrollbar.concat.min.js"></th:script>
+@* <th:script type="text/javascript" src="~/files/assets/js/SmoothScroll.js"></th:script> *@
+<th:script src="~/files/assets/js/mboard.min.js"></th:script>
+
+<!-- custom js -->
+<th:script src="~/files/assets/js/vartical-layout.min.js"></th:script>
+<th:script type="text/javascript" src="~/files/assets/pages/dashboard/custom-dashboard.js"></th:script>
+<th:script type="text/javascript" src="~/files/assets/js/script.js"></th:script>
+
+@await RenderSectionAsync("scripts", false)
+</body>
+
+</html>

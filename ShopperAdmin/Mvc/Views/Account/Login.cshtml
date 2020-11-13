@@ -1,0 +1,61 @@
+﻿@model Shared.Mvc.ViewModels.LoginModel;
+@{
+    Layout = "_Layout ";
+    var emailVerified = TempData["EmailVerification"] as string;
+}
+
+<th:form class="md-float-material form-material" asp-controller="Account" asp-action="Login" asp-route-returnTo="@ViewContext.HttpContext.Request.Query["return_to"]">
+    <div class="text-center">
+        <th:img src="~\files\assets\images\logo.png" alt="logo.png"/>
+    </div>
+    <div class="auth-box card">
+        <div class="card-block">
+            <div class="row m-b-20">
+                <div class="col-md-12">
+                    <h3 class="text-center">Login In</h3>
+                </div>
+            </div>
+
+            @if (ViewBag.Message != null)
+            {
+                <span>@ViewBag.Message</span>
+            }
+
+            <th:partial name="_Message"></th:partial>
+            <th:partial name="_ModelValidationSummary"></th:partial>
+            <th:partial name="_EmailVerificationMessage" model="emailVerified"></th:partial>
+
+            <br>
+            <div class="form-group form-primary">
+                <th:input asp-for="Email" class="form-control" placeholder="Your Email Address"></th:input>
+                <th:span class="form-bar text-danger" asp-validation-for="Email"></th:span>
+            </div>
+            <div class="form-group form-primary">
+                <th:input asp-for="Password" class="form-control" placeholder="Password"></th:input>
+                <th:span asp-validation-for="Password" class="text-danger"></th:span>
+            </div>
+            <div class="row m-t-25 text-left">
+                <div class="col-12">
+                    <div class="checkbox-fade fade-in-primary d-">
+                        <th:input asp-for="RememberMe" class="cr-icon icofont icofont-ui-check txt-primary"></th:input>
+                        <th:label asp-for="RememberMe" class="text-inverse"></th:label>
+                    </div>
+                    <div class="forgot-phone text-right f-right">
+                        <th:a asp-controller="Account" asp-action="ForgotPassword" class="text-right f-w-600"> Forgot Password?</th:a>
+                    </div>
+                </div>S
+            </div>
+            <div class="row m-t-30">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary btn-md btn-block waves-effect waves-light text-center m-b-20">Sign in</button>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+</th:form>
+
+@section scripts
+{
+    @* <th:partial name="_ValidationScriptsPartial"/> *@
+}

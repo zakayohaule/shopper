@@ -1,0 +1,11 @@
+/.idea/*
+/Shopper/bin/*
+/Shopper/appsettings.json
+/Shopper/obj/*
+/Shopper/Logs/*
+/ShopperAdmin/bin/*
+/ShopperAdmin/appsettings.json
+/ShopperAdmin/obj/*
+/ShopperAdmin/Logs/*
+/Shared/bin/*
+/Shared/obj/*

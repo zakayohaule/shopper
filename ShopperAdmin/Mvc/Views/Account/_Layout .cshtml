@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>DashBoard </title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="#">
+<meta name="keywords" content="">
+<meta name="author" content="#">
+<!-- Favicon icon -->
+<th:link rel="icon" href="~/files/assets/images/favicon.ico" type="image/x-icon"></th:link>
+<!-- Google font-->
+@* <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet"/> *@
+<!-- Required Fremwork -->
+<!-- themify-icons line icon -->
+<th:link rel="stylesheet" type="text/css" href="~\files\assets\icon\themify-icons\themify-icons.css"></th:link>
+<!-- ico font -->
+<th:link rel="stylesheet" type="text/css" href="~/files/vendors/bootstrap/css/bootstrap.min.css"></th:link>
+<th:link rel="stylesheet" type="text/css" href="~/files/assets/icon/material-design/css/material-design-iconic-font.min.css"></th:link>
+<th:link rel="stylesheet" type="text/css" href="~/files/assets/css/style.css"></th:link>
+@* <th:link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css"/> *@
+<th:link rel="stylesheet" href="~/css/site.css"></th:link>
+
+@await RenderSectionAsync("css", false);
+<body>
+@*<!-- Pre-loader start -->
+<div class="theme-loader">
+    <div class="ball-scale">
+        <div class='contain'>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Pre-loader end -->*@
+
+<section class="login-block">
+    <!-- Container-fluid starts -->
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-12">
+                <!-- Authentication card start -->
+                @RenderBody();
+                <!-- end of col-sm-12 -->
+                <!-- end of form -->
+            </div>
+        </div>
+        <!-- end of row -->
+    </div>
+    <!-- end of container-fluid -->
+</section>
+
+<!-- Required Jquery -->
+<th:script type="text/javascript" src="~/files/vendors/jquery/js/jquery.min.js"></th:script>
+<th:script type="text/javascript" src="~/files/vendors/jquery-ui/js/jquery-ui.min.js"></th:script>
+<th:script type="text/javascript" src="~/files/vendors/popper.js/js/popper.min.js"></th:script>
+<th:script type="text/javascript" src="~/files/vendors/bootstrap/js/bootstrap.min.js"></th:script>
+<!-- jquery slimscroll js -->
+<th:script type="text/javascript" src="~/files/vendors/jquery-slimscroll/js/jquery.slimscroll.js"></th:script>
+<!-- modernizr js -->
+<th:script type="text/javascript" src="~/files/vendors/modernizr/js/modernizr.js"></th:script>
+<!-- Include the Quill library -->
+<th:script src="https://cdn.quilljs.com/1.3.6/quill.js"></th:script>
+<!-- Accordion js -->
+<th:script type="text/javascript" src="~/files/assets/pages/accordion/accordion.js"></th:script>
+<!-- Chart js -->
+<th:script type="text/javascript" src="~/files/vendors/chart.js/js/Chart.js"></th:script>
+<!-- amchart js -->
+<th:script src="~/files/assets/pages/widget/amchart/amcharts.js"></th:script>
+<th:script src="~/files/assets/pages/widget/amchart/serial.js"></th:script>
+<th:script src="~/files/assets/pages/widget/amchart/light.js"></th:script>
+<th:script src="~/files/assets/js/jquery.mCustomScrollbar.concat.min.js"></th:script>
+<th:script type="text/javascript" src="~/files/assets/js/SmoothScroll.js"></th:script>
+<th:script src="~/files/assets/js/mboard.min.js"></th:script>
+<!-- custom js -->
+<th:script src="~/files/assets/js/vartical-layout.min.js"></th:script>
+<th:script type="text/javascript" src="~/files/assets/pages/dashboard/custom-dashboard.js"></th:script>
+<th:script type="text/javascript" src="~/files/assets/js/script.js"> </th:script>
+
+@await RenderSectionAsync("scripts", false);
+</body>
+
+</html>

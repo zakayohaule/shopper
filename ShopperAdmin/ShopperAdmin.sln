@@ -1,0 +1,15 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopperAdmin", "ShopperAdmin.csproj", "{46D1F681-BD63-4C3C-B67D-CA9C9525E8C4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{46D1F681-BD63-4C3C-B67D-CA9C9525E8C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46D1F681-BD63-4C3C-B67D-CA9C9525E8C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46D1F681-BD63-4C3C-B67D-CA9C9525E8C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46D1F681-BD63-4C3C-B67D-CA9C9525E8C4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

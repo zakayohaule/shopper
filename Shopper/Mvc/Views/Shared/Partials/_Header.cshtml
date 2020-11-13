@@ -1,0 +1,107 @@
+﻿@using Shopper.Extensions.Helpers
+@using Shopper.Services.Interfaces
+@inject INotificationService NotificationService;
+@{
+    var notification = 12;
+}
+<nav class="navbar header-navbar mboard-header">
+    <div class="navbar-wrapper">
+
+        <div class="navbar-logo">
+            <a class="mobile-menu" id="mobile-collapse" href="#!">
+                <i class="feather icon-menu"></i>
+            </a>
+            <th:a asp-controller="Home" asp-action="Index" class="text-left align-item-left">
+                <th:img class="img-fluid img-logo" src="~/files/assets/images/logo.png" alt="Theme-Logo" asp-append-version="true"/>
+            </th:a>
+            <a class="mobile-options">
+                <i class="feather icon-more-horizontal"></i>
+            </a>
+        </div>
+
+        <div class="navbar-container container-fluid">
+            <ul class="nav-left">
+                @*<li class="header-search">
+                    <div class="main-search morphsearch-search" id="software-search">
+                        <th:form asp-controller="Software" asp-action="Search" id="searchSoftwareForm">
+                            <div class="input-group">
+                                <span class="input-group-addon search-close">
+                                    <i class="feather icon-x"></i>
+                                </span>
+                                <input type="text" class="form-control" name="q">
+                                <span class="input-group-addon search-btn">
+                                    <i class="feather icon-search" onclick="searchSoftware()"></i>
+                                </span>
+                            </div>
+                        </th:form>
+                    </div>
+                </li>*@
+                <li>
+                    <a href="#!" onclick="javascript:toggleFullScreen()">
+                        <i class="feather icon-maximize full-screen"></i>
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav-right">
+                <li class="header-notification">
+                    <div class="dropdown-primary dropdown">
+                        <div class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="feather icon-bell"></i>
+                            <span class="badge bg-c-pink">12</span>
+                        </div>
+                        <ul class="show-notification notification-view dropdown-menu" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+                            <li>
+                                <h6>New notifications</h6>
+                                <label class="label label-danger">12 New</label>
+                            </li>
+@*                             @foreach (var request in notification.ConnectionRequests) *@
+@*                             { *@
+                                <li>
+                                    <div class="media">
+                                        <th:img class="d-flex align-self-center img-radius" src="" alt="Generic placeholder image"/>
+                                        <div class="media-body">
+                                            <h5 class="notification-user">From: Linus Trovald</h5>
+                                            <h5 class="notification-user">To: Taylor Otwell</h5>
+                                                <p class="notification-msg">There is a new meeting tomorrow afternoon</p>
+                                            <span class="notification-time">@DateTime.Now</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                            @if (notification > 0)
+                            {
+                                <li class="text-center">
+                                    <a href="#" >View All</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </li>
+                <li class="user-profile header-notification">
+                    <div class="dropdown-primary dropdown">
+                        <div class="dropdown-toggle" data-toggle="dropdown">
+                            <th:img src="" class="img-radius" alt="User-Profile-Image"/>
+                            @* <th:img src="~/zakayo.jfif" class="img-radius" alt="User-Profile-Image"/> *@
+                            <th:auth>
+                                <span>@User.GetUserFullName()</span>
+                            </th:auth>
+                            <i class="feather icon-chevron-down"></i>
+                        </div>
+                        <ul class="show-notification profile-notification dropdown-menu" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+                            <li>
+                                <th:a asp-controller="Account" asp-action="ChangePassword">
+                                    <i class="fa fa-lock"></i> Reset Password
+                                </th:a>
+                            </li>
+                            <li>
+                                <th:a asp-route="logout">
+                                    <i class="feather icon-log-out"></i> Logout
+                                </th:a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

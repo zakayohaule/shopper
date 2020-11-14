@@ -8,12 +8,12 @@ namespace ShopperAdmin.Extensions.Configurations
     {
         public static void ConfigureMailServer(this IServiceCollection services, IWebHostEnvironment environment)
         {
-            var builder = services.AddFluentEmail("admin@ega.go.tz")
+            var builder = services.AddFluentEmail("zackhaule@gmail.com")
                 .AddRazorRenderer();
 
             if (environment.IsDevelopment())
             {
-                builder.AddMailtrapSender("e8c9a211be6576", "f7072de5b40e9d", "smtp.mailtrap.io", 2525);
+                builder.AddMailtrapSender("51f7f8fd58db29", "3ef16ce8493234", "smtp.mailtrap.io", 2525);
             }
             else
             {

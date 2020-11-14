@@ -54,24 +54,24 @@
                                 <h6>New notifications</h6>
                                 <label class="label label-danger">12 New</label>
                             </li>
-                            @*                             @foreach (var request in notification.ConnectionRequests) *@
-                            @*                             { *@
-                            <li>
-                                <div class="media">
-                                    <th:img class="d-flex align-self-center img-radius" src="" alt="Generic placeholder image"/>
-                                    <div class="media-body">
-                                        <h5 class="notification-user">From: Linus Trovald</h5>
-                                        <h5 class="notification-user">To: Taylor Otwell</h5>
-                                        <p class="notification-msg">There is a new meeting tomorrow afternoon</p>
-                                        <span class="notification-time">@DateTime.Now</span>
+@*                             @foreach (var request in notification.ConnectionRequests) *@
+@*                             { *@
+                                <li>
+                                    <div class="media">
+                                        <th:img class="d-flex align-self-center img-radius" src="" alt="Generic placeholder image"/>
+                                        <div class="media-body">
+                                            <h5 class="notification-user">From: Linus Trovald</h5>
+                                            <h5 class="notification-user">To: Taylor Otwell</h5>
+                                                <p class="notification-msg">There is a new meeting tomorrow afternoon</p>
+                                            <span class="notification-time">@DateTime.Now</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
                             }
                             @if (notification > 0)
                             {
                                 <li class="text-center">
-                                    <a href="#">View All</a>
+                                    <a href="#" >View All</a>
                                 </li>
                             }
                         </ul>

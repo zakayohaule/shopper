@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Text;
 using ShopperAdmin.Database;
 using Shared.Mvc.Entities;
@@ -10,9 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Shared.Mvc.Entities.Identity;
+ using Shared.Mvc.Entities.Identity;
 
-namespace ShopperAdmin.Extensions.Configurations
+ namespace ShopperAdmin.Extensions.Configurations
 {
     public static class IdentityServiceExtensions
     {
@@ -29,9 +29,7 @@ namespace ShopperAdmin.Extensions.Configurations
                         options.Password.RequireLowercase = false;
                         options.Password.RequireUppercase = false;
                         options.Password.RequireNonAlphanumeric = false;
-                    }
-
-                    ;
+                    };
 
                     //User settings
                     options.User.RequireUniqueEmail = true;
@@ -55,7 +53,7 @@ namespace ShopperAdmin.Extensions.Configurations
                 {
                     options.Authority = "http://localhost:5000";
                     options.SaveToken = true;
-
+                    
                     // todo Remove this in production
                     options.RequireHttpsMetadata = false;
                     options.Audience = "egov_apis";

@@ -1,26 +1,25 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Serilog;
-using Shared.Mvc.ViewModels;
+﻿﻿using System;
+ using System.Diagnostics;
+ using System.IO;
+ using Microsoft.AspNetCore.Authorization;
+ using Microsoft.AspNetCore.Mvc;
+ using Serilog;
+ using Shared.Mvc.ViewModels;
 
-namespace ShopperAdmin.Mvc.Controllers
+ namespace ShopperAdmin.Mvc.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger _logger;
-        public string Title { get; set; } = "Home";
-
         public HomeController(ILogger logger)
         {
             _logger = logger;
         }
-
+        
         public IActionResult Index()
         {
+            AddPageHeader("Dashboard");
             return View();
         }
 

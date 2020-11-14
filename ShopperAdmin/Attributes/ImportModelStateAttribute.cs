@@ -13,7 +13,7 @@ namespace ShopperAdmin.Attributes
             var controller = filterContext.Controller as Controller;
             var serialisedModelState = controller?.TempData[Key] as string;
             var modelState = filterContext.ModelState;
-
+            
             if (serialisedModelState != null)
             {
                 //Only Import if we are viewing

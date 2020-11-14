@@ -1,25 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using ShopperAdmin.Database;
-using ShopperAdmin.Extensions.Helpers;
-using Shared.Mvc.Entities;
-using Shared.Mvc.ViewModels;
-using Shared.Mvc.ViewModels.Emails;
-using ShopperAdmin.Services.Interfaces;
-using FluentEmail.Core;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using PasswordGenerator;
-using Serilog;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities.Identity;
+﻿﻿using System;
+ using System.Collections.Generic;
+ using System.Linq;
+ using System.Threading.Tasks;
+ using FluentEmail.Core;
+ using Microsoft.AspNetCore.Identity;
+ using Microsoft.EntityFrameworkCore;
+ using Microsoft.Extensions.Hosting;
+ using PasswordGenerator;
+ using Serilog;
+ using Shared.Extensions.Helpers;
+ using ShopperAdmin.Database;
+ using ShopperAdmin.Extensions.Helpers;
+ using Shared.Mvc.Entities.Identity;
+ using Shared.Mvc.ViewModels;
+ using Shared.Mvc.ViewModels.Emails;
+ using ShopperAdmin.Services.Interfaces;
 
-namespace ShopperAdmin.Services.Implementations
+ namespace ShopperAdmin.Services.Implementations
 {
     public class UserService : IUserService
     {
@@ -30,8 +27,7 @@ namespace ShopperAdmin.Services.Implementations
         private readonly ILogger _logger;
         private readonly UserManager<AppUser> _userManager;
 
-        public UserService(ApplicationDbContext dbContext, IEmailQueueService emailQueueService,
-            IFluentEmail fluentEmail, IHostEnvironment environment, ILogger logger, UserManager<AppUser> userManager)
+        public UserService(ApplicationDbContext dbContext, IEmailQueueService emailQueueService, IFluentEmail fluentEmail, IHostEnvironment environment, ILogger logger, UserManager<AppUser> userManager)
         {
             _dbContext = dbContext;
             _emailQueueService = emailQueueService;
@@ -54,7 +50,7 @@ namespace ShopperAdmin.Services.Implementations
             return _dbContext.Roles.AsNoTracking();
         }
 
-        public async Task<AppUser> FindByIdAsync(long id, bool eager = false)
+        public async Task<AppUser> FindByIdAsync(long id, bool eager=false)
         {
             if (!eager)
             {
@@ -73,8 +69,17 @@ namespace ShopperAdmin.Services.Implementations
         {
             return await _dbContext.Users
                 .IgnoreQueryFilters()
-                .FirstOrDefaultAsync(
-                    user => String.Equals(user.Email, email, StringComparison.CurrentCultureIgnoreCase));
+                .FirstOrDefaultAsync(user => String.Equals(user.Email, email, StringComparison.CurrentCultureIgnoreCase));
+        }
+
+        public Task<AppUser> SaveUserAsync(UserViewModel userViewModel)
+        {
+            return null;
+        }
+
+        public Task<AppUser> UpdateUserAsync(UserViewModel userViewModel)
+        {
+            return null;
         }
 
         public async Task DeleteUserAsync(AppUser user)
@@ -111,8 +116,7 @@ namespace ShopperAdmin.Services.Implementations
                 .IncludeNumeric()
                 .IncludeUppercase()
                 .IncludeSpecial()
-                .Next();
-            ;
+                .Next();;
         }
 
         public async Task<string> ChangePasswordAsync(AppUser user)
@@ -132,8 +136,7 @@ namespace ShopperAdmin.Services.Implementations
             {
                 var currentRoles = user.UserRoles.Select(role => role.RoleId.ToString()).ToList();
 
-                var deleted = user.UserRoles.Where(role => currentRoles.Except(roles).Contains(role.RoleId.ToString()))
-                    .ToList();
+                var deleted = user.UserRoles.Where(role => currentRoles.Except(roles).Contains(role.RoleId.ToString())).ToList();
                 added = roles.Except(currentRoles).ToList();
                 _dbContext.UserRoles.RemoveRange(deleted);
             }
@@ -156,6 +159,14 @@ namespace ShopperAdmin.Services.Implementations
             await _dbContext.SaveChangesAsync();
         }
 
+        public bool WasDeleted(UserViewModel viewModel)
+        {
+            return _dbContext.Users
+                .IgnoreQueryFilters()
+                .Any(user => (string.Equals(user.Email, viewModel.Email, StringComparison.OrdinalIgnoreCase) 
+                || Equals(user.Id, viewModel.Id) && user.IsDeleted));
+        }
+
         public bool ExistsByEmail(string email)
         {
             return _dbContext.Users.Any(user =>
@@ -171,8 +182,7 @@ namespace ShopperAdmin.Services.Implementations
 
         public bool ExistsByUserName(string userName)
         {
-            return _dbContext.Users.Any(user =>
-                string.Equals(user.UserName, userName, StringComparison.CurrentCultureIgnoreCase));
+            return _dbContext.Users.Any(user => string.Equals(user.UserName, userName, StringComparison.CurrentCultureIgnoreCase));
         }
 
         public string GenerateUserName(string username)
@@ -184,8 +194,7 @@ namespace ShopperAdmin.Services.Implementations
 
         public bool UsersForInstitution(uint institutionId, HashSet<long> selectedUsers)
         {
-            var users = GetAllUsers().Where(user => user.InstitutionId == institutionId).Select(user => user.Id)
-                .ToHashSet();
+            var users = GetAllUsers().Where(user => user.InstitutionId == institutionId).Select(user => user.Id).ToHashSet();
             return selectedUsers.IsSubsetOf(users);
         }
     }

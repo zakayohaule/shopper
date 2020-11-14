@@ -17,8 +17,8 @@ namespace ShopperAdmin.Attributes
             Action = action;
             RouteValues = routeValues;
         }
-
-
+        
+        
         public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             if (!context.ModelState.IsValid)
@@ -26,7 +26,6 @@ namespace ShopperAdmin.Attributes
                 // Console.WriteLine($"{context.RouteData}");
                 // context.Result = new RedirectToActionResult(Action,Controller,RouteValues);
             }
-
             return base.OnActionExecutionAsync(context, next);
         }
     }

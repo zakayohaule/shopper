@@ -19,14 +19,10 @@ namespace ShopperAdmin.Extensions.Configurations
                 client.Property(x => x.ClientUri).HasMaxLength(2000).HasColumnName("client_uri");
                 client.Property(x => x.LogoUri).HasMaxLength(2000).HasColumnName("logo_uri");
                 client.Property(x => x.Description).HasMaxLength(1000).HasColumnName("description");
-                client.Property(x => x.FrontChannelLogoutUri).HasMaxLength(2000)
-                    .HasColumnName("front_channel_logout_uri");
-                client.Property(x => x.FrontChannelLogoutSessionRequired)
-                    .HasColumnName("front_channel_logout_session_required");
-                client.Property(x => x.BackChannelLogoutUri).HasMaxLength(2000)
-                    .HasColumnName("back_channel_logout_uri");
-                client.Property(x => x.BackChannelLogoutSessionRequired)
-                    .HasColumnName("back_channel_logout_session_required");
+                client.Property(x => x.FrontChannelLogoutUri).HasMaxLength(2000).HasColumnName("front_channel_logout_uri");
+                client.Property(x => x.FrontChannelLogoutSessionRequired).HasColumnName("front_channel_logout_session_required");
+                client.Property(x => x.BackChannelLogoutUri).HasMaxLength(2000).HasColumnName("back_channel_logout_uri");
+                client.Property(x => x.BackChannelLogoutSessionRequired).HasColumnName("back_channel_logout_session_required");
                 client.Property(x => x.ClientClaimsPrefix).HasMaxLength(200).HasColumnName("client_claims_prefix");
                 client.Property(x => x.PairWiseSubjectSalt).HasMaxLength(200).HasColumnName("pairwise_subject_salt");
                 client.Property(x => x.UserCodeType).HasMaxLength(100).HasColumnName("user_code_type");
@@ -34,8 +30,7 @@ namespace ShopperAdmin.Extensions.Configurations
                 client.Property(x => x.RequireClientSecret).HasColumnName("require_client_secret");
                 client.Property(x => x.RequireConsent).HasColumnName("require_consent");
                 client.Property(x => x.AllowRememberConsent).HasColumnName("allow_remember_consent");
-                client.Property(x => x.AlwaysIncludeUserClaimsInIdToken)
-                    .HasColumnName("always_include_user_claim_in_idtoken");
+                client.Property(x => x.AlwaysIncludeUserClaimsInIdToken).HasColumnName("always_include_user_claim_in_idtoken");
                 client.Property(x => x.RequirePkce).HasColumnName("require_pkce");
                 client.Property(x => x.AllowPlainTextPkce).HasColumnName("allow_plain_text_pkce");
                 client.Property(x => x.AllowAccessTokensViaBrowser).HasColumnName("allow_access_token_via_browser");
@@ -47,8 +42,7 @@ namespace ShopperAdmin.Extensions.Configurations
                 client.Property(x => x.AbsoluteRefreshTokenLifetime).HasColumnName("absolute_refresh_token_lifetime");
                 client.Property(x => x.SlidingRefreshTokenLifetime).HasColumnName("sliding_refresh_token_lifetime");
                 client.Property(x => x.RefreshTokenUsage).HasColumnName("refresh_token_usage");
-                client.Property(x => x.UpdateAccessTokenClaimsOnRefresh)
-                    .HasColumnName("update_access_token_claims_on_refresh");
+                client.Property(x => x.UpdateAccessTokenClaimsOnRefresh).HasColumnName("update_access_token_claims_on_refresh");
                 client.Property(x => x.RefreshTokenExpiration).HasColumnName("refresh_token_expiration");
                 client.Property(x => x.AccessTokenType).HasColumnName("access_token_type");
                 client.Property(x => x.EnableLocalLogin).HasColumnName("enable_local_login");
@@ -63,24 +57,15 @@ namespace ShopperAdmin.Extensions.Configurations
 
                 client.HasIndex(x => x.ClientId).IsUnique();
 
-                client.HasMany(x => x.AllowedGrantTypes).WithOne(x => x.Client).HasForeignKey(x => x.ClientId)
-                    .IsRequired().OnDelete(DeleteBehavior.Cascade);
-                client.HasMany(x => x.RedirectUris).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired()
-                    .OnDelete(DeleteBehavior.Cascade);
-                client.HasMany(x => x.PostLogoutRedirectUris).WithOne(x => x.Client).HasForeignKey(x => x.ClientId)
-                    .IsRequired().OnDelete(DeleteBehavior.Cascade);
-                client.HasMany(x => x.AllowedScopes).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired()
-                    .OnDelete(DeleteBehavior.Cascade);
-                client.HasMany(x => x.ClientSecrets).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired()
-                    .OnDelete(DeleteBehavior.Cascade);
-                client.HasMany(x => x.Claims).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired()
-                    .OnDelete(DeleteBehavior.Cascade);
-                client.HasMany(x => x.IdentityProviderRestrictions).WithOne(x => x.Client)
-                    .HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-                client.HasMany(x => x.AllowedCorsOrigins).WithOne(x => x.Client).HasForeignKey(x => x.ClientId)
-                    .IsRequired().OnDelete(DeleteBehavior.Cascade);
-                client.HasMany(x => x.Properties).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired()
-                    .OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.AllowedGrantTypes).WithOne(x => x.Client).HasForeignKey(x=>x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.RedirectUris).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.PostLogoutRedirectUris).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.AllowedScopes).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.ClientSecrets).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.Claims).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.IdentityProviderRestrictions).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.AllowedCorsOrigins).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.Properties).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<ClientGrantType>(grantType =>
@@ -103,8 +88,7 @@ namespace ShopperAdmin.Extensions.Configurations
             {
                 postLogoutRedirectUri.ToTable("client_post_logout_redirect_uris");
                 postLogoutRedirectUri.Property(x => x.Id).HasColumnName("id");
-                postLogoutRedirectUri.Property(x => x.PostLogoutRedirectUri).HasMaxLength(2000).IsRequired()
-                    .HasColumnName("post_logout_redirect_uri");
+                postLogoutRedirectUri.Property(x => x.PostLogoutRedirectUri).HasMaxLength(2000).IsRequired().HasColumnName("post_logout_redirect_uri");
                 postLogoutRedirectUri.Property(x => x.ClientId).HasColumnName("client_id");
             });
 
@@ -181,10 +165,8 @@ namespace ShopperAdmin.Extensions.Configurations
 
                 identityResource.HasIndex(x => x.Name).IsUnique();
 
-                identityResource.HasMany(x => x.UserClaims).WithOne(x => x.IdentityResource)
-                    .HasForeignKey(x => x.IdentityResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-                identityResource.HasMany(x => x.Properties).WithOne(x => x.IdentityResource)
-                    .HasForeignKey(x => x.IdentityResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                identityResource.HasMany(x => x.UserClaims).WithOne(x => x.IdentityResource).HasForeignKey(x => x.IdentityResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                identityResource.HasMany(x => x.Properties).WithOne(x => x.IdentityResource).HasForeignKey(x => x.IdentityResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<IdentityClaim>(claim =>
@@ -206,6 +188,7 @@ namespace ShopperAdmin.Extensions.Configurations
             });
 
 
+
             modelBuilder.Entity<ApiResource>(apiResource =>
             {
                 apiResource.ToTable("api_resources").HasKey(x => x.Id);
@@ -222,14 +205,10 @@ namespace ShopperAdmin.Extensions.Configurations
 
                 apiResource.HasIndex(x => x.Name).IsUnique();
 
-                apiResource.HasMany(x => x.Secrets).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId)
-                    .IsRequired().OnDelete(DeleteBehavior.Cascade);
-                apiResource.HasMany(x => x.Scopes).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId)
-                    .IsRequired().OnDelete(DeleteBehavior.Cascade);
-                apiResource.HasMany(x => x.UserClaims).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId)
-                    .IsRequired().OnDelete(DeleteBehavior.Cascade);
-                apiResource.HasMany(x => x.Properties).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId)
-                    .IsRequired().OnDelete(DeleteBehavior.Cascade);
+                apiResource.HasMany(x => x.Secrets).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                apiResource.HasMany(x => x.Scopes).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                apiResource.HasMany(x => x.UserClaims).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                apiResource.HasMany(x => x.Properties).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<ApiSecret>(apiSecret =>
@@ -269,8 +248,7 @@ namespace ShopperAdmin.Extensions.Configurations
 
                 apiScope.HasIndex(x => x.Name).IsUnique();
 
-                apiScope.HasMany(x => x.UserClaims).WithOne(x => x.ApiScope).HasForeignKey(x => x.ApiScopeId)
-                    .IsRequired().OnDelete(DeleteBehavior.Cascade);
+                apiScope.HasMany(x => x.UserClaims).WithOne(x => x.ApiScope).HasForeignKey(x => x.ApiScopeId).IsRequired().OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<ApiScopeClaim>(apiScopeClaim =>
@@ -309,7 +287,7 @@ namespace ShopperAdmin.Extensions.Configurations
 
                 grant.HasKey(x => x.Key);
 
-                grant.HasIndex(x => new {x.SubjectId, x.ClientId, x.Type});
+                grant.HasIndex(x => new { x.SubjectId, x.ClientId, x.Type });
                 grant.HasIndex(x => x.Expiration);
             });
 

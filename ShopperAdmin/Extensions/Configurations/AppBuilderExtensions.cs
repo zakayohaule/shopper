@@ -8,6 +8,8 @@ using Shared.Mvc.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Shared.Mvc.Entities.Identity;
 
@@ -28,8 +30,8 @@ namespace ShopperAdmin.Extensions.Configurations
             ILogger logger)
         {
             ModulesSeeder.Seed(dbContext, logger);
-            // PermissionsSeeder.Seed(dbContext, logger);
-            // RoleClaimsSeeder.Seed(dbContext, logger);
+            PermissionsSeeder.Seed(dbContext, logger);
+            RoleClaimsSeeder.Seed(dbContext, logger);
         }
 
         public static void RefreshDatabase(this IApplicationBuilder app,
@@ -48,13 +50,22 @@ namespace ShopperAdmin.Extensions.Configurations
 
         public static void ShowBanner()
         {
-            var file = new FileStream(@"C:\Users\user\RiderProjects\ShopperAdmin\ShopperAdmin\banner.txt"
-                , FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-
+            var file = new FileStream(@"C:\Users\user\RiderProjects\Shopper\ShopperAdmin\banner.txt"
+                ,FileMode.Open, FileAccess.Read,FileShare.ReadWrite);
+            
             var reader = new StreamReader(file);
             while (!reader.EndOfStream)
             {
                 Console.WriteLine(reader.ReadLine());
+            }
+        }
+
+        public static void ShowBannerIfEnabled(this IServiceCollection services, IConfiguration configuration)
+        {
+            var showBanner = configuration.GetValue<bool?>("ShowBanner") ?? false;
+            if (showBanner)
+            {
+                ShowBanner(); 
             }
         }
     }

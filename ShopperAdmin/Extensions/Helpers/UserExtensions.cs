@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
@@ -9,9 +9,9 @@ using Microsoft.CodeAnalysis.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.JsonWebTokens;
-using Shared.Extensions.Helpers;
+ using Shared.Extensions.Helpers;
 
-namespace ShopperAdmin.Extensions.Helpers
+ namespace ShopperAdmin.Extensions.Helpers
 {
     public static class UserExtensions
     {
@@ -27,17 +27,16 @@ namespace ShopperAdmin.Extensions.Helpers
                     .FirstOrDefault(claim => claim.Type == "sub")
                     ?.Value;
             }
-
             if (userIdClaim == null) return -1;
             long.TryParse(userIdClaim, out var userId);
             return userId;
         }
-
+        
         public static long GetUserId(this HttpContext httpContext)
         {
             return GetUserId(httpContext.User);
         }
-
+        
         public static bool HasPermission(this HttpContext httpContext, string permission)
         {
             var userClaimService = httpContext.RequestServices.GetRequiredService<IUserClaimService>();
@@ -51,7 +50,7 @@ namespace ShopperAdmin.Extensions.Helpers
                 ?.Value;
             return institutionId == null ? (uint) 0 : uint.Parse(institutionId);
         }
-
+        
         public static string GetUserEmail(this ClaimsPrincipal claimsPrincipal)
         {
             var fullName = claimsPrincipal.Claims
@@ -67,7 +66,7 @@ namespace ShopperAdmin.Extensions.Helpers
                 ?.Value;
             return fullName ?? string.Empty;
         }
-
+        
         public static string GetBearerToken(this HttpContext httpContext)
         {
             var authorizationHeader = httpContext.Request.Headers["Authorization"];
@@ -79,7 +78,7 @@ namespace ShopperAdmin.Extensions.Helpers
             }
 
             var bearerHeader = authorizationHeader.FirstOrDefault();
-
+            
             if (bearerHeader.IsNull())
             {
                 Console.WriteLine("Authorization header doesn't contain a bearer token");
@@ -93,9 +92,9 @@ namespace ShopperAdmin.Extensions.Helpers
             }
 
             Console.WriteLine("Getting the access token from the authorization header");
-            return bearerHeader.Remove(0, 7);
+            return bearerHeader.Remove(0,7);
         }
-
+        
         public static string GetClientIdFromToken(this HttpContext httpContext)
         {
             var token = httpContext.GetBearerToken();
@@ -103,7 +102,7 @@ namespace ShopperAdmin.Extensions.Helpers
             var clientId = tokenHandler.ReadJsonWebToken(token);
             return clientId.Claims.First(claim => claim.Type == "client_id").Value;
         }
-
+        
         public static string GetClientIdFromToken(this string accessToken)
         {
             var tokenHandler = new JsonWebTokenHandler();
@@ -125,7 +124,7 @@ namespace ShopperAdmin.Extensions.Helpers
             var request = httpContext.Request;
             return $"{request.Scheme}://{request.Host}{request.PathBase}";
         }
-
+        
         public static string GetEmailTemplate(this IHostEnvironment hostEnvironment, string templateName)
         {
             try
@@ -136,9 +135,9 @@ namespace ShopperAdmin.Extensions.Helpers
             }
             catch (FileNotFoundException fileNotFoundException)
             {
-                throw new FileNotFoundException(
-                    $"Email template '{templateName}' could not be found in the Mvc/Views/Emails directory");
+                throw new FileNotFoundException($"Email template '{templateName}' could not be found in the Mvc/Views/Emails directory");
             }
+
         }
     }
 }

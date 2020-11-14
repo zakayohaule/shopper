@@ -81,16 +81,14 @@ namespace ShopperAdmin.Services.Implementations
 
         public RolePermissionViewModel RolePermissions(long roleId)
         {
-            var role = _dbContext.Roles.Where(role => role.Id == roleId).Select(role => new {role.Name, role.Id})
-                .First();
+            var role = _dbContext.Roles.Where(role => role.Id == roleId).Select(role => new {role.Name, role.Id}).First();
             var modules = _dbContext
                 .Modules
                 .AsNoTracking()
                 .Include(module => module.Permissions)
                 .ToList();
-            var roleClaims = _dbContext.RoleClaims.Where(claim => claim.RoleId == roleId)
-                .Select(claim => claim.ClaimValue).ToList();
-
+            var roleClaims = _dbContext.RoleClaims.Where(claim => claim.RoleId == roleId).Select(claim => claim.ClaimValue).ToList();
+            
             return new RolePermissionViewModel
             {
                 RoleId = role.Id,
@@ -108,8 +106,7 @@ namespace ShopperAdmin.Services.Implementations
             {
                 var currentRolePermissions = role.RoleClaims.Select(claim => claim.ClaimValue).ToList();
 
-                var deleted = role.RoleClaims
-                    .Where(claim => currentRolePermissions.Except(permissions).Contains(claim.ClaimValue)).ToList();
+                var deleted = role.RoleClaims.Where(claim => currentRolePermissions.Except(permissions).Contains(claim.ClaimValue)).ToList();
                 added = permissions.Except(currentRolePermissions).ToList();
                 _dbContext.RoleClaims.RemoveRange(deleted);
             }

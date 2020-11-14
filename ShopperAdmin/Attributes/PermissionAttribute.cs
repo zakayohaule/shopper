@@ -31,7 +31,7 @@ namespace ShopperAdmin.Attributes
                 if (!userClaimService.HasPermission(userPrincipal.GetUserId(), Permission))
                 {
                     context.Result = new UnauthorizedResult();
-                }
+                }   
             }
         }
     }

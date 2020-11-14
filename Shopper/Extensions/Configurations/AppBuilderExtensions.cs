@@ -1,10 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using Shopper.Database;
-using Shopper.Database.Seeders;
-using Shared.Mvc.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Shared.Mvc.Entities.Identity;
+using Shopper.Database;
+using Shopper.Database.Seeders;
 
 namespace Shopper.Extensions.Configurations
 {

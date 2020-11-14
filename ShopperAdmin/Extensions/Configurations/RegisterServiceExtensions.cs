@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using Shared.Mvc.Entities.Identity;
+﻿using Shared.Mvc.Entities;
 using ShopperAdmin.Services.Implementations;
 using ShopperAdmin.Services.Implementations.ReplaceDefaults;
 using ShopperAdmin.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Shared.Mvc.Entities.Identity;
 
 namespace ShopperAdmin.Extensions.Configurations
 {
@@ -22,6 +23,7 @@ namespace ShopperAdmin.Extensions.Configurations
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<ITenantService, TenantService>();
         }
     }
 }

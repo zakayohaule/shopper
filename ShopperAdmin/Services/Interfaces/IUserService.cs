@@ -12,7 +12,7 @@ namespace ShopperAdmin.Services.Interfaces
     {
         IQueryable<AppUser> GetAllUsers();
         IQueryable<Role> GetAllRoles();
-        Task<AppUser> FindByIdAsync(long id, bool eager = false);
+        Task<AppUser> FindByIdAsync(long id, bool eager=false);
         Task<AppUser> FindByEmail(string email);
         Task DeleteUserAsync(AppUser user);
         void SendEmailVerificationEmail(EmailVerificationViewModel emailVerificationViewModel);

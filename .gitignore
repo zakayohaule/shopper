@@ -3,9 +3,14 @@
 /Shopper/appsettings.json
 /Shopper/obj/*
 /Shopper/Logs/*
+/Shopper/.idea/*
 /ShopperAdmin/bin/*
 /ShopperAdmin/appsettings.json
 /ShopperAdmin/obj/*
 /ShopperAdmin/Logs/*
+/ShopperAdmin/.idea/*
 /Shared/bin/*
 /Shared/obj/*
+/Shared/.idea/*
+
+

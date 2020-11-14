@@ -21,13 +21,13 @@ namespace ShopperAdmin.Services.Implementations
         private readonly IHostEnvironment _environment;
         private readonly IEmailQueueService _emailQueueService;
 
-        public NotificationService(ApplicationDbContext dbContext, IFluentEmail fluentEmail,
-            IHostEnvironment environment, IEmailQueueService emailQueueService)
+        public NotificationService(ApplicationDbContext dbContext, IFluentEmail fluentEmail, IHostEnvironment environment, IEmailQueueService emailQueueService)
         {
             _dbContext = dbContext;
             _fluentEmail = fluentEmail;
             _environment = environment;
             _emailQueueService = emailQueueService;
         }
+        
     }
 }

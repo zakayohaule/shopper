@@ -12,9 +12,7 @@ namespace ShopperAdmin.Extensions.Configurations
             services.AddDbContext<ApplicationDbContext>(builder =>
             {
                 builder.UseMySql(configuration.GetConnectionString("Default"));
-                // builder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
-            services.AddDbContext<TenantDbContext>();
         }
     }
 }

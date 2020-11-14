@@ -27,9 +27,11 @@ namespace ShopperAdmin.Extensions.Configurations
                 options.ViewLocationFormats.Clear();
                 options.ViewLocationFormats.Add("/Mvc/Views/{1}/{0}" + RazorViewEngine.ViewExtension);
                 options.ViewLocationFormats.Add("/Mvc/Views/Shared/{0}" + RazorViewEngine.ViewExtension);
+                options.ViewLocationFormats.Add("/Mvc/Views/Shared/Partials/{0}" + RazorViewEngine.ViewExtension);
             });
 
             services.AddMemoryCache(options => options.ExpirationScanFrequency = TimeSpan.FromMinutes(30));
+
         }
     }
 }

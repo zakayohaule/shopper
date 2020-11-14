@@ -7,9 +7,7 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <i class="icofont icofont-close-line-circled"></i>
         </button>
-        <p>
-            <strong>Success!</strong> @TempData["Success"]
-        </p>
+        <p><strong>Success!</strong> @TempData["Success"]</p>
     </div>
 }
 @if (TempData["Info"].IsNotNull())
@@ -18,9 +16,7 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <i class="icofont icofont-close-line-circled"></i>
         </button>
-        <p>
-            <strong>Info!</strong> @TempData["Info"]
-        </p>
+        <p><strong>Info!</strong> @TempData["Info"]</p>
     </div>
 }
 @if (TempData["Error"].IsNotNull())
@@ -29,8 +25,6 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <i class="icofont icofont-close-line-circled"></i>
         </button>
-        <p>
-            <strong>Error!</strong> @TempData["Error"]
-        </p>
+        <p><strong>Error!</strong> @TempData["Error"]</p>
     </div>
 }

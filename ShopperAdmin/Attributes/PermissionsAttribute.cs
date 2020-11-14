@@ -28,7 +28,7 @@ namespace ShopperAdmin.Attributes
             else
             {
                 var permissions = Permissions.Split(",", StringSplitOptions.RemoveEmptyEntries);
-
+            
                 foreach (var permission in permissions)
                 {
                     if (!context.HttpContext.HasPermission(permission))
@@ -36,8 +36,9 @@ namespace ShopperAdmin.Attributes
                         context.Result = new UnauthorizedResult();
                         return;
                     }
-                }
+                } 
             }
+
         }
     }
 }

@@ -9,7 +9,7 @@ namespace ShopperAdmin.Attributes
         public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var viewName = context.RouteData.Values["action"] as string;
-
+            
             if (!context.ModelState.IsValid)
             {
                 context.Result = new ViewResult
@@ -17,7 +17,6 @@ namespace ShopperAdmin.Attributes
                     ViewName = viewName
                 };
             }
-
             return base.OnActionExecutionAsync(context, next);
         }
     }

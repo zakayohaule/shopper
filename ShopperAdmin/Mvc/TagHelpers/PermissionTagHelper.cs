@@ -31,12 +31,11 @@ namespace ShopperAdmin.Mvc.TagHelpers
             output.TagName = "";
             if (ViewContext.HttpContext.User.Identity.IsAuthenticated)
             {
-                if (!(bool) Condition)
+                if (!(bool)Condition)
                 {
                     output.SuppressOutput();
                     return;
                 }
-
                 var hasPermission = ViewContext.HttpContext.HasPermission(Name);
                 if (!hasPermission)
                 {

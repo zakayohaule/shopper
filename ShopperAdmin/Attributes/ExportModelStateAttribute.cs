@@ -1,11 +1,6 @@
-﻿using System;
-using System.Linq;
-using ShopperAdmin.Extensions.Helpers;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Newtonsoft.Json;
+using ShopperAdmin.Extensions.Helpers;
 
 namespace ShopperAdmin.Attributes
 {
@@ -18,8 +13,8 @@ namespace ShopperAdmin.Attributes
             if (!modelState.IsValid)
             {
                 //Export if we are redirecting
-                if (filterContext.Result is RedirectResult
-                    || filterContext.Result is RedirectToRouteResult
+                if (filterContext.Result is RedirectResult 
+                    || filterContext.Result is RedirectToRouteResult 
                     || filterContext.Result is RedirectToActionResult)
                 {
                     var controller = filterContext.Controller as Controller;

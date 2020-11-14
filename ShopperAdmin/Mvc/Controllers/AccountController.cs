@@ -16,7 +16,7 @@ namespace ShopperAdmin.Mvc.Controllers
 {
     [AllowAnonymous]
     [Route("account")]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
@@ -35,6 +35,11 @@ namespace ShopperAdmin.Mvc.Controllers
         [HttpGet("login", Name = "login")]
         public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View(new LoginModel());
         }
 
@@ -45,7 +50,7 @@ namespace ShopperAdmin.Mvc.Controllers
             // return Ok(loginModel);
             if (user.IsNull())
             {
-                AddPageAlerts(PageAlertType.Error, "Invalid login credentials");
+                AddPageAlerts(PageAlertType.Error, "Invalid login credentials!");
                 return View();
             }
 
@@ -57,7 +62,10 @@ namespace ShopperAdmin.Mvc.Controllers
 
             var validCredentials = await _userManager.CheckPasswordAsync(user, loginModel.Password);
 
-            if (validCredentials)
+            var result =
+                await _signInManager.PasswordSignInAsync(user, loginModel.Password, loginModel.RememberMe, true);
+
+            if (result.Succeeded)
             {
                 if (!user.HasResetPassword)
                 {
@@ -65,41 +73,35 @@ namespace ShopperAdmin.Mvc.Controllers
                     return Redirect(callbackUrl);
                 }
 
-                var result =
-                    await _signInManager.PasswordSignInAsync(user, loginModel.Password, loginModel.RememberMe, true);
+                var claims = _userClaimService.GetUserClaims(user.Id);
+                _userClaimService.CacheClaims(user.Id, claims);
 
-                if (result.Succeeded)
+                if (returnTo.IsNotNull())
                 {
-                    var claims = _userClaimService.GetUserClaims(user.Id);
-                    _userClaimService.CacheClaims(user.Id, claims);
-
-                    if (returnTo.IsNotNull())
-                    {
-                        return LocalRedirect(returnTo);
-                    }
-
-                    return RedirectToAction("Index", "Home");
+                    return LocalRedirect(returnTo);
                 }
 
-                if (result.IsLockedOut)
-                {
-                    var offset = (user.LockoutEnd - DateTimeOffset.Now);
-                    if (offset.HasValue)
-                    {
-                        AddPageAlerts(PageAlertType.Error,
-                            $"Your account has been locked due to many failed login attempts!. Wait for {offset.Value.Minutes} minutes, then try again!");
-                    }
-                }
+                return RedirectToAction("Index", "Home");
+            }
 
-                else if (result.IsNotAllowed)
+            if (result.IsLockedOut)
+            {
+                var offset = (user.LockoutEnd - DateTimeOffset.Now);
+                if (offset.HasValue)
                 {
-                    AddPageAlerts(PageAlertType.Error, $"You are not allowed to login!Please contact our administrators");
+                    AddPageAlerts(PageAlertType.Error,
+                        $"Your account has been locked due to many failed login attempts!. Wait for {offset.Value.Minutes} minutes, then try again!");
                 }
+            }
+            else if (result.IsNotAllowed)
+            {
+                AddPageAlerts(PageAlertType.Error,
+                    $"You are not allowed to login!Please contact our administrators");
             }
             else
             {
                 AddPageAlerts(PageAlertType.Error,
-                    $"{user.AccessFailedCount} failed login attempt(s). Your account will be locked afer 5 failed attempts");
+                    $"{user.AccessFailedCount} failed login attempt(s). Your account will be locked after 5 failed attempts");
             }
 
             return View();
@@ -122,7 +124,7 @@ namespace ShopperAdmin.Mvc.Controllers
             return View();
         }
 
-        [HttpPost("forgot-password")]
+        [HttpPost("forgot-password"), ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordModel viewModel)
         {
             var user = await _userManager.FindByEmailAsync(viewModel.Email);
@@ -135,8 +137,7 @@ namespace ShopperAdmin.Mvc.Controllers
             viewModel.ResetLink = callBackUrl;
             _userService.SendPasswordResetMail(viewModel);
 
-            ViewBag.Success =
-                "A password reset link has been sent to your email!";
+            AddPageAlerts(PageAlertType.Success, "A password reset link has been sent to your email!");
             return View("Login");
         }
 
@@ -154,8 +155,8 @@ namespace ShopperAdmin.Mvc.Controllers
 
             if (!validLink)
             {
-                // AddPageAlerts(PageAlertType.Error, "Invalid password reset link");
-                ViewBag.Error = "Invalid password reset link";
+                AddPageAlerts(PageAlertType.Error, "Invalid password reset link");
+                // ViewBag.Error = "Invalid password reset link";
 
                 return View("Login");
             }
@@ -201,7 +202,7 @@ namespace ShopperAdmin.Mvc.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.Success = "Your password has been reset successfully, Please login!!";
+            AddPageAlerts(PageAlertType.Success, "Your password has been reset successfully, Please login!");
             return View(nameof(Login));
         }
 
@@ -242,8 +243,8 @@ namespace ShopperAdmin.Mvc.Controllers
 
             await _signInManager.SignOutAsync();
 
-            ViewBag.Success = "Your password has been reset successfully, Please login!!";
-
+            
+            AddPageAlerts(PageAlertType.Success, "Your password has been reset successfully, Please login!");
             return View(nameof(Login));
         }
 
@@ -287,6 +288,15 @@ namespace ShopperAdmin.Mvc.Controllers
         [Authorize]
         [HttpGet("logout", Name = "logout")]
         public async Task<IActionResult> Logout()
+        {
+            _userClaimService.RemoveClaims(User.GetUserId());
+            await _signInManager.SignOutAsync();
+            return RedirectToRoute("login");
+        }
+
+        [Authorize]
+        [HttpPost("logout", Name = "logout-post")]
+        public async Task<IActionResult> PostLogout()
         {
             _userClaimService.RemoveClaims(User.GetUserId());
             await _signInManager.SignOutAsync();

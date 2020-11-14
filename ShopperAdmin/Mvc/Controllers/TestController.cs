@@ -16,26 +16,15 @@ namespace ShopperAdmin.Mvc.Controllers
     public class TestController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly TenantDbContext _tenantDb;
-        public TestController(ApplicationDbContext dbContext, TenantDbContext tenantDb)
+        public TestController(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-            _tenantDb = tenantDb;
         }
 
         [HttpGet("test-db-context")]
         public IActionResult ListUsers()
         {
-            var tenant = HttpContext.Request.Query["db"];
-            if (string.IsNullOrEmpty(tenant))
-            {
-                HttpContext.Items["db"] = "kea_db";
-            }
-            else
-            {
-                HttpContext.Items["db"] = tenant;
-            }
-            return Ok(_tenantDb.Users);
+            return Ok(_dbContext.Users);
         }
     }
 }

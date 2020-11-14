@@ -1,0 +1,19 @@
+﻿@model List<long>;
+
+@{
+    var roles = TempData["Roles"] as List<Role>;
+}
+
+<div class="row px-3">
+@foreach (var role in roles)
+{
+    var isChecked = Model.Contains(role.Id) ? "checked" : "";
+    <div class="form-group col-md-4">
+        <input type="checkbox" @isChecked name="roles"
+               value="@role.Id"> @role.DisplayName
+    </div>
+}
+</div>
+<div class="form-group col-12 text-right">
+    <button type="submit" class="btn btn-success" name="button">Submit</button>
+</div>

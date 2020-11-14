@@ -7,7 +7,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 |  @ViewData["Title"]?.ToString() </title>
+    <title>AdminLTE 3 | @ViewData["Title"]?.ToString() </title>
     <!-- Tell the browser to be responsive to screen width -->
     <th:environment names="Development">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -36,7 +36,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <th:script src="~/js/site.min.js" asp-append-version="true"></th:script>
         <th:script src="~/dist/js/adminlte.js" asp-append-version="true"></th:script>
     </th:environment>
-
+    @await RenderSectionAsync("css", false);
 </head>
 <!--
 BODY TAG OPTIONS:

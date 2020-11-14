@@ -30,7 +30,7 @@ namespace Shopper.Mvc.ViewComponents
             var userManagementModule = ModuleHelper.AddTree(name: "User Management", iconClassName: "fa fa-user");
             userManagementModule.TreeChild = new List<SidebarMenu>
             {
-                ModuleHelper.AddModuleLink(name: "Users", url: "/", iconClassName:"fa fa-users"),
+                ModuleHelper.AddModuleLink(name: "Users", url: Url.Action("Index", "User"), iconClassName:"fa fa-users"),
                 ModuleHelper.AddModuleLink(name: "Roles", url: "/Roles", null),
                 ModuleHelper.AddModuleLink(name: "Permissions", url: "/permissions", null)
             };

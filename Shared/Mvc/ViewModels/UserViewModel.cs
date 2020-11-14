@@ -1,4 +1,4 @@
-﻿﻿using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Shared.Mvc.Entities;
@@ -18,9 +18,6 @@ namespace Shared.Mvc.ViewModels
         [Required, EmailAddress, DisplayName("Email Address"), BindRequired]
         [Remote("ValidateUserEmail", AdditionalFields = "Id")]
         public string Email { get; set; }
-
-        [BindNever]
-        public string InstitutionName { get; set; }
         
         public List<long> Roles { get; set; }
     }

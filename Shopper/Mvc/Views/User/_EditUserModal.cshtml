@@ -1,0 +1,5 @@
+﻿@model UserViewModel
+
+<th:form class="" asp-controller="User" asp-action="Update" asp-route-id="@Model.Id">
+    <th:partial name="_UserForm" model="Model"/>
+</th:form>

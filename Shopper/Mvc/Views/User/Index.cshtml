@@ -5,12 +5,33 @@
     ViewData["Modal-Title"] = "Edit User";
 }
 
+@section css {
+    <!-- Toastr -->
+    <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
+}
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Bordered Table</h3>
+        <a href="" data-toggle="modal" data-target="#add-user" class="btn text-primary float-right" title="Add User"><i class="fas fa-user-plus fa-lg"></i></a>
     </div>
     <!-- /.card-header -->
+    
+    <div class="modal" id="add-user">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="col-12 mt-3">
+                    <h5>
+                        <b>NEW USER ACCOUNT</b>
+                    </h5>
+                    <hr>
+                </div>
+                <th:form class="" asp-controller="User" asp-action="Create" method="post">
+                    <th:partial name="_UserForm" model="newUser"/>
+                </th:form>
+            </div>
+        </div>
+    </div>
+    
     <div class="card-body">
         <table class="table table-bordered">
             <thead>
@@ -18,7 +39,7 @@
                 <th style="width: 10px">#</th>
                 <th>Full Name</th>
                 <th>Roles</th>
-                <th style="width: 40px"></th>
+                <th style="width: 160px"></th>
             </tr>
             </thead>
             <tbody>
@@ -33,15 +54,16 @@
                     <td>@user.FullName</td>
                     <td>
                         <ul>
-                        @foreach (var role in user.Roles)
-                        {
-                            <li>@role</li>
-                        }
+                            @foreach (var role in user.Roles)
+                            {
+                                <li>@role.Name</li>
+                            }
                         </ul>
                     </td>
                     <td>
-                        <span class="badge bg-info">edit</span>
-                        <span class="badge bg-info">delete</span>
+                        <a href=""><span class="badge badge-dark" data-toggle="tooltip" title="Assign roles"><i class="fas fa-users"></i></span></a>
+                        <a href=""><span class="badge badge-warning"data-toggle="tooltip" title="Edit user"><i class="fas fa-edit"></i></span></a>
+                        <a href=""><span class="badge badge-danger"data-toggle="tooltip" title="Delete user"><i class="fas fa-trash"></i></span></a>    
                     </td>
                 </tr>
             }
@@ -155,9 +177,10 @@
     </div>
 </div>
 <!-- Page-body start -->
-<th:partial name="Partials/_DynamicModelPopup" model="Model" view-data="ViewData"></th:partial>
+<th:partial name="Partials/_DynamicModelPopup" model="Model" view-data="ViewData"></th:partial>*@
 
 @section scripts
 {
     <th:partial name="_ValidationScriptsPartial"></th:partial>
-}*@
+    <th:partial name="Partials/_ToastScript"></th:partial>
+}

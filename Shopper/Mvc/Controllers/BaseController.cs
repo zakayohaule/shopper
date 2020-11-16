@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Runtime.CompilerServices;
 using Shared.Mvc.Entities;
+using Shared.Mvc.Enums;
+using Shared.Mvc.ViewModels;
 
 namespace Shopper.Mvc.Controllers
 {
@@ -59,6 +61,40 @@ namespace Shopper.Mvc.Controllers
 
             messages.Add(new Message { Type = pageAlertType.ToString().ToLower(), ShortDesc = description });
             ViewBag.PageAlerts = messages;
+        }
+
+        internal void AddToast(ToastType type, string body)
+        {
+            ViewBag.Toast = new ToastModel
+            {
+                Type = type,
+                Body = body,
+            };
+        }
+
+        internal void AddErrorToast(string body)
+        {
+            AddToast(ToastType.Error, body);
+        }
+        
+        internal void AddSuccessToast(string body)
+        {
+            AddToast(ToastType.Success, body);
+        }
+        
+        internal void AddWarningToast(string body)
+        {
+            AddToast(ToastType.Warning, body);
+        }
+        
+        internal void AddInfoToast(string body)
+        {
+            AddToast(ToastType.Info, body);
+        }
+        
+        internal void AddDangerToast(string body)
+        {
+            AddToast(ToastType.Error, body);
         }
     }
 }

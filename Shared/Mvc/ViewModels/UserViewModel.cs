@@ -5,6 +5,7 @@ using Shared.Mvc.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Shared.Mvc.Entities.Identity;
 
 namespace Shared.Mvc.ViewModels
 {
@@ -19,6 +20,6 @@ namespace Shared.Mvc.ViewModels
         [Remote("ValidateUserEmail", AdditionalFields = "Id")]
         public string Email { get; set; }
         
-        public List<long> Roles { get; set; }
+        public List<Role> Roles { get; set; }
     }
 }

@@ -1,0 +1,47 @@
+@using Shared.Mvc.Enums
+
+@{
+    var toastModel = ViewBag.Toast as ToastModel;
+}
+@if (toastModel != null)
+{
+    <th:script src="~/plugins/toastr/toastr.min.js"></th:script>
+    <script>
+        toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "3000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+    @*@{
+        var title = toastModel.Title;
+        var body = toastModel.Body;
+        switch (toastModel.Type)
+        {
+            case ToastType.Danger:
+            case ToastType.Error:
+            
+        }
+    }*@
+    var body = '@toastModel.Body';
+    if ('@toastModel.Type' === 'Success')
+        toastr.success(body);
+    if ('@toastModel.Type' === 'Info')
+        toastr.info(body);
+    if ('@toastModel.Type' === 'Warning')
+        toastr.warning(body);
+    if ('@toastModel.Type' === 'Error' || '@toastModel.Type' === 'Danger')
+        toastr.error(body);
+    </script>
+}

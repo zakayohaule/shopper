@@ -18,8 +18,4 @@
       <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Mvc\Views\Shared\Partials" />
-    </ItemGroup>
-
 </Project>

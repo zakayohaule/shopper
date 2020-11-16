@@ -36,7 +36,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <th:script src="~/js/site.min.js" asp-append-version="true"></th:script>
         <th:script src="~/dist/js/adminlte.js" asp-append-version="true"></th:script>
     </th:environment>
-    @await RenderSectionAsync("css", false);
+    @await RenderSectionAsync("css", false)
+
 </head>
 <!--
 BODY TAG OPTIONS:
@@ -58,7 +59,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition sidebar-mini text-sm">
+<body class="hold-transition sidebar-mini">
 <div class="wrapper">
     <!-- Main Header -->
     @await Component.InvokeAsync("Header")
@@ -70,10 +71,10 @@ desired effect
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-0">
-                    <div class="col-sm-6">
+                    <div class="col-sm-8">
                         @await Component.InvokeAsync("PageHeader")
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         @await Component.InvokeAsync("Breadcrumb")
                     </div>
                 </div>
@@ -107,10 +108,10 @@ desired effect
 Both of these plugins are recommended to enhance the
 user experience. Slimscroll is required when using the
 fixed layout. -->
-@RenderSection("scripts", required: false)
-<script>
+@await RenderSectionAsync("scripts", required: false)
+@*<script>
         useSubmitClass();
         useDeleteConfirmation();
-    </script>
+</script>*@
 </body>
 </html>

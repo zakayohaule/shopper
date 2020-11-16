@@ -1716,6 +1716,7 @@
         <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.map" />
         <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\LICENSE.txt" />
         <_ContentIncludedByDefault Remove="wwwroot\lib\quill.js" />
+        <_ContentIncludedByDefault Remove="Mvc\Views\Shared\Partials\Components\Buttons\Default.cshtml" />
     </ItemGroup>
 
     <ItemGroup>

@@ -16,10 +16,10 @@ namespace Shared.Mvc.Entities.Identity
 
         [Column("normalized_user_name")] public override string NormalizedUserName { get; set; } = null;
 
-        [Column("full_name"), DisplayName("Full Name")] 
+        [Column("full_name"), DisplayName("Full Name")]
         public string FullName { get; set; }
 
-        [Column("email"), EmailAddress] 
+        [Column("email"), EmailAddress]
         public override string Email { get; set; }
 
         [Column("normalized_email"), EmailAddress]
@@ -44,9 +44,6 @@ namespace Shared.Mvc.Entities.Identity
         [Column("lockout_enabled")] public override bool LockoutEnabled { get; set; }
 
         [Column("access_failed_count")] public override int AccessFailedCount { get; set; }
-
-        [Column("institution_id")]
-        public uint InstitutionId { get; set; }
 
         [Column("created_at")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

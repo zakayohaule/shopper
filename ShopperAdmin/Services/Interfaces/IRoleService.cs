@@ -20,7 +20,7 @@ namespace ShopperAdmin.Services.Interfaces
 
         string GenerateRoleName(string roleName);
         bool ExistsByName(string name, bool includeDeleted);
-        bool ExistsByDisplayName(string name, bool includeDeleted);
+        bool ExistsByDisplayName(string name);
         bool ExistsById(long id, bool includeDeleted);
         bool WasDeleted(Role role);
     }

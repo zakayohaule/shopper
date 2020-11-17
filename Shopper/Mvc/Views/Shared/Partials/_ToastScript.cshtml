@@ -1,7 +1,10 @@
-@using Shared.Mvc.Enums
-
+@using Newtonsoft.Json
 @{
-    var toastModel = ViewBag.Toast as ToastModel;
+    ToastModel toastModel = null;
+    if (TempData["Toast"] != null)
+    {
+        toastModel = JsonConvert.DeserializeObject<ToastModel>(TempData["Toast"].ToString());
+    }
 }
 @if (toastModel != null)
 {
@@ -31,7 +34,7 @@
         {
             case ToastType.Danger:
             case ToastType.Error:
-            
+
         }
     }*@
     var body = '@toastModel.Body';

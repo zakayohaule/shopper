@@ -2,18 +2,20 @@
 
 @{
     var newUser = new UserViewModel();
-    ViewData["Modal-Title"] = "Edit User";
 }
 
 @section css {
     <!-- Toastr -->
     <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
+
+    <!-- iCheck for checkboxes and radio inputs -->
+    <th:link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css"></th:link>
 }
 
-<div class="card">
+<div class="card card-default">
     <div class="card-header">
-        <a href="" data-toggle="modal" data-target="#add-user" class="btn text-primary float-right" title="Add User">
-            <i class="fas fa-user-plus fa-lg"></i>
+        <a href="" data-toggle="modal" data-target="#add-user" class="btn btn-sm btn-primary float-right" title="Add User">
+            <i class="fas fa-user-plus"> Add</i>
         </a>
     </div>
     <!-- /.card-header -->
@@ -37,7 +39,7 @@
     </div>
 
     <div class="card-body table-responsive p-0">
-        <table class="table table-hover text-nowrap">
+        <table class="table table-bordered table-hover">
             <thead>
             <tr>
                 <th style="width: 10px">#</th>
@@ -59,22 +61,17 @@
                     <td>@user.FullName</td>
                     <td>@user.Email</td>
                     <td>
-                        <ul>
-                            @foreach (var role in user.Roles)
-                            {
-                                <li>@role.Name</li>
-                            }
-                        </ul>
+                        @string.Join(", ", user.Roles.Select(r => r.DisplayName))
                     </td>
                     <td>
                         <a href="#">
                             <span class="badge badge-dark" data-toggle="tooltip" title="Assign roles" onclick="openFormModal('@Url.Action("UserRolesModal", new {id = user.Id})', 'Assign Roles')">
-                                <i class="fas fa-users"></i>
+                                <i class="fas fa-users fa-1x"></i>
                             </span>
                         </a>
                         <a href="#" onclick="openFormModal('@Url.Action("EditUserModal", new {id = user.Id})', 'Edit User')">
                             <span class="badge badge-warning" title="Edit user">
-                                <i class="fas fa-edit"></i>
+                                <i class="fas fa-edit fa-1x"></i>
                             </span>
                         </a>
                         <th:a asp-controller="User"
@@ -93,14 +90,14 @@
     <!-- /.card-body -->
 </div>
 <!-- /.card -->
-<th:partial name="Partials/_DynamicModelPopup" model="Model" view-data="ViewData" ></th:partial>
+<th:partial name="Partials/_DynamicModelPopup" model="Model" view-data="ViewData"></th:partial>
 
 @section scripts
 {
-    <script>
-            useSubmitClass();
-            useDeleteConfirmation();
-    </script>
     <th:partial name="_ValidationScriptsPartial"></th:partial>
     <th:partial name="Partials/_ToastScript"></th:partial>
+    <script>
+                // useSubmitClass();
+                useDeleteConfirmation();
+        </script>
 }

@@ -22,7 +22,7 @@ namespace ShopperAdmin.Mvc.Controllers
         private readonly IRoleService _roleService;
         private readonly RoleManager<Role> _roleManager;
 
-        [ViewData] 
+        [ViewData]
         public string Title { get; set; } = "Roles";
 
         public RoleController(IRoleService roleService, RoleManager<Role> roleManager)
@@ -39,17 +39,16 @@ namespace ShopperAdmin.Mvc.Controllers
 
             return View(roles);
         }
-        
-        [HttpPost(""),Permission("role_add"), ValidateAntiForgeryToken, 
+
+        [HttpPost(""),Permission("role_add"), ValidateAntiForgeryToken,
          /*ValidateModelWithRedirect()*/]
         public async Task<IActionResult> Create(Role role)
         {
             IdentityResult result;
-            if (_roleService.ExistsByDisplayName(role.DisplayName, true))
+            if (_roleService.ExistsByDisplayName(role.DisplayName))
             {
                 var deleted = await _roleService.FindByDisplayName(role.DisplayName);
                 deleted.DisplayName = role.DisplayName;
-                deleted.IsDeleted = false;
                 result = await _roleManager.UpdateAsync(deleted);
             }
             else
@@ -62,7 +61,7 @@ namespace ShopperAdmin.Mvc.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
-            
+
             TempData["Error"] = "Role could not be created";
             return RedirectToAction(nameof(Index));
         }
@@ -78,18 +77,18 @@ namespace ShopperAdmin.Mvc.Controllers
             }
 
             toUpdate.DisplayName = role.DisplayName;
-            
+
             var result = await _roleManager.UpdateAsync(toUpdate);
-            
+
             if (result.Succeeded)
             {
                 return RedirectToAction(nameof(Index));
             }
-            
+
             TempData["Error"] = "Role could not be created";
             return RedirectToAction(nameof(Index));
         }
-        
+
         [HttpGet("{id}/delete"), Permission("role_delete")]
         public async Task<IActionResult> Delete(long id)
         {
@@ -115,8 +114,8 @@ namespace ShopperAdmin.Mvc.Controllers
         [AcceptVerbs("GET",Route = "validate-role-name", Name = "ValidateRoleDisplayName")]
         public IActionResult ExistsByDisplayName(string displayName)
         {
-            return _roleService.ExistsByDisplayName(displayName, false) 
-                ? Json("A role with this name already exists") 
+            return _roleService.ExistsByDisplayName(displayName)
+                ? Json("A role with this name already exists")
                 : Json(true);
         }
 
@@ -128,7 +127,7 @@ namespace ShopperAdmin.Mvc.Controllers
             {
                 return NotFound();
             }
-            
+
             var permissions = HttpContext.Request.Form["permissions"].ToList();
 
             await _roleService.SaveRolePermissionsAsync(role, permissions);

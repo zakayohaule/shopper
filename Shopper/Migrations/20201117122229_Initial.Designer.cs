@@ -9,7 +9,7 @@ using Shopper.Database;
 namespace Shopper.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201108030051_Initial")]
+    [Migration("20201117122229_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,10 +56,6 @@ namespace Shopper.Migrations
                     b.Property<bool>("HasResetPassword")
                         .HasColumnName("has_reset_password")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<uint>("InstitutionId")
-                        .HasColumnName("institution_id")
-                        .HasColumnType("int unsigned");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnName("is_deleted")
@@ -197,10 +193,6 @@ namespace Shopper.Migrations
                         .IsRequired()
                         .HasColumnName("display_name")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnName("is_deleted")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Name")
                         .HasColumnName("name")

@@ -60,10 +60,6 @@ namespace ShopperAdmin.Migrations
                     .HasColumnName("institution_id")
                     .HasColumnType("int unsigned");
 
-                b.Property<bool>("IsDeleted")
-                    .HasColumnName("is_deleted")
-                    .HasColumnType("tinyint(1)");
-
                 b.Property<bool>("LockoutEnabled")
                     .HasColumnName("lockout_enabled")
                     .HasColumnType("tinyint(1)");
@@ -196,10 +192,6 @@ namespace ShopperAdmin.Migrations
                     .IsRequired()
                     .HasColumnName("display_name")
                     .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                b.Property<bool>("IsDeleted")
-                    .HasColumnName("is_deleted")
-                    .HasColumnType("tinyint(1)");
 
                 b.Property<string>("Name")
                     .HasColumnName("name")

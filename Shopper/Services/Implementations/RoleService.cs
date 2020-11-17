@@ -50,14 +50,6 @@ namespace Shopper.Services.Implementations
 
         public async Task<Role> CreateAsync(Role role)
         {
-            if (WasDeleted(role))
-            {
-                var deleted = await FindByNameAsync(role.Name);
-                deleted.IsDeleted = false;
-                await _dbContext.SaveChangesAsync();
-                return deleted;
-            }
-
             var newRole = await _dbContext.Roles.AddAsync(role);
             await _dbContext.SaveChangesAsync();
             return newRole.Entity;
@@ -74,21 +66,22 @@ namespace Shopper.Services.Implementations
 
         public async Task DeleteRoleAsync(Role role)
         {
-            role.IsDeleted = true;
-            _dbContext.Roles.Update(role);
+            _dbContext.Roles.Remove(role);
             await _dbContext.SaveChangesAsync();
         }
 
         public RolePermissionViewModel RolePermissions(long roleId)
         {
-            var role = _dbContext.Roles.Where(role => role.Id == roleId).Select(role => new {role.Name, role.Id}).First();
+            var role = _dbContext.Roles.Where(role => role.Id == roleId).Select(role => new {role.Name, role.Id})
+                .First();
             var modules = _dbContext
                 .Modules
                 .AsNoTracking()
                 .Include(module => module.Permissions)
                 .ToList();
-            var roleClaims = _dbContext.RoleClaims.Where(claim => claim.RoleId == roleId).Select(claim => claim.ClaimValue).ToList();
-            
+            var roleClaims = _dbContext.RoleClaims.Where(claim => claim.RoleId == roleId)
+                .Select(claim => claim.ClaimValue).ToList();
+
             return new RolePermissionViewModel
             {
                 RoleId = role.Id,
@@ -106,7 +99,8 @@ namespace Shopper.Services.Implementations
             {
                 var currentRolePermissions = role.RoleClaims.Select(claim => claim.ClaimValue).ToList();
 
-                var deleted = role.RoleClaims.Where(claim => currentRolePermissions.Except(permissions).Contains(claim.ClaimValue)).ToList();
+                var deleted = role.RoleClaims
+                    .Where(claim => currentRolePermissions.Except(permissions).Contains(claim.ClaimValue)).ToList();
                 added = permissions.Except(currentRolePermissions).ToList();
                 _dbContext.RoleClaims.RemoveRange(deleted);
             }
@@ -130,34 +124,18 @@ namespace Shopper.Services.Implementations
             await _dbContext.SaveChangesAsync();
         }
 
-        public bool ExistsByName(string name, bool includeDeleted)
+        public bool ExistsByName(string name)
         {
-            if (includeDeleted)
-            {
-                return _dbContext.Roles
-                    .IgnoreQueryFilters()
-                    .AsNoTracking()
-                    .Any(r => string.Equals(r.Name, name, StringComparison.OrdinalIgnoreCase));
-            }
-
             return _dbContext.Roles
                 .AsNoTracking()
                 .Any(r => string.Equals(r.Name, name, StringComparison.OrdinalIgnoreCase));
         }
 
-        public bool ExistsByDisplayName(string name, bool includeDeleted)
+        public bool ExistsByDisplayName(string name, long id)
         {
-            if (includeDeleted)
-            {
-                return _dbContext.Roles
-                    .IgnoreQueryFilters()
-                    .AsNoTracking()
-                    .Any(r => string.Equals(r.DisplayName, name, StringComparison.OrdinalIgnoreCase));
-            }
-
             return _dbContext.Roles
                 .AsNoTracking()
-                .Any(r => string.Equals(r.DisplayName, name, StringComparison.OrdinalIgnoreCase));
+                .Any(r => string.Equals(r.DisplayName, name, StringComparison.OrdinalIgnoreCase) && r.Id != id);
         }
 
         public bool ExistsById(long id, bool includeDeleted)
@@ -180,8 +158,7 @@ namespace Shopper.Services.Implementations
             return _dbContext.Roles
                 .IgnoreQueryFilters()
                 .AsNoTracking()
-                .Any(r => string.Equals(r.Name, role.Name, StringComparison.OrdinalIgnoreCase)
-                          && r.IsDeleted);
+                .Any(r => string.Equals(r.Name, role.Name, StringComparison.OrdinalIgnoreCase));
         }
 
         public string GenerateRoleName(string roleName)

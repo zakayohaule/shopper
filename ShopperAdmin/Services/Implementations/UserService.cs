@@ -84,7 +84,6 @@
 
         public async Task DeleteUserAsync(AppUser user)
         {
-            user.IsDeleted = true;
             _dbContext.Users.Update(user);
             await _dbContext.SaveChangesAsync();
         }
@@ -163,8 +162,8 @@
         {
             return _dbContext.Users
                 .IgnoreQueryFilters()
-                .Any(user => (string.Equals(user.Email, viewModel.Email, StringComparison.OrdinalIgnoreCase) 
-                || Equals(user.Id, viewModel.Id) && user.IsDeleted));
+                .Any(user => (string.Equals(user.Email, viewModel.Email, StringComparison.OrdinalIgnoreCase)
+                || Equals(user.Id, viewModel.Id)));
         }
 
         public bool ExistsByEmail(string email)

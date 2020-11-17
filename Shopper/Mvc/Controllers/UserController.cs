@@ -31,12 +31,12 @@ namespace Shopper.Mvc.Controllers
         }
 
 
-        [Permission("user_view")]
+        [Permission("user_view"), Toast]
         [HttpGet("", Name = "users.view")]
         public IActionResult Index()
         {
             Title = "Users";
-            AddPageHeader("Users list");
+            AddPageHeader("Manage users");
             var users = _userService
                 .GetAllUsers()
                 .Select(user => new UserViewModel
@@ -47,6 +47,7 @@ namespace Shopper.Mvc.Controllers
                     Roles = user.UserRoles.Select(role => role.Role).ToList(),
                 })
                 .ToList();
+
             return View(users);
         }
 
@@ -98,6 +99,7 @@ namespace Shopper.Mvc.Controllers
             TempData["EmailVerified"] = "sent";
             _userService.SendEmailVerificationEmail(emailVerificationModel);
 
+            ToastSuccess("User created successfully!");
             return RedirectToAction(nameof(Index));
         }
 
@@ -126,6 +128,8 @@ namespace Shopper.Mvc.Controllers
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 });
+
+            ToastSuccess("User updated successfully!");
             return RedirectToAction(nameof(Index));
         }
 
@@ -140,6 +144,7 @@ namespace Shopper.Mvc.Controllers
 
             await _userService.DeleteUserAsync(user);
 
+            ToastSuccess("User deleted successfully!");
             return RedirectToAction(nameof(Index));
         }
 
@@ -165,6 +170,8 @@ namespace Shopper.Mvc.Controllers
 
             var roles = HttpContext.Request.Form["roles"].ToList();
             await _userService.UpdateUserRolesAsync(user, roles);
+
+            ToastSuccess("User roles updated successfully!");
             return RedirectToAction(nameof(Index));
         }
 

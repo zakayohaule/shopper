@@ -15,13 +15,13 @@ namespace Shopper.Database.Seeders
             {
                 UserName = "admin",
                 FullName = "Admin Admin",
-                Email = "admin@ega.go.tz",
+                Email = "admin@admin.com",
                 EmailConfirmed = true,
                 HasResetPassword = true,
                 // Institution = eGa
             };
 
-            if (!dbContext.Users.Any(appUser => appUser.Email == "admin@ega.go.tz"))
+            if (!dbContext.Users.Any(appUser => appUser.Email == "admin@admin.com"))
             {
                 var result = userManager.CreateAsync(user, "123456").Result;
                 if (!result.Succeeded)
@@ -37,7 +37,7 @@ namespace Shopper.Database.Seeders
                 return;
             }
 
-            var adminUser = userManager.FindByEmailAsync("admin@ega.go.tz").Result;
+            var adminUser = userManager.FindByEmailAsync("admin@admin.com").Result;
 
             var adminRole = dbContext.Roles.SingleOrDefault(role => role.Name == "Administrator");
 

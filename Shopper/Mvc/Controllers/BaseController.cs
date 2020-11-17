@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
 using Shared.Mvc.Entities;
 using Shared.Mvc.Enums;
 using Shared.Mvc.ViewModels;
@@ -15,7 +16,7 @@ namespace Shopper.Mvc.Controllers
     {
         [ViewData]
         public string Title { get; set; } = "Shopper";
-        
+
         internal void AddBreadcrumb(string displayName, string urlPath)
         {
             List<Message> messages;
@@ -65,34 +66,34 @@ namespace Shopper.Mvc.Controllers
 
         internal void AddToast(ToastType type, string body)
         {
-            ViewBag.Toast = new ToastModel
+            TempData["Toast"] = JsonConvert.SerializeObject(new ToastModel
             {
                 Type = type,
                 Body = body,
-            };
+            });
         }
 
-        internal void AddErrorToast(string body)
+        internal void ToastError(string body)
         {
             AddToast(ToastType.Error, body);
         }
-        
-        internal void AddSuccessToast(string body)
+
+        internal void ToastSuccess(string body)
         {
             AddToast(ToastType.Success, body);
         }
-        
-        internal void AddWarningToast(string body)
+
+        internal void ToastWarning(string body)
         {
             AddToast(ToastType.Warning, body);
         }
-        
-        internal void AddInfoToast(string body)
+
+        internal void ToastInfo(string body)
         {
             AddToast(ToastType.Info, body);
         }
-        
-        internal void AddDangerToast(string body)
+
+        internal void ToastDanger(string body)
         {
             AddToast(ToastType.Error, body);
         }

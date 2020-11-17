@@ -55,10 +55,6 @@ namespace Shopper.Migrations
                         .HasColumnName("has_reset_password")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<uint>("InstitutionId")
-                        .HasColumnName("institution_id")
-                        .HasColumnType("int unsigned");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnName("is_deleted")
                         .HasColumnType("tinyint(1)");
@@ -195,10 +191,6 @@ namespace Shopper.Migrations
                         .IsRequired()
                         .HasColumnName("display_name")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnName("is_deleted")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Name")
                         .HasColumnName("name")

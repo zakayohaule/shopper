@@ -15,9 +15,7 @@ using Serilog;
             var modules = new List<Module>
             {
                 new Module {Name = "User Management"},
-                new Module {Name = "Institution Management"},
                 new Module {Name = "Role Management"},
-                new Module {Name = "Software Management"},
             }.ToList();
 
             modules.ForEach(pg =>

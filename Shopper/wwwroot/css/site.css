@@ -25,7 +25,7 @@
 }
 
 /*site specifics*/
-.site-loader-color 
+.site-loader-color
 {
     color: #000000 !important;
     font-size: 50px !important;
@@ -37,5 +37,13 @@
 
 .button-create{
 
+}
+
+.main-sidebar{
+  width: 230px;
+}
+
+.content-wrapper {
+  background-color: #e9ecef;
 }
 

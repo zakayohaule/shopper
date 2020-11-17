@@ -29,8 +29,6 @@ namespace Shared.Database.ModelBuilders.IdentityBuilders
                 .WithOne(e => e.User)
                 .HasForeignKey(ur => ur.UserId)
                 .IsRequired();
-            
-            b.HasQueryFilter(user => user.IsDeleted != true);
         }
     }
 }

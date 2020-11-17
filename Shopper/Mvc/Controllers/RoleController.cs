@@ -17,13 +17,11 @@ namespace Shopper.Mvc.Controllers
 {
     [Route("roles")]
     [Authorize]
-    public class RoleController : Controller
+    public class RoleController : BaseController
     {
         private readonly IRoleService _roleService;
         private readonly RoleManager<Role> _roleManager;
 
-        [ViewData] 
-        public string Title { get; set; } = "Roles";
 
         public RoleController(IRoleService roleService, RoleManager<Role> roleManager)
         {
@@ -32,42 +30,36 @@ namespace Shopper.Mvc.Controllers
         }
 
         // GET
-        [HttpGet(""), Permission("role_view")]
+        [HttpGet(""), Permission("role_view"), Toast]
         public IActionResult Index()
         {
+            Title = "Roles";
+
             var roles = _roleService.GetAllRoles().ToList();
 
             return View(roles);
         }
-        
-        [HttpPost(""),Permission("role_add"), ValidateAntiForgeryToken, 
-         /*ValidateModelWithRedirect()*/]
+
+        [HttpPost(""), Permission("role_add"), ValidateAntiForgeryToken,
+            /*ValidateModelWithRedirect()*/]
         public async Task<IActionResult> Create(Role role)
         {
             IdentityResult result;
-            if (_roleService.ExistsByDisplayName(role.DisplayName, true))
-            {
-                var deleted = await _roleService.FindByDisplayName(role.DisplayName);
-                deleted.DisplayName = role.DisplayName;
-                deleted.IsDeleted = false;
-                result = await _roleManager.UpdateAsync(deleted);
-            }
-            else
-            {
-                var roleName = _roleService.GenerateRoleName(role.DisplayName);
-                role.Name = roleName;
-                result = await _roleManager.CreateAsync(role);
-            }
+            var roleName = _roleService.GenerateRoleName(role.DisplayName);
+            role.Name = roleName;
+            result = await _roleManager.CreateAsync(role);
+            // }
             if (result.Succeeded)
             {
+                ToastSuccess("Role created successfully!");
                 return RedirectToAction(nameof(Index));
             }
-            
-            TempData["Error"] = "Role could not be created";
+
+            ToastError("Role could not be created!");
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpPost("{id}"),Permission("role_edit"), ValidateAntiForgeryToken, ]
+        [HttpPost("{id}"), Permission("role_edit"), ValidateAntiForgeryToken,]
         public async Task<IActionResult> Update(long id, Role role)
         {
             var toUpdate = await _roleService.FindByIdAsync(id);
@@ -77,19 +69,25 @@ namespace Shopper.Mvc.Controllers
                 return NotFound();
             }
 
-            toUpdate.DisplayName = role.DisplayName;
-            
-            var result = await _roleManager.UpdateAsync(toUpdate);
-            
-            if (result.Succeeded)
+            if (_roleService.ExistsByDisplayName(role.DisplayName, id))
             {
+                ToastError($"A role with the name '{role.DisplayName}', already exists");
                 return RedirectToAction(nameof(Index));
             }
-            
-            TempData["Error"] = "Role could not be created";
+            toUpdate.DisplayName = role.DisplayName;
+
+            var result = await _roleManager.UpdateAsync(toUpdate);
+
+            if (result.Succeeded)
+            {
+                ToastSuccess("Role updated successfully!");
+                return RedirectToAction(nameof(Index));
+            }
+
+            ToastError("Role could not be updated");
             return RedirectToAction(nameof(Index));
         }
-        
+
         [HttpGet("{id}/delete"), Permission("role_delete")]
         public async Task<IActionResult> Delete(long id)
         {
@@ -112,11 +110,11 @@ namespace Shopper.Mvc.Controllers
             return View(rolePermissions);
         }
 
-        [AcceptVerbs("GET",Route = "validate-role-name", Name = "ValidateRoleDisplayName")]
-        public IActionResult ExistsByDisplayName(string displayName)
+        [AcceptVerbs("GET", Route = "validate-role-name", Name = "ValidateRoleDisplayName")]
+        public IActionResult ExistsByDisplayName(string displayName, long id)
         {
-            return _roleService.ExistsByDisplayName(displayName, false) 
-                ? Json("A role with this name already exists") 
+            return _roleService.ExistsByDisplayName(displayName, id)
+                ? Json("A role with this name already exists")
                 : Json(true);
         }
 
@@ -128,12 +126,19 @@ namespace Shopper.Mvc.Controllers
             {
                 return NotFound();
             }
-            
-            var permissions = HttpContext.Request.Form["permissions"].ToList();
 
+            var permissions = HttpContext.Request.Form["permissions"].ToList();
             await _roleService.SaveRolePermissionsAsync(role, permissions);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet("{id}/open-edit-modal")]
+        public async Task<PartialViewResult> EditRoleModal(long id)
+        {
+            var role = await _roleService.FindByIdAsync(id);
+
+            return PartialView("../Role/_EditRoleModal", role);
         }
     }
 }

@@ -21,7 +21,6 @@ namespace Shared.Database.ModelBuilders.IdentityBuilders
                 .IsRequired();
 
             b.HasIndex(role => role.Name).IsUnique();
-            b.HasQueryFilter(role => role.IsDeleted != true);
         }
     }
 }

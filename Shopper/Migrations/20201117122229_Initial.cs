@@ -34,8 +34,7 @@ namespace Shopper.Migrations
                     created_at = table.Column<DateTime>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     updated_at = table.Column<DateTime>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
-                    is_deleted = table.Column<bool>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
                 },
                 constraints: table =>
                 {
@@ -63,7 +62,6 @@ namespace Shopper.Migrations
                     lockout_end = table.Column<DateTimeOffset>(nullable: true),
                     lockout_enabled = table.Column<bool>(nullable: false),
                     access_failed_count = table.Column<int>(nullable: false),
-                    institution_id = table.Column<uint>(nullable: false),
                     created_at = table.Column<DateTime>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     updated_at = table.Column<DateTime>(nullable: false)

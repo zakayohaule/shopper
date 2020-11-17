@@ -53,7 +53,6 @@ namespace ShopperAdmin.Services.Implementations
             if (WasDeleted(role))
             {
                 var deleted = await FindByNameAsync(role.Name);
-                deleted.IsDeleted = false;
                 await _dbContext.SaveChangesAsync();
                 return deleted;
             }
@@ -74,7 +73,6 @@ namespace ShopperAdmin.Services.Implementations
 
         public async Task DeleteRoleAsync(Role role)
         {
-            role.IsDeleted = true;
             _dbContext.Roles.Update(role);
             await _dbContext.SaveChangesAsync();
         }
@@ -88,7 +86,7 @@ namespace ShopperAdmin.Services.Implementations
                 .Include(module => module.Permissions)
                 .ToList();
             var roleClaims = _dbContext.RoleClaims.Where(claim => claim.RoleId == roleId).Select(claim => claim.ClaimValue).ToList();
-            
+
             return new RolePermissionViewModel
             {
                 RoleId = role.Id,
@@ -145,16 +143,8 @@ namespace ShopperAdmin.Services.Implementations
                 .Any(r => string.Equals(r.Name, name, StringComparison.OrdinalIgnoreCase));
         }
 
-        public bool ExistsByDisplayName(string name, bool includeDeleted)
+        public bool ExistsByDisplayName(string name)
         {
-            if (includeDeleted)
-            {
-                return _dbContext.Roles
-                    .IgnoreQueryFilters()
-                    .AsNoTracking()
-                    .Any(r => string.Equals(r.DisplayName, name, StringComparison.OrdinalIgnoreCase));
-            }
-
             return _dbContext.Roles
                 .AsNoTracking()
                 .Any(r => string.Equals(r.DisplayName, name, StringComparison.OrdinalIgnoreCase));
@@ -181,7 +171,7 @@ namespace ShopperAdmin.Services.Implementations
                 .IgnoreQueryFilters()
                 .AsNoTracking()
                 .Any(r => string.Equals(r.Name, role.Name, StringComparison.OrdinalIgnoreCase)
-                          && r.IsDeleted);
+                          );
         }
 
         public string GenerateRoleName(string roleName)

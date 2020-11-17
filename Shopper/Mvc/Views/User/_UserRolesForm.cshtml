@@ -5,14 +5,23 @@
 }
 
 <div class="row px-3">
-@foreach (var role in roles)
-{
-    var isChecked = Model.Contains(role.Id) ? "checked" : "";
-    <div class="form-group col-md-4">
-        <input type="checkbox" @isChecked name="roles"
-               value="@role.Id"> @role.DisplayName
-    </div>
-}
+    @foreach (var role in roles)
+    {
+        var isChecked = Model.Contains(role.Id) ? "checked" : "";
+        <div class="form-group col-md-4">
+            <div class="icheck-primary">
+                <input type="checkbox" name="roles" value="@role.Id" id="role_@role.Id" @isChecked>
+                <label for="role_@role.Id">
+                    @role.DisplayName
+                </label>
+            </div>
+            @*<input type="checkbox" @isChecked name="roles"value="@role.Id" id="role_@role.Id">
+            <label for="role_@role.Id">
+                @role.DisplayName
+            </label>*@
+
+        </div>
+    }
 </div>
 <div class="modal-footer justify-content-between">
     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

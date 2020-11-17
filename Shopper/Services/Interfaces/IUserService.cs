@@ -25,6 +25,6 @@ namespace Shopper.Services.Interfaces
         bool ExistsByEmail(string email);
         bool ExistsByUserName(string username);
         string GenerateUserName(string username);
-        bool UsersForInstitution(uint getInstitutionId, HashSet<long> selectedUsers);
+        // bool UsersForInstitution(uint getInstitutionId, HashSet<long> selectedUsers);
     }
 }

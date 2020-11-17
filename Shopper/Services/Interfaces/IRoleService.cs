@@ -19,8 +19,8 @@ namespace Shopper.Services.Interfaces
         Task SaveRolePermissionsAsync(Role role, List<string> permissions);
 
         string GenerateRoleName(string roleName);
-        bool ExistsByName(string name, bool includeDeleted);
-        bool ExistsByDisplayName(string name, bool includeDeleted);
+        bool ExistsByName(string name);
+        bool ExistsByDisplayName(string name, long id);
         bool ExistsById(long id, bool includeDeleted);
         bool WasDeleted(Role role);
     }

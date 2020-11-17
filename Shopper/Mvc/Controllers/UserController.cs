@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Serilog;
+using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities.Identity;
-using Shared.Mvc.Enums;
 using Shared.Mvc.ViewModels;
 using Shared.Mvc.ViewModels.Emails;
 using Shopper.Attributes;
@@ -62,7 +62,7 @@ namespace Shopper.Mvc.Controllers
                 EmailConfirmed = false,
                 UserName = _userService.GenerateUserName(userViewModel.FullName)
             };
-            
+
             var result = await _userManager.CreateAsync(user, password);
 
             if (!result.Succeeded)
@@ -101,52 +101,49 @@ namespace Shopper.Mvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // [HttpPost("{id}"), Permission("user_edit"), ValidateAntiForgeryToken,
-        //  ValidateModelWithRedirect(nameof(UserController), nameof(Index), null)]
-        // public async Task<IActionResult> Update(UserViewModel viewModel)
-        // {
-        //     var user = await _userManager.FindByIdAsync(viewModel.Id.ToString());
-        //
-        //     if (user.IsNull())
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     // user.Email = viewModel.Email;
-        //     user.InstitutionId = viewModel.InstitutionId;
-        //     user.FullName = viewModel.FullName;
-        //     var result = await _userManager.UpdateAsync(user);
-        //     if (result.Succeeded)
-        //     {
-        //         return RedirectToAction(nameof(Index));
-        //     }
-        //     else
-        //     {
-        //         result.Errors.ToList().ForEach(error => { ModelState.AddModelError(error.Code, error.Description); });
-        //         TempData["Error"] = JsonConvert.SerializeObject(ModelState, Formatting.Indented,
-        //             new JsonSerializerSettings
-        //             {
-        //                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        //             });
-        //         return RedirectToAction(nameof(Index));
-        //     }
-        // }
-        //
-        // [HttpGet("{id}/delete"), Permission("user_delete")]
-        // public async Task<IActionResult> Delete(long id)
-        // {
-        //     var user = await _userManager.FindByIdAsync(id.ToString());
-        //     if (user.IsNull())
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     await _userService.DeleteUserAsync(user);
-        //
-        //     return RedirectToAction(nameof(Index));
-        // }
-        //
-        //
+        [HttpPost("{id}"), Permission("user_edit"), ValidateAntiForgeryToken,
+         ValidateModelWithRedirect(nameof(UserController), nameof(Index), null)]
+        public async Task<IActionResult> Update(UserViewModel viewModel)
+        {
+            var user = await _userManager.FindByIdAsync(viewModel.Id.ToString());
+
+            if (user.IsNull())
+            {
+                return NotFound();
+            }
+
+            // user.Email = viewModel.Email;
+            user.FullName = viewModel.FullName;
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            result.Errors.ToList().ForEach(error => { ModelState.AddModelError(error.Code, error.Description); });
+            TempData["Error"] = JsonConvert.SerializeObject(ModelState, Formatting.Indented,
+                new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet("{id}/delete"), Permission("user_delete")]
+        public async Task<IActionResult> Delete(long id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user.IsNull())
+            {
+                return NotFound();
+            }
+
+            await _userService.DeleteUserAsync(user);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
         [AcceptVerbs("GET", Route = "validate-user-email", Name = "ValidateUserEmail")]
         public JsonResult ExistsByEmail(string email)
         {
@@ -156,58 +153,48 @@ namespace Shopper.Mvc.Controllers
             };
             return Json(true);
         }
-        //
-        // [HttpPost("{id}/roles")]
-        // public async Task<IActionResult> UpdateUserRoles(long id)
-        // {
-        //     var user = await _userManager.FindByIdAsync(id.ToString());
-        //     if (user.IsNull())
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     var roles = HttpContext.Request.Form["roles"].ToList();
-        //     await _userService.UpdateUserRolesAsync(user, roles);
-        //     return RedirectToAction(nameof(Index));
-        // }
-        //
-        // [HttpGet("{id}/open-edit-modal")]
-        // public async Task<PartialViewResult> EditUserModal(long id)
-        // {
-        //     var user = await _userService.FindByIdAsync(id, true);
-        //     var viewModel = new UserViewModel
-        //     {
-        //         Email = user.Email,
-        //         FullName = user.FullName,
-        //         InstitutionId = user.InstitutionId,
-        //         InstitutionName = user.Institution.Name,
-        //         Id = user.Id,
-        //     };
-        //
-        //     ViewData["InstitutionSelectItems"] = _institutionService
-        //         .GetAllInstitutions()
-        //         .Select(inst => new SelectListItem
-        //         {
-        //             Value = inst.Id.ToString(),
-        //             Text = inst.Name
-        //         }).ToList();
-        //
-        //     return PartialView("../User/_EditUserModal", viewModel);
-        // }
-        //
-        // [HttpGet("{id}/user-roles-modal")]
-        // public async Task<PartialViewResult> UserRolesModal(long id)
-        // {
-        //     var user = await _userService.FindByIdAsync(id, true);
-        //
-        //     var viewModel = new UserViewModel
-        //     {
-        //         Id = user.Id,
-        //         Roles = user.UserRoles.Select(role => role.RoleId).ToList()
-        //     };
-        //     TempData["Roles"] = _userService.GetAllRoles().ToList();
-        //
-        //     return PartialView("../User/_UpdateUserRolesModal", viewModel);
-        // }
+
+        [HttpPost("{id}/roles")]
+        public async Task<IActionResult> UpdateUserRoles(long id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user.IsNull())
+            {
+                return NotFound();
+            }
+
+            var roles = HttpContext.Request.Form["roles"].ToList();
+            await _userService.UpdateUserRolesAsync(user, roles);
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet("{id}/open-edit-modal")]
+        public async Task<PartialViewResult> EditUserModal(long id)
+        {
+            var user = await _userService.FindByIdAsync(id);
+            var viewModel = new UserViewModel
+            {
+                Email = user.Email,
+                FullName = user.FullName,
+                Id = user.Id,
+            };
+
+            return PartialView("../User/_EditUserModal", viewModel);
+        }
+
+        [HttpGet("{id}/user-roles-modal")]
+        public async Task<PartialViewResult> UserRolesModal(long id)
+        {
+            var user = await _userService.FindByIdAsync(id, true);
+
+            var viewModel = new UserViewModel
+            {
+                Id = user.Id,
+                Roles = user.UserRoles.Select(ur => ur.Role).ToList()
+            };
+            TempData["Roles"] = _userService.GetAllRoles().ToList();
+            ViewData["Modal-Title"] = "Assign Roles";
+            return PartialView("../User/_UpdateUserRolesModal", viewModel);
+        }
     }
 }

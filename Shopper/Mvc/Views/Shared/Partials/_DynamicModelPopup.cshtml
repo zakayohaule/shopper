@@ -14,15 +14,11 @@
 <div class="modal" id="edit-modal">
     <div class="modal-dialog @size">
         <div class="modal-content">
-            <div class="col-12 mt-3">
-                <h5 id="modal-title">
-                    <b>@title</b>
-                </h5>
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-label="Close">
-                    <i class="zmdi zmdi-close-circle-o"></i>
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-title">@title</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
                 </button>
-                <hr>
             </div>
             <div class="modal-body" id="edit-modal-body">
 
@@ -42,7 +38,7 @@
                 }
                 $("#edit-modal-body").html(response);
                 $("#edit-modal").modal("show");
-            } 
+            }
            })
     }
     </script>

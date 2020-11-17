@@ -62,6 +62,7 @@
             return await _dbContext
                 .Users
                 .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
@@ -163,7 +164,7 @@
         {
             return _dbContext.Users
                 .IgnoreQueryFilters()
-                .Any(user => (string.Equals(user.Email, viewModel.Email, StringComparison.OrdinalIgnoreCase) 
+                .Any(user => (string.Equals(user.Email, viewModel.Email, StringComparison.OrdinalIgnoreCase)
                 || Equals(user.Id, viewModel.Id) && user.IsDeleted));
         }
 

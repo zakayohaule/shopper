@@ -1,0 +1,91 @@
+﻿@model List<ProductGroup>;
+
+@{
+    Layout = "_Layout";
+    var newProductGroup = new ProductGroup();
+}
+
+@section css {
+    <!-- Toastr -->
+    <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
+}
+
+<div class="card card-default">
+    <div class="card-header">
+        <a href="" data-toggle="modal" data-target="#add-user" class="btn btn-sm btn-primary float-right" title="Add User">
+            <i class="fas fa-user-plus"> Add</i>
+        </a>
+    </div>
+    <!-- /.card-header -->
+
+    <div class="modal fade" id="add-user">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Product Group</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <th:form class="" asp-controller="ProductGroup" asp-action="Create" method="post">
+                    <div class="modal-body">
+                        <th:partial name="_ProductGroupForm" model="newProductGroup"/>
+                    </div>
+                </th:form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body table-responsive p-0">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th style="width: 10px">#</th>
+                <th>Name</th>
+                <th style="width: 160px"></th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                int index = 0;
+            }
+            @foreach (var productGroup in Model)
+            {
+                index++;
+                <tr>
+                    <td>@index</td>
+                    <td>@productGroup.Name</td>
+                    <td>
+                        <a href="#" onclick="openFormModal('@Url.Action("EditProductGroupModal", new {id = productGroup.Id})', 'Edit Product Group')"
+                           class="btn btn-default btn-sm">
+                            @* <span class="badge badge-warning" title="Edit product group"> *@
+                                <i class="fas fa-edit"></i>
+                            @* </span> *@
+                        </a>
+                        <th:a asp-controller="ProductGroup"
+                              asp-action="Delete"
+                              asp-route-id="@productGroup.Id" class="btn-delete">
+                            <span class="badge badge-danger" title="Delete product group">
+                                <i class="fas fa-trash"></i>
+                            </span>
+                        </th:a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->
+<th:partial name="Partials/_DynamicModelPopup" model="Model" view-data="ViewData"></th:partial>
+
+@section scripts
+{
+    <th:partial name="_ValidationScriptsPartial"></th:partial>
+    <th:partial name="Partials/_ToastScript"></th:partial>
+    <script>
+                // useSubmitClass();
+                useDeleteConfirmation();
+        </script>
+}

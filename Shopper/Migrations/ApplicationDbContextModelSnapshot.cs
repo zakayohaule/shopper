@@ -17,6 +17,70 @@ namespace Shopper.Migrations
                 .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("Shared.Mvc.Entities.Attribute", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("attributes");
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.AttributeOption", b =>
+                {
+                    b.Property<ushort>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("smallint unsigned");
+
+                    b.Property<int>("AttributeId")
+                        .HasColumnName("attribute_id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttributeId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("attribute_options");
+                });
+
             modelBuilder.Entity("Shared.Mvc.Entities.Identity.AppUser", b =>
                 {
                     b.Property<long>("Id")
@@ -331,6 +395,233 @@ namespace Shopper.Migrations
                     b.ToTable("user_tokens");
                 });
 
+            modelBuilder.Entity("Shared.Mvc.Entities.Product", b =>
+                {
+                    b.Property<uint>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("int unsigned");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnName("image_path")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.Property<ushort>("ProductCategoryId")
+                        .HasColumnName("product_category_id")
+                        .HasColumnType("smallint unsigned");
+
+                    b.Property<string>("Slug")
+                        .HasColumnName("slug")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("ProductCategoryId");
+
+                    b.ToTable("products");
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.ProductAttributeOption", b =>
+                {
+                    b.Property<uint>("ProductId")
+                        .HasColumnName("product_id")
+                        .HasColumnType("int unsigned");
+
+                    b.Property<ushort>("AttributeOptionId")
+                        .HasColumnName("attribute_option_id")
+                        .HasColumnType("smallint unsigned");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("ProductId", "AttributeOptionId");
+
+                    b.HasIndex("AttributeOptionId");
+
+                    b.ToTable("product_attribute_options");
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.ProductCategory", b =>
+                {
+                    b.Property<ushort>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("smallint unsigned");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.Property<ushort>("ProductGroupId")
+                        .HasColumnName("product_group_id")
+                        .HasColumnType("smallint unsigned");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("ProductGroupId");
+
+                    b.ToTable("product_categories");
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.ProductGroup", b =>
+                {
+                    b.Property<ushort>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("smallint unsigned");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("product_groups");
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.Sku", b =>
+                {
+                    b.Property<ulong>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<decimal>("BuyingPrice")
+                        .HasColumnName("buying_price")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsOnSale")
+                        .HasColumnName("is_on_sale")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<decimal>("MaximumDiscount")
+                        .HasColumnName("maximum_discount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<uint>("ProductId")
+                        .HasColumnName("product_id")
+                        .HasColumnType("int unsigned");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnName("quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RemainingQuantity")
+                        .HasColumnName("remaining_quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("SellingPrice")
+                        .HasColumnName("selling_price")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Skus");
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.SkuAttribute", b =>
+                {
+                    b.Property<ulong>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<ushort>("AttributeOptionId")
+                        .HasColumnName("attribute_option_id")
+                        .HasColumnType("smallint unsigned");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<ulong>("SkuId")
+                        .HasColumnName("stock_keeping_unit_id")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttributeOptionId");
+
+                    b.HasIndex("SkuId");
+
+                    b.ToTable("sku_attributes");
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.AttributeOption", b =>
+                {
+                    b.HasOne("Shared.Mvc.Entities.Attribute", "Attribute")
+                        .WithMany("AttributeOptions")
+                        .HasForeignKey("AttributeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Shared.Mvc.Entities.Identity.Permission", b =>
                 {
                     b.HasOne("Shared.Mvc.Entities.Identity.Module", "Module")
@@ -387,6 +678,54 @@ namespace Shopper.Migrations
                     b.HasOne("Shared.Mvc.Entities.Identity.AppUser", "User")
                         .WithMany("Tokens")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.Product", b =>
+                {
+                    b.HasOne("Shared.Mvc.Entities.ProductCategory", "ProductCategory")
+                        .WithMany("Products")
+                        .HasForeignKey("ProductCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.ProductAttributeOption", b =>
+                {
+                    b.HasOne("Shared.Mvc.Entities.AttributeOption", "AttributeOption")
+                        .WithMany()
+                        .HasForeignKey("AttributeOptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Shared.Mvc.Entities.Product", "Product")
+                        .WithMany("AttributeOptions")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.ProductCategory", b =>
+                {
+                    b.HasOne("Shared.Mvc.Entities.ProductGroup", "ProductGroup")
+                        .WithMany("ProductCategories")
+                        .HasForeignKey("ProductGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.SkuAttribute", b =>
+                {
+                    b.HasOne("Shared.Mvc.Entities.AttributeOption", "Option")
+                        .WithMany()
+                        .HasForeignKey("AttributeOptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Shared.Mvc.Entities.Sku", "Sku")
+                        .WithMany("SkuAttributes")
+                        .HasForeignKey("SkuId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

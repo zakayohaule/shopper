@@ -16,6 +16,8 @@ using Serilog;
             {
                 new Module {Name = "User Management"},
                 new Module {Name = "Role Management"},
+                new Module {Name = "Product Group Management"},
+                new Module {Name = "Product Category Management"},
             }.ToList();
 
             modules.ForEach(pg =>

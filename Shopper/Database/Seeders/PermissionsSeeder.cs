@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Shared.Mvc.Entities;
 using Serilog;
 using Shared.Mvc.Entities.Identity;
@@ -20,6 +21,12 @@ namespace Shopper.Database.Seeders
                 .Modules
                 .SingleOrDefault(group => group.Name == "Role Management");
 
+            var productGroupManagement =
+                dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Product Group Management"));
+
+            var productCategoryManagement =
+                dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Product Category Management"));
+
             var permissions = new List<Permission>
             {
                 new Permission {Name = "user_add", DisplayName = "Create Own Institution's User", Module = userManagement},
@@ -32,7 +39,15 @@ namespace Shopper.Database.Seeders
                 new Permission {Name = "role_edit", DisplayName = "Edit Role", Module = roleManagement},
                 new Permission {Name = "role_view", DisplayName = "View Role", Module = roleManagement},
                 new Permission {Name = "role_delete", DisplayName = "Delete Role", Module = roleManagement},
-                new Permission {Name = "role_permission_view", DisplayName = "View Role Permissions", Module = roleManagement}
+                new Permission {Name = "role_permission_view", DisplayName = "View Role Permissions", Module = roleManagement},
+                new Permission {Name = "product_category_add", DisplayName = "Add Product Categories", Module = productCategoryManagement},
+                new Permission {Name = "product_category_view", DisplayName = "View Product Categories", Module = productCategoryManagement},
+                new Permission {Name = "product_category_edit", DisplayName = "Edit Product Categories", Module = productCategoryManagement},
+                new Permission {Name = "product_category_delete", DisplayName = "Delete Product Categories", Module = productCategoryManagement},
+                new Permission {Name = "product_group_add", DisplayName = "Add Product Groups", Module = productGroupManagement},
+                new Permission {Name = "product_group_view", DisplayName = "View Product Groups", Module = productGroupManagement},
+                new Permission {Name = "product_group_edit", DisplayName = "Edit Product Groups", Module = productGroupManagement},
+                new Permission {Name = "product_group_delete", DisplayName = "Delete Product Groups", Module = productGroupManagement},
             }.ToList();
 
             permissions.ForEach(permission =>
@@ -45,9 +60,12 @@ namespace Shopper.Database.Seeders
                 }
             });
             dbContext.SaveChanges();
-            logger.Information($"********************************************************");
-            logger.Information($"*             {newCount} permissions added                      *");
-            logger.Information($"********************************************************");
+            if (newCount>0)
+            {
+                logger.Information($"********************************************************");
+                logger.Information($"*             {newCount} permissions added                      *");
+                logger.Information($"********************************************************");
+            }
         }
     }
 }

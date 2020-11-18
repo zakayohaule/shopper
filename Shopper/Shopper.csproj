@@ -8,18 +8,18 @@
         <PreserveCompilationReferences>true</PreserveCompilationReferences>
         <PreserveCompilationContext>true</PreserveCompilationContext>
     </PropertyGroup>
-    
-    <ItemGroup>
+
+    <!--<ItemGroup>
         <Folder Include="Database\ModelBuilders" />
         <Folder Include="Migrations" />
         <Folder Include="Mvc\Entities" />
         <Folder Include="Mvc\ViewModels" />
-    </ItemGroup>
+    </ItemGroup>-->
 
     <ItemGroup>
         <Watch Remove="wwwroot\*" />
     </ItemGroup>
-    
+
     <ItemGroup>
         <PackageReference Include="FluentEmail.Core" Version="2.7.0" />
         <PackageReference Include="FluentEmail.Mailtrap" Version="2.7.0" />
@@ -47,7 +47,7 @@
         <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     </ItemGroup>
 
-    <ItemGroup>
+    <!--<ItemGroup>
         <_ContentIncludedByDefault Remove="Mvc\Views\User\Index.cshtml" />
         <_ContentIncludedByDefault Remove="Mvc\Views\User\_EditUserModal.cshtml" />
         <_ContentIncludedByDefault Remove="Mvc\Views\User\_UpdateUserRolesModal.cshtml" />
@@ -1717,7 +1717,7 @@
         <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\LICENSE.txt" />
         <_ContentIncludedByDefault Remove="wwwroot\lib\quill.js" />
         <_ContentIncludedByDefault Remove="Mvc\Views\Shared\Partials\Components\Buttons\Default.cshtml" />
-    </ItemGroup>
+    </ItemGroup>-->
 
     <ItemGroup>
         <ProjectReference Include="..\Shared\Shared.csproj" />

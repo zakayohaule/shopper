@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Shared.Mvc.Entities.Identity;
+using Shared.Mvc.Entities;
 using Shopper.Services.Interfaces;
+using Attribute = Shared.Mvc.Entities.Attribute;
 
 namespace Shopper.Database
 {
@@ -40,6 +42,14 @@ namespace Shopper.Database
         //custom entities
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Module> Modules { get; set; }
+        public DbSet<ProductGroup> ProductGroups { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<Attribute> Attributes { get; set; }
+        public DbSet<AttributeOption> AttributeOptions { get; set; }
+        public DbSet<ProductAttributeOption> ProductOptions { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Sku> Skus { get; set; }
+        public DbSet<SkuAttribute> SkuAttributes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

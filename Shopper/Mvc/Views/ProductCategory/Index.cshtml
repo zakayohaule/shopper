@@ -1,8 +1,8 @@
-﻿@model List<ProductGroup>;
+﻿@model List<ProductCategory>;
 
 @{
     Layout = "_Layout";
-    var newProductGroup = new ProductGroup();
+    var newProductCategory = new ProductCategory();
 }
 
 @section css {
@@ -10,26 +10,26 @@
     <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
 }
 
-<div class="card with-border">
+<div class="card card-default">
     <div class="card-header">
-        <a href="" data-toggle="modal" data-target="#add-user" class="btn btn-sm btn-primary float-right" title="Add User">
+        <a href="" data-toggle="modal" data-target="#add-product-category" class="btn btn-sm btn-primary float-right" title="Add User">
             <i class="fas fa-user-plus"> Add</i>
         </a>
     </div>
     <!-- /.card-header -->
 
-    <div class="modal fade" id="add-user">
+    <div class="modal fade" id="add-product-category">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Add Product Group</h4>
+                    <h4 class="modal-title">Add Product Category</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <th:form class="" asp-controller="ProductGroup" asp-action="Create" method="post">
+                <th:form class="" asp-controller="ProductCategory" asp-action="Create" method="post">
                     <div class="modal-body">
-                        <th:partial name="_ProductGroupForm" model="newProductGroup"/>
+                        <th:partial name="_ProductCategoryForm" model="newProductCategory"/>
                     </div>
                 </th:form>
             </div>
@@ -42,32 +42,30 @@
             <tr>
                 <th style="width: 10px">#</th>
                 <th>Name</th>
-                <th>Action</th>
+                <th style="width: 160px"></th>
             </tr>
             </thead>
             <tbody>
             @{
                 int index = 0;
             }
-            @foreach (var productGroup in Model)
+            @foreach (var productCategory in Model)
             {
                 index++;
                 <tr>
                     <td>@index</td>
-                    <td>@productGroup.Name</td>
+                    <td>@productCategory.Name</td>
                     <td>
-                        <a href="#" onclick="openFormModal('@Url.Action("EditProductGroupModal", new {id = productGroup.Id})', 'Edit Product Group')"
-                           class="btn btn-default btn-sm" title="Edit product group">
-                            @* <span class="badge badge-warning" title="Edit product group"> *@
-                                <i class="fas fa-edit"></i>
-                            @* </span> *@
+                        <a href="#" onclick="openFormModal('@Url.Action("EditProductCategoryModal", new {id = productCategory.Id})', 'Edit Product Category')"
+                           class="btn btn-default btn-sm">
+                            <i class="fas fa-edit"></i>
                         </a>
-                        <th:a asp-controller="ProductGroup"
+                        <th:a asp-controller="ProductCategory"
                               asp-action="Delete"
-                              asp-route-id="@productGroup.Id" class="btn btn-default btn-sm btn-delete" title="Delete product group">
-                            @* <span class="badge badge-danger" title="Delete product group"> *@
+                              asp-route-id="@productCategory.Id" class="btn-delete">
+                            <span class="badge badge-danger" title="Delete product group">
                                 <i class="fas fa-trash"></i>
-                            @* </span> *@
+                            </span>
                         </th:a>
                     </td>
                 </tr>

@@ -46,7 +46,7 @@
                 <th>Full Name</th>
                 <th>Email</th>
                 <th>Roles</th>
-                <th style="width: 160px"></th>
+                <th style="width: 160px">Action</th>
             </tr>
             </thead>
             <tbody>
@@ -64,22 +64,22 @@
                         @string.Join(", ", user.Roles.Select(r => r.DisplayName))
                     </td>
                     <td>
-                        <a href="#">
-                            <span class="badge badge-dark" data-toggle="tooltip" title="Assign roles" onclick="openFormModal('@Url.Action("UserRolesModal", new {id = user.Id})', 'Assign Roles')">
-                                <i class="fas fa-users fa-1x"></i>
-                            </span>
+                        <a href="#" title="Assign roles" onclick="openFormModal('@Url.Action("UserRolesModal", new {id = user.Id})', 'Assign Roles')" class="btn btn-sm btn-default">
+                            @* <span class="badge badge-dark" data-toggle="tooltip"  > *@
+                                <i class="fas fa-users"></i>
+                            @* </span> *@
                         </a>
-                        <a href="#" onclick="openFormModal('@Url.Action("EditUserModal", new {id = user.Id})', 'Edit User')">
-                            <span class="badge badge-warning" title="Edit user">
-                                <i class="fas fa-edit fa-1x"></i>
-                            </span>
+                        <a href="#" onclick="openFormModal('@Url.Action("EditUserModal", new {id = user.Id})', 'Edit User')" title="Edit user" class="btn btn-sm btn-default">
+                            @* <span class="badge badge-warning" > *@
+                                <i class="fas fa-edit"></i>
+                            @* </span> *@
                         </a>
                         <th:a asp-controller="User"
                               asp-action="Delete"
-                              asp-route-id="@user.Id" class="btn-delete">
-                            <span class="badge badge-danger" title="Delete user">
+                              asp-route-id="@user.Id" class="btn btn-default btn-sm btn-delete" title="Delete user">
+                            @* <span class="badge badge-danger" > *@
                                 <i class="fas fa-trash"></i>
-                            </span>
+                            @* </span> *@
                         </th:a>
                     </td>
                 </tr>

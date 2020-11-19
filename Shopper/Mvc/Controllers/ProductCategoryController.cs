@@ -14,11 +14,11 @@ namespace Shopper.Mvc.Controllers
     [Route("product-categories"), Authorize]
     public class ProductCategoryController : BaseController
     {
-        private readonly IProductGroupService _productGroupService;
+        private readonly IProductCategoryService _productCategoryService;
 
-        public ProductCategoryController(IProductGroupService productGroupService)
+        public ProductCategoryController(IProductCategoryService productCategoryService)
         {
-            _productGroupService = productGroupService;
+            _productCategoryService = productCategoryService;
         }
 
         [HttpGet("", Name = "product-category-index"), Permission("product_category_view"), Toast]
@@ -26,80 +26,80 @@ namespace Shopper.Mvc.Controllers
         {
             Title = "Product Categories";
 
-            var productGroups = _productGroupService.GetAllProductGroups().ToList();
+            var productCategories = _productCategoryService.GetAllProductCategories().ToList();
 
-            return View(productGroups);
+            return View(productCategories);
         }
 
         [HttpPost("", Name = "product-category-add"), Permission("product_category_create"), ValidateAntiForgeryToken,
             /*ValidateModelWithRedirect()*/]
-        public async Task<IActionResult> Create(ProductGroup productGroup)
+        public async Task<IActionResult> Create(ProductCategory productCategory)
         {
-            productGroup.Name = productGroup.Name;
+            productCategory.Name = productCategory.Name;
 
-            productGroup = await _productGroupService.CreateAsync(productGroup);
-            if (productGroup == null)
+            productCategory = await _productCategoryService.CreateAsync(productCategory);
+            if (productCategory == null)
             {
-                ToastError("Product group could not be created!");
+                ToastError("Product category could not be created!");
             }
             else
             {
-                ToastSuccess("Product group created successfully!");
+                ToastSuccess("Product category created successfully!");
             }
             return RedirectToAction(nameof(Index));
         }
 
         [HttpPost("{id}", Name = "product-category-edit"), Permission("product_category_edit"), ValidateAntiForgeryToken,]
-        public async Task<IActionResult> Update(ushort id, ProductGroup productGroup)
+        public async Task<IActionResult> Update(ushort id, ProductCategory productCategory)
         {
-            if (_productGroupService.IsDuplicate(productGroup.Name, id))
+            if (_productCategoryService.IsDuplicate(productCategory.Name, id))
             {
-                ToastError($"A product group with the name '{productGroup.Name}', already exists");
+                ToastError($"A product category with the name '{productCategory.Name}', already exists");
                 return RedirectToAction(nameof(Index));
             }
 
-            var toUpdate = await _productGroupService.FindByIdAsync(id);
-            toUpdate.Name = productGroup.Name;
+            var toUpdate = await _productCategoryService.FindByIdAsync(id);
+            toUpdate.Name = productCategory.Name;
 
-            toUpdate = await _productGroupService.UpdateAsync(toUpdate);
+            toUpdate = await _productCategoryService.UpdateAsync(toUpdate);
 
             if (toUpdate != null)
             {
-                ToastSuccess("Product group updated successfully!");
+                ToastSuccess("Product category updated successfully!");
             }
 
-            ToastError("Product group could not be updated");
+            ToastError("Product category could not be updated");
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet("{id}/delete", Name = "product-category-delete"), Permission("product_category_delete")]
         public async Task<IActionResult> Delete(ushort id)
         {
-            var productGroup = await _productGroupService.FindByIdAsync(id);
-            if (productGroup.IsNull())
+            var productCategory = await _productCategoryService.FindByIdAsync(id);
+            if (productCategory.IsNull())
             {
                 return NotFound();
             }
 
-            await _productGroupService.DeleteProductGroupAsync(productGroup);
+            await _productCategoryService.DeleteProductCategoryAsync(productCategory);
 
-            ToastSuccess("Product group deleted successfully!");
+            ToastSuccess("Product category deleted successfully!");
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet("{id}/open-edit-modal")]
-        public async Task<PartialViewResult> EditProductGroupModal(ushort id)
+        public async Task<PartialViewResult> EditProductCategoryModal(ushort id)
         {
-            var productGroup = await _productGroupService.FindByIdAsync(id);
+            var productCategory = await _productCategoryService.FindByIdAsync(id);
 
-            return PartialView("../ProductGroup/_EditProductGroupModal", productGroup);
+            return PartialView("../ProductCategory/_EditProductCategoryModal", productCategory);
         }
 
-        [AcceptVerbs("GET", Route = "validate-product-category-name", Name = "ValidateProductGroupName")]
+        [AcceptVerbs("GET", Route = "validate-product-category-name", Name = "ValidateProductCategoryName")]
         public IActionResult ExistsByDisplayName(string name, ushort id)
         {
-            return _productGroupService.IsDuplicate(name, id)
-                ? Json("A product group with this name already exists")
+            return _productCategoryService.IsDuplicate(name, id)
+                ? Json("A product category with this name already exists")
                 : Json(true);
         }
     }

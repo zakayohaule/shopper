@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentEmail.Core;
@@ -21,10 +22,11 @@ namespace Shopper.Mvc.Controllers
             _dbContext = dbContext;
         }
 
-        [HttpGet("test-db-context")]
-        public IActionResult ListUsers()
+        [HttpGet("test")]
+        public IActionResult Test()
         {
-            return Ok(_dbContext.Users);
+            var permissions = _dbContext.Permissions.ToList();
+            return View(permissions);
         }
     }
 }

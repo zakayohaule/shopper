@@ -42,7 +42,7 @@
             <tr>
                 <th style="width: 10px">#</th>
                 <th>Name</th>
-                <th style="width: 160px"></th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -56,22 +56,22 @@
                     <td>@index</td>
                     <td>@role.DisplayName</td>
                     <td>
-                        <th:a asp-controller="Role" asp-action="RolePermissions" asp-route-id="@role.Id">
-                            <span class="badge badge-default" title="Role permissions">
+                        <th:a asp-controller="Role" asp-action="RolePermissions" asp-route-id="@role.Id" title="Role permissions" class="btn btn-sm btn-default">
+                            @* <span class="badge badge-default" > *@
                                 <i class="fa fa-list-ul"></i>
-                            </span>
+                            @* </span> *@
                         </th:a>
-                        <a href="#" onclick="openFormModal('@Url.Action("EditRoleModal", new {id = role.Id})', 'Edit Role')">
-                            <span class="badge badge-warning" title="Edit role">
+                        <a href="#" onclick="openFormModal('@Url.Action("EditRoleModal", new {id = role.Id})', 'Edit Role')" title="Edit role" class="btn btn-sm btn-default">
+                            @* <span class="badge badge-warning" > *@
                                 <i class="fas fa-edit"></i>
-                            </span>
+                            @* </span> *@
                         </a>
                         <th:a asp-controller="Role"
                               asp-action="Delete"
-                              asp-route-id="@role.Id" class="btn-delete">
-                            <span class="badge badge-danger" title="Delete role">
+                              asp-route-id="@role.Id" class="btn btn-sm btn-default btn-delete" title="Delete role">
+                            @* <span class="badge badge-danger" > *@
                                 <i class="fas fa-trash"></i>
-                            </span>
+                            @* </span> *@
                         </th:a>
                     </td>
                 </tr>

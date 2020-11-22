@@ -27,6 +27,9 @@ namespace Shopper.Database.Seeders
             var productCategoryManagement =
                 dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Product Category Management"));
 
+            var attributeManagement =
+                dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Attribute Management"));
+
             var permissions = new List<Permission>
             {
                 new Permission {Name = "user_add", DisplayName = "Create Own Institution's User", Module = userManagement},
@@ -44,6 +47,10 @@ namespace Shopper.Database.Seeders
                 new Permission {Name = "product_category_view", DisplayName = "View Product Categories", Module = productCategoryManagement},
                 new Permission {Name = "product_category_edit", DisplayName = "Edit Product Categories", Module = productCategoryManagement},
                 new Permission {Name = "product_category_delete", DisplayName = "Delete Product Categories", Module = productCategoryManagement},
+                new Permission {Name = "attribute_add", DisplayName = "Add Attributes", Module = attributeManagement},
+                new Permission {Name = "attribute_view", DisplayName = "View Attributes", Module = attributeManagement},
+                new Permission {Name = "attribute_edit", DisplayName = "Edit Attributes", Module = attributeManagement},
+                new Permission {Name = "attribute_delete", DisplayName = "Delete Attributes", Module = attributeManagement},
                 new Permission {Name = "product_group_add", DisplayName = "Add Product Groups", Module = productGroupManagement},
                 new Permission {Name = "product_group_view", DisplayName = "View Product Groups", Module = productGroupManagement},
                 new Permission {Name = "product_group_edit", DisplayName = "Edit Product Groups", Module = productGroupManagement},

@@ -18,7 +18,7 @@ namespace Shopper.Services.Implementations
             _dbContext = dbContext;
         }
 
-        public IEnumerable<ProductCategory> GetAllProductCategories()
+        public IQueryable<ProductCategory> GetAllProductCategories()
         {
             return _dbContext.ProductCategories.AsQueryable();
         }
@@ -53,9 +53,25 @@ namespace Shopper.Services.Implementations
             await _dbContext.SaveChangesAsync();
         }
 
+        public bool IsDuplicate(ProductCategory productCategory)
+        {
+            return _dbContext
+                .ProductCategories
+                .Any(pg => pg.Name.Equals(productCategory.Name, StringComparison.OrdinalIgnoreCase) &&
+                           pg.Id != productCategory.Id);
+        }
+
         public bool IsDuplicate(string name, ushort id)
         {
-            return _dbContext.ProductCategories.Any(pg => pg.Name.Equals(name, StringComparison.OrdinalIgnoreCase) && pg.Id != id);
+            return _dbContext
+                .ProductCategories
+                .Any(pg => pg.Name.Equals(name, StringComparison.OrdinalIgnoreCase) &&
+                           pg.Id != id);
+        }
+
+        public async Task<bool> ExistsByIdAsync(ushort id)
+        {
+            return await _dbContext.ProductCategories.AnyAsync(pc => pc.Id.Equals(id));
         }
     }
 }

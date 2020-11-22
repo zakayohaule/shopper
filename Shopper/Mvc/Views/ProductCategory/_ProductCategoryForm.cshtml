@@ -1,5 +1,14 @@
 ﻿@model ProductCategory
-
+@{
+    var productGroups = ViewData["ProductGroups"] as List<SelectListItem>;
+}
+<div class="form-group col-12">
+    <th:label asp-for="ProductGroupId">Product Group</th:label>
+    <th:select class="form-control" asp-for="ProductGroupId" asp-items="productGroups">
+        <option value="">-- Select --</option>
+    </th:select>
+    <th:span asp-validation-for="ProductGroupId" class="text-danger"></th:span>
+</div>
 <div class="form-group col-12">
     <th:label asp-for="Name"></th:label>
     <th:input asp-for="Name" class="form-control"></th:input>

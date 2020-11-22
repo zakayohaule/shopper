@@ -10,7 +10,7 @@ namespace Shared.Mvc.Entities
         public string Name { get; set; }
 
         [Column("attribute_id")]
-        public int AttributeId { get; set; }
+        public ushort AttributeId { get; set; }
 
         [ForeignKey(nameof(AttributeId))]
         public Attribute Attribute { get; set; }

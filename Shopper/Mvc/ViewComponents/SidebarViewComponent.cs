@@ -40,7 +40,7 @@ namespace Shopper.Mvc.ViewComponents
             // {
                 sidebars.Add(ModuleHelper.AddModuleLink("Product Groups", Url.Action("Index", "ProductGroup"), "fas fa-sitemap"));
                 sidebars.Add(ModuleHelper.AddModuleLink("Product Categories", Url.Action("Index", "ProductCategory")));
-                sidebars.Add(ModuleHelper.AddModuleLink("Product Attributes", "#", "fas fa-paint-brush"));
+                sidebars.Add(ModuleHelper.AddModuleLink("Product Attributes", Url.Action("Index", "Attribute"), "fas fa-paint-brush"));
                 sidebars.Add(ModuleHelper.AddModuleLink("Products", "#", "fas fa-tshirt"));
             // };
             // sidebars.Add(productManagement);

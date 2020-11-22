@@ -5,7 +5,7 @@ using Shared.Mvc.Entities.BaseEntities;
 namespace Shared.Mvc.Entities
 {
     [Table("attributes")]
-    public class Attribute: BaseEntity<int>
+    public class Attribute: BaseEntity<ushort>
     {
         [Column(name: "name")] public string Name { get; set; }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shared.Mvc.Entities;
 using Shopper.Database;
@@ -21,6 +22,12 @@ namespace Shopper.Services.Implementations
         public IEnumerable<ProductGroup> GetAllProductGroups()
         {
             return _dbContext.ProductGroups.AsQueryable();
+        }
+
+        public List<SelectListItem> GetProductGroupSelectListItems()
+        {
+            return GetAllProductGroups()
+                .Select(pg => new SelectListItem {Value = pg.Id.ToString(), Text = pg.Name}).ToList();
         }
 
         public async Task<ProductGroup> FindByNameAsync(string name)
@@ -51,6 +58,11 @@ namespace Shopper.Services.Implementations
         {
             _dbContext.Remove(productGroup);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public bool IsDuplicate(ProductGroup productGrpGroup)
+        {
+            return _dbContext.ProductGroups.Any(pg => pg.Name.Equals(productGrpGroup.Name, StringComparison.OrdinalIgnoreCase) && pg.Id != productGrpGroup.Id);
         }
 
         public bool IsDuplicate(string name, ushort id)

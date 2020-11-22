@@ -1,12 +1,9 @@
-﻿﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Shared.Mvc.Entities;
 using Serilog;
- using Shared.Mvc.Entities.Identity;
+using Shared.Mvc.Entities.Identity;
 
- namespace Shopper.Database.Seeders
+namespace Shopper.Database.Seeders
 {
     public static class ModulesSeeder
     {
@@ -18,6 +15,7 @@ using Serilog;
                 new Module {Name = "Role Management"},
                 new Module {Name = "Product Group Management"},
                 new Module {Name = "Product Category Management"},
+                new Module {Name = "Attribute Management"},
             }.ToList();
 
             modules.ForEach(pg =>

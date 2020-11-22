@@ -29,7 +29,7 @@
                 </div>
                 <th:form class="" asp-controller="ProductCategory" asp-action="Create" method="post">
                     <div class="modal-body">
-                        <th:partial name="_ProductCategoryForm" model="newProductCategory"/>
+                        <th:partial name="_ProductCategoryForm" model="newProductCategory" view-data="ViewData"/>
                     </div>
                 </th:form>
             </div>
@@ -37,11 +37,12 @@
     </div>
 
     <div class="card-body table-responsive p-0">
-        <table class="table table-bordered table-hover">
+            <table class="table table-sm table-bordered table-hover">
             <thead>
             <tr>
                 <th style="width: 10px">#</th>
                 <th>Name</th>
+                <th>Product Group</th>
                 <th style="width: 160px"></th>
             </tr>
             </thead>
@@ -55,15 +56,16 @@
                 <tr>
                     <td>@index</td>
                     <td>@productCategory.Name</td>
+                    <td>@productCategory.ProductGroup.Name</td>
                     <td>
                         <a href="#" onclick="openFormModal('@Url.Action("EditProductCategoryModal", new {id = productCategory.Id})', 'Edit Product Category')"
-                           class="btn btn-default btn-sm">
+                           class="btn btn-default btn-sm" title="Edit product category">
                             <i class="fas fa-edit"></i>
                         </a>
                         <th:a asp-controller="ProductCategory"
                               asp-action="Delete"
                               asp-route-id="@productCategory.Id" class="btn-delete">
-                            <span class="badge badge-danger" title="Delete product group">
+                            <span class="btn btn-default btn-sm" title="Delete product category">
                                 <i class="fas fa-trash"></i>
                             </span>
                         </th:a>

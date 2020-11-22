@@ -32,7 +32,7 @@ namespace Shopper.Mvc.Controllers
             return View(productGroups);
         }
 
-        [HttpPost("", Name = "product-group-add"), Permission("product_group_create"), ValidateAntiForgeryToken,
+        [HttpPost("", Name = "product-group-add"), Permission("product_group_add"), ValidateAntiForgeryToken,
             /*ValidateModelWithRedirect()*/]
         public async Task<IActionResult> Create(ProductGroup productGroup)
         {
@@ -53,7 +53,7 @@ namespace Shopper.Mvc.Controllers
         [HttpPost("{id}", Name = "product-group-edit"), Permission("product_group_edit"), ValidateAntiForgeryToken,]
         public async Task<IActionResult> Update(ushort id, ProductGroup productGroup)
         {
-            if (_productGroupService.IsDuplicate(productGroup.Name, id))
+            if (_productGroupService.IsDuplicate(productGroup))
             {
                 ToastError($"A product group with the name '{productGroup.Name}', already exists");
                 return RedirectToAction(nameof(Index));
@@ -68,8 +68,10 @@ namespace Shopper.Mvc.Controllers
             {
                 ToastSuccess("Product group updated successfully!");
             }
-
-            ToastError("Product group could not be updated");
+            else
+            {
+                ToastError("Product group could not be updated");
+            }
             return RedirectToAction(nameof(Index));
         }
 

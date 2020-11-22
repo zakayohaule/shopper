@@ -26,6 +26,8 @@ namespace Shopper.Extensions.Configurations
             services.AddScoped<ITenantService, TenantService>();
             services.AddScoped<IProductGroupService, ProductGroupService>();
             services.AddScoped<IProductCategoryService, ProductCategoryService>();
+            services.AddScoped<IAttributeService, AttributeService>();
+            services.AddScoped<IAttributeOptionService, AttributeOptionService>();
         }
     }
 }

@@ -17,7 +17,7 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar nav-collapse-hide-child nav-child-indent nav-compact flex-column text-sm" data-widget="treeview" role="menu" data-accordion="false">
-                @foreach (var menu in Model as IEnumerable<SidebarMenu>)
+                @foreach (var menu in Model)
                 {
                     if (menu.Type == SidebarMenuType.Header)
                     {

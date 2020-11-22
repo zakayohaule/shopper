@@ -25,7 +25,7 @@ namespace Shopper.Mvc.Controllers
         public IActionResult Index()
         {
             Title = "Product Categories";
-
+            AddPageHeader(Title);
             var productCategories = _productCategoryService.GetAllProductCategories().ToList();
 
             return View(productCategories);

@@ -38,8 +38,8 @@ namespace Shopper.Mvc.ViewComponents
             sidebars.Add(ModuleHelper.AddHeader("Product Management"));
             // productManagement.TreeChild = new List<SidebarMenu>
             // {
-                sidebars.Add(ModuleHelper.AddModuleLink("Product Groups", Url.Link("product-group-index", null), "fas fa-sitemap"));
-                sidebars.Add(ModuleHelper.AddModuleLink("Product Categories", "#"));
+                sidebars.Add(ModuleHelper.AddModuleLink("Product Groups", Url.Action("Index", "ProductGroup"), "fas fa-sitemap"));
+                sidebars.Add(ModuleHelper.AddModuleLink("Product Categories", Url.Action("Index", "ProductCategory")));
                 sidebars.Add(ModuleHelper.AddModuleLink("Product Attributes", "#", "fas fa-paint-brush"));
                 sidebars.Add(ModuleHelper.AddModuleLink("Products", "#", "fas fa-tshirt"));
             // };

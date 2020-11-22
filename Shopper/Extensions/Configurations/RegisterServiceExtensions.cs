@@ -25,6 +25,7 @@ namespace Shopper.Extensions.Configurations
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<ITenantService, TenantService>();
             services.AddScoped<IProductGroupService, ProductGroupService>();
+            services.AddScoped<IProductCategoryService, ProductCategoryService>();
         }
     }
 }

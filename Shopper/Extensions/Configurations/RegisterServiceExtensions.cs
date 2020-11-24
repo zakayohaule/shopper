@@ -24,6 +24,7 @@ namespace Shopper.Extensions.Configurations
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<ITenantService, TenantService>();
+            services.AddScoped<IPriceTypeService, PriceTypeService>();
             services.AddScoped<IProductGroupService, ProductGroupService>();
             services.AddScoped<IProductCategoryService, ProductCategoryService>();
             services.AddScoped<IAttributeService, AttributeService>();

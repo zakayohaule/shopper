@@ -30,6 +30,9 @@ namespace Shopper.Database.Seeders
             var attributeManagement =
                 dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Attribute Management"));
 
+            var priceTypeManagement =
+                dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Price Type Management"));
+
             var permissions = new List<Permission>
             {
                 new Permission {Name = "user_add", DisplayName = "Create Own Institution's User", Module = userManagement},
@@ -51,6 +54,14 @@ namespace Shopper.Database.Seeders
                 new Permission {Name = "attribute_view", DisplayName = "View Attributes", Module = attributeManagement},
                 new Permission {Name = "attribute_edit", DisplayName = "Edit Attributes", Module = attributeManagement},
                 new Permission {Name = "attribute_delete", DisplayName = "Delete Attributes", Module = attributeManagement},
+                new Permission {Name = "attribute_option_add", DisplayName = "Add Attribute options", Module = attributeManagement},
+                new Permission {Name = "attribute_option_view", DisplayName = "View Attribute options", Module = attributeManagement},
+                new Permission {Name = "attribute_option_edit", DisplayName = "Edit Attribute options", Module = attributeManagement},
+                new Permission {Name = "attribute_option_delete", DisplayName = "Delete Attribute options", Module = attributeManagement},
+                new Permission {Name = "price_type_add", DisplayName = "Add Price Types", Module = priceTypeManagement},
+                new Permission {Name = "price_type_view", DisplayName = "View Price Types", Module = priceTypeManagement},
+                new Permission {Name = "price_type_edit", DisplayName = "Edit Price Types", Module = priceTypeManagement},
+                new Permission {Name = "price_type_delete", DisplayName = "Delete Price Types", Module = priceTypeManagement},
                 new Permission {Name = "product_group_add", DisplayName = "Add Product Groups", Module = productGroupManagement},
                 new Permission {Name = "product_group_view", DisplayName = "View Product Groups", Module = productGroupManagement},
                 new Permission {Name = "product_group_edit", DisplayName = "Edit Product Groups", Module = productGroupManagement},

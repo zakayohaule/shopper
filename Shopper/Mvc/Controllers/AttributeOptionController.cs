@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities;
 using Shopper.Attributes;
@@ -13,18 +14,27 @@ namespace Shopper.Mvc.Controllers
     public class AttributeOptionController : BaseController
     {
         private readonly IAttributeOptionService _attributeOptionService;
+        private readonly IAttributeService _attributeService;
 
-        public AttributeOptionController(IAttributeOptionService attributeOptionService)
+        public AttributeOptionController(IAttributeOptionService attributeOptionService,
+            IAttributeService attributeService)
         {
             _attributeOptionService = attributeOptionService;
+            _attributeService = attributeService;
         }
 
-        [HttpGet("", Name = "attribute-option-index"), Permission("attribute_option_view"), Toast]
-        public IActionResult Index()
+        [HttpGet("{attributeId}", Name = "attribute-option-index"), Permission("attribute_option_view"), Toast]
+        public async Task<IActionResult> Index(ushort attributeId)
         {
-            Title = "Attribute Options";
+            var attribute = await _attributeService.FindByIdAsync(attributeId);
+            if (attribute == null)
+            {
+                return NotFound($"Attribute with id {attributeId} not found!");
+            }
 
-            var attributeOptions = _attributeOptionService.GetAllAttributeOptions().ToList();
+            Title = $"{attribute.Name} Options";
+
+            var attributeOptions = _attributeOptionService.GetAllAttributeOptionsByAttribute(attributeId).Include(ao => ao.Attribute).ToList();
 
             AddPageHeader(Title);
             return View(attributeOptions);
@@ -45,16 +55,18 @@ namespace Shopper.Mvc.Controllers
             {
                 ToastSuccess("Attribute Option created successfully!");
             }
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction(nameof(Index), new {attributeId = attributeOption?.AttributeId});
         }
 
-        [HttpPost("{id}", Name = "attribute-option-edit"), Permission("attribute_option_edit"), ValidateAntiForgeryToken,]
+        [HttpPost("{id}", Name = "attribute-option-edit"), Permission("attribute_option_edit"),
+         ValidateAntiForgeryToken,]
         public async Task<IActionResult> Update(ushort id, AttributeOption attributeOption)
         {
             if (_attributeOptionService.IsDuplicate(attributeOption))
             {
                 ToastError($"An attributeOption with the name '{attributeOption.Name}', already exists");
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new {attributeId = attributeOption?.AttributeId});
             }
 
             var toUpdate = await _attributeOptionService.FindByIdAsync(id);
@@ -70,7 +82,8 @@ namespace Shopper.Mvc.Controllers
             {
                 ToastError("Attribute Option could not be updated");
             }
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction(nameof(Index), new {attributeId = attributeOption?.AttributeId});
         }
 
         [HttpGet("{id}/delete", Name = "attribute-option-delete"), Permission("attribute_option_delete")]
@@ -85,7 +98,7 @@ namespace Shopper.Mvc.Controllers
             await _attributeOptionService.DeleteAttributeOptionAsync(attributeOption);
 
             ToastSuccess("Attribute Option deleted successfully!");
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new {attributeId = attributeOption?.AttributeId});
         }
 
         [HttpGet("{id}/open-edit-modal")]

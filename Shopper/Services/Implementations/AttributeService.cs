@@ -61,5 +61,10 @@ namespace Shopper.Services.Implementations
         {
             return _dbContext.Attributes.Any(pg => pg.Name.Equals(name, StringComparison.OrdinalIgnoreCase) && pg.Id != id);
         }
+
+        public async Task<bool> ExistsById(ushort id)
+        {
+            return await _dbContext.Attributes.AnyAsync(att => att.Id.Equals(id));
+        }
     }
 }

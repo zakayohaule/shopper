@@ -1,9 +1,8 @@
-﻿@using Attribute = Shared.Mvc.Entities.AttributeOption
-@model List<Shared.Mvc.Entities.AttributeOption>;
+﻿@model List<PriceType>;
 
 @{
     Layout = "_Layout";
-    var attributeOption = new AttributeOption();
+    var newPriceType = new PriceType();
 }
 
 @section css {
@@ -13,24 +12,24 @@
 
 <div class="card with-border">
     <div class="card-header">
-        <a href="" data-toggle="modal" data-target="#add-attribute-option" class="btn btn-sm btn-primary float-right" title="Add Attribute">
+        <a href="" data-toggle="modal" data-target="#add-price-type" class="btn btn-sm btn-primary float-right" title="Add User">
             <i class="fas fa-user-plus"> Add</i>
         </a>
     </div>
     <!-- /.card-header -->
 
-    <div class="modal fade" id="add-attribute-option">
+    <div class="modal fade" id="add-price-type">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Add Attribute Option</h4>
+                    <h4 class="modal-title">Add Price Type</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <th:form class="" asp-controller="AttributeOption" asp-action="Create" method="post">
+                <th:form class="" asp-controller="PriceType" asp-action="Create" method="post">
                     <div class="modal-body">
-                        <th:partial name="_AttributeOptionForm" model="attributeOption"/>
+                        <th:partial name="_PriceTypeForm" model="newPriceType"/>
                     </div>
                 </th:form>
             </div>
@@ -42,7 +41,6 @@
             <thead>
             <tr>
                 <th style="width: 10px">#</th>
-                <th>Atribute</th>
                 <th>Name</th>
                 <th>Action</th>
             </tr>
@@ -51,28 +49,24 @@
             @{
                 int index = 0;
             }
-            @foreach (var att in Model)
+            @foreach (var priceType in Model)
             {
                 index++;
                 <tr>
                     <td>@index</td>
-                    <td>@att.Attribute.Name</td>
-                    <td>@att.Name</td>
+                    <td>@priceType.Name</td>
                     <td>
-                        @*<th:a asp-controller="Role" asp-action="RolePermissions" asp-route-id="@role.Id" title="Role permissions" class="btn btn-sm btn-default">
-                            <i class="fa fa-list-ul"></i>
-                        </th:a>*@
-                        <a href="#" onclick="openFormModal('@Url.Action("EditAttributeOptionModal", new {id = att.Id})', 'Edit Attribute Option')"
-                           class="btn btn-default btn-sm" title="Edit attribute option">
-                            @* <span class="badge badge-warning" title="Edit attribute"> *@
-                            <i class="fas fa-edit"></i>
+                        <a href="#" onclick="openFormModal('@Url.Action("EditPriceTypeModal", new {id = priceType.Id})', 'Edit Price Type')"
+                           class="btn btn-default btn-sm" title="Edit price type">
+                            @* <span class="badge badge-warning" title="Edit price type"> *@
+                                <i class="fas fa-edit"></i>
                             @* </span> *@
                         </a>
-                        <th:a asp-controller="AttributeOption"
+                        <th:a asp-controller="PriceType"
                               asp-action="Delete"
-                              asp-route-id="@att.Id" class="btn btn-default btn-sm btn-delete" title="Delete attribute option">
-                            @* <span class="badge badge-danger" title="Delete attribute"> *@
-                            <i class="fas fa-trash"></i>
+                              asp-route-id="@priceType.Id" class="btn btn-default btn-sm btn-delete" title="Delete price type">
+                            @* <span class="badge badge-danger" title="Delete price type"> *@
+                                <i class="fas fa-trash"></i>
                             @* </span> *@
                         </th:a>
                     </td>

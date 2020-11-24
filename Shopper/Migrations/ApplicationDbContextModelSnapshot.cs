@@ -395,6 +395,35 @@ namespace Shopper.Migrations
                     b.ToTable("user_tokens");
                 });
 
+            modelBuilder.Entity("Shared.Mvc.Entities.PriceType", b =>
+                {
+                    b.Property<ushort>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("smallint unsigned");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("name")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("price_types");
+                });
+
             modelBuilder.Entity("Shared.Mvc.Entities.Product", b =>
                 {
                     b.Property<uint>("Id")
@@ -565,10 +594,6 @@ namespace Shopper.Migrations
                         .HasColumnName("remaining_quantity")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("SellingPrice")
-                        .HasColumnName("selling_price")
-                        .HasColumnType("decimal(65,30)");
-
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("updated_at")
@@ -576,7 +601,7 @@ namespace Shopper.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Skus");
+                    b.ToTable("skus");
                 });
 
             modelBuilder.Entity("Shared.Mvc.Entities.SkuAttribute", b =>
@@ -611,6 +636,37 @@ namespace Shopper.Migrations
                     b.HasIndex("SkuId");
 
                     b.ToTable("sku_attributes");
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.SkuSellingPrice", b =>
+                {
+                    b.Property<ushort>("PriceTypeId")
+                        .HasColumnName("price_type_id")
+                        .HasColumnType("smallint unsigned");
+
+                    b.Property<ulong>("SkuId")
+                        .HasColumnName("sku_id")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnName("price")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("PriceTypeId", "SkuId");
+
+                    b.HasIndex("SkuId");
+
+                    b.ToTable("sku_selling_prices");
                 });
 
             modelBuilder.Entity("Shared.Mvc.Entities.AttributeOption", b =>
@@ -725,6 +781,21 @@ namespace Shopper.Migrations
 
                     b.HasOne("Shared.Mvc.Entities.Sku", "Sku")
                         .WithMany("SkuAttributes")
+                        .HasForeignKey("SkuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.SkuSellingPrice", b =>
+                {
+                    b.HasOne("Shared.Mvc.Entities.PriceType", "PriceType")
+                        .WithMany()
+                        .HasForeignKey("PriceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Shared.Mvc.Entities.Sku", "Sku")
+                        .WithMany()
                         .HasForeignKey("SkuId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

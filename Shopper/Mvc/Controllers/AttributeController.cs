@@ -24,7 +24,7 @@ namespace Shopper.Mvc.Controllers
         [HttpGet("", Name = "attribute-index"), Permission("attribute_view"), Toast]
         public IActionResult Index()
         {
-            Title = "Attributes";
+            Title = "Product Attributes";
 
             var attributes = _attributeService.GetAllAttributes().ToList();
 

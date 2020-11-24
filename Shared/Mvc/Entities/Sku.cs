@@ -4,6 +4,7 @@ using Shared.Mvc.Entities.BaseEntities;
 
 namespace Shared.Mvc.Entities
 {
+    [Table("skus")]
     public class Sku : BaseEntity<ulong>
     {
         [Column("product_id")]
@@ -11,9 +12,6 @@ namespace Shared.Mvc.Entities
 
         [Column("buying_price")]
         public decimal BuyingPrice { get; set; }
-
-        [Column("selling_price")]
-        public decimal SellingPrice { get; set; }
 
         [Column("quantity")]
         public int Quantity { get; set; }

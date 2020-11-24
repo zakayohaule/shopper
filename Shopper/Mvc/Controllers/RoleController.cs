@@ -34,7 +34,7 @@ namespace Shopper.Mvc.Controllers
         public IActionResult Index()
         {
             Title = "Roles";
-
+            AddPageHeader("Role Management");
             var roles = _roleService.GetAllRoles().ToList();
 
             return View(roles);

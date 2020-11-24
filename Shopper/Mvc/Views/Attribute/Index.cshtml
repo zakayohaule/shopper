@@ -57,9 +57,9 @@
                     <td>@index</td>
                     <td>@att.Name</td>
                     <td>
-                        @*<th:a asp-controller="Role" asp-action="RolePermissions" asp-route-id="@role.Id" title="Role permissions" class="btn btn-sm btn-default">
+                        <th:a asp-controller="AttributeOption" asp-action="Index" asp-route-attributeId="@att.Id" title="Attribute Options" class="btn btn-sm btn-default">
                             <i class="fa fa-list-ul"></i>
-                        </th:a>*@
+                        </th:a>
                         <a href="#" onclick="openFormModal('@Url.Action("EditAttributeModal", new {id = att.Id})', 'Edit Attribute')"
                            class="btn btn-default btn-sm" title="Edit attribute">
                             @* <span class="badge badge-warning" title="Edit attribute"> *@

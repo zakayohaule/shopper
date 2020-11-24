@@ -45,4 +45,13 @@
     <ItemGroup>
       <Folder Include="Migrations" />
     </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\dist\img\credit\american-express.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\img\credit\cirrus.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\img\credit\mastercard.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\img\credit\paypal.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\img\credit\paypal2.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\img\credit\visa.png" />
+    </ItemGroup>
 </Project>

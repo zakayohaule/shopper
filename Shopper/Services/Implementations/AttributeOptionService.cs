@@ -23,6 +23,11 @@ namespace Shopper.Services.Implementations
             return _dbContext.AttributeOptions.AsQueryable();
         }
 
+        public IQueryable<AttributeOption> GetAllAttributeOptionsByAttribute(ushort attributeId)
+        {
+            return GetAllAttributeOptions().Where(ao => ao.AttributeId.Equals(attributeId));
+        }
+
         public async Task<AttributeOption> FindByNameAsync(string name)
         {
             return await _dbContext.AttributeOptions.Where(pg => pg.Name.Equals(name)).FirstOrDefaultAsync();

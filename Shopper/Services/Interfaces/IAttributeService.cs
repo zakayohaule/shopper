@@ -15,5 +15,6 @@ namespace Shopper.Services.Interfaces
 
         bool IsDuplicate(Attribute attribute);
         public bool IsDuplicate(string name, ushort id);
+        public Task<bool> ExistsById(ushort id);
     }
 }

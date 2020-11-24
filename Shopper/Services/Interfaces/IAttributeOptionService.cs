@@ -7,6 +7,7 @@ namespace Shopper.Services.Interfaces
     public interface IAttributeOptionService
     {
         IQueryable<AttributeOption> GetAllAttributeOptions();
+        IQueryable<AttributeOption> GetAllAttributeOptionsByAttribute(ushort attributeId);
         Task<AttributeOption> FindByNameAsync(string name);
         Task<AttributeOption> FindByIdAsync(ushort id);
         Task<AttributeOption> CreateAsync(AttributeOption productCategory);

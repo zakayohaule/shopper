@@ -30,6 +30,7 @@ namespace Shopper.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnName("name")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
@@ -63,6 +64,7 @@ namespace Shopper.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnName("name")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
@@ -408,6 +410,7 @@ namespace Shopper.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnName("name")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
@@ -441,6 +444,7 @@ namespace Shopper.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnName("name")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
@@ -534,6 +538,7 @@ namespace Shopper.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnName("name")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
@@ -569,6 +574,7 @@ namespace Shopper.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnName("name")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
@@ -621,12 +627,18 @@ namespace Shopper.Migrations
                         .HasColumnName("remaining_quantity")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("SellingPrice")
+                        .HasColumnName("selling_price")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnName("updated_at")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("skus");
                 });
@@ -783,7 +795,7 @@ namespace Shopper.Migrations
                         .IsRequired();
 
                     b.HasOne("Shared.Mvc.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("Attributes")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -798,7 +810,7 @@ namespace Shopper.Migrations
                         .IsRequired();
 
                     b.HasOne("Shared.Mvc.Entities.Product", "Product")
-                        .WithMany("AttributeOptions")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -809,6 +821,15 @@ namespace Shopper.Migrations
                     b.HasOne("Shared.Mvc.Entities.ProductGroup", "ProductGroup")
                         .WithMany("ProductCategories")
                         .HasForeignKey("ProductGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.Sku", b =>
+                {
+                    b.HasOne("Shared.Mvc.Entities.Product", "Product")
+                        .WithMany("Skus")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

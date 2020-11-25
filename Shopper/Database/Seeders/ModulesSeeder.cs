@@ -18,6 +18,7 @@ namespace Shopper.Database.Seeders
                 new Module {Name = "Attribute Management"},
                 new Module {Name = "Price Type Management"},
                 new Module {Name = "Product Management"},
+                new Module {Name = "Stock Management"},
             }.ToList();
 
             modules.ForEach(pg =>

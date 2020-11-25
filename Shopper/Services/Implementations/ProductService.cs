@@ -50,6 +50,24 @@ namespace Shopper.Services.Implementations
             return selectItems;
         }
 
+        public List<SelectListItem> GetProductsSelectListItems()
+        {
+            return _dbContext.Products.Select(p => new SelectListItem
+            {
+                Value = p.Id.ToString(),
+                Text = p.Name
+            }).ToList();
+        }
+
+        public List<Product> GetStockedProducts()
+        {
+            return GetAllProducts()
+                .Include(p => p.ProductCategory)
+                .Include(p => p.Skus)
+                .Where(p => p.Skus.Any(sku => sku.RemainingQuantity > 0))
+                .ToList();
+        }
+
         public bool IsDuplicate(Product product)
         {
             return _dbContext
@@ -69,6 +87,11 @@ namespace Shopper.Services.Implementations
         public async Task<bool> ExistsByIdAsync(uint id)
         {
             return await _dbContext.Products.AnyAsync(pc => pc.Id.Equals(id));
+        }
+
+        public async Task<Product> FindByIdAsync(uint id)
+        {
+            return await _dbContext.Products.FindAsync(id);
         }
 
         public async Task<Product> CreateProductAsync(Product newProduct, string[] attributes = null)

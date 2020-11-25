@@ -10,9 +10,12 @@ namespace Shopper.Services.Interfaces
     {
         IQueryable<Product> GetAllProducts();
         List<SelectListItem> GetAttributeGroupings();
+        List<SelectListItem> GetProductsSelectListItems();
+        List<Product> GetStockedProducts();
         public bool IsDuplicate(Product product);
         public bool IsDuplicate(string name, uint id);
         public Task<bool> ExistsByIdAsync(uint id);
+        Task<Product> FindByIdAsync(uint id);
         Task<Product> CreateProductAsync(Product newProduct, string[] attributes = null);
     }
 

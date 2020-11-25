@@ -1,0 +1,5 @@
+﻿@model Product
+
+<th:form class="" asp-controller="Product" asp-action="Index" asp-route-id="@Model.Id">
+    <th:partial name="_ProductForm" model="Model"/>
+</th:form>

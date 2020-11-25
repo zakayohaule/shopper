@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shopper.Database;
 using Shopper.Services.Interfaces;
@@ -20,6 +22,12 @@ namespace Shopper.Services.Implementations
         public IQueryable<Attribute> GetAllAttributes()
         {
             return _dbContext.Attributes.AsQueryable();
+        }
+
+        public List<SelectListItem> GetAllAttributeSelectListItems()
+        {
+            return GetAllAttributes()
+                .Select(pg => new SelectListItem {Value = pg.Id.ToString(), Text = pg.Name}).ToList();
         }
 
         public async Task<Attribute> FindByNameAsync(string name)

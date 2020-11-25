@@ -467,6 +467,33 @@ namespace Shopper.Migrations
                     b.ToTable("products");
                 });
 
+            modelBuilder.Entity("Shared.Mvc.Entities.ProductAttribute", b =>
+                {
+                    b.Property<uint>("ProductId")
+                        .HasColumnName("product_id")
+                        .HasColumnType("int unsigned");
+
+                    b.Property<ushort>("AttributeId")
+                        .HasColumnName("attribute_id")
+                        .HasColumnType("smallint unsigned");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("ProductId", "AttributeId");
+
+                    b.HasIndex("AttributeId");
+
+                    b.ToTable("product_attribute");
+                });
+
             modelBuilder.Entity("Shared.Mvc.Entities.ProductAttributeOption", b =>
                 {
                     b.Property<uint>("ProductId")
@@ -743,6 +770,21 @@ namespace Shopper.Migrations
                     b.HasOne("Shared.Mvc.Entities.ProductCategory", "ProductCategory")
                         .WithMany("Products")
                         .HasForeignKey("ProductCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.ProductAttribute", b =>
+                {
+                    b.HasOne("Shared.Mvc.Entities.Attribute", "Attribute")
+                        .WithMany()
+                        .HasForeignKey("AttributeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Shared.Mvc.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

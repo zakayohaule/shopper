@@ -6,21 +6,20 @@ using Shared.Mvc.Entities.BaseEntities;
 
 namespace Shared.Mvc.Entities
 {
-    [Table("sku_selling_prices")]
-    public class SkuSellingPrice
+    [Table("product_attribute")]
+    public class ProductAttribute
     {
-        [Column("sku_id"), Required]
-        public ulong SkuId { get; set; }
+        [Column("attribute_id"), Required]
+        public ushort AttributeId { get; set; }
 
-        [Column("price_type_id"), Required]
-        public ushort PriceTypeId { get; set; }
+        [Column("product_id"), Required]
+        public uint ProductId { get; set; }
 
-        [Column("price"), Required]
-        public decimal Price { get; set; }
+        [ForeignKey(nameof(AttributeId))]
+        public Attribute Attribute { get; set; }
 
-        [ForeignKey(nameof(SkuId))] public Sku Sku { get; set; }
-
-        [ForeignKey(nameof(PriceTypeId))] public PriceType PriceType { get; set; }
+        [ForeignKey(nameof(ProductId))]
+        public Product Product { get; set; }
 
         [Column("created_at")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

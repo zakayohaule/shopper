@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Shared.Mvc.Entities;
 
 namespace Shopper.Services.Interfaces
@@ -7,6 +9,7 @@ namespace Shopper.Services.Interfaces
     public interface IAttributeService
     {
         IQueryable<Attribute>  GetAllAttributes();
+        List<SelectListItem> GetAllAttributeSelectListItems();
         Task<Attribute> FindByNameAsync(string name);
         Task<Attribute> FindByIdAsync(ushort id);
         Task<Attribute> CreateAsync(Attribute productGroup);

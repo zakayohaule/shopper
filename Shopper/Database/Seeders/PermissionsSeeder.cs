@@ -33,6 +33,9 @@ namespace Shopper.Database.Seeders
             var priceTypeManagement =
                 dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Price Type Management"));
 
+            var productManagement =
+                dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Product Management"));
+
             var permissions = new List<Permission>
             {
                 new Permission {Name = "user_add", DisplayName = "Create Own Institution's User", Module = userManagement},
@@ -66,6 +69,10 @@ namespace Shopper.Database.Seeders
                 new Permission {Name = "product_group_view", DisplayName = "View Product Groups", Module = productGroupManagement},
                 new Permission {Name = "product_group_edit", DisplayName = "Edit Product Groups", Module = productGroupManagement},
                 new Permission {Name = "product_group_delete", DisplayName = "Delete Product Groups", Module = productGroupManagement},
+                new Permission {Name = "product_add", DisplayName = "Add Products", Module = productManagement},
+                new Permission {Name = "product_view", DisplayName = "View Products", Module = productManagement},
+                new Permission {Name = "product_edit", DisplayName = "Edit Products", Module = productManagement},
+                new Permission {Name = "product_delete", DisplayName = "Delete Products", Module = productManagement},
             }.ToList();
 
             permissions.ForEach(permission =>

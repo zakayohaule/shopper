@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shared.Mvc.Entities;
 using Shopper.Database;
@@ -21,6 +22,13 @@ namespace Shopper.Services.Implementations
         public IQueryable<ProductCategory> GetAllProductCategories()
         {
             return _dbContext.ProductCategories.AsQueryable();
+        }
+
+        public List<SelectListItem> GetProductCategorySelectListItems()
+        {
+            return GetAllProductCategories()
+                .Include(pg => pg.ProductGroup)
+                .Select(pg => new SelectListItem {Value = pg.Id.ToString(), Text = $"{pg.ProductGroup.Name} - {pg.Name}"}).ToList();
         }
 
         public async Task<ProductCategory> FindByNameAsync(string name)

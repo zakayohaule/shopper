@@ -9,7 +9,7 @@ namespace Shared.Database.ModelBuilders
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             builder.HasIndex(p => p.Name).IsUnique();
-            builder.HasMany(product => product.AttributeOptions)
+            builder.HasMany(product => product.Attributes)
                 .WithOne(option => option.Product)
                 .HasForeignKey(option => option.ProductId);
         }

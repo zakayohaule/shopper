@@ -1,0 +1,108 @@
+﻿@model List<Product>;
+
+@{
+    Layout = "_Layout";
+    var newProduct = new Product();
+}
+
+@section css {
+    <th:link rel="stylesheet" href="~/plugins/select2/css/select2.min.css"></th:link>
+    <th:link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"></th:link>
+    <!-- Toastr -->
+    <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
+}
+
+<div class="card with-border">
+    <div class="card-header">
+        <a href="" data-toggle="modal" data-target="#add-product" class="btn btn-sm btn-primary float-right" title="Add User">
+            <i class="fas fa-user-plus"> Add</i>
+        </a>
+    </div>
+    <!-- /.card-header -->
+
+    <div class="modal fade" id="add-product">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Product</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <th:form class="" asp-controller="Product" asp-action="Create" method="post">
+                    <div class="modal-body">
+                        <th:partial name="_ProductForm" model="newProduct"/>
+                    </div>
+                </th:form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body table-responsive p-0">
+        <table class="table table-sm table-bordered table-hover">
+            <thead>
+            <tr>
+                <th style="width: 10px">#</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Attributes</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                int index = 0;
+            }
+            @foreach (var product in Model)
+            {
+                index++;
+                <tr>
+                    <td>@index</td>
+                    <td>@product.Name</td>
+                    <td>@product.ProductCategory.Name</td>
+                    <td>@string.Join(", ", product.Attributes.Select(att => att.Attribute.Name))</td>
+                    <td>
+                        <a href="#" onclick="openFormModal('@Url.Action("Index", new {id = product.Id})', 'Edit Product')"
+                           class="btn btn-default btn-sm" title="Edit product">
+                            @* <span class="badge badge-warning" title="Edit product"> *@
+                            <i class="fas fa-edit"></i>
+                            @* </span> *@
+                        </a>
+                        <th:a asp-controller="Product"
+                              asp-action="Index"
+                              asp-route-id="@product.Id" class="btn btn-default btn-sm btn-delete" title="Delete product">
+                            @* <span class="badge badge-danger" title="Delete product"> *@
+                            <i class="fas fa-trash"></i>
+                            @* </span> *@
+                        </th:a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->
+<th:partial name="Partials/_DynamicModelPopup" model="Model" view-data="ViewData"></th:partial>
+
+@section scripts
+{
+    <!-- Select2 -->
+    <th:script src="~/plugins/select2/js/select2.full.min.js"></th:script>
+    <script >
+    //Initialize Select2 Elements
+        $('.select2').select2()
+
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+          theme: 'bootstrap4'
+        })
+    </script>
+    <th:partial name="_ValidationScriptsPartial"></th:partial>
+    <th:partial name="Partials/_ToastScript"></th:partial>
+    <script>
+                // useSubmitClass();
+                useDeleteConfirmation();
+        </script>
+}

@@ -2,6 +2,7 @@
 
 @{
     Layout = "_Layout";
+    var today = DateTime.Now;
     var productSelectItems = ViewData["Products"] as List<SelectListItem>;
 }
 
@@ -16,6 +17,7 @@
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
             <h3 class="card-title">Manage Stock</h3>
+            <span class="pull pull-right">@today.ToString("h:mm tt") @today.ToLongDateString()</span>
         </div>
     </div>
     <!-- /.card-header -->
@@ -39,21 +41,20 @@
     </div>*@
 
     <div class="card-body">
-        <div class="pull pull-right">
+        @*<div class="pull pull-right">
             <div class="form-group">
-                <label class="col-sm-12 control-label">Date: @DateTime.Today.ToShortDateString()</label>
+                <label class="col-sm-12 control-label">Date: @today.ToLongDateString()</label>
             </div>
             <div class="form-group">
-                <label class="col-sm-12 control-label">Date: @DateTime.Now.ToShortTimeString()</label>
+                <label class="col-sm-12 control-label">Time: @today.ToString("h:mm tt")</label>
             </div>
-        </div>
+        </div>*@
         <table class="table table-borderless col-md-8">
             <thead>
-            <tr>
-                <th style="width:50%">Product</th>
-                <th style="width:10%">
-                </th>
-            </tr>
+            @*<tr>
+                <th style="width:50%"></th>
+                <th style="width:10%"></th>
+            </tr>*@
             </thead>
 
             <tbody>
@@ -80,6 +81,7 @@
                 <th>Name</th>
                 <th>Quantity</th>
                 <th>Remaining Quantity</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -93,6 +95,7 @@
                     <td>@index</td>
                     <td>@product.ProductCategory.Name</td>
                     <td>@product.Name</td>
+                    <td>@product.Skus.Sum(sku => sku.Quantity)</td>
                     <td>@product.Skus.Sum(sku => sku.RemainingQuantity)</td>
                     <td>
                         <a href="#" onclick="openFormModal('@Url.Action("Index", new {id = product.Id})', 'Edit Product')"
@@ -117,12 +120,16 @@
     <!-- /.card-body -->
 </div>
 <!-- /.card -->
-<th:partial name="Partials/_DynamicModelPopup" model="Model" view-data="ViewData"></th:partial>
+<th:partial name="Partials/_DynamicModalPopup" model="Model" view-data="ViewData"></th:partial>
 
 @section scripts
 {
     <!-- Select2 -->
     <th:script src="~/plugins/select2/js/select2.full.min.js"></th:script>
+
+    <!-- Number formatter -->
+    <th:script src="~/js/number-formatter.js"></th:script>
+
     <script >
     //Initialize Select2 Elements
         $('.select2').select2()
@@ -139,10 +146,11 @@
                 useDeleteConfirmation();
 
     function openStockModal(){
-        var product = $('#products');
-        console.log("The select product is: " + product.text() + "("+product.val() + ")");
-        if (product.val()){
-            openFormModal("/stocks/" + product.val() + "/open-stock-modal", 'Add Product Stock');
+        var selected = $("#products option:selected");
+        console.log("The select product is: " + selected.html() + " ("+selected.val() + ")");
+        if (selected.val()){
+            openFormModal("/stocks/" + selected.val() + "/open-stock-modal", 'Add Stock - ' + selected.html() , 'md', true);
             }}
         </script>
+
 }

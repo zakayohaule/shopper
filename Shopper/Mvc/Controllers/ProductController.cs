@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities;
-using Shared.Mvc.ViewModels;
 using Shopper.Attributes;
 using Shopper.Services.Interfaces;
 

@@ -12,7 +12,7 @@
     }
 }
 <div class="modal" id="edit-modal">
-    <div class="modal-dialog @size">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="modal-title">@title</h4>
@@ -28,7 +28,7 @@
 </div>
 
 <script >
-    var openFormModal = function(url, title=null, size=null){
+    var openFormModal = function(url, title=null, size=null, hasSelectFields=false){
         $.ajax({
             type: "GET",
             url: url.toString(),
@@ -36,8 +36,16 @@
                 if (title){
                     $("#modal-title").html(title)
                 }
+                if (size){
+                    $(".modal-dialog").addClass("modal-" + size)
+                    }
                 $("#edit-modal-body").html(response);
                 $("#edit-modal").modal("show");
+                if (hasSelectFields){
+                    $('.select2bs4').select2({
+                          theme: 'bootstrap4'
+                })
+                }
             }
            })
     }

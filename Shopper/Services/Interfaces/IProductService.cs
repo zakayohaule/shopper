@@ -3,12 +3,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Shared.Mvc.Entities;
+using Shopper.Mvc.ViewModels;
 
 namespace Shopper.Services.Interfaces
 {
     public interface IProductService
     {
         IQueryable<Product> GetAllProducts();
+        public Task<Product> FindByIdWithAttributesAsync(uint id);
         List<SelectListItem> GetAttributeGroupings();
         List<SelectListItem> GetProductsSelectListItems();
         List<Product> GetStockedProducts();
@@ -17,6 +19,9 @@ namespace Shopper.Services.Interfaces
         public Task<bool> ExistsByIdAsync(uint id);
         Task<Product> FindByIdAsync(uint id);
         Task<Product> CreateProductAsync(Product newProduct, string[] attributes = null);
+
+        Task<Sku> AddProductToStockAsync(Sku sku, List<ushort> attributeOptions);
+        Task<bool> HasAttributes(uint productId,List<ushort> attributes);
     }
 
 }

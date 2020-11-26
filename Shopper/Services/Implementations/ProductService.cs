@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shared.Mvc.Entities;
 using Shopper.Database;
+using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Services.Implementations
@@ -94,6 +95,16 @@ namespace Shopper.Services.Implementations
             return await _dbContext.Products.FindAsync(id);
         }
 
+        public async Task<Product> FindByIdWithAttributesAsync(uint id)
+        {
+            return await _dbContext
+                .Products
+                .Include(p => p.Attributes)
+                .ThenInclude(pa => pa.Attribute)
+                .ThenInclude(ao => ao.AttributeOptions)
+                .FirstAsync(p => p.Id.Equals(id));
+        }
+
         public async Task<Product> CreateProductAsync(Product newProduct, string[] attributes = null)
         {
             var product = await _dbContext.Products.AddAsync(newProduct);
@@ -115,6 +126,39 @@ namespace Shopper.Services.Implementations
             }
             await _dbContext.SaveChangesAsync();
             return product.Entity;
+        }
+
+        public async Task<Sku> AddProductToStockAsync(Sku sku, List<ushort> attributeOptions)
+        {
+            sku.RemainingQuantity = sku.Quantity;
+            sku.IsOnSale = false;
+            var newSku = _dbContext.Skus.Add(sku);
+            var skuAttributes = new List<SkuAttribute>();
+            foreach (var attributeOption in attributeOptions)
+            {
+                skuAttributes.Add(new SkuAttribute
+                {
+                    Sku = newSku.Entity,
+                    AttributeOptionId = attributeOption
+                });
+            }
+
+            await _dbContext.SkuAttributes.AddRangeAsync(skuAttributes);
+            await _dbContext.SaveChangesAsync();
+            return newSku.Entity;
+        }
+
+        public async Task<bool> HasAttributes(uint productId, List<ushort> attributes)
+        {
+            foreach (var attribute in attributes)
+            {
+                if (! await _dbContext.ProductAttributes.AnyAsync(pa => pa.ProductId.Equals(productId) && pa.AttributeId.Equals(attribute)))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

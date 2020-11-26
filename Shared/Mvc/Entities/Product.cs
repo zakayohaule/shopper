@@ -27,7 +27,7 @@ namespace Shared.Mvc.Entities
         public ProductCategory ProductCategory { get; set; }
 
         [InverseProperty("Product")]
-        public ICollection<Sku> Skus { get; set; }
+        public List<Sku> Skus { get; set; }
 
         [InverseProperty("Product")]
         public ICollection<ProductAttribute> Attributes { get; set; }

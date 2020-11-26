@@ -1,6 +1,68 @@
-﻿@model Product
+﻿@model Shopper.Mvc.ViewModels.SkuViewFormModel
 
-<h1>@Model.Name</h1>
-@*<th:form class="" asp-controller="ProductGroup" asp-action="Update" asp-route-id="@Model.Id">
-    <th:partial name="_ProductGroupForm" model="Model"/>
-</th:form>*@
+@* <h1>@Model.Name</h1> *@
+<th:form class="form-horizontal" asp-controller="Stock" asp-action="Create">
+    <th:input type="hidden" asp-for="Sku.ProductId" value="@Model.Product.Id"></th:input>
+    @for (var i = 0; i < Model.Product.Attributes.Count; i++)
+    {
+        var att = Model.Product.Attributes.ToList()[i].Attribute;
+        <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">@att.Name</label>
+            <div class="col-sm-8">
+                <th:select class="form-control select2bs4" asp-for="Attributes[i]" id="attribute_@att.Id"
+                           asp-items="@att.AttributeOptions.Select(ao => new SelectListItem {Text = ao.Name, Value = $"{ao.AttributeId}_{ao.Id}"})">
+                    <option value="">-- Select @att.Name --</option>
+                </th:select>
+            </div>
+        </div>
+    }
+    <div class="form-group row">
+        <th:label asp-for="Sku.Quantity" class="col-sm-4 col-form-label"></th:label>
+        <div class="col-sm-8">
+            <th:input asp-for="Sku.Quantity" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+        </div>
+    </div>
+    <div class="form-group row">
+        <th:label asp-for="Sku.BuyingPrice" class="col-sm-4 col-form-label"></th:label>
+        <div class="col-sm-8">
+            <th:input asp-for="Sku.BuyingPrice" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+        </div>
+    </div>
+    <div class="form-group row">
+        <th:label asp-for="Sku.SellingPrice" class="col-sm-4 col-form-label"></th:label>
+        <div class="col-sm-8">
+            <th:input asp-for="Sku.SellingPrice" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+        </div>
+    </div>
+    <div class="form-group row">
+        <th:label asp-for="Sku.MaximumDiscount" class="col-sm-4 col-form-label"></th:label>
+        <div class="col-sm-8">
+            <th:input asp-for="Sku.MaximumDiscount" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+        </div>
+    </div>
+    @*<div class="form-group row">
+        <span>Profit Margin: <span id="profit"></span></span>
+    </div>*@
+    <div class="card-footer">
+        <button type="submit" class="btn btn-info float-right">Submit</button>
+        @* <button type="submit" class="btn btn-default float-right">Cancel</button> *@
+    </div>
+    <!-- /.card-footer -->
+</th:form>
+
+@*
+<script >
+ $(".profit").change(function (){
+     console.log("Value enter"+ $(this).val());
+     var qty = $('#Sku.Quantity').val();
+     var bp = $('#Sku.BuyingPrice').val();
+      var sp = $('#Sku.SellingPrice').val();
+      var md = $('#Sku.MaximumDiscount').val();
+      if (qty && bp && sp && md){
+            var maxProf = (sp - bp)*qty;
+            var minProf = ((sp-md) - bp)*qty;
+            var profitSpan = $('#profit');
+            profitSpan.html(minProf + " - " +maxProf);
+      }
+     })
+</script>*@

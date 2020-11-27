@@ -17,7 +17,7 @@
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
             <h3 class="card-title">Manage Stock</h3>
-            <span class="pull pull-right">@today.ToString("h:mm tt") @today.ToLongDateString()</span>
+            <span class="pull pull-right" style="font-weight: bolder">@*@today.ToString("h:mm tt") - *@@today.ToLongDateString()</span>
         </div>
     </div>
     <!-- /.card-header -->
@@ -98,12 +98,13 @@
                     <td>@product.Skus.Sum(sku => sku.Quantity)</td>
                     <td>@product.Skus.Sum(sku => sku.RemainingQuantity)</td>
                     <td>
-                        <a href="#" onclick="openFormModal('@Url.Action("Index", new {id = product.Id})', 'Edit Product')"
-                           class="btn btn-default btn-sm" title="Edit product">
+                        <th:a asp-action="OpenProductSkus" asp-route-id="@product.Id"
+                           class="btn btn-default btn-sm" title="View Details">
                             @* <span class="badge badge-warning" title="Edit product"> *@
-                            <i class="fas fa-edit"></i>
+                            <i class="fas fa-eye"></i>
                             @* </span> *@
-                        </a>
+                        </th:a>
+
                         <th:a asp-controller="Product"
                               asp-action="Index"
                               asp-route-id="@product.Id" class="btn btn-default btn-sm btn-delete" title="Delete product">

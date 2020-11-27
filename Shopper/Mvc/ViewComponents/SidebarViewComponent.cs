@@ -4,48 +4,61 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Common;
 using Shared.Mvc.Entities;
+using Shopper.Extensions.Helpers;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Mvc.ViewComponents
 {
     public class SidebarViewComponent : ViewComponent
     {
-        private IUserClaimService _userClaimService;
+        private readonly IUserClaimService _userClaimService;
+        private long UserId { get; set; }
 
         public SidebarViewComponent(IUserClaimService userClaimService)
         {
             _userClaimService = userClaimService;
         }
 
-        public IViewComponentResult Invoke(string filter)
+        public IViewComponentResult Invoke(long userId)
         {
-            //you can do the access rights checking here by using session, user, and/or filter parameter
+            UserId = userId;
             var sidebars = new List<SidebarMenu>();
-
-            //if (((ClaimsPrincipal)User).GetUserProperty("AccessProfile").Contains("VES_008, Payroll"))
-            //{\
-            //}
-
             sidebars.Add(ModuleHelper.AddHeader("  User Management"));
-            // var userManagementModule = ModuleHelper.AddTree(name: "User Management", iconClassName: "fa fa-user");
-            // userManagementModule.TreeChild = new List<SidebarMenu>
-            // {
-            sidebars.Add(ModuleHelper.AddModuleLink(name: "Users", url: Url.Action("Index", "User"), "fa fa-users"));
-            sidebars.Add(ModuleHelper.AddModuleLink(name: "Roles", Url.Action("Index", "Role"), "fas fa-user-tag"));
-            // };
-            // sidebars.Add(userManagementModule);
+
+            if (_userClaimService.HasPermission(UserId, "user_view"))
+            {
+                sidebars.Add(ModuleHelper.AddModuleLink(name: "Users", url: Url.Action("Index", "User"), "fa fa-users"));
+            }
+            if (_userClaimService.HasPermission(UserId, "role_view"))
+            {
+                sidebars.Add(ModuleHelper.AddModuleLink(name: "Roles", Url.Action("Index", "Role"), "fas fa-user-tag"));
+            }
 
             sidebars.Add(ModuleHelper.AddHeader("Product Management"));
-            // productManagement.TreeChild = new List<SidebarMenu>
-            // {
+            if (_userClaimService.HasPermission(UserId, "product_group_view"))
+            {
                 sidebars.Add(ModuleHelper.AddModuleLink("Product Groups", Url.Action("Index", "ProductGroup"), "fas fa-sitemap"));
+            }
+            if (_userClaimService.HasPermission(UserId, "product_category_view"))
+            {
                 sidebars.Add(ModuleHelper.AddModuleLink("Product Categories", Url.Action("Index", "ProductCategory")));
+            }
+            if (_userClaimService.HasPermission(UserId, "product_attribute_view"))
+            {
                 sidebars.Add(ModuleHelper.AddModuleLink("Product Attributes", Url.Action("Index", "Attribute"), "fas fa-paint-brush"));
+            }
+            if (_userClaimService.HasPermission(UserId, "price_type_view"))
+            {
                 sidebars.Add(ModuleHelper.AddModuleLink("Price Types", Url.Action("Index", "PriceType")));
+            }
+            if (_userClaimService.HasPermission(UserId, "product_view"))
+            {
                 sidebars.Add(ModuleHelper.AddModuleLink("Products", Url.Action("Index", "Product"), "fas fa-tshirt"));
+            }
+            if (_userClaimService.HasPermission(UserId, "stock_view"))
+            {
                 sidebars.Add(ModuleHelper.AddModuleLink("Stock", Url.Action("Index", "Stock")));
-            // };
-            // sidebars.Add(productManagement);
+            }
             return View(sidebars);
         }
     }

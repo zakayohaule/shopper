@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shared.Mvc.Entities;
@@ -65,6 +66,8 @@ namespace Shopper.Services.Implementations
             return GetAllProducts()
                 .Include(p => p.ProductCategory)
                 .Include(p => p.Skus)
+                .ThenInclude(sku => sku.SkuAttributes)
+                .ThenInclude(skuAtt => skuAtt.Option)
                 .Where(p => p.Skus.Any(sku => sku.RemainingQuantity > 0))
                 .ToList();
         }
@@ -99,10 +102,22 @@ namespace Shopper.Services.Implementations
         {
             return await _dbContext
                 .Products
-                .Include(p => p.Attributes)
+                .Include(p => p.Attributes)/*
                 .ThenInclude(pa => pa.Attribute)
-                .ThenInclude(ao => ao.AttributeOptions)
+                .ThenInclude(ao => ao.AttributeOptions)*/
                 .FirstAsync(p => p.Id.Equals(id));
+        }
+
+        public async Task<Product> FindProductSkusAsync(uint productId)
+        {
+            var product = await _dbContext
+                .Products
+                .Include(p => p.Skus)
+                .ThenInclude(sku => sku.SkuAttributes)
+                .ThenInclude(skuAtt => skuAtt.Option)
+                .FirstAsync(p => p.Id.Equals(productId));
+            product.Skus = product.Skus.OrderByDescending(sku => sku.CreatedAt).ToList();
+            return product;
         }
 
         public async Task<Product> CreateProductAsync(Product newProduct, string[] attributes = null)
@@ -133,17 +148,14 @@ namespace Shopper.Services.Implementations
             sku.RemainingQuantity = sku.Quantity;
             sku.IsOnSale = false;
             var newSku = _dbContext.Skus.Add(sku);
-            var skuAttributes = new List<SkuAttribute>();
-            foreach (var attributeOption in attributeOptions)
-            {
-                skuAttributes.Add(new SkuAttribute
-                {
-                    Sku = newSku.Entity,
-                    AttributeOptionId = attributeOption
-                });
-            }
 
-            await _dbContext.SkuAttributes.AddRangeAsync(skuAttributes);
+            if (!attributeOptions.IsNullOrEmpty())
+            {
+                var skuAttributes = attributeOptions
+                    .Select(attributeOption => new SkuAttribute {Sku = newSku.Entity, AttributeOptionId = attributeOption}).
+                    ToList();
+                await _dbContext.SkuAttributes.AddRangeAsync(skuAttributes);
+            }
             await _dbContext.SaveChangesAsync();
             return newSku.Entity;
         }

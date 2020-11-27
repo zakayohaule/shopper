@@ -1,0 +1,114 @@
+﻿@using Microsoft.EntityFrameworkCore.Internal
+@model Product;
+
+@{
+    Layout = "_Layout";
+    var product = Model;
+}
+
+@section css {
+    <th:link rel="stylesheet" href="~/plugins/select2/css/select2.min.css"></th:link>
+    <th:link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"></th:link>
+    <!-- Toastr -->
+    <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
+}
+
+<div class="card with-border">
+    <div class="card-header border-0">
+        <div class="d-flex justify-content-between">
+            <h3 class="card-title">Product Stock - @Model.Name</h3>
+        </div>
+    </div>
+    <!-- /.card-header -->
+
+    <div class="card-body">
+        <table class="table table-sm table-bordered table-hover" style="text-align: center;">
+            <thead>
+            <tr>
+                <th style="width: 10px;">#</th>
+                @if (product.Skus.Any(sku => sku.SkuAttributes.Any()))
+                {
+                    <th>Attributes</th>
+                }
+                <th>Quantity</th>
+                <th>Remaining Quantity</th>
+                <th>Date</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                int index = 0;
+            }
+            @foreach (var sku in Model.Skus)
+            {
+                index++;
+                <tr>
+                    <td>@index</td>
+                    @if (product.Skus.Any(sku1 => sku1.SkuAttributes.Any()))
+                    {
+                        <td style="font-weight: bolder">
+                            @string.Join(" - ", sku.SkuAttributes.Select(skuAtt => skuAtt.Option.Name))
+                        </td>
+                    }
+                    <td>@sku.Quantity</td>
+                    <td>@sku.RemainingQuantity</td>
+                    <td>@sku.CreatedAt.Date.ToShortDateString()</td>
+                    <td>
+                        <a href="#" onclick="openFormModal('@Url.Action("OpenProductSkus", new {id = sku.Id})', @Model.Name + ' Stock Keeping Units')"
+                           class="btn btn-default btn-sm" title="Edit entry">
+                            @* <span class="badge badge-warning" title="Edit product"> *@
+                            <i class="fas fa-edit"></i>
+                            @* </span> *@
+                        </a>
+
+                        <th:a asp-controller="Product"
+                              asp-action="Index"
+                              asp-route-id="@sku.Id" class="btn btn-default btn-sm btn-delete" title="Delete entry">
+                            @* <span class="badge badge-danger" title="Delete product"> *@
+                            <i class="fas fa-trash"></i>
+                            @* </span> *@
+                        </th:a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->
+<th:partial name="Partials/_DynamicModalPopup" model="Model" view-data="ViewData"></th:partial>
+
+@section scripts
+{
+    <!-- Select2 -->
+    <th:script src="~/plugins/select2/js/select2.full.min.js"></th:script>
+
+    <!-- Number formatter -->
+    <th:script src="~/js/number-formatter.js"></th:script>
+
+    <script >
+    //Initialize Select2 Elements
+        $('.select2').select2()
+
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+          theme: 'bootstrap4'
+        })
+    </script>
+    <th:partial name="_ValidationScriptsPartial"></th:partial>
+    <th:partial name="Partials/_ToastScript"></th:partial>
+    <script>
+                // useSubmitClass();
+                useDeleteConfirmation();
+
+    function openStockModal(){
+        var selected = $("#products option:selected");
+        console.log("The select product is: " + selected.html() + " ("+selected.val() + ")");
+        if (selected.val()){
+            openFormModal("/stocks/" + selected.val() + "/open-stock-modal", 'Add Stock - ' + selected.html() , 'md', true);
+            }}
+        </script>
+
+}

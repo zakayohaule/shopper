@@ -11,6 +11,7 @@ namespace Shopper.Services.Interfaces
     {
         IQueryable<Product> GetAllProducts();
         public Task<Product> FindByIdWithAttributesAsync(uint id);
+        public Task<Product> FindProductSkusAsync(uint productId);
         List<SelectListItem> GetAttributeGroupings();
         List<SelectListItem> GetProductsSelectListItems();
         List<Product> GetStockedProducts();

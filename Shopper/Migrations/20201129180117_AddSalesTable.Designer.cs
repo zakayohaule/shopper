@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shopper.Database;
 
 namespace Shopper.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201129180117_AddSalesTable")]
+    partial class AddSalesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -607,13 +609,9 @@ namespace Shopper.Migrations
                         .HasColumnName("is_confirmed")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<uint>("Price")
+                    b.Property<decimal>("Price")
                         .HasColumnName("price")
-                        .HasColumnType("int unsigned");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnName("quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<ulong>("SkuId")
                         .HasColumnName("sku_id")
@@ -638,9 +636,9 @@ namespace Shopper.Migrations
                         .HasColumnName("id")
                         .HasColumnType("bigint unsigned");
 
-                    b.Property<uint>("BuyingPrice")
+                    b.Property<decimal>("BuyingPrice")
                         .HasColumnName("buying_price")
-                        .HasColumnType("int unsigned");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -651,9 +649,9 @@ namespace Shopper.Migrations
                         .HasColumnName("is_on_sale")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<uint>("MaximumDiscount")
+                    b.Property<decimal>("MaximumDiscount")
                         .HasColumnName("maximum_discount")
-                        .HasColumnType("int unsigned");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<uint>("ProductId")
                         .HasColumnName("product_id")
@@ -667,9 +665,9 @@ namespace Shopper.Migrations
                         .HasColumnName("remaining_quantity")
                         .HasColumnType("int");
 
-                    b.Property<uint>("SellingPrice")
+                    b.Property<decimal>("SellingPrice")
                         .HasColumnName("selling_price")
-                        .HasColumnType("int unsigned");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()
@@ -732,9 +730,9 @@ namespace Shopper.Migrations
                         .HasColumnName("created_at")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<uint?>("Price")
+                    b.Property<decimal>("Price")
                         .HasColumnName("price")
-                        .HasColumnType("int unsigned");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()

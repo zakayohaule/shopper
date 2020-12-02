@@ -16,7 +16,7 @@
 <div class="card with-border">
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
-            <h3 class="card-title">Product Stock - @Model.Name</h3>
+            <h3 class="card-title">Product Stock Entries - @Model.Name</h3>
         </div>
     </div>
     <!-- /.card-header -->
@@ -32,6 +32,8 @@
                 }
                 <th>Quantity</th>
                 <th>Remaining Quantity</th>
+                <th>Buying Price</th>
+                <th>Selling Price</th>
                 <th>Date</th>
                 <th></th>
             </tr>
@@ -51,9 +53,17 @@
                             @string.Join(" - ", sku.SkuAttributes.Select(skuAtt => skuAtt.Option.Name))
                         </td>
                     }
+                    else
+                    {
+                        <td style="font-weight: bolder">
+                            N/A
+                        </td>
+                    }
                     <td>@sku.Quantity</td>
                     <td>@sku.RemainingQuantity</td>
-                    <td>@sku.CreatedAt.Date.ToShortDateString()</td>
+                    <td>@sku.BuyingPrice.ToString("N0")</td>
+                    <td>@sku.SellingPrice.ToString("N0")</td>
+                    <td>@sku.CreatedAt.Date.ToString("MM/dd/yyyy")</td>
                     <td>
                         <a href="#" onclick="openFormModal('@Url.Action("OpenProductSkus", new {id = sku.Id})', @Model.Name + ' Stock Keeping Units')"
                            class="btn btn-default btn-sm" title="Edit entry">

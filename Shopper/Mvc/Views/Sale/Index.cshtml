@@ -1,4 +1,4 @@
-﻿@model List<Product>;
+﻿@* @model List<Product>; *@
 
 @{
     Layout = "_Layout";
@@ -41,20 +41,14 @@
     </div>*@
 
     <div class="card-body">
-        @*<div class="pull pull-right">
-            <div class="form-group">
-                <label class="col-sm-12 control-label">Date: @today.ToLongDateString()</label>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-12 control-label">Time: @today.ToString("h:mm tt")</label>
-            </div>
-        </div>*@
-        <table class="table table-borderless col-md-8">
+        <table class="table table-borderless col-md-12" id="sales">
             <thead>
-            @*<tr>
-                <th style="width:50%"></th>
+            <tr>
+                <th style="width:60%"></th>
                 <th style="width:10%"></th>
-            </tr>*@
+                <th style="width:20%"></th>
+                <th style="width:10%"></th>
+            </tr>
             </thead>
 
             <tbody>
@@ -65,8 +59,14 @@
                     </th:select>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-default" onclick="openStockModal()">
-                        <i class="fa fa-plus"></i>
+                    <input type="text" placeholder="Qty" class="form-control" name="quantity" id="quantity">
+                </td>
+                <td>
+                    <input type="text" placeholder="Price" class="form-control" name="price" id="price">
+                </td>
+                <td>
+                    <button type="button" class="btn btn-default" id="add-to-cart">
+                        <i class="fa fa-cart-arrow-down"></i>
                     </button>
                 </td>
             </tr>
@@ -77,44 +77,14 @@
             <thead>
             <tr>
                 <th style="width: 10px">#</th>
-                <th>Category</th>
                 <th>Name</th>
                 <th>Quantity</th>
-                <th>Quantity In Stock</th>
-                <th></th>
+                <th>Unit Price</th>
+                <th>Amount</th>
             </tr>
             </thead>
             <tbody>
-            @{
-                int index = 0;
-            }
-            @foreach (var product in Model)
-            {
-                index++;
-                <tr>
-                    <td>@index</td>
-                    <td>@product.ProductCategory.Name</td>
-                    <td>@product.Name</td>
-                    <td>@product.Skus.Sum(sku => sku.Quantity)</td>
-                    <td>@product.Skus.Sum(sku => sku.RemainingQuantity)</td>
-                    <td>
-                        <th:a asp-action="OpenProductSkus" asp-route-id="@product.Id"
-                           class="btn btn-default btn-sm" title="View Details">
-                            @* <span class="badge badge-warning" title="Edit product"> *@
-                            <i class="fas fa-eye"></i>
-                            @* </span> *@
-                        </th:a>
 
-                        <th:a asp-controller="Product"
-                              asp-action="Index"
-                              asp-route-id="@product.Id" class="btn btn-default btn-sm btn-delete" title="Delete product">
-                            @* <span class="badge badge-danger" title="Delete product"> *@
-                            <i class="fas fa-trash"></i>
-                            @* </span> *@
-                        </th:a>
-                    </td>
-                </tr>
-            }
             </tbody>
         </table>
     </div>
@@ -145,13 +115,10 @@
     <script>
                 // useSubmitClass();
                 useDeleteConfirmation();
+                let sales = null;
 
-    function openStockModal(){
-        var selected = $("#products option:selected");
-        console.log("The select product is: " + selected.html() + " ("+selected.val() + ")");
-        if (selected.val()){
-            openFormModal("/stocks/" + selected.val() + "/open-stock-modal", 'Add Stock - ' + selected.html() , 'md', true);
-            }}
-        </script>
-
+                $('#add-to-cart').on('click', function (){
+                    if
+                    })
+                </script>
 }

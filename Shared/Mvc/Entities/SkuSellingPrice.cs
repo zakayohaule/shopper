@@ -15,8 +15,8 @@ namespace Shared.Mvc.Entities
         [Column("price_type_id"), Required]
         public ushort PriceTypeId { get; set; }
 
-        [Column("price"), Required]
-        public decimal Price { get; set; }
+        [Column("price")]
+        public uint? Price { get; set; }
 
         [ForeignKey(nameof(SkuId))] public Sku Sku { get; set; }
 

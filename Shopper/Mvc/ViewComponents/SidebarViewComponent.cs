@@ -59,6 +59,10 @@ namespace Shopper.Mvc.ViewComponents
             {
                 sidebars.Add(ModuleHelper.AddModuleLink("Stock", Url.Action("Index", "Stock")));
             }
+            if (_userClaimService.HasPermission(UserId, "sale_view"))
+            {
+                sidebars.Add(ModuleHelper.AddModuleLink("Sales", Url.Action("Index", "Sale")));
+            }
             return View(sidebars);
         }
     }

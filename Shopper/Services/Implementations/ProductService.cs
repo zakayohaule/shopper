@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using IdentityServer4.Extensions;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.WebEncoders.Testing;
 using Shared.Mvc.Entities;
 using Shopper.Database;
 using Shopper.Mvc.ViewModels;
@@ -54,11 +58,22 @@ namespace Shopper.Services.Implementations
 
         public List<SelectListItem> GetProductsSelectListItems()
         {
-            return _dbContext.Products.Select(p => new SelectListItem
-            {
-                Value = p.Id.ToString(),
-                Text = p.Name
-            }).ToList();
+            /*return _dbContext.Products
+                .Include(p => p.Skus.Where(sku => sku.))
+                .Select(p => new SelectListItem
+                {
+                    Value = p.Id.ToString(),
+                    Text = p.Name
+                }).ToList();*/
+            // HtmlString htmlString = new HtmlString();
+            return _dbContext.Skus
+                .Include(sku => sku.Product)
+                .Where(sku => sku.RemainingQuantity > 0)
+                .Select(sku => new SelectListItem
+                {
+                    Value = sku.Id.ToString(),
+                    Text = new HtmlString($"{sku.Product.Name}  [{sku.RemainingQuantity}/{sku.SellingPrice}]").ToString()
+                }).ToList();
         }
 
         public List<Product> GetStockedProducts()
@@ -102,9 +117,9 @@ namespace Shopper.Services.Implementations
         {
             return await _dbContext
                 .Products
-                .Include(p => p.Attributes)/*
+                .Include(p => p.Attributes)
                 .ThenInclude(pa => pa.Attribute)
-                .ThenInclude(ao => ao.AttributeOptions)*/
+                .ThenInclude(ao => ao.AttributeOptions)
                 .FirstAsync(p => p.Id.Equals(id));
         }
 
@@ -139,6 +154,7 @@ namespace Shopper.Services.Implementations
 
                 await _dbContext.ProductAttributes.AddRangeAsync(productAttributes);
             }
+
             await _dbContext.SaveChangesAsync();
             return product.Entity;
         }
@@ -152,10 +168,11 @@ namespace Shopper.Services.Implementations
             if (!attributeOptions.IsNullOrEmpty())
             {
                 var skuAttributes = attributeOptions
-                    .Select(attributeOption => new SkuAttribute {Sku = newSku.Entity, AttributeOptionId = attributeOption}).
-                    ToList();
+                    .Select(attributeOption => new SkuAttribute
+                        {Sku = newSku.Entity, AttributeOptionId = attributeOption}).ToList();
                 await _dbContext.SkuAttributes.AddRangeAsync(skuAttributes);
             }
+
             await _dbContext.SaveChangesAsync();
             return newSku.Entity;
         }
@@ -164,7 +181,8 @@ namespace Shopper.Services.Implementations
         {
             foreach (var attribute in attributes)
             {
-                if (! await _dbContext.ProductAttributes.AnyAsync(pa => pa.ProductId.Equals(productId) && pa.AttributeId.Equals(attribute)))
+                if (!await _dbContext.ProductAttributes.AnyAsync(pa =>
+                    pa.ProductId.Equals(productId) && pa.AttributeId.Equals(attribute)))
                 {
                     return false;
                 }

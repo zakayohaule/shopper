@@ -17,7 +17,7 @@ namespace Shopper.Mvc.Controllers
         [HttpGet(""), Permission("sale_view"), Toast]
         public IActionResult Index()
         {
-            ViewData["Products"] = _productService.GetProductsSelectListItems();
+            ViewData["Products"] = _productService.GetProductsSelectListItemsForSale();
 
             return View();
         }

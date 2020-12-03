@@ -14,6 +14,7 @@ namespace Shopper.Services.Interfaces
         public Task<Product> FindProductSkusAsync(uint productId);
         List<SelectListItem> GetAttributeGroupings();
         List<SelectListItem> GetProductsSelectListItems();
+        public List<SelectListItem> GetProductsSelectListItemsForSale();
         List<Product> GetStockedProducts();
         public bool IsDuplicate(Product product);
         public bool IsDuplicate(string name, uint id);

@@ -7,6 +7,7 @@
 }
 
 @section css {
+    <th:partial name="Partials/_DtCss"></th:partial>
     <th:link rel="stylesheet" href="~/plugins/select2/css/select2.min.css"></th:link>
     <th:link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"></th:link>
     <!-- Toastr -->
@@ -51,10 +52,10 @@
         </div>*@
         <table class="table table-borderless col-md-8">
             <thead>
-            @*<tr>
-                <th style="width:50%"></th>
-                <th style="width:10%"></th>
-            </tr>*@
+            <tr>
+                <th style="width:40%"></th>
+                <th style="width:20%"></th>
+            </tr>
             </thead>
 
             <tbody>
@@ -65,15 +66,15 @@
                     </th:select>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-default" onclick="openStockModal()">
-                        <i class="fa fa-plus"></i>
+                    <button type="button" class="btn btn-primary" onclick="openStockModal()">
+                        <i class="fa fa-plus"></i> Add to stock
                     </button>
                 </td>
             </tr>
             </tbody>
         </table>
 
-        <table class="table table-sm table-bordered table-hover">
+        <table class="table table-sm table-bordered table-hover dt-table">
             <thead>
             <tr>
                 <th style="width: 10px">#</th>
@@ -99,7 +100,7 @@
                     <td>@product.Skus.Sum(sku => sku.RemainingQuantity)</td>
                     <td>
                         <th:a asp-action="OpenProductSkus" asp-route-id="@product.Id"
-                           class="btn btn-default btn-sm" title="View Details">
+                              class="btn btn-default btn-sm" title="View Details">
                             @* <span class="badge badge-warning" title="Edit product"> *@
                             <i class="fas fa-eye"></i>
                             @* </span> *@
@@ -125,6 +126,7 @@
 
 @section scripts
 {
+    <th:partial name="Partials/_DtJs"></th:partial>
     <!-- Select2 -->
     <th:script src="~/plugins/select2/js/select2.full.min.js"></th:script>
 

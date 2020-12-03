@@ -31,13 +31,13 @@
     <div class="form-group row">
         <th:label asp-for="Sku.SellingPrice" class="col-sm-4 col-form-label"></th:label>
         <div class="col-sm-8">
-            <th:input asp-for="Sku.SellingPrice" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+            <th:input asp-for="Sku.SellingPrice" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
         </div>
     </div>
     <div class="form-group row">
         <th:label asp-for="Sku.MaximumDiscount" class="col-sm-4 col-form-label"></th:label>
         <div class="col-sm-8">
-            <th:input asp-for="Sku.MaximumDiscount" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+            <th:input asp-for="Sku.MaximumDiscount" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
         </div>
     </div>
     @*<div class="form-group row">

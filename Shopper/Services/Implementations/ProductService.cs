@@ -56,16 +56,8 @@ namespace Shopper.Services.Implementations
             return selectItems;
         }
 
-        public List<SelectListItem> GetProductsSelectListItems()
+        public List<SelectListItem> GetProductsSelectListItemsForSale()
         {
-            /*return _dbContext.Products
-                .Include(p => p.Skus.Where(sku => sku.))
-                .Select(p => new SelectListItem
-                {
-                    Value = p.Id.ToString(),
-                    Text = p.Name
-                }).ToList();*/
-            // HtmlString htmlString = new HtmlString();
             return _dbContext.Skus
                 .Include(sku => sku.Product)
                 .Where(sku => sku.RemainingQuantity > 0)
@@ -73,6 +65,16 @@ namespace Shopper.Services.Implementations
                 {
                     Value = sku.Id.ToString(),
                     Text = new HtmlString($"{sku.Product.Name}  [{sku.RemainingQuantity}/{sku.SellingPrice}]").ToString()
+                }).ToList();
+        }
+
+        public List<SelectListItem> GetProductsSelectListItems()
+        {
+            return _dbContext.Products
+                .Select(p => new SelectListItem
+                {
+                    Value = p.Id.ToString(),
+                    Text = p.Name
                 }).ToList();
         }
 

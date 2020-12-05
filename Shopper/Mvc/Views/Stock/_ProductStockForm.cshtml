@@ -2,7 +2,7 @@
 
 @* <h1>@Model.Name</h1> *@
 <th:form class="form-horizontal" asp-controller="Stock" asp-action="Create">
-    <th:input type="hidden" asp-for="Sku.ProductId" value="@Model.Product.Id"></th:input>
+    <th:input type="hidden" asp-for="ProductId" value="@Model.Product.Id"></th:input>
     @for (var i = 0; i < Model.Product.Attributes.Count; i++)
     {
         var att = Model.Product.Attributes.ToList()[i].Attribute;
@@ -17,27 +17,27 @@
         </div>
     }
     <div class="form-group row">
-        <th:label asp-for="Sku.Quantity" class="col-sm-4 col-form-label"></th:label>
+        <th:label asp-for="Quantity" class="col-sm-4 col-form-label"></th:label>
         <div class="col-sm-8">
-            <th:input asp-for="Sku.Quantity" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+            <th:input asp-for="Quantity" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
         </div>
     </div>
     <div class="form-group row">
-        <th:label asp-for="Sku.BuyingPrice" class="col-sm-4 col-form-label"></th:label>
+        <th:label asp-for="BuyingPrice" class="col-sm-4 col-form-label"></th:label>
         <div class="col-sm-8">
-            <th:input asp-for="Sku.BuyingPrice" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+            <th:input asp-for="BuyingPrice" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
         </div>
     </div>
     <div class="form-group row">
-        <th:label asp-for="Sku.SellingPrice" class="col-sm-4 col-form-label"></th:label>
+        <th:label asp-for="SellingPrice" class="col-sm-4 col-form-label"></th:label>
         <div class="col-sm-8">
-            <th:input asp-for="Sku.SellingPrice" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+            <th:input asp-for="SellingPrice" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
         </div>
     </div>
     <div class="form-group row">
-        <th:label asp-for="Sku.MaximumDiscount" class="col-sm-4 col-form-label"></th:label>
+        <th:label asp-for="MaximumDiscount" class="col-sm-4 col-form-label"></th:label>
         <div class="col-sm-8">
-            <th:input asp-for="Sku.MaximumDiscount" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+            <th:input asp-for="MaximumDiscount" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
         </div>
     </div>
     @*<div class="form-group row">
@@ -54,10 +54,10 @@
 <script >
  $(".profit").change(function (){
      console.log("Value enter"+ $(this).val());
-     var qty = $('#Sku.Quantity').val();
-     var bp = $('#Sku.BuyingPrice').val();
-      var sp = $('#Sku.SellingPrice').val();
-      var md = $('#Sku.MaximumDiscount').val();
+     var qty = $('#Quantity').val();
+     var bp = $('#BuyingPrice').val();
+      var sp = $('#SellingPrice').val();
+      var md = $('#MaximumDiscount').val();
       if (qty && bp && sp && md){
             var maxProf = (sp - bp)*qty;
             var minProf = ((sp-md) - bp)*qty;

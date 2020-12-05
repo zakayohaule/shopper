@@ -60,11 +60,13 @@ namespace Shopper.Services.Implementations
         {
             return _dbContext.Skus
                 .Include(sku => sku.Product)
+                /*.Include(sku => sku.SkuAttributes)
+                .ThenInclude(skuAtt => skuAtt.Option)*/
                 .Where(sku => sku.RemainingQuantity > 0)
                 .Select(sku => new SelectListItem
                 {
                     Value = sku.Id.ToString(),
-                    Text = new HtmlString($"{sku.Product.Name}  [{sku.RemainingQuantity}/{sku.SellingPrice}]").ToString()
+                    Text = sku.Product.Name
                 }).ToList();
         }
 

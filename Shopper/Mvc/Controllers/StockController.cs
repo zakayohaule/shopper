@@ -44,7 +44,7 @@ namespace Shopper.Mvc.Controllers
         [HttpPost(""), Permission("stock_add"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SkuViewFormModel skuViewModel)
         {
-            if (!await _productService.ExistsByIdAsync(skuViewModel.Sku.ProductId))
+            if (!await _productService.ExistsByIdAsync(skuViewModel.ProductId))
             {
                 return NotFound("Product not found");
             }
@@ -54,12 +54,21 @@ namespace Shopper.Mvc.Controllers
             {
                 var attributeIds = skuViewModel.Attributes.Select(s => ushort.Parse(s.Split("_")[0])).ToList();
                 attributeOptionIds = skuViewModel.Attributes.Select(s => ushort.Parse(s.Split("_")[1])).ToList();
-                if (!await _productService.HasAttributes(skuViewModel.Sku.ProductId, attributeIds))
+                if (!await _productService.HasAttributes(skuViewModel.ProductId, attributeIds))
                 {
                     return BadRequest();
                 }
             }
 
+            var sku = new Sku
+            {
+                ProductId = skuViewModel.ProductId,
+                Quantity = int.Parse(skuViewModel.Quantity.Replace(",", "")),
+                BuyingPrice = uint.Parse(skuViewModel.BuyingPrice.Replace(",", "")),
+                SellingPrice = uint.Parse(skuViewModel.SellingPrice.Replace(",", "")),
+                MaximumDiscount = uint.Parse(skuViewModel.MaximumDiscount.Replace(",", "")),
+            };
+            skuViewModel.Sku = sku;
             var newSku = await _productService.AddProductToStockAsync(skuViewModel.Sku, attributeOptionIds);
             if (newSku.IsNotNull())
             {
@@ -79,8 +88,6 @@ namespace Shopper.Mvc.Controllers
             var product = await _productService.FindProductSkusAsync(id);
 
             return View("ProductSkus", product);
-            return Ok(product);
-            return null;
         }
     }
 }

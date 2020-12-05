@@ -49,20 +49,3 @@
     </div>
     <!-- /.card-footer -->
 </th:form>
-
-@*
-<script >
- $(".profit").change(function (){
-     console.log("Value enter"+ $(this).val());
-     var qty = $('#Quantity').val();
-     var bp = $('#BuyingPrice').val();
-      var sp = $('#SellingPrice').val();
-      var md = $('#MaximumDiscount').val();
-      if (qty && bp && sp && md){
-            var maxProf = (sp - bp)*qty;
-            var minProf = ((sp-md) - bp)*qty;
-            var profitSpan = $('#profit');
-            profitSpan.html(minProf + " - " +maxProf);
-      }
-     })
-</script>*@

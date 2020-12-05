@@ -56,18 +56,32 @@ namespace Shopper.Services.Implementations
             return selectItems;
         }
 
-        public List<SelectListItem> GetProductsSelectListItemsForSale()
+        public async Task<List<SelectListItem>> GetProductsSelectListItemsForSaleASync()
         {
-            return _dbContext.Skus
+            return await _dbContext.Products
+                .Include(prod => prod.Skus)
+                .Where(prod => prod.Skus.Any(sku => sku.RemainingQuantity > 0))
+                .Select(prod => new SelectListItem
+                {
+                    Text = prod.Name,
+                    Value = prod.Id.ToString()
+                }).ToListAsync();
+            return await _dbContext.Skus
                 .Include(sku => sku.Product)
-                /*.Include(sku => sku.SkuAttributes)
-                .ThenInclude(skuAtt => skuAtt.Option)*/
                 .Where(sku => sku.RemainingQuantity > 0)
                 .Select(sku => new SelectListItem
                 {
-                    Value = sku.Id.ToString(),
+                    Value = sku.ProductId.ToString(),
                     Text = sku.Product.Name
-                }).ToList();
+                }).ToListAsync();
+        }
+
+        public IQueryable<Sku> GetProductSkus(uint id)
+        {
+            return _dbContext.Skus
+                .Include(sku => sku.Product)
+                .Where(sku => sku.RemainingQuantity > 0 && sku.ProductId == id)
+                .AsQueryable();
         }
 
         public List<SelectListItem> GetProductsSelectListItems()

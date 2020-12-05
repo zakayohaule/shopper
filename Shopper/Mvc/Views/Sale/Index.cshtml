@@ -47,8 +47,6 @@
                 <thead>
                 <tr>
                     <th style="width:40%"></th>
-                    <th style="width:15%"></th>
-                    <th style="width:25%"></th>
                     <th style="width:20%"></th>
                 </tr>
                 </thead>
@@ -67,7 +65,7 @@
                         <input type="text" placeholder="Price" class="form-control" name="price" id="price" onkeyup="formatNumber(event)">
                     </td>*@
                     <td>
-                        <button type="button" class="btn btn-primary" id="add-to-cart">
+                        <button type="button" class="btn btn-primary" id="add-to-cart" onclick="openSalesModal()">
                             <i class="fa fa-cart-arrow-down"></i> Add To Cart
                         </button>
                     </td>
@@ -128,7 +126,7 @@
     <th:script src="~/js/number-formatter.js"></th:script>
 
     <!-- Add To Cart Script -->
-    <th:script src="~/js/add-to-cart.js"></th:script>
+    @* <th:script src="~/js/add-to-cart.js"></th:script> *@
 
     <script >
     //Initialize Select2 Elements
@@ -144,6 +142,11 @@
     <script>
                 // useSubmitClass();
                 useDeleteConfirmation();
-
+                function openSalesModal(){
+                        var selected = $("#products option:selected");
+                        console.log("The selected product is: " + selected.html() + " ("+selected.val() + ")");
+                        if (selected.val()){
+                            openFormModal("/sales/" + selected.val() + "/open-sales-modal", 'Record Sale - ' + selected.html() , 'md', true);
+                            }}
                 </script>
 }

@@ -1,0 +1,32 @@
+﻿@model Shopper.Mvc.ViewModels.SaleViewModel;
+
+<th:form class="form-horizontal">
+    <div class="form-group row">
+        <th:select class="form-control select2bs4" asp-for="SkuId"
+                   asp-items="@Model.Skus">
+            <option value="">-- Select Product --</option>
+        </th:select>
+    </div>
+    @*<div class="form-group row">
+        <th:label asp-for="Quantity" class="col-sm-4 col-form-label"></th:label>
+        <div class="col-sm-8">
+            <th:input asp-for="Quantity" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+        </div>
+    </div>*@
+    <div class="form-group row">
+        <th:label asp-for="Price" class="col-sm-4 col-form-label"></th:label>
+        <div class="col-sm-8">
+            <th:input asp-for="Price" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+        </div>
+    </div>
+    <div class="form-group row">
+        <th:label asp-for="Quantity" class="col-sm-4 col-form-label"></th:label>
+        <div class="col-sm-8">
+            <th:input asp-for="Quantity"  type="number" class="form-control profit"></th:input>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button type="button" class="btn btn-info float-right">Submit</button>
+    </div>
+    <!-- /.card-footer -->
+</th:form>

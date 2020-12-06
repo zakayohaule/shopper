@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shopper.Database;
 
 namespace Shopper.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201205203931_AddedIsCompletedColumnInSalesInvoiceModel")]
+    partial class AddedIsCompletedColumnInSalesInvoiceModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -603,10 +605,6 @@ namespace Shopper.Migrations
                         .HasColumnName("created_at")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<uint>("Discount")
-                        .HasColumnName("discount")
-                        .HasColumnType("int unsigned");
-
                     b.Property<bool>("IsConfirmed")
                         .HasColumnName("is_confirmed")
                         .HasColumnType("tinyint(1)");
@@ -614,10 +612,6 @@ namespace Shopper.Migrations
                     b.Property<uint>("Price")
                         .HasColumnName("price")
                         .HasColumnType("int unsigned");
-
-                    b.Property<long>("Profit")
-                        .HasColumnName("profit")
-                        .HasColumnType("bigint");
 
                     b.Property<int>("Quantity")
                         .HasColumnName("quantity")
@@ -671,7 +665,7 @@ namespace Shopper.Migrations
 
                     b.Property<string>("Number")
                         .HasColumnName("number")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()
@@ -679,9 +673,6 @@ namespace Shopper.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Number")
-                        .IsUnique();
 
                     b.ToTable("sale_invoices");
                 });

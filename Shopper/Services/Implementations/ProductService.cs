@@ -30,60 +30,6 @@ namespace Shopper.Services.Implementations
             return _dbContext.Products.AsQueryable();
         }
 
-        public List<SelectListItem> GetAttributeGroupings()
-        {
-            var attributes = _dbContext.Attributes.Include(att => att.AttributeOptions).ToList();
-            var groups = new List<SelectListGroup>();
-            var selectItems = new List<SelectListItem>();
-            foreach (var att in attributes)
-            {
-                var group = new SelectListGroup();
-                group.Name = att.Name;
-                group.Disabled = false;
-                foreach (var opt in att.AttributeOptions)
-                {
-                    selectItems.Add(new SelectListItem
-                    {
-                        Group = group,
-                        Text = opt.Name,
-                        Value = opt.Id.ToString()
-                    });
-                }
-
-                groups.Add(group);
-            }
-
-            return selectItems;
-        }
-
-        public async Task<List<SelectListItem>> GetProductsSelectListItemsForSaleASync()
-        {
-            return await _dbContext.Products
-                .Include(prod => prod.Skus)
-                .Where(prod => prod.Skus.Any(sku => sku.RemainingQuantity > 0))
-                .Select(prod => new SelectListItem
-                {
-                    Text = prod.Name,
-                    Value = prod.Id.ToString()
-                }).ToListAsync();
-            return await _dbContext.Skus
-                .Include(sku => sku.Product)
-                .Where(sku => sku.RemainingQuantity > 0)
-                .Select(sku => new SelectListItem
-                {
-                    Value = sku.ProductId.ToString(),
-                    Text = sku.Product.Name
-                }).ToListAsync();
-        }
-
-        public IQueryable<Sku> GetProductSkus(uint id)
-        {
-            return _dbContext.Skus
-                .Include(sku => sku.Product)
-                .Where(sku => sku.RemainingQuantity > 0 && sku.ProductId == id)
-                .AsQueryable();
-        }
-
         public List<SelectListItem> GetProductsSelectListItems()
         {
             return _dbContext.Products
@@ -103,14 +49,6 @@ namespace Shopper.Services.Implementations
                 .ThenInclude(skuAtt => skuAtt.Option)
                 .Where(p => p.Skus.Any(sku => sku.RemainingQuantity > 0))
                 .ToList();
-        }
-
-        public bool IsDuplicate(Product product)
-        {
-            return _dbContext
-                .Products
-                .Any(pg => pg.Name.Equals(product.Name, StringComparison.OrdinalIgnoreCase) &&
-                           pg.Id != product.Id);
         }
 
         public bool IsDuplicate(string name, uint id)

@@ -18,6 +18,9 @@ namespace Shared.Mvc.Entities
         [Column("date")]
         public DateTime Date { get; set; }
 
+        [Column("is_completed")]
+        public bool IsCompleted { get; set; } = false;
+
         [InverseProperty("SaleInvoice")]
         public ICollection<Sale> Sales { get; set; }
     }

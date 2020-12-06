@@ -15,10 +15,14 @@ namespace Shared.Mvc.Entities
         [Column("price")]
         public uint Price { get; set; }
 
+        [Column("discount")] public uint Discount { get; set; } = 0;
+
+        [Column("profit")] public long Profit { get; set; } = 0;
+
         [Column("quantity")]
         public int Quantity { get; set; }
 
-        [Column("is_confirmed")] public bool IsConfirmed { get; set; } = true;
+        [Column("is_confirmed")] public bool IsConfirmed { get; set; } = false;
 
         [ForeignKey(nameof(SkuId))]
         public Sku Sku { get; set; }

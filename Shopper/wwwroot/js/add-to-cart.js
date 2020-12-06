@@ -1,28 +1,33 @@
 $("#add-to-cart").click(function () {
+    var totalText = $("#total-amount");
     var qtyInput = $("#quantity");
     var priceInput = $("#price");
-    var productInput = $("#products");
-    var productNameText = $("#products option:selected");
+    var skuInput = $("#skus");
+    var skuNameText = $("#skus option:selected");
 
     var price = parseInt(priceInput.val().replace(",", ""));
     var qty = qtyInput.val();
-    var product = productInput.val();
-    productName = productNameText.text();
-
-    console.log(productName + " added to card");
+    var productTotal = qty * price;
+    var sku = skuInput.val();
+    skuName = skuNameText.text();
+    console.log(skuName + " added to cart");
 
     var markup = "<tr>" +
-        "<td>" + productName + "</td>" +
+        "<td>" + skuName + "</td>" +
         "<td>" + qty + "</td>" +
         "<td>" + price + "</td>" +
-        "<td>" + price * qty + "</td>" +
+        "<td>" + productTotal+ "</td>" +
         "</tr>";
     $("#sales-table").append(markup);
+    var currentTotal = parseInt(totalText.html());
+
+    totalText.html(currentTotal + productTotal);
 
     qtyInput.val(null);
     priceInput.val(null);
-    productInput.val(null);
-    productInput.change();
+    skuInput.val(null);
+    skuInput.change();
+    $('#edit-modal').modal('hide');
 });
 
 // Find and remove selected table rows

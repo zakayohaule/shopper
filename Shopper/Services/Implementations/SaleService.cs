@@ -1,0 +1,129 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Shared.Mvc.Entities;
+using Shopper.Database;
+using Shopper.Mvc.ViewModels;
+using Shopper.Services.Interfaces;
+
+namespace Shopper.Services.Implementations
+{
+    public class SaleService : ISaleService
+    {
+        private readonly ApplicationDbContext _dbContext;
+
+        public SaleService(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public async Task<List<SelectListItem>> GetProductsSelectListItemsForSaleASync()
+        {
+            return await _dbContext.Products
+                .Include(prod => prod.Skus)
+                .Where(prod => prod.Skus.Any(sku => sku.RemainingQuantity > 0))
+                .Select(prod => new SelectListItem
+                {
+                    Text = prod.Name,
+                    Value = prod.Id.ToString()
+                }).ToListAsync();
+        }
+
+        public IQueryable<Sku> GetProductSkus(uint id)
+        {
+            return _dbContext.Skus
+                .Include(sku => sku.Product)
+                .Where(sku => sku.RemainingQuantity > 0 && sku.ProductId == id)
+                .AsQueryable();
+        }
+
+        public async Task<SaleInvoice> AddToInvoiceAsync(SaleFormViewModel formViewModel)
+        {
+            var sku = await _dbContext.Skus.FirstOrDefaultAsync(sku1 => sku1.Id == formViewModel.SkuId);
+            if (sku == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                await _dbContext.Database.BeginTransactionAsync();
+                var price = uint.Parse(formViewModel.Price.Replace(",", ""));
+                var sale = new Sale
+                {
+                    Price = price,
+                    Quantity = formViewModel.Quantity,
+                    SkuId = formViewModel.SkuId,
+                    Discount = sku.SellingPrice > price
+                        ? (uint) ((sku.SellingPrice - price) * formViewModel.Quantity)
+                        : 0,
+                    Profit = (price - sku.BuyingPrice) * formViewModel.Quantity
+                };
+                SaleInvoice invoice = null;
+                if (await _dbContext.SaleInvoices.AnyAsync())
+                {
+                    invoice = await _dbContext.SaleInvoices
+                        .FirstAsync(si => !si.IsCompleted);
+                }
+
+                if (invoice == null)
+                {
+                    invoice = new SaleInvoice
+                    {
+                        Amount = (ulong) (sale.Price * sale.Quantity), Date = DateTime.Now,
+                        Number = await GenerateInvoiceNumberAsync()
+                    };
+                    await _dbContext.SaleInvoices.AddAsync(invoice);
+                }
+                else
+                {
+                    invoice.Amount += (ulong) (sale.Price * sale.Quantity);
+                    _dbContext.SaleInvoices.Update(invoice);
+                }
+
+                sale.SaleInvoice = invoice;
+                await _dbContext.Sales.AddAsync(sale);
+                sku.RemainingQuantity -= sale.Quantity;
+                _dbContext.Skus.Update(sku);
+                await _dbContext.SaveChangesAsync();
+                _dbContext.Database.CommitTransaction();
+                return invoice;
+            }
+            catch (Exception e)
+            {
+                _dbContext.Database.RollbackTransaction();
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task<SaleInvoice> GetInCompleteInvoiceAsync()
+        {
+            if (_dbContext.SaleInvoices.Any())
+            {
+                return await _dbContext.SaleInvoices
+                    .Include(si => si.Sales)
+                    .ThenInclude(s => s.Sku)
+                    .ThenInclude(s => s.Product)
+                    .FirstAsync(si => !si.IsCompleted);
+            }
+
+            return null;
+        }
+
+        public async Task<string> GenerateInvoiceNumberAsync()
+        {
+            ulong id = 1;
+            var latest = await _dbContext.SaleInvoices.OrderByDescending(si => si.Id).FirstOrDefaultAsync();
+            if (latest != null)
+            {
+                id = latest.Id;
+            }
+
+            return $"{id++}_{DateTimeOffset.Now.ToUnixTimeSeconds()}";
+        }
+    }
+}

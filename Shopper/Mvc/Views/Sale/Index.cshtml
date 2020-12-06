@@ -1,9 +1,9 @@
-﻿@* @model List<Product>; *@
+﻿@model Shopper.Mvc.ViewModels.SaleViewModal;
 
 @{
     Layout = "_Layout";
     var today = DateTime.Now;
-    var productSelectItems = ViewData["Products"] as List<SelectListItem>;
+    var productSelectItems = Model.ProductSelectListItems;
 }
 
 @section css {
@@ -65,7 +65,7 @@
                         <input type="text" placeholder="Price" class="form-control" name="price" id="price" onkeyup="formatNumber(event)">
                     </td>*@
                     <td>
-                        <button type="button" class="btn btn-primary" id="add-to-cart" onclick="openSalesModal()">
+                        <button type="button" class="btn btn-primary" onclick="openSalesModal()">
                             <i class="fa fa-cart-arrow-down"></i> Add To Cart
                         </button>
                     </td>
@@ -80,13 +80,21 @@
                     <thead>
                     <tr>
                         <th style="width: 45%">Name</th>
-                        <th style="width: 15%">Quantity</th>
-                        <th style="width: 15%">Unit Price</th>
-                        <th style="width: 25%">Amount</th>
+                        <th style="width: 15%; text-align: center">Quantity</th>
+                        <th style="width: 15%; text-align: center">Unit Price</th>
+                        <th style="width: 25%; text-align: center">Amount</th>
                     </tr>
                     </thead>
                     <tbody id="sales-table">
-
+                    @foreach (var sale in Model.Sales)
+                    {
+                        <tr>
+                            <td>@sale.Sku.Product.Name</td>
+                            <td style="text-align: center">@sale.Quantity.ToString("N0")</td>
+                            <td style="text-align: center">@sale.Price.ToString("N0")/-</td>
+                            <td style="text-align: center">@((sale.Price * sale.Quantity).ToString("N0"))/-</td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
             </div>
@@ -99,11 +107,11 @@
                     <table class="table table-borderless">
                         <tr>
                             <th style="font-weight: normal">Discount:</th>
-                            <td style="font-weight: bolder">13,000/=</td>
+                            <td style="font-weight: bolder">@Model.TotalDiscount.ToString("N0")/=</td>
                         </tr>
                         <tr>
                             <th style="font-weight: normal">Total:</th>
-                            <td style="font-weight: bolder">$5.80</td>
+                            <td style="font-weight: bolder" id="total-amount">@Model.TotalAmount.ToString("N0")/=</td>
                         </tr>
                     </table>
                 </div>
@@ -125,8 +133,6 @@
     <!-- Number formatter -->
     <th:script src="~/js/number-formatter.js"></th:script>
 
-    <!-- Add To Cart Script -->
-    @* <th:script src="~/js/add-to-cart.js"></th:script> *@
 
     <script >
     //Initialize Select2 Elements

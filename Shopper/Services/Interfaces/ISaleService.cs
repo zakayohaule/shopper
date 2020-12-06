@@ -15,5 +15,6 @@ namespace Shopper.Services.Interfaces
         public Task<SaleInvoice> GetInCompleteInvoiceAsync();
         public Task<string> GenerateInvoiceNumberAsync();
         public Task<SaleInvoice> ConfirmPaymentAsync(ulong id);
+        public Task<string> IsAvailableInStockAsync(int quantity, ulong skuId);
     }
 }

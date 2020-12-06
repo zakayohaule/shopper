@@ -17,6 +17,7 @@
         <th:label asp-for="Quantity" class="col-sm-4 col-form-label"></th:label>
         <div class="col-sm-8">
             <th:input asp-for="Quantity" type="number" id="quantity" class="form-control profit"></th:input>
+            <th:span asp-validation-for="Quantity" class="text-danger"></th:span>
         </div>
     </div>
     <div class="card-footer">
@@ -24,3 +25,5 @@
     </div>
     <!-- /.card-footer -->
 </th:form>
+
+<th:partial name="_ValidationScriptsPartial"></th:partial>

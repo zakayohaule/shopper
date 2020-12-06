@@ -27,16 +27,6 @@
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     }
-    @*@{
-        var title = toastModel.Title;
-        var body = toastModel.Body;
-        switch (toastModel.Type)
-        {
-            case ToastType.Danger:
-            case ToastType.Error:
-
-        }
-    }*@
     var body = '@toastModel.Body';
     if ('@toastModel.Type' === 'Success')
         toastr.success(body);

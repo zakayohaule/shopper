@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Shared.Common;
 using Shared.Mvc.Entities;
 using Shopper.Database;
 using Shopper.Mvc.ViewModels;
@@ -87,10 +88,21 @@ namespace Shopper.Services.Implementations
                 sale.SaleInvoice = invoice;
                 await _dbContext.Sales.AddAsync(sale);
                 sku.RemainingQuantity -= sale.Quantity;
+                if (sku.RemainingQuantity < 0)
+                {
+                    sku.RemainingQuantity += sale.Quantity;
+                    throw new OutOfStockException(
+                        $"There are less than {sale.Quantity} items left in stock.( {sku.RemainingQuantity} left)");
+                }
+
                 _dbContext.Skus.Update(sku);
                 await _dbContext.SaveChangesAsync();
                 _dbContext.Database.CommitTransaction();
                 return invoice;
+            }
+            catch (OutOfStockException e)
+            {
+                throw;
             }
             catch (Exception e)
             {
@@ -138,6 +150,18 @@ namespace Shopper.Services.Implementations
             var updatedInvoice = _dbContext.SaleInvoices.Update(invoice);
             await _dbContext.SaveChangesAsync();
             return updatedInvoice.Entity;
+        }
+
+        public async Task<string> IsAvailableInStockAsync(int quantity, ulong skuId)
+        {
+            var sku = await _dbContext.Skus.FindAsync(skuId);
+            var isAvailable = quantity <= sku.RemainingQuantity;
+            if (isAvailable)
+            {
+                return null;
+            }
+
+            return $"There are only {sku.RemainingQuantity} items in stock!";
         }
     }
 }

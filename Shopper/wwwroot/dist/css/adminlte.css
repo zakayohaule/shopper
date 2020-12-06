@@ -32361,4 +32361,9 @@ a.text-muted:hover {
     border-color: #367fa9;
 }
 
+.toast-message {
+    font-weight: bold;
+    font-family: sans-serif, Verdana;
+}
+
 /*# sourceMappingURL=adminlte.css.map */

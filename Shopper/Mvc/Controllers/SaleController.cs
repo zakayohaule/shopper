@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Shared.Common;
 using Shared.Mvc.Entities;
 using Shopper.Attributes;
 using Shopper.Mvc.ViewModels;
@@ -35,7 +37,7 @@ namespace Shopper.Mvc.Controllers
                     ProductSelectListItems = productSelectItems,
                     Sales = invoice.Sales.ToList(),
                     TotalAmount = invoice.Amount,
-                    TotalDiscount = (uint)invoice.Sales.Sum(s => s.Discount)
+                    TotalDiscount = (uint) invoice.Sales.Sum(s => s.Discount)
                 };
             }
             else
@@ -70,8 +72,15 @@ namespace Shopper.Mvc.Controllers
         [HttpPost("add-to-cart"), ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToCart(SaleFormViewModel formViewModel)
         {
-            // return Ok(formViewModel);
-            var saleInvoice = await _saleService.AddToInvoiceAsync(formViewModel);
+            try
+            {
+                await _saleService.AddToInvoiceAsync(formViewModel);
+            }
+            catch (OutOfStockException e)
+            {
+                ToastError(e.Message);
+            }
+
             return RedirectToAction("Index");
         }
 
@@ -81,6 +90,18 @@ namespace Shopper.Mvc.Controllers
             var invoice = await _saleService.ConfirmPaymentAsync(id);
             // return Ok($"Confirm payment for invoice with {invoice.Id} with total amount of {invoice.Amount}");
             return RedirectToAction("Index");
+        }
+
+        [AcceptVerbs("GET", Route = "check-stock-quantity", Name = "CheckStockQuantity")]
+        public async Task<IActionResult> CheckStockQuantity(int quantity, ulong skuId)
+        {
+            var message = await _saleService.IsAvailableInStockAsync(quantity, skuId);
+            if (message == null)
+            {
+                return Json(true);
+            }
+
+            return Json(message);
         }
     }
 }

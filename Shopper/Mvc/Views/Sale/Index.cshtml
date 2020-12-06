@@ -101,8 +101,8 @@
         </div>
 
         <div class="row">
-            <div class="col-6"></div>
-            <div class="col-6">
+            <div class="col-8"></div>
+            <div class="col-4">
                 <div class="table-responsive">
                     <table class="table table-borderless">
                         <tr>
@@ -117,6 +117,21 @@
                 </div>
             </div>
             <!-- /.col -->
+        </div>
+
+        <!-- this row will not appear when printing -->
+        <div class="row no-print">
+            <div class="col-12">
+                <th:form asp-action="SubmitPayment"
+                         asp-controller="Sale"
+                         asp-route-id="@Model.InvoiceId"
+                         onclick="return confirm('Are you sure you want to submit this payment?')">
+                    <button type="submit" class="btn btn-success float-right">
+                        <i class="far fa-credit-card"></i> Submit
+                        Payment
+                    </button>
+                </th:form>
+            </div>
         </div>
     </div>
     <!-- /.card-body -->

@@ -63,7 +63,7 @@ namespace Shopper.Services.Implementations
                     Profit = (price - sku.BuyingPrice) * formViewModel.Quantity
                 };
                 SaleInvoice invoice = null;
-                if (await _dbContext.SaleInvoices.AnyAsync())
+                if (await _dbContext.SaleInvoices.AnyAsync(si => !si.IsCompleted))
                 {
                     invoice = await _dbContext.SaleInvoices
                         .FirstAsync(si => !si.IsCompleted);
@@ -102,7 +102,7 @@ namespace Shopper.Services.Implementations
 
         public async Task<SaleInvoice> GetInCompleteInvoiceAsync()
         {
-            if (_dbContext.SaleInvoices.Any())
+            if (await _dbContext.SaleInvoices.AnyAsync(si => !si.IsCompleted))
             {
                 return await _dbContext.SaleInvoices
                     .Include(si => si.Sales)
@@ -124,6 +124,20 @@ namespace Shopper.Services.Implementations
             }
 
             return $"{id++}_{DateTimeOffset.Now.ToUnixTimeSeconds()}";
+        }
+
+        public async Task<SaleInvoice> ConfirmPaymentAsync(ulong id)
+        {
+            var invoice = await _dbContext.SaleInvoices.FindAsync(id);
+            if (invoice == null)
+            {
+                return null;
+            }
+
+            invoice.IsCompleted = true;
+            var updatedInvoice = _dbContext.SaleInvoices.Update(invoice);
+            await _dbContext.SaveChangesAsync();
+            return updatedInvoice.Entity;
         }
     }
 }

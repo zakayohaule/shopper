@@ -14,5 +14,6 @@ namespace Shopper.Services.Interfaces
         public Task<SaleInvoice> AddToInvoiceAsync(SaleFormViewModel formViewModel);
         public Task<SaleInvoice> GetInCompleteInvoiceAsync();
         public Task<string> GenerateInvoiceNumberAsync();
+        public Task<SaleInvoice> ConfirmPaymentAsync(ulong id);
     }
 }

@@ -31,6 +31,7 @@ namespace Shopper.Mvc.Controllers
             {
                 viewModel = new SaleViewModal
                 {
+                    InvoiceId = invoice.Id,
                     ProductSelectListItems = productSelectItems,
                     Sales = invoice.Sales.ToList(),
                     TotalAmount = invoice.Amount,
@@ -71,6 +72,14 @@ namespace Shopper.Mvc.Controllers
         {
             // return Ok(formViewModel);
             var saleInvoice = await _saleService.AddToInvoiceAsync(formViewModel);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost("{id}/submit-payment"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubmitPayment(ulong id)
+        {
+            var invoice = await _saleService.ConfirmPaymentAsync(id);
+            // return Ok($"Confirm payment for invoice with {invoice.Id} with total amount of {invoice.Amount}");
             return RedirectToAction("Index");
         }
     }

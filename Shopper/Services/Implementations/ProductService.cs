@@ -1,17 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using IdentityServer4.Extensions;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.WebEncoders.Testing;
 using Shared.Mvc.Entities;
 using Shopper.Database;
-using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Services.Implementations
@@ -23,6 +18,16 @@ namespace Shopper.Services.Implementations
         public ProductService(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        async Task<Product> IProductService.FindByIdAsync(uint id)
+        {
+            return await _dbContext.Products.FindAsync(id);
+        }
+
+        public IQueryable<Product> FindByIdAsyncQ(uint id)
+        {
+            return _dbContext.Products.Where(product => product.Id.Equals(id)).AsQueryable();
         }
 
         public IQueryable<Product> GetAllProducts()

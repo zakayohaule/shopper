@@ -113,7 +113,7 @@ namespace Shopper.Mvc.Controllers
         public IActionResult ExistsByDisplayName(string name, ushort id)
         {
             return _attributeOptionService.IsDuplicate(name, id)
-                ? Json("An attribute with this name already exists")
+                ? Json("An attribute option with this name already exists")
                 : Json(true);
         }
     }

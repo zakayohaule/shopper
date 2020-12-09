@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Shared.Mvc.Entities;
 
@@ -8,6 +9,8 @@ namespace Shopper.Services.Interfaces
 {
     public interface IProductService
     {
+        Task<Product> FindByIdAsync(uint id);
+        IQueryable<Product> FindByIdAsyncQ(uint id);
         IQueryable<Product> GetAllProducts();
         public Task<Product> FindByIdWithAttributesAsync(uint id);
         public Task<Product> FindProductSkusAsync(uint productId);

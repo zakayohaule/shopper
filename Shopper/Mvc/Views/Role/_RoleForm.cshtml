@@ -1,6 +1,7 @@
 ﻿@model Shared.Mvc.Entities.Identity.Role
 
 <div class="form-group col-12">
+    <th:input asp-for="Id" value="@Model.Id" hidden></th:input>
     <th:label asp-for="DisplayName"></th:label>
     <th:input asp-for="DisplayName" class="form-control"></th:input>
     <th:span asp-validation-for="DisplayName" class="text-danger"></th:span>

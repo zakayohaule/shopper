@@ -21,6 +21,9 @@ namespace Shared.Mvc.Entities
         [Column("is_completed")]
         public bool IsCompleted { get; set; } = false;
 
+        [Column("is_canceled")]
+        public bool IsCanceled { get; set; } = false;
+
         [InverseProperty("SaleInvoice")]
         public ICollection<Sale> Sales { get; set; }
     }

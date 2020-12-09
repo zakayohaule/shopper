@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 using Shared.Mvc.Entities;
 
 namespace Shopper.Mvc.ViewModels
@@ -15,6 +16,8 @@ namespace Shopper.Mvc.ViewModels
         [Required] public string BuyingPrice { get; set; }
         [Required] public string SellingPrice { get; set; }
         [Required] public string MaximumDiscount { get; set; }
+
+        [Required] public IFormFile Image { get; set; }
 
         [Required] public List<string> Attributes { get; set; }
     }

@@ -119,7 +119,7 @@ namespace Shopper.Mvc.Controllers
         }
 
         [HttpPost("{id}/role-permissions")]
-        public async Task<IActionResult> SaveRolePermissions(long id)
+        public async Task<IActionResult> SaveRolePermissions(long id, [FromServices] IUserClaimService userClaimService)
         {
             var role = await _roleService.FindByIdAsync(id);
             if (role.IsNull())
@@ -129,7 +129,7 @@ namespace Shopper.Mvc.Controllers
 
             var permissions = HttpContext.Request.Form["permissions"].ToList();
             await _roleService.SaveRolePermissionsAsync(role, permissions);
-
+            await userClaimService.ReCacheUsersRoleClaims(role.Id);
             return RedirectToAction(nameof(Index));
         }
 

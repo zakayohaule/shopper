@@ -41,6 +41,11 @@ namespace Shopper.Services.Implementations
                 .AsQueryable();
         }
 
+        public async Task<SaleInvoice> FindById(ulong id)
+        {
+            return await _dbContext.SaleInvoices.FindAsync(id);
+        }
+
         public async Task<SaleInvoice> AddToInvoiceAsync(SaleFormViewModel formViewModel)
         {
             var sku = await _dbContext.Skus.FirstOrDefaultAsync(sku1 => sku1.Id == formViewModel.SkuId);
@@ -138,18 +143,48 @@ namespace Shopper.Services.Implementations
             return $"{id++}_{DateTimeOffset.Now.ToUnixTimeSeconds()}";
         }
 
-        public async Task<SaleInvoice> ConfirmPaymentAsync(ulong id)
+        public async Task<SaleInvoice> ConfirmPaymentAsync(SaleInvoice invoice)
         {
-            var invoice = await _dbContext.SaleInvoices.FindAsync(id);
-            if (invoice == null)
-            {
-                return null;
-            }
-
             invoice.IsCompleted = true;
+            invoice.IsCanceled = false;
             var updatedInvoice = _dbContext.SaleInvoices.Update(invoice);
+
             await _dbContext.SaveChangesAsync();
             return updatedInvoice.Entity;
+        }
+
+        public async Task<SaleInvoice> CancelPaymentAsync(SaleInvoice invoice)
+        {
+            try
+            {
+                await _dbContext.Database.BeginTransactionAsync();
+                invoice.IsCompleted = true;
+                invoice.IsCanceled = true;
+                var updatedInvoice = _dbContext.SaleInvoices.Update(invoice);
+
+                await _dbContext.Entry(invoice)
+                    .Collection(i => i.Sales)
+                    .Query()
+                    .Include(sale => sale.Sku)
+                    .LoadAsync();
+
+                foreach (var sale in invoice.Sales)
+                {
+                    sale.IsConfirmed = false;
+                    sale.Sku.RemainingQuantity += sale.Quantity;
+                    _dbContext.Sales.Update(sale);
+                }
+
+                await _dbContext.SaveChangesAsync();
+                _dbContext.Database.CommitTransaction();
+                return updatedInvoice.Entity;
+            }
+            catch (Exception e)
+            {
+                _dbContext.Database.RollbackTransaction();
+                Console.WriteLine(e);
+                return null;
+            }
         }
 
         public async Task<string> IsAvailableInStockAsync(int quantity, ulong skuId)

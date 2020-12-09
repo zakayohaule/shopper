@@ -42,6 +42,7 @@ namespace Shopper.Mvc.Controllers
         [HttpPost(""), Permission("product_add"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product newProduct)
         {
+            // return Ok(newProduct);
             if (_productService.IsDuplicate(newProduct.Name, newProduct.Id))
             {
                 ToastError($"Product with name {newProduct.Name} already exists! Please use another name.");

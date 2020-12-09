@@ -28,13 +28,13 @@
         "hideMethod": "fadeOut"
     }
     var body = '@toastModel.Body';
-    if ('@toastModel.Type' === 'Success')
-        toastr.success(body);
+    if ('@toastModel.Type' === 'Success!')
+        toastr.success(body, "Success");
     if ('@toastModel.Type' === 'Info')
-        toastr.info(body);
+        toastr.info(body, "Info!");
     if ('@toastModel.Type' === 'Warning')
-        toastr.warning(body);
+        toastr.warning(body, "Warning!");
     if ('@toastModel.Type' === 'Error' || '@toastModel.Type' === 'Danger')
-        toastr.error(body);
+        toastr.error(body, "Failed!");
     </script>
 }

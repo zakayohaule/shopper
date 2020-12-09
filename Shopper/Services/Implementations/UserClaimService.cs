@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Serilog;
@@ -11,6 +14,7 @@ using Shopper.Services.Interfaces;
 
 namespace Shopper.Services.Implementations
 {
+    [Authorize]
     public class UserClaimService : IUserClaimService
     {
         private readonly IMemoryCache _memoryCache;
@@ -53,7 +57,7 @@ namespace Shopper.Services.Implementations
                 return claims;
             }
             var userRoles = _userManager.GetRolesAsync(user).Result.ToList();
-            
+
             userRoles.ForEach(roleName =>
             {
                 Console.WriteLine(roleName);
@@ -74,10 +78,49 @@ namespace Shopper.Services.Implementations
             return userClaims.Contains(permission);
         }
 
+        public bool HasAllPermissions(long userId, string permissions)
+        {
+            var permissionList = permissions.Split(",", StringSplitOptions.RemoveEmptyEntries);
+            return permissionList.All(perm => HasPermission(userId, perm));
+        }
+
+        public bool HasAnyPermission(long userId, string permissions)
+        {
+            var permissionList = permissions.Split(",", StringSplitOptions.RemoveEmptyEntries);
+            return permissionList.Any(perm => HasPermission(userId, perm));
+        }
+
+        public bool HasAllPermissions(long userId, IEnumerable<string> permissions)
+        {
+            return permissions.All(perm => HasPermission(userId, perm));
+        }
+
+        public bool HasAnyPermission(long userId, IEnumerable<string> permissions)
+        {
+            return permissions.Any(perm => HasPermission(userId, perm));
+        }
+
         public void RemoveClaims(long userId)
         {
-            _logger.Information("Removing user claims from memory cache before signing out user");
+            _logger.Information("Removing user claims from memory cache");
             _memoryCache.Remove(userId);
+        }
+
+        public async Task ReCacheUsersRoleClaims(long roleId)
+        {
+            var users = await _userManager.Users
+                .Include(user => user.UserRoles)
+                .Where(user => user.UserRoles.Any(ur => ur.RoleId.Equals(roleId)))
+                .ToListAsync();
+            foreach (var appUser in users)
+            {
+                if (!_memoryCache.TryGetValue(appUser.Id, out List<string> userClaims)) continue;
+                Console.WriteLine($"Permission changed, re-caching {appUser.FullName}'s claims!");
+                RemoveClaims(appUser.Id);
+                userClaims = GetUserClaims(appUser.Id);
+                CacheClaims(appUser.Id, userClaims);
+            }
+
         }
     }
 }

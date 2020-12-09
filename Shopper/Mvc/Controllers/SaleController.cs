@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shared.Common;
-using Shared.Mvc.Entities;
 using Shopper.Attributes;
 using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
@@ -85,11 +82,36 @@ namespace Shopper.Mvc.Controllers
         }
 
         [HttpPost("{id}/submit-payment"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> SubmitPayment(ulong id)
+        public async Task<IActionResult> SubmitPayment(ulong id, string action)
         {
-            var invoice = await _saleService.ConfirmPaymentAsync(id);
-            // return Ok($"Confirm payment for invoice with {invoice.Id} with total amount of {invoice.Amount}");
+            var invoice = await _saleService.FindById(id);
+            if (invoice == null)
+            {
+                return NotFound($"Invoice with id {id} not found");
+            }
+
+            if (!action.Equals("submit") && !action.Equals("cancel"))
+            {
+                return BadRequest("Invalid payment action");
+            }
+
+            if (action.Equals("submit"))
+            {
+                invoice = await _saleService.ConfirmPaymentAsync(invoice);
+            }
+
+            if (action.Equals("cancel"))
+            {
+                invoice = await _saleService.CancelPaymentAsync(invoice);
+            }
+
+            if (invoice == null)
+            {
+                ToastError($"Could not {action} invoice payment. Please try again or contact system administrator");
+            }
+
             return RedirectToAction("Index");
+            // return Ok($"Confirm payment for invoice with {invoice.Id} with total amount of {invoice.Amount}");
         }
 
         [AcceptVerbs("GET", Route = "check-stock-quantity", Name = "CheckStockQuantity")]

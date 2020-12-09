@@ -119,20 +119,46 @@
             <!-- /.col -->
         </div>
 
-        <!-- this row will not appear when printing -->
-        <div class="row no-print">
-            <div class="col-12">
-                <th:form asp-action="SubmitPayment"
-                         asp-controller="Sale"
-                         asp-route-id="@Model.InvoiceId"
-                         onclick="return confirm('Are you sure you want to submit this payment?')">
-                    <button type="submit" class="btn btn-success float-right">
-                        <i class="far fa-credit-card"></i> Submit
-                        Payment
-                    </button>
-                </th:form>
+        <th:form asp-controller="Sale" asp-action="SubmitPayment" asp-route-id="@Model.InvoiceId" class="form">
+            <div class="row">
+                <div class="col-sm-12 text-right">
+                    <button onclick="return confirm('Are you sure you want to cancel this payment?')" type="submit" class="btn btn-danger" name="action" value="cancel">Cancel</button>
+                    <button onclick="return confirm('Are you sure you want to submit this payment?')" type="submit" class="btn btn-success"  name="action" value="submit">Sumbit Payment</button>
+                </div>
             </div>
-        </div>
+        </th:form>
+        <!-- this row will not appear when printing -->
+        @*<div class="row no-print">
+            <div class="col-6"></div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-4"></div>
+                    <div class="col-4"></div>
+                    <div class="col-4">
+                        <th:form asp-action="SubmitPayment"
+                                 asp-controller="Sale"
+                                 asp-route-id="@Model.InvoiceId"
+                                 onclick="return confirm('Are you sure you want to submit this payment?')">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="far fa-times"></i> Cancel
+                                Payment
+                            </button>
+                        </th:form>
+                    </div>
+                    <div class="col-4">
+                        <th:form asp-action="SubmitPayment"
+                                 asp-controller="Sale"
+                                 asp-route-id="@Model.InvoiceId"
+                                 onclick="return confirm('Are you sure you want to submit this payment?')">
+                            <button type="submit" class="btn btn-success pull-right">
+                                <i class="far fa-credit-card"></i> Submit
+                                Payment
+                            </button>
+                        </th:form>
+                    </div>
+                </div>
+            </div>
+        </div>*@
     </div>
     <!-- /.card-body -->
 </div>

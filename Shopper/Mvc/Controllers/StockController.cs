@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using Shared.Mvc.Entities;
 using Shopper.Attributes;
 using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
+using SixLabors.ImageSharp;
 
 namespace Shopper.Mvc.Controllers
 {
@@ -44,6 +46,9 @@ namespace Shopper.Mvc.Controllers
         [HttpPost(""), Permission("stock_add"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SkuViewFormModel skuViewModel)
         {
+            /*using var image = await Image.LoadAsync(skuViewModel.Image.OpenReadStream());
+            await image.SaveAsync($"{DateTimeOffset.Now.ToUnixTimeSeconds()}.jpg");
+            return Ok(Request.Form);*/
             if (!await _productService.ExistsByIdAsync(skuViewModel.ProductId))
             {
                 return NotFound("Product not found");

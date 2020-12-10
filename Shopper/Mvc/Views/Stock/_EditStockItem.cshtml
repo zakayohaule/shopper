@@ -1,0 +1,5 @@
+@model Shopper.Mvc.ViewModels.SkuViewFormModel
+
+<th:form class="" asp-controller="Stock" asp-action="EditStockItem" asp-route-id="@Model.Sku.Id">
+    <th:partial name="_ProductStockForm" model="Model"/>
+</th:form>

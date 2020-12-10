@@ -55,28 +55,15 @@ namespace Shopper.Mvc.Controllers
                 return NotFound("Product not found");
             }
 
-            var attributeOptionIds = new List<ushort>();
-            if (!skuViewModel.Attributes.IsNullOrEmpty())
+            var attributeOptionIds = await GetAttributeIdsFromViewModelAsync(skuViewModel);
+            if (attributeOptionIds.IsNull())
             {
-                var attributeIds = skuViewModel.Attributes.Select(s => ushort.Parse(s.Split("_")[0])).ToList();
-                attributeOptionIds = skuViewModel.Attributes.Select(s => ushort.Parse(s.Split("_")[1])).ToList();
-                if (!await _productService.HasAttributes(skuViewModel.ProductId, attributeIds))
-                {
-                    return BadRequest();
-                }
+                return BadRequest();
             }
 
-            var sku = new Sku
-            {
-                ProductId = skuViewModel.ProductId,
-                Date = skuViewModel.StockDate,
-                Quantity = int.Parse(skuViewModel.Quantity.Replace(",", "")),
-                BuyingPrice = uint.Parse(skuViewModel.BuyingPrice.Replace(",", "")),
-                SellingPrice = uint.Parse(skuViewModel.SellingPrice.Replace(",", "")),
-                MaximumDiscount = uint.Parse(skuViewModel.MaximumDiscount.Replace(",", "")),
-            };
-            skuViewModel.Sku = sku;
-            var newSku = await _productService.AddProductToStockAsync(skuViewModel.Sku, attributeOptionIds);
+            var sku = GetSkuFromViewModel(skuViewModel);
+
+            var newSku = await _productService.AddProductToStockAsync(sku, attributeOptionIds);
             if (newSku.IsNotNull())
             {
                 ToastSuccess("Product added to stock successfully!");
@@ -87,6 +74,34 @@ namespace Shopper.Mvc.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+
+        [HttpPost("{id}/edit-sku"), Permission("stock_add"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditStockItem(ulong id, SkuViewFormModel skuViewModel)
+        {
+            // @todo validate stock item quantity
+            var sku = await _productService.FindSkuByIdAsync(id).SingleOrDefaultAsync();
+            if (sku.IsNull())
+            {
+                return NotFound();
+            }
+
+            var attributeOptionIds = await GetAttributeIdsFromViewModelAsync(skuViewModel);
+            if (attributeOptionIds.IsNull())
+            {
+                return BadRequest();
+            }
+
+            var updated = GetSkuFromViewModel(skuViewModel);
+
+            sku = await _productService.UpdateStockItemAsync(sku,updated, attributeOptionIds);
+            if (sku.IsNull())
+            {
+                ToastError("Stock item could not be updated. Please try again or contact system administrator");
+            }
+
+            return RedirectToAction("OpenProductSkus", new {id = sku.ProductId});
         }
 
         [HttpGet("{id}/product-skus"), Permission("stock_view")]
@@ -115,7 +130,49 @@ namespace Shopper.Mvc.Controllers
                ProductId = sku.ProductId,
                AttributeSelects = _productService.GetProductAttributeSelects(product, sku)
             };
-            return PartialView("../Stock/_ProductStockForm", stockViewModel);
+            return PartialView("../Stock/_EditStockItem", stockViewModel);
+        }
+
+
+        [HttpGet("{id}/delete-sku", Name = "sku-delete"), Permission("stock_delete")]
+        public async Task<IActionResult> DeleteSku(ulong id)
+        {
+            var sku = await _productService.FindSkuByIdAsync(id).SingleOrDefaultAsync();
+            if (sku.IsNull())
+            {
+                return NotFound();
+            }
+
+            await _productService.DeleteSkuAsync(sku);
+            ToastSuccess("Stock item deleted successfully!");
+            return RedirectToAction("OpenProductSkus", new {id = sku.ProductId});
+        }
+
+        private async Task<List<ushort>> GetAttributeIdsFromViewModelAsync(SkuViewFormModel skuViewModel)
+        {
+            var attributeOptionIds = new List<ushort>();
+            if (skuViewModel.Attributes.IsNullOrEmpty()) return attributeOptionIds;
+            var attributeIds = skuViewModel.Attributes.Select(s => ushort.Parse(s.Split("_")[0])).ToList();
+            attributeOptionIds = skuViewModel.Attributes.Select(s => ushort.Parse(s.Split("_")[1])).ToList();
+            if (!await _productService.HasAttributes(skuViewModel.ProductId, attributeIds))
+            {
+                return null;
+            }
+
+            return attributeOptionIds;
+        }
+
+        private Sku GetSkuFromViewModel(SkuViewFormModel skuViewModel)
+        {
+            return new Sku
+            {
+                ProductId = skuViewModel.ProductId,
+                Date = skuViewModel.StockDate,
+                Quantity = int.Parse(skuViewModel.Quantity.Replace(",", "")),
+                BuyingPrice = uint.Parse(skuViewModel.BuyingPrice.Replace(",", "")),
+                SellingPrice = uint.Parse(skuViewModel.SellingPrice.Replace(",", "")),
+                MaximumDiscount = uint.Parse(skuViewModel.MaximumDiscount.Replace(",", "")),
+            };
         }
     }
 }

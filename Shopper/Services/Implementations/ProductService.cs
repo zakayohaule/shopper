@@ -179,6 +179,35 @@ namespace Shopper.Services.Implementations
             return newSku.Entity;
         }
 
+        public async Task<Sku> UpdateStockItemAsync(Sku sku,Sku updated, List<ushort> attributeOptionIds)
+        {
+            try
+            {
+                await _dbContext.Database.BeginTransactionAsync();
+                sku.Quantity = updated.Quantity;
+                sku.SellingPrice = updated.SellingPrice;
+                sku.BuyingPrice = updated.BuyingPrice;
+                sku.MaximumDiscount = updated.MaximumDiscount;
+                sku.Date = updated.Date;
+                await _dbContext.Entry(sku).Collection(s => s.SkuAttributes).LoadAsync();
+                _dbContext.SkuAttributes.RemoveRange(sku.SkuAttributes);
+                var skuAttributes = attributeOptionIds
+                    .Select(attributeOption => new SkuAttribute
+                        {Sku = sku, AttributeOptionId = attributeOption}).ToList();
+                await _dbContext.SkuAttributes.AddRangeAsync(skuAttributes);
+                var updatedSku = _dbContext.Skus.Update(sku);
+                await _dbContext.SaveChangesAsync();
+                _dbContext.Database.CommitTransaction();
+                return updatedSku.Entity;
+            }
+            catch (Exception e)
+            {
+                _dbContext.Database.RollbackTransaction();
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
         public async Task<bool> HasAttributes(uint productId, List<ushort> attributes)
         {
             foreach (var attribute in attributes)
@@ -196,6 +225,12 @@ namespace Shopper.Services.Implementations
         public async Task DeleteProductAsync(Product productGroup)
         {
             _dbContext.Remove(productGroup);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteSkuAsync(Sku sku)
+        {
+            _dbContext.Skus.Remove(sku);
             await _dbContext.SaveChangesAsync();
         }
     }

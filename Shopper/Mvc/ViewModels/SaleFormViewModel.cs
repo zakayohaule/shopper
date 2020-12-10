@@ -7,7 +7,11 @@ namespace Shopper.Mvc.ViewModels
 {
     public class SaleFormViewModel
     {
+        public ulong Id { get; set; }
+
         public List<SelectListItem> Skus { get; set; }
+
+        public List<SelectListItem> SkuPrices { get; set; }
 
         [Required] public ulong SkuId { get; set; }
 

@@ -41,9 +41,14 @@ namespace Shopper.Services.Implementations
                 .AsQueryable();
         }
 
-        public async Task<SaleInvoice> FindById(ulong id)
+        public async Task<SaleInvoice> FindInvoiceByIdAsync(ulong id)
         {
             return await _dbContext.SaleInvoices.FindAsync(id);
+        }
+
+        public async Task<Sale> FindSaleByIdAsync(ulong id)
+        {
+            return await _dbContext.Sales.Include(s => s.Sku).FirstOrDefaultAsync(s => s.Id.Equals(id));
         }
 
         public async Task<SaleInvoice> AddToInvoiceAsync(SaleFormViewModel formViewModel)
@@ -115,6 +120,39 @@ namespace Shopper.Services.Implementations
                 Console.WriteLine(e);
                 throw;
             }
+        }
+
+        public async Task<Sale> UpdateSaleAsync(Sale sale, SaleFormViewModel viewModel)
+        {
+            var price = uint.Parse(viewModel.Price.Replace(",", ""));
+            var priceChange = (int)price - (int)sale.Price;
+            var quantityChange = viewModel.Quantity - sale.Quantity;
+            var saleChanged = priceChange != 0 || quantityChange != 0;
+
+            if (saleChanged)
+            {
+                await _dbContext.Entry(sale).Reference(s => s.SaleInvoice).LoadAsync();
+                var sku = sale.Sku;
+                var invoice = sale.SaleInvoice;
+                sale.Profit = (price - sku.BuyingPrice) * viewModel.Quantity;
+                sale.Discount = sku.SellingPrice > price
+                    ? (uint) ((sku.SellingPrice - price) * viewModel.Quantity)
+                    : 0;
+
+                //Update Sku
+                sku.RemainingQuantity -= quantityChange;
+
+                invoice.Amount -= (ulong) (sale.Price * sale.Quantity);
+                invoice.Amount += (ulong) (viewModel.Quantity * price);
+                /*invoice.Amount -= (ulong)(sale.Price * viewModel.Quantity);
+                invoice.Amount += (ulong)(price * viewModel.Quantity);*/
+                sale.Quantity = viewModel.Quantity;
+                sale.Price = price;
+            }
+
+            var updated = _dbContext.Sales.Update(sale);
+            await _dbContext.SaveChangesAsync();
+            return updated.Entity;
         }
 
         public async Task<SaleInvoice> GetInCompleteInvoiceAsync()
@@ -198,5 +236,17 @@ namespace Shopper.Services.Implementations
 
             return $"There are only {sku.RemainingQuantity} items in stock!";
         }
+
+        /*private void UpdateSaleQuantity(Sale sale)
+        {
+            var invoice = sale.SaleInvoice;
+            var sku = sale.Sku;
+
+        }
+
+        private void UpdateSalePrice(Sale sale)
+        {
+
+        }*/
     }
 }

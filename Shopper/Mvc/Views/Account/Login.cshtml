@@ -16,17 +16,17 @@
                 <span class="fas fa-envelope"></span>
             </div>
         </div>
-        <th:span asp-validation-for="Email" class="text-danger"></th:span>
     </div>
+    <th:span asp-validation-for="Email" class="text-danger"></th:span>
     <div class="input-group mb-3">
-        <th:input asp-for="Password" type="password" class="form-control" placeholder="Password"></th:input>
+        <th:input asp-for="Password" type="password" minLength="6" class="form-control" placeholder="Password"></th:input>
         <div class="input-group-append">
             <div class="input-group-text">
                 <span class="fas fa-lock"></span>
             </div>
         </div>
-        <th:span asp-validation-for="Password" class="text-danger"></th:span>
     </div>
+    <th:span asp-validation-for="Password" class="text-danger"></th:span>
     <div class="row">
         <div class="col-8">
             <div class="icheck-primary">

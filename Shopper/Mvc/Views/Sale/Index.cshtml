@@ -17,29 +17,11 @@
 <div class="card with-border">
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
-            <h3 class="card-title">Manage Stock</h3>
+            <h3 class="card-title">Manage Sale</h3>
             <span class="pull pull-right" style="font-weight: bolder">@today.ToLongDateString()</span>
         </div>
     </div>
     <!-- /.card-header -->
-
-    @*<div class="modal fade" id="add-product-stock">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Product</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <th:form class="" asp-controller="Product" asp-action="Create" method="post">
-                    <div class="modal-body">
-                        <th:partial name="_ProductStockForm"/>
-                    </div>
-                </th:form>
-            </div>
-        </div>
-    </div>*@
 
     <div class="card-body">
         <div class="row">
@@ -58,12 +40,6 @@
                             <option value="">-- Select Product --</option>
                         </th:select>
                     </td>
-                    @*<td>
-                        <input type="number" placeholder="Qty" class="form-control" name="quantity" id="quantity">
-                    </td>
-                    <td>
-                        <input type="text" placeholder="Price" class="form-control" name="price" id="price" onkeyup="formatNumber(event)">
-                    </td>*@
                     <td>
                         <button type="button" class="btn btn-primary" onclick="openSalesModal()">
                             <i class="fa fa-cart-arrow-down"></i> Add To Cart
@@ -79,10 +55,11 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th style="width: 45%">Name</th>
+                        <th style="width: 35%">Name</th>
                         <th style="width: 15%; text-align: center">Quantity</th>
                         <th style="width: 15%; text-align: center">Unit Price</th>
                         <th style="width: 25%; text-align: center">Amount</th>
+                        <th style="width: 10%; text-align: center"></th>
                     </tr>
                     </thead>
                     <tbody id="sales-table">
@@ -93,6 +70,20 @@
                             <td style="text-align: center">@sale.Quantity.ToString("N0")</td>
                             <td style="text-align: center">@sale.Price.ToString("N0")/-</td>
                             <td style="text-align: center">@((sale.Price * sale.Quantity).ToString("N0"))/-</td>
+                            <td>
+                                <th:a onclick="openFormModal('@Url.Action("OpenSaleEditModal", new {id = sale.Id})',
+                                                     'Edit Sale', null,  true)"
+                                      class="btn btn-default btn-sm" title="Edit sale">
+                                    <i class="fas fa-edit"></i>
+                                </th:a>
+
+                                <th:a asp-action="DeleteSale"
+                                      asp-route-id="@sale.Id" class="btn btn-default btn-sm btn-delete" title="Delete sale">
+                                    @* <span class="badge badge-danger" title="Delete product"> *@
+                                    <i class="fas fa-trash"></i>
+                                    @* </span> *@
+                                </th:a>
+                            </td>
                         </tr>
                     }
                     </tbody>
@@ -123,42 +114,10 @@
             <div class="row">
                 <div class="col-sm-12 text-right">
                     <button onclick="return confirm('Are you sure you want to cancel this payment?')" type="submit" class="btn btn-danger" name="action" value="cancel">Cancel</button>
-                    <button onclick="return confirm('Are you sure you want to submit this payment?')" type="submit" class="btn btn-success"  name="action" value="submit">Sumbit Payment</button>
+                    <button onclick="return confirm('Are you sure you want to submit this payment?')" type="submit" class="btn btn-success" name="action" value="submit">Sumbit Payment</button>
                 </div>
             </div>
         </th:form>
-        <!-- this row will not appear when printing -->
-        @*<div class="row no-print">
-            <div class="col-6"></div>
-            <div class="col-6">
-                <div class="row">
-                    <div class="col-4"></div>
-                    <div class="col-4"></div>
-                    <div class="col-4">
-                        <th:form asp-action="SubmitPayment"
-                                 asp-controller="Sale"
-                                 asp-route-id="@Model.InvoiceId"
-                                 onclick="return confirm('Are you sure you want to submit this payment?')">
-                            <button type="submit" class="btn btn-danger">
-                                <i class="far fa-times"></i> Cancel
-                                Payment
-                            </button>
-                        </th:form>
-                    </div>
-                    <div class="col-4">
-                        <th:form asp-action="SubmitPayment"
-                                 asp-controller="Sale"
-                                 asp-route-id="@Model.InvoiceId"
-                                 onclick="return confirm('Are you sure you want to submit this payment?')">
-                            <button type="submit" class="btn btn-success pull-right">
-                                <i class="far fa-credit-card"></i> Submit
-                                Payment
-                            </button>
-                        </th:form>
-                    </div>
-                </div>
-            </div>
-        </div>*@
     </div>
     <!-- /.card-body -->
 </div>
@@ -176,23 +135,19 @@
 
 
     <script >
-    //Initialize Select2 Elements
-        $('.select2').select2()
-
         //Initialize Select2 Elements
         $('.select2bs4').select2({
           theme: 'bootstrap4'
         })
+
+        // useSubmitClass();
+        useDeleteConfirmation();
+        function openSalesModal(){
+        var selected = $("#products option:selected");
+        console.log("The selected product is: " + selected.html() + " ("+selected.val() + ")");
+        if (selected.val()){
+            openFormModal("/sales/" + selected.val() + "/open-sales-modal", 'Record Sale - ' + selected.html() , 'md', true);
+        }}
     </script>
     <th:partial name="Partials/_ToastScript"></th:partial>
-    <script>
-                // useSubmitClass();
-                useDeleteConfirmation();
-                function openSalesModal(){
-                        var selected = $("#products option:selected");
-                        console.log("The selected product is: " + selected.html() + " ("+selected.val() + ")");
-                        if (selected.val()){
-                            openFormModal("/sales/" + selected.val() + "/open-sales-modal", 'Record Sale - ' + selected.html() , 'md', true);
-                            }}
-                </script>
 }

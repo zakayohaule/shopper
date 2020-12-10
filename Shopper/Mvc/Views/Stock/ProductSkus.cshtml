@@ -65,13 +65,13 @@
                     <td>@sku.SellingPrice.ToString("N0")</td>
                     <td>@sku.Date.ToString("dd-MM-yyyy")</td>
                     <td>
-                        <th:a onclick="openFormModal('@Url.Action("OpenProductSkusEditModal", new {id = sku.Id})', '@Model.Name  Stock Keeping Units')"
+                        <th:a onclick="openFormModal('@Url.Action("OpenProductSkusEditModal", new {id = sku.Id})',
+                         'Edit @Model.Name stock item', null,  true)"
                            class="btn btn-default btn-sm" title="Edit entry">
                             <i class="fas fa-edit"></i>
                         </th:a>
 
-                        <th:a asp-controller="Product"
-                              asp-action="Index"
+                        <th:a asp-action="DeleteSku"
                               asp-route-id="@sku.Id" class="btn btn-default btn-sm btn-delete" title="Delete entry">
                             @* <span class="badge badge-danger" title="Delete product"> *@
                             <i class="fas fa-trash"></i>

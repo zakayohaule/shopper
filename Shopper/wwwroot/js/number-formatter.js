@@ -19,3 +19,13 @@ function formatDecimal(event){
         return parseFloat(value).toLocaleString();
     });
 }
+
+
+function fillPriceField(val)
+{
+    console.log("new sku selected")
+    console.log(val)
+    var price = $('#price-for-'+val).text();
+    console.log("Product's price is: " + price)
+    $('#price').val(Number(price).toLocaleString());
+}

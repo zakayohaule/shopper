@@ -1,21 +1,33 @@
-﻿@model Shopper.Mvc.ViewModels.SaleFormViewModel;
+﻿@using Shared.Extensions.Helpers
+@model Shopper.Mvc.ViewModels.SaleFormViewModel;
 
 <th:form class="form-horizontal" asp-action="AddToCart" asp-controller="Sale">
+    @foreach (var price in Model.SkuPrices)
+    {
+        <span id="price-for-@price.Value" hidden>@price.Text</span>
+    }
+    <th:input asp-for="Id" value="@Model.Id" hidden></th:input>
     <div class="form-group row">
-        <th:select class="form-control select2bs4" id="skus" asp-for="SkuId"
-                   asp-items="@Model.Skus">
-            <option value="">-- Select Product --</option>
-        </th:select>
+        <th:label asp-for="SkuId" class="col-sm-3 col-form-label">Stock Item</th:label>
+        <div class="col-sm-9">
+            @{
+                var disabled = Model.SkuId != 0;
+            }
+            <th:select class="form-control select2bs4" disabled="@disabled" id="skus" asp-for="SkuId"
+                       asp-items="@Model.Skus" onChange="fillPriceField(this.value)">
+                <option value="">-- Select Product --</option>
+            </th:select>
+        </div>
     </div>
     <div class="form-group row">
-        <th:label asp-for="Price" class="col-sm-4 col-form-label"></th:label>
-        <div class="col-sm-8">
+        <th:label asp-for="Price" class="col-sm-3 col-form-label"></th:label>
+        <div class="col-sm-9">
             <th:input asp-for="Price" type="text" id="price" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
         </div>
     </div>
     <div class="form-group row">
-        <th:label asp-for="Quantity" class="col-sm-4 col-form-label"></th:label>
-        <div class="col-sm-8">
+        <th:label asp-for="Quantity" class="col-sm-3 col-form-label"></th:label>
+        <div class="col-sm-9">
             <th:input asp-for="Quantity" type="number" id="quantity" class="form-control profit"></th:input>
             <th:span asp-validation-for="Quantity" class="text-danger"></th:span>
         </div>

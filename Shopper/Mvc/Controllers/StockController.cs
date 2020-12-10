@@ -40,15 +40,13 @@ namespace Shopper.Mvc.Controllers
             var stockViewModel = new SkuViewFormModel();
             var product = await _productService.FindByIdWithAttributesAsync(id);
             stockViewModel.Product = product;
+            stockViewModel.StockDate = DateTime.Today.Date;
             return PartialView("../Stock/_ProductStockForm", stockViewModel);
         }
 
         [HttpPost(""), Permission("stock_add"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SkuViewFormModel skuViewModel)
         {
-            /*using var image = await Image.LoadAsync(skuViewModel.Image.OpenReadStream());
-            await image.SaveAsync($"{DateTimeOffset.Now.ToUnixTimeSeconds()}.jpg");
-            return Ok(Request.Form);*/
             if (!await _productService.ExistsByIdAsync(skuViewModel.ProductId))
             {
                 return NotFound("Product not found");
@@ -68,6 +66,7 @@ namespace Shopper.Mvc.Controllers
             var sku = new Sku
             {
                 ProductId = skuViewModel.ProductId,
+                Date = skuViewModel.StockDate,
                 Quantity = int.Parse(skuViewModel.Quantity.Replace(",", "")),
                 BuyingPrice = uint.Parse(skuViewModel.BuyingPrice.Replace(",", "")),
                 SellingPrice = uint.Parse(skuViewModel.SellingPrice.Replace(",", "")),

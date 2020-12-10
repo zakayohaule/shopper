@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,6 +12,10 @@ namespace Shared.Mvc.Entities
 
         [Column("product_id"), Required]
         public uint ProductId { get; set; }
+
+        [Column("stock_date"), Required]
+        [Display(Name = "Stock Date")]
+        public DateTime Date { get; set; }
 
         [Column("buying_price"), Required]
         [Display(Name = "Buying price (unit)")]

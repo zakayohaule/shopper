@@ -162,5 +162,11 @@ namespace Shopper.Services.Implementations
 
             return true;
         }
+
+        public async Task DeleteProductAsync(Product productGroup)
+        {
+            _dbContext.Remove(productGroup);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

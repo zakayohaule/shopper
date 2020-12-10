@@ -121,5 +121,19 @@ namespace Shopper.Mvc.Controllers
                 : Json(true);
         }
 
+        [HttpGet("{id}/delete", Name = "product-delete"), Permission("product_delete")]
+        public async Task<IActionResult> Delete(ushort id)
+        {
+            var productGroup = await _productService.FindByIdAsync(id);
+            if (productGroup.IsNull())
+            {
+                return NotFound();
+            }
+
+            await _productService.DeleteProductAsync(productGroup);
+
+            ToastSuccess("Product deleted successfully!");
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

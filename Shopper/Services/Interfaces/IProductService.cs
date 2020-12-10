@@ -24,5 +24,6 @@ namespace Shopper.Services.Interfaces
 
         Task<Sku> AddProductToStockAsync(Sku sku, List<ushort> attributeOptions);
         Task<bool> HasAttributes(uint productId, List<ushort> attributes);
+        Task DeleteProductAsync(Product productGroup);
     }
 }

@@ -3,6 +3,12 @@
 @* <h1>@Model.Name</h1> *@
 <th:form class="form-horizontal" enctype="multipart/form-data" asp-controller="Stock" asp-action="Create">
     <th:input type="hidden" asp-for="ProductId" value="@Model.Product.Id"></th:input>
+    <div class="form-group row">
+        <th:label asp-for="StockDate" class="col-sm-4 col-form-label"></th:label>
+        <div class="col-sm-8">
+            <th:input asp-for="StockDate" type="date" class="form-control"></th:input>
+        </div>
+    </div>
     @for (var i = 0; i < Model.Product.Attributes.Count; i++)
     {
         var att = Model.Product.Attributes.ToList()[i].Attribute;
@@ -40,7 +46,7 @@
             <th:input asp-for="MaximumDiscount" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
         </div>
     </div>
-    <div class="form-group">
+    @*<div class="form-group">
         <th:label asp-for="Image">Product Image</th:label>
         <div class="input-group">
             <div class="custom-file">
@@ -48,7 +54,7 @@
                 <label class="custom-file-label" for="exampleInputFile">Choose file</label>
             </div>
         </div>
-    </div>
+    </div>*@
     @*<div class="form-group row">
         <span>Profit Margin: <span id="profit"></span></span>
     </div>*@

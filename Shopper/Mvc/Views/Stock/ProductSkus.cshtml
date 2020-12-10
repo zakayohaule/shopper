@@ -63,7 +63,7 @@
                     <td>@sku.RemainingQuantity</td>
                     <td>@sku.BuyingPrice.ToString("N0")</td>
                     <td>@sku.SellingPrice.ToString("N0")</td>
-                    <td>@sku.CreatedAt.Date.ToString("MM/dd/yyyy")</td>
+                    <td>@sku.Date.ToString("dd-MM-yyyy")</td>
                     <td>
                         <a href="#" onclick="openFormModal('@Url.Action("OpenProductSkus", new {id = sku.Id})', @Model.Name + ' Stock Keeping Units')"
                            class="btn btn-default btn-sm" title="Edit entry">

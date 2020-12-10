@@ -11,11 +11,24 @@ namespace Shopper.Mvc.ViewModels
         public Product Product { get; set; }
         public Sku Sku { get; set; }
 
+        [Display(Name = "Stock Date")]
+        [Required]
+        public DateTime StockDate { get; set; }
+
         [Required] public uint ProductId { get; set; }
         [Required] public string Quantity { get; set; }
-        [Required] public string BuyingPrice { get; set; }
-        [Required] public string SellingPrice { get; set; }
-        [Required] public string MaximumDiscount { get; set; }
+
+        [Display(Name = "Buying Price")]
+        [Required]
+        public string BuyingPrice { get; set; }
+
+        [Display(Name = "Selling Price")]
+        [Required]
+        public string SellingPrice { get; set; }
+
+        [Display(Name = "Maximum Discount")]
+        [Required]
+        public string MaximumDiscount { get; set; }
 
         [Required] public IFormFile Image { get; set; }
 

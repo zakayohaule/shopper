@@ -93,7 +93,6 @@ namespace Shopper.Mvc.Controllers
         }
 
         [HttpGet("{id}/open-edit-modal")]
-        [AllowAnonymous]
         public async Task<JsonResult> EditProductModal(uint id, [FromServices] IAttributeService attributeService,
             [FromServices] IProductCategoryService productCategoryService)
         {

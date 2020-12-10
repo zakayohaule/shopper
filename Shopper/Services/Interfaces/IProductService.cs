@@ -11,8 +11,10 @@ namespace Shopper.Services.Interfaces
     public interface IProductService
     {
         Task<Product> FindByIdAsync(uint id);
+        IQueryable<Sku> FindSkuByIdAsync(ulong skuId);
         IQueryable<Product> FindByIdAsyncQ(uint id);
         IQueryable<Product> GetAllProducts();
+        List<AttributeSelect> GetProductAttributeSelects(Product product, Sku sku);
         public Task<Product> FindByIdWithAttributesAsync(uint id);
         public Task<Product> FindProductSkusAsync(uint productId);
         List<SelectListItem> GetProductsSelectListItems();

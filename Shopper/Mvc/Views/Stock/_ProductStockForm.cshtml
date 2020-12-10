@@ -1,5 +1,7 @@
 ﻿@model Shopper.Mvc.ViewModels.SkuViewFormModel
-
+@{
+    var attributeSelects = Model.AttributeSelects;
+}
 @* <h1>@Model.Name</h1> *@
 <th:form class="form-horizontal" enctype="multipart/form-data" asp-controller="Stock" asp-action="Create">
     <th:input type="hidden" asp-for="ProductId" value="@Model.Product.Id"></th:input>
@@ -9,7 +11,7 @@
             <th:input asp-for="StockDate" type="date" class="form-control"></th:input>
         </div>
     </div>
-    @for (var i = 0; i < Model.Product.Attributes.Count; i++)
+    @*@for (var i = 0; i < Model.Product.Attributes.Count; i++)
     {
         var att = Model.Product.Attributes.ToList()[i].Attribute;
         <div class="form-group row">
@@ -21,6 +23,22 @@
                 </th:select>
             </div>
         </div>
+    }*@
+    @{
+        var i = 0;
+    }
+    @foreach (var att in attributeSelects)
+    {
+        <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">@att.Name</label>
+            <div class="col-sm-8">
+                <th:select class="form-control select2bs4" asp-for="Attributes[i]" id="attribute_@att.Id"
+                           asp-items="@att.Options">
+                    <option value="">-- Select @att.Name --</option>
+                </th:select>
+            </div>
+        </div>
+        i++;
     }
     <div class="form-group row">
         <th:label asp-for="Quantity" class="col-sm-4 col-form-label"></th:label>

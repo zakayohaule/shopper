@@ -65,12 +65,10 @@
                     <td>@sku.SellingPrice.ToString("N0")</td>
                     <td>@sku.Date.ToString("dd-MM-yyyy")</td>
                     <td>
-                        <a href="#" onclick="openFormModal('@Url.Action("OpenProductSkus", new {id = sku.Id})', @Model.Name + ' Stock Keeping Units')"
+                        <th:a onclick="openFormModal('@Url.Action("OpenProductSkusEditModal", new {id = sku.Id})', '@Model.Name  Stock Keeping Units')"
                            class="btn btn-default btn-sm" title="Edit entry">
-                            @* <span class="badge badge-warning" title="Edit product"> *@
                             <i class="fas fa-edit"></i>
-                            @* </span> *@
-                        </a>
+                        </th:a>
 
                         <th:a asp-controller="Product"
                               asp-action="Index"

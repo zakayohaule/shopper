@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities;
 using Shopper.Attributes;
@@ -41,6 +43,7 @@ namespace Shopper.Mvc.Controllers
             var product = await _productService.FindByIdWithAttributesAsync(id);
             stockViewModel.Product = product;
             stockViewModel.StockDate = DateTime.Today.Date;
+            stockViewModel.AttributeSelects = _productService.GetProductAttributeSelects(product, new Sku());
             return PartialView("../Stock/_ProductStockForm", stockViewModel);
         }
 
@@ -92,6 +95,27 @@ namespace Shopper.Mvc.Controllers
             var product = await _productService.FindProductSkusAsync(id);
 
             return View("ProductSkus", product);
+        }
+        [HttpGet("{id}/open-product-skus-edit-modal")]
+        public async Task<IActionResult> OpenProductSkusEditModal(ulong id)
+        {
+            var sku = await _productService.FindSkuByIdAsync(id)
+                .Include(s => s.SkuAttributes)
+                .SingleOrDefaultAsync();
+            var product = await _productService.FindByIdWithAttributesAsync(sku.ProductId);
+            var stockViewModel = new SkuViewFormModel
+            {
+               Product = sku.Product,
+               Sku = sku,
+               BuyingPrice = sku.BuyingPrice.ToString(),
+               SellingPrice = sku.SellingPrice.ToString(),
+               MaximumDiscount = sku.MaximumDiscount.ToString(),
+               Quantity = sku.Quantity.ToString(),
+               StockDate = sku.Date,
+               ProductId = sku.ProductId,
+               AttributeSelects = _productService.GetProductAttributeSelects(product, sku)
+            };
+            return PartialView("../Stock/_ProductStockForm", stockViewModel);
         }
     }
 }

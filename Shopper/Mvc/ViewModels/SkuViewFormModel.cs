@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Shared.Mvc.Entities;
 
 namespace Shopper.Mvc.ViewModels
@@ -33,5 +34,7 @@ namespace Shopper.Mvc.ViewModels
         [Required] public IFormFile Image { get; set; }
 
         [Required] public List<string> Attributes { get; set; }
+
+        public List<AttributeSelect> AttributeSelects { get; set; }
     }
 }

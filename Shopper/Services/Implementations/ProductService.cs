@@ -27,6 +27,11 @@ namespace Shopper.Services.Implementations
             return await _dbContext.Products.FindAsync(id);
         }
 
+        public IQueryable<Sku> FindSkuByIdAsync(ulong id)
+        {
+            return _dbContext.Skus.Where(sku => sku.Id.Equals(id)).AsQueryable();
+        }
+
         public IQueryable<Product> FindByIdAsyncQ(uint id)
         {
             return _dbContext.Products.Where(product => product.Id.Equals(id)).AsQueryable();
@@ -35,6 +40,28 @@ namespace Shopper.Services.Implementations
         public IQueryable<Product> GetAllProducts()
         {
             return _dbContext.Products.AsQueryable();
+        }
+
+        public List<AttributeSelect> GetProductAttributeSelects(Product product, Sku sku)
+        {
+            var selects = new List<AttributeSelect>();
+            foreach (var productAttribute in product.Attributes)
+            {
+                var select = new AttributeSelect();
+                var att = productAttribute.Attribute;
+                select.Name = att.Name;
+                select.Id = att.Id;
+                var skuHasAttributes = sku.SkuAttributes.IsNotNull() && sku.SkuAttributes.Any();
+                select.Options = att.AttributeOptions.Select(ao => new SelectListItem
+                {
+                    Selected = skuHasAttributes && sku.SkuAttributes.Any(ska => ska.AttributeOptionId.Equals(ao.Id)),
+                    Text = ao.Name,
+                    Value = $"{ao.AttributeId}_{ao.Id}"
+                }).ToList();
+                selects.Add(select);
+            }
+
+            return selects;
         }
 
         public List<SelectListItem> GetProductsSelectListItems()
@@ -100,11 +127,13 @@ namespace Shopper.Services.Implementations
 
         public async Task<Product> CreateProductAsync(ProductFormModel newProduct)
         {
-            var product = await _dbContext.Products.AddAsync(new Product{Name = newProduct.Name, ProductCategoryId = newProduct.ProductCategoryId});
+            var product = await _dbContext.Products.AddAsync(new Product
+                {Name = newProduct.Name, ProductCategoryId = newProduct.ProductCategoryId});
 
             if (newProduct.Attributes.Any())
             {
-                var productAttributes = newProduct.Attributes.Select(attribute => new ProductAttribute {AttributeId = attribute, Product = product.Entity,}).ToList();
+                var productAttributes = newProduct.Attributes.Select(attribute => new ProductAttribute
+                    {AttributeId = attribute, Product = product.Entity,}).ToList();
 
                 await _dbContext.ProductAttributes.AddRangeAsync(productAttributes);
             }
@@ -121,7 +150,8 @@ namespace Shopper.Services.Implementations
             _dbContext.ProductAttributes.RemoveRange(productToUpdate.Attributes);
             if (productModel.Attributes.IsNotNull() && productModel.Attributes.Any())
             {
-                var productAttributes = productModel.Attributes.Select(attribute => new ProductAttribute {AttributeId = attribute, Product = productToUpdate,}).ToList();
+                var productAttributes = productModel.Attributes.Select(attribute => new ProductAttribute
+                    {AttributeId = attribute, Product = productToUpdate,}).ToList();
 
                 await _dbContext.ProductAttributes.AddRangeAsync(productAttributes);
             }

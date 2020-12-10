@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities;
 using Shared.Mvc.Entities.Identity;
@@ -100,11 +101,11 @@ namespace Shopper.Mvc.Controllers
         }
 
         [HttpGet("{id}/open-edit-modal")]
-        public async Task<PartialViewResult> EditProductCategoryModal(ushort id)
+        public async Task<JsonResult> EditProductCategoryModal(ushort id)
         {
             var productCategory = await _productCategoryService.FindByIdAsync(id);
-            ViewData["ProductGroups"] = _productGroupService.GetProductGroupSelectListItems();
-            return PartialView("../ProductCategory/_EditProductCategoryModal", productCategory);
+
+            return Json(productCategory, new JsonSerializerSettings{ContractResolver = null});
         }
 
         [AcceptVerbs("GET", Route = "validate-product-category-name", Name = "ValidateProductCategoryName")]

@@ -1,0 +1,20 @@
+@{
+    var partialName = ViewData["FormName"];
+}
+<div class="modal fade" id="edit-modal">
+    <div class="modal-dialog modal-lg" id="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="edit-title">Edit Product</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <th:form class="" id="edit-form" method="post">
+                    <th:partial name="@partialName" view-data="ViewData"/>
+                </th:form>
+            </div>
+        </div>
+    </div>
+</div>

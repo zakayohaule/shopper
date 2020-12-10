@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities;
 using Shopper.Database;
+using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Services.Implementations
@@ -96,28 +98,37 @@ namespace Shopper.Services.Implementations
             return product;
         }
 
-        public async Task<Product> CreateProductAsync(Product newProduct, string[] attributes = null)
+        public async Task<Product> CreateProductAsync(ProductFormModel newProduct)
         {
-            var product = await _dbContext.Products.AddAsync(newProduct);
+            var product = await _dbContext.Products.AddAsync(new Product{Name = newProduct.Name, ProductCategoryId = newProduct.ProductCategoryId});
 
-            // return product.Entity;
-            if (attributes != null && attributes.Length > 0)
+            if (newProduct.Attributes.Any())
             {
-                var productAttributes = new List<ProductAttribute>();
-                foreach (var attribute in attributes)
-                {
-                    productAttributes.Add(new ProductAttribute
-                    {
-                        AttributeId = ushort.Parse(attribute),
-                        Product = product.Entity,
-                    });
-                }
+                var productAttributes = newProduct.Attributes.Select(attribute => new ProductAttribute {AttributeId = attribute, Product = product.Entity,}).ToList();
 
                 await _dbContext.ProductAttributes.AddRangeAsync(productAttributes);
             }
 
             await _dbContext.SaveChangesAsync();
             return product.Entity;
+        }
+
+        public async Task<Product> UpdateProductAsync(ProductFormModel productModel, Product productToUpdate)
+        {
+            productToUpdate.Name = productModel.Name;
+            productToUpdate.ProductCategoryId = productModel.ProductCategoryId;
+            // productToUpdate.Attributes.Clear();
+            _dbContext.ProductAttributes.RemoveRange(productToUpdate.Attributes);
+            if (productModel.Attributes.IsNotNull() && productModel.Attributes.Any())
+            {
+                var productAttributes = productModel.Attributes.Select(attribute => new ProductAttribute {AttributeId = attribute, Product = productToUpdate,}).ToList();
+
+                await _dbContext.ProductAttributes.AddRangeAsync(productAttributes);
+            }
+
+            var prod = _dbContext.Products.Update(productToUpdate);
+            await _dbContext.SaveChangesAsync();
+            return prod.Entity;
         }
 
         public async Task<Sku> AddProductToStockAsync(Sku sku, List<ushort> attributeOptions)

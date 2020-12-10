@@ -2,6 +2,7 @@
 @model UserViewModel;
 
 <div class="form-group col-12">
+    <th:input asp-for="Id" value="@Model.Id" hidden></th:input>
     <th:label asp-for="FullName"></th:label>
     <th:input asp-for="FullName" class="form-control"></th:input>
     <th:span asp-validation-for="FullName" class="text-danger"></th:span>

@@ -176,7 +176,7 @@ namespace Shopper.Mvc.Controllers
         }
 
         [HttpGet("{id}/open-edit-modal")]
-        public async Task<PartialViewResult> EditUserModal(long id)
+        public async Task<JsonResult> EditUserModal(long id)
         {
             var user = await _userService.FindByIdAsync(id);
             var viewModel = new UserViewModel
@@ -186,7 +186,7 @@ namespace Shopper.Mvc.Controllers
                 Id = user.Id,
             };
 
-            return PartialView("../User/_EditUserModal", viewModel);
+            return Json(viewModel, new JsonSerializerSettings{ContractResolver = null});
         }
 
         [HttpGet("{id}/user-roles-modal")]

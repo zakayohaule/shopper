@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Shared.Mvc.Entities;
+using Shopper.Mvc.ViewModels;
 
 namespace Shopper.Services.Interfaces
 {
@@ -18,7 +19,8 @@ namespace Shopper.Services.Interfaces
         List<Product> GetStockedProducts();
         public bool IsDuplicate(string name, uint id);
         public Task<bool> ExistsByIdAsync(uint id);
-        Task<Product> CreateProductAsync(Product newProduct, string[] attributes = null);
+        Task<Product> CreateProductAsync(ProductFormModel newProduct);
+        Task<Product> UpdateProductAsync(ProductFormModel newProduct, Product productToUpdate);
 
         Task<Sku> AddProductToStockAsync(Sku sku, List<ushort> attributeOptions);
         Task<bool> HasAttributes(uint productId, List<ushort> attributes);

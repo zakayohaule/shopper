@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities;
 using Shared.Mvc.Entities.Identity;
@@ -91,11 +92,11 @@ namespace Shopper.Mvc.Controllers
         }
 
         [HttpGet("{id}/open-edit-modal")]
-        public async Task<PartialViewResult> EditPriceTypeModal(ushort id)
+        public async Task<JsonResult> EditPriceTypeModal(ushort id)
         {
             var priceType = await _priceTypeService.FindByIdAsync(id);
 
-            return PartialView("../PriceType/_EditPriceTypeModal", priceType);
+            return Json(priceType, new JsonSerializerSettings{ContractResolver = null});
         }
 
         [AcceptVerbs("GET", Route = "validate-price-type-name", Name = "ValidatePriceTypeName")]

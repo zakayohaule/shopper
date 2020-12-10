@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities;
 using Shared.Mvc.Entities.Identity;
@@ -91,11 +92,11 @@ namespace Shopper.Mvc.Controllers
         }
 
         [HttpGet("{id}/open-edit-modal")]
-        public async Task<PartialViewResult> EditProductGroupModal(ushort id)
+        public async Task<JsonResult> EditProductGroupModal(ushort id)
         {
             var productGroup = await _productGroupService.FindByIdAsync(id);
 
-            return PartialView("../ProductGroup/_EditProductGroupModal", productGroup);
+            return Json(productGroup, new JsonSerializerSettings{ContractResolver = null});
         }
 
         [AcceptVerbs("GET", Route = "validate-product-group-name", Name = "ValidateProductGroupName")]

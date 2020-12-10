@@ -3,9 +3,12 @@
 @{
     Layout = "_Layout";
     var newProductCategory = new ProductCategory();
+    ViewData["FormName"] = "_ProductCategoryForm";
 }
 
 @section css {
+    <th:link rel="stylesheet" href="~/plugins/select2-4.0.5/css/select2.min.css"></th:link>
+    <th:link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"></th:link>
     <!-- Toastr -->
     <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
 }
@@ -37,7 +40,7 @@
     </div>
 
     <div class="card-body table-responsive p-0">
-            <table class="table table-sm table-bordered table-hover">
+        <table class="table table-sm table-bordered table-hover">
             <thead>
             <tr>
                 <th style="width: 10px">#</th>
@@ -58,8 +61,11 @@
                     <td>@productCategory.Name</td>
                     <td>@productCategory.ProductGroup.Name</td>
                     <td>
-                        <a href="#" onclick="openFormModal('@Url.Action("EditProductCategoryModal", new {id = productCategory.Id})', 'Edit Product Category')"
-                           class="btn btn-default btn-sm" title="Edit product category">
+                        <a href="#" onclick="openEditModal('@Url.Action("EditProductCategoryModal", new {id = productCategory.Id})',
+                         '@Url.Action("Update", new {id = productCategory.Id})',
+                         'Edit Product Category')"
+                           class="btn btn-default btn-sm"
+                           title="Edit product category">
                             <i class="fas fa-edit"></i>
                         </a>
                         <th:a asp-controller="ProductCategory"
@@ -78,14 +84,23 @@
     <!-- /.card-body -->
 </div>
 <!-- /.card -->
-<th:partial name="Partials/_DynamicModalPopup" model="Model" view-data="ViewData"></th:partial>
+
+<th:partial name="Partials/_EditModal" model="newProductCategory" view-data="ViewData"/>
 
 @section scripts
 {
     <th:partial name="_ValidationScriptsPartial"></th:partial>
     <th:partial name="Partials/_ToastScript"></th:partial>
-    <script>
-                // useSubmitClass();
+    <!-- Select2 -->
+    <th:script src="~/plugins/select2-4.0.5/js/select2.full.min.js"></th:script>
+
+    <th:script src="~/js/edit-form.js"></th:script>
+    <script >
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+              theme: 'bootstrap4'
+            })
+
                 useDeleteConfirmation();
         </script>
 }

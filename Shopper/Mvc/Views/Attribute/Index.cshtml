@@ -4,6 +4,7 @@
 @{
     Layout = "_Layout";
     var newAttribute = new Attribute();
+    ViewData["FormName"] = "_AttributeForm";
 }
 
 @section css {
@@ -60,7 +61,9 @@
                         <th:a asp-controller="AttributeOption" asp-action="Index" asp-route-attributeId="@att.Id" title="Attribute Options" class="btn btn-sm btn-default">
                             <i class="fa fa-list-ul"></i>
                         </th:a>
-                        <a href="#" onclick="openFormModal('@Url.Action("EditAttributeModal", new {id = att.Id})', 'Edit Attribute')"
+                        <a href="#" onclick="openEditModal('@Url.Action("EditAttributeModal", new {id = att.Id})',
+                         '@Url.Action("Update", new {id = att.Id})',
+                         'Edit Attribute')"
                            class="btn btn-default btn-sm" title="Edit attribute">
                             @* <span class="badge badge-warning" title="Edit attribute"> *@
                             <i class="fas fa-edit"></i>
@@ -82,10 +85,12 @@
     <!-- /.card-body -->
 </div>
 <!-- /.card -->
-<th:partial name="Partials/_DynamicModalPopup" model="Model" view-data="ViewData"></th:partial>
+
+<th:partial name="Partials/_EditModal" model="newAttribute" view-data="ViewData"/>
 
 @section scripts
 {
+    <th:script src="~/js/edit-form.js"></th:script>
     <th:partial name="_ValidationScriptsPartial"></th:partial>
     <th:partial name="Partials/_ToastScript"></th:partial>
     <script>

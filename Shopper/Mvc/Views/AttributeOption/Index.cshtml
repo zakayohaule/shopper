@@ -4,6 +4,7 @@
 @{
     Layout = "_Layout";
     var attributeOption = new AttributeOption();
+    ViewData["FormName"] = "_AttributeOptionForm";
 }
 
 @section css {
@@ -42,8 +43,8 @@
             <thead>
             <tr>
                 <th style="width: 10px">#</th>
+                <th>Option Name</th>
                 <th>Atribute</th>
-                <th>Name</th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -56,14 +57,17 @@
                 index++;
                 <tr>
                     <td>@index</td>
-                    <td>@att.Attribute.Name</td>
                     <td>@att.Name</td>
+                    <td>@att.Attribute.Name</td>
                     <td>
                         @*<th:a asp-controller="Role" asp-action="RolePermissions" asp-route-id="@role.Id" title="Role permissions" class="btn btn-sm btn-default">
                             <i class="fa fa-list-ul"></i>
                         </th:a>*@
-                        <a href="#" onclick="openFormModal('@Url.Action("EditAttributeOptionModal", new {id = att.Id})', 'Edit Attribute Option')"
-                           class="btn btn-default btn-sm" title="Edit attribute option">
+                        <a href="#" onclick="openEditModal('@Url.Action("EditAttributeOptionModal", new {id = att.Id})',
+                         '@Url.Action("Update", new {id = att.Id})',
+                         'Edit Attribute Option')"
+                           class="btn btn-default btn-sm"
+                           title="Edit attribute option">
                             @* <span class="badge badge-warning" title="Edit attribute"> *@
                             <i class="fas fa-edit"></i>
                             @* </span> *@
@@ -84,10 +88,12 @@
     <!-- /.card-body -->
 </div>
 <!-- /.card -->
-<th:partial name="Partials/_DynamicModalPopup" model="Model" view-data="ViewData"></th:partial>
+
+<th:partial name="Partials/_EditModal" model="attributeOption" view-data="ViewData"/>
 
 @section scripts
 {
+    <th:script src="~/js/edit-form.js"></th:script>
     <th:partial name="_ValidationScriptsPartial"></th:partial>
     <th:partial name="Partials/_ToastScript"></th:partial>
     <script>

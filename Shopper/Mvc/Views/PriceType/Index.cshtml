@@ -3,6 +3,7 @@
 @{
     Layout = "_Layout";
     var newPriceType = new PriceType();
+    ViewData["FormName"] = "_PriceTypeForm";
 }
 
 @section css {
@@ -56,17 +57,20 @@
                     <td>@index</td>
                     <td>@priceType.Name</td>
                     <td>
-                        <a href="#" onclick="openFormModal('@Url.Action("EditPriceTypeModal", new {id = priceType.Id})', 'Edit Price Type')"
-                           class="btn btn-default btn-sm" title="Edit price type">
+                        <a href="#" onclick="openEditModal('@Url.Action("EditPriceTypeModal", new {id = priceType.Id})',
+                         '@Url.Action("Update", new {id = priceType.Id})',
+                         'Edit Price Type')"
+                           class="btn btn-default btn-sm"
+                           title="Edit price type">
                             @* <span class="badge badge-warning" title="Edit price type"> *@
-                                <i class="fas fa-edit"></i>
+                            <i class="fas fa-edit"></i>
                             @* </span> *@
                         </a>
                         <th:a asp-controller="PriceType"
                               asp-action="Delete"
                               asp-route-id="@priceType.Id" class="btn btn-default btn-sm btn-delete" title="Delete price type">
                             @* <span class="badge badge-danger" title="Delete price type"> *@
-                                <i class="fas fa-trash"></i>
+                            <i class="fas fa-trash"></i>
                             @* </span> *@
                         </th:a>
                     </td>
@@ -78,10 +82,12 @@
     <!-- /.card-body -->
 </div>
 <!-- /.card -->
-<th:partial name="Partials/_DynamicModalPopup" model="Model" view-data="ViewData"></th:partial>
+
+<th:partial name="Partials/_EditModal" model="newPriceType" view-data="ViewData"/>
 
 @section scripts
 {
+    <th:script src="~/js/edit-form.js"></th:script>
     <th:partial name="_ValidationScriptsPartial"></th:partial>
     <th:partial name="Partials/_ToastScript"></th:partial>
     <script>

@@ -1,14 +1,13 @@
-﻿@model Product
+﻿@model Shopper.Mvc.ViewModels.ProductFormModel
 @{
     var attributes = ViewData["Attributes"] as List<SelectListItem>;
     var categories = ViewData["Categories"] as List<SelectListItem>;
-    var select2Class = ViewBag.EditMode != null ? "select2bs4-modal" : "select2bs4";
 }
 
 <div class="form-group col-12">
-    <th>Product Category</th>
-    <th:input asp-for="Id" value="@Model.Id" hidden></th:input>
-    <th:select class="form-control @select2Class" asp-for="ProductCategoryId" asp-items="categories">
+    <th:input hidden asp-for="Id" value="@Model.Id"></th:input>
+    <th:label asp-for="ProductCategoryId">Product Category</th:label>
+    <th:select class="form-control select2bs4" asp-for="ProductCategoryId" asp-items="categories">
         <option value="">-- Select Product Category --</option>
     </th:select>
     <th:span asp-validation-for="ProductCategoryId" class="text-danger"></th:span>
@@ -21,7 +20,7 @@
 </div>
 <div class="form-group col-12">
     <th>Product Attributes</th>
-    <th:select class="form-control @select2Class" multiple="multiple" data-placeholder="-- Select product attributes --" asp-for="Attributes" asp-items="attributes">
+    <th:select class="form-control select2bs4" multiple="multiple" data-placeholder="-- Select product attributes --" asp-for="Attributes" asp-items="attributes">
     </th:select>
     <th:span asp-validation-for="Attributes" class="text-danger"></th:span>
 </div>

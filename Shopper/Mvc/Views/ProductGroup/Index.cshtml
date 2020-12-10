@@ -3,6 +3,7 @@
 @{
     Layout = "_Layout";
     var newProductGroup = new ProductGroup();
+    ViewData["FormName"] = "_ProductGroupForm";
 }
 
 @section css {
@@ -56,17 +57,20 @@
                     <td>@index</td>
                     <td>@productGroup.Name</td>
                     <td>
-                        <a href="#" onclick="openFormModal('@Url.Action("EditProductGroupModal", new {id = productGroup.Id})', 'Edit Product Group')"
-                           class="btn btn-default btn-sm" title="Edit product group">
+                        <a href="#" onclick="openEditModal('@Url.Action("EditProductGroupModal", new {id = productGroup.Id})',
+                         '@Url.Action("Update", new {id = productGroup.Id})',
+                         'Edit Product Group')"
+                           class="btn btn-default btn-sm"
+                           title="Edit product group">
                             @* <span class="badge badge-warning" title="Edit product group"> *@
-                                <i class="fas fa-edit"></i>
+                            <i class="fas fa-edit"></i>
                             @* </span> *@
                         </a>
                         <th:a asp-controller="ProductGroup"
                               asp-action="Delete"
                               asp-route-id="@productGroup.Id" class="btn btn-default btn-sm btn-delete" title="Delete product group">
                             @* <span class="badge badge-danger" title="Delete product group"> *@
-                                <i class="fas fa-trash"></i>
+                            <i class="fas fa-trash"></i>
                             @* </span> *@
                         </th:a>
                     </td>
@@ -78,10 +82,12 @@
     <!-- /.card-body -->
 </div>
 <!-- /.card -->
-<th:partial name="Partials/_DynamicModalPopup" model="Model" view-data="ViewData"></th:partial>
+
+<th:partial name="Partials/_EditModal" model="newProductGroup" view-data="ViewData"/>
 
 @section scripts
 {
+    <th:script src="~/js/edit-form.js"></th:script>
     <th:partial name="_ValidationScriptsPartial"></th:partial>
     <th:partial name="Partials/_ToastScript"></th:partial>
     <script>

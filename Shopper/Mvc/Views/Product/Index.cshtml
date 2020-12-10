@@ -1,13 +1,15 @@
-﻿@model List<Product>;
+﻿@using Shopper.Mvc.ViewModels
+@model List<Product>;
 
 @{
     Layout = "_Layout";
-    var newProduct = new Product();
+    var newProduct = new ProductFormModel();
+    ViewData["FormName"] = "_ProductForm";
 }
 
 @section css {
     <th:partial name="Partials/_DtCss"></th:partial>
-    <th:link rel="stylesheet" href="~/plugins/select2/css/select2.min.css"></th:link>
+    <th:link rel="stylesheet" href="~/plugins/select2-4.0.5/css/select2.min.css"></th:link>
     <th:link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"></th:link>
     <!-- Toastr -->
     <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
@@ -20,24 +22,6 @@
         </a>
     </div>
     <!-- /.card-header -->
-
-    <div class="modal fade" id="add-product">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Product</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <th:form class="" id="form" asp-controller="Product" asp-action="Create" method="post">
-                        <th:partial name="_ProductForm" model="newProduct"/>
-                    </th:form>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="card-body table-responsive p-0">
         <table class="table table-sm table-bordered table-hover dt-table">
@@ -56,6 +40,7 @@
             }
             @foreach (var product in Model)
             {
+                var editTitle = $"Edit Product ({product.Name})";
                 index++;
                 <tr>
                     <td>@index</td>
@@ -66,7 +51,7 @@
                         <a href="#"
                            onclick="openEditModal('@Url.Action("EditProductModal", new {id = product.Id})',
                             '@Url.Action("Update", "Product", new {id = product.Id})',
-                            'Edit Product', null)"
+                            '@editTitle', null)"
                            class="btn btn-default btn-sm" title="Edit product">
                             @* <span class="badge badge-warning" title="Edit product"> *@
                             <i class="fas fa-edit"></i>
@@ -88,13 +73,48 @@
     <!-- /.card-body -->
 </div>
 <!-- /.card -->
-@* <th:partial name="Partials/_DynamicModalPopup" model="Model" view-data="ViewData"></th:partial> *@
+<div class="modal fade" id="add-product">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Product</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <th:form class="" id="form" asp-controller="Product" asp-action="Create" method="post">
+                    <th:partial name="_ProductForm" model="newProduct"/>
+                </th:form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:partial name="Partials/_EditModal" model="newProduct" view-data="ViewData" />
+@*<div class="modal fade" id="edit-modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="edit-title">Edit Product</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <th:form class="" id="edit-form" method="post">
+                    <th:partial name="_ProductForm" model="newProduct" view-data="ViewData"/>
+                </th:form>
+            </div>
+        </div>
+    </div>
+</div>*@
 
 @section scripts
 {
     <th:partial name="Partials/_DtJs"></th:partial>
     <!-- Select2 -->
-    <th:script src="~/plugins/select2/js/select2.full.min.js"></th:script>
+    <th:script src="~/plugins/select2-4.0.5/js/select2.full.min.js"></th:script>
 
     <th:script src="~/js/edit-form.js"></th:script>
     <script >
@@ -102,9 +122,6 @@
         $('.select2bs4').select2({
           theme: 'bootstrap4'
         })
-        // $('.select2bs4-modal').select2({
-        //           theme: 'bootstrap4'
-        //         })
     </script>
     <th:partial name="_ValidationScriptsPartial"></th:partial>
     <th:partial name="Partials/_ToastScript"></th:partial>

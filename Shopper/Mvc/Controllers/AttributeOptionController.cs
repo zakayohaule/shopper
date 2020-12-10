@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities;
 using Shopper.Attributes;
@@ -102,11 +103,11 @@ namespace Shopper.Mvc.Controllers
         }
 
         [HttpGet("{id}/open-edit-modal")]
-        public async Task<PartialViewResult> EditAttributeOptionModal(ushort id)
+        public async Task<JsonResult> EditAttributeOptionModal(ushort id)
         {
             var attributeOption = await _attributeOptionService.FindByIdAsync(id);
 
-            return PartialView("../AttributeOption/_EditAttributeOptionModal", attributeOption);
+            return Json(attributeOption, new JsonSerializerSettings{ContractResolver = null});
         }
 
         [AcceptVerbs("GET", Route = "validate-attribute-option-name", Name = "ValidateAttributeOptionName")]

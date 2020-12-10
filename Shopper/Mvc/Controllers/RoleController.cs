@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities.Identity;
 
@@ -134,11 +135,11 @@ namespace Shopper.Mvc.Controllers
         }
 
         [HttpGet("{id}/open-edit-modal")]
-        public async Task<PartialViewResult> EditRoleModal(long id)
+        public async Task<JsonResult> EditRoleModal(long id)
         {
             var role = await _roleService.FindByIdAsync(id);
 
-            return PartialView("../Role/_EditRoleModal", role);
+            return Json(role, new JsonSerializerSettings{ContractResolver = null});
         }
     }
 }

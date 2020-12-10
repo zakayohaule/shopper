@@ -4,7 +4,7 @@
 }
 <div class="form-group col-12">
     <th:label asp-for="ProductGroupId">Product Group</th:label>
-    <th:select class="form-control" asp-for="ProductGroupId" asp-items="productGroups">
+    <th:select class="form-control select2bs4" asp-for="ProductGroupId" asp-items="productGroups">
         <option value="">-- Select --</option>
     </th:select>
     <th:span asp-validation-for="ProductGroupId" class="text-danger"></th:span>

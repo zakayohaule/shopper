@@ -10,6 +10,7 @@ using Newtonsoft.Json.Serialization;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities;
 using Shopper.Attributes;
+using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Mvc.Controllers
@@ -44,7 +45,7 @@ namespace Shopper.Mvc.Controllers
         }
 
         [HttpPost(""), Permission("product_add"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Product newProduct)
+        public async Task<IActionResult> Create(ProductFormModel newProduct)
         {
             // return Ok(newProduct);
             if (_productService.IsDuplicate(newProduct.Name, newProduct.Id))
@@ -53,10 +54,10 @@ namespace Shopper.Mvc.Controllers
                 return RedirectToAction("Index");
             }
 
-            newProduct = await _productService.CreateProductAsync(newProduct, Request.Form["Attributes"].ToArray());
+            var product = await _productService.CreateProductAsync(newProduct);
 
             // return Ok(newProduct);
-            if (newProduct.IsNotNull())
+            if (product.IsNotNull())
             {
                 ToastSuccess($"Product created successfully!");
             }
@@ -68,9 +69,32 @@ namespace Shopper.Mvc.Controllers
             return RedirectToAction("Index");
         }
 
+
+        [HttpPost("{id}", Name = "product-edit"), Permission("product_edit"), ValidateAntiForgeryToken,]
+        public async Task<IActionResult> Update(uint id, ProductFormModel formModel)
+        {
+            if (_productService.IsDuplicate(formModel.Name, formModel.Id))
+            {
+                ToastError($"Product with name {formModel.Name} already exists! Please use another name.");
+                return RedirectToAction("Index");
+            }
+
+            var product = await _productService.FindByIdAsyncQ(formModel.Id).Include(p => p.Attributes)
+                .SingleOrDefaultAsync();
+            if (product.IsNull())
+            {
+                return NotFound($"Product with id {id} not found");
+            }
+
+            product = await _productService.UpdateProductAsync(formModel, product);
+
+            ToastSuccess("Product edited successfully!");
+            return RedirectToAction("Index");
+        }
+
         [HttpGet("{id}/open-edit-modal")]
         [AllowAnonymous]
-        public async Task<JsonResult> EditProductModal(uint id,[FromServices] IAttributeService attributeService,
+        public async Task<JsonResult> EditProductModal(uint id, [FromServices] IAttributeService attributeService,
             [FromServices] IProductCategoryService productCategoryService)
         {
             var product = await _productService.FindByIdAsyncQ(id).Include(p => p.Attributes).SingleAsync();
@@ -78,14 +102,14 @@ namespace Shopper.Mvc.Controllers
             ViewData["Categories"] = productCategoryService.GetProductCategorySelectListItems();
             ViewBag.EditMode = true;
 
-            var formData = new
+            var formData = new ProductFormModel
             {
-                product.Id,
-                product.Name,
-                product.ProductCategoryId,
+                Id = product.Id,
+                Name = product.Name,
+                ProductCategoryId = product.ProductCategoryId,
                 Attributes = product.Attributes.Select(at => at.AttributeId)
             };
-            return Json(formData, new JsonSerializerSettings{ContractResolver = null});
+            return Json(formData, new JsonSerializerSettings {ContractResolver = null});
             // return PartialView("../Product/_EditProductModal", product);
         }
 
@@ -97,11 +121,5 @@ namespace Shopper.Mvc.Controllers
                 : Json(true);
         }
 
-        [HttpPost("{id}", Name = "product-edit"), Permission("product_edit"), ValidateAntiForgeryToken,]
-        public IActionResult Update(uint id, Product product)
-        {
-            Console.WriteLine($"Product Id is {id}");
-            return Ok(product);
-        }
     }
 }

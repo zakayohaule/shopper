@@ -3,6 +3,7 @@
 @{
     Layout = "_Layout";
     var newRole = new Role();
+    ViewData["FormName"] = "_RoleForm";
 }
 
 @section css {
@@ -17,24 +18,6 @@
         </a>
     </div>
     <!-- /.card-header -->
-
-    <div class="modal fade" id="add-user">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Role</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <th:form class="" asp-controller="Role" asp-action="Create" method="post">
-                    <div class="modal-body">
-                        <th:partial name="_RoleForm" model="newRole"/>
-                    </div>
-                </th:form>
-            </div>
-        </div>
-    </div>
 
     <div class="card-body table-responsive p-0">
         <table class="table table-bordered table-hover table-sm">
@@ -57,18 +40,22 @@
                     <td>@role.DisplayName</td>
                     <td>
                         <th:a asp-controller="Role" asp-action="RolePermissions" asp-route-id="@role.Id" title="Role permissions" class="btn btn-sm btn-default">
-                                <i class="fa fa-list-ul"></i>
+                            <i class="fa fa-list-ul"></i>
                         </th:a>
-                        <a href="#" onclick="openFormModal('@Url.Action("EditRoleModal", new {id = role.Id})', 'Edit Role')" title="Edit role" class="btn btn-sm btn-default">
+                        <a href="#" onclick="openEditModal('@Url.Action("EditRoleModal", new {id = role.Id})',
+                         '@Url.Action("Update", new {id = role.Id})',
+                         'Edit Role')"
+                           title="Edit role"
+                           class="btn btn-sm btn-default">
                             @* <span class="badge badge-warning" > *@
-                                <i class="fas fa-edit"></i>
+                            <i class="fas fa-edit"></i>
                             @* </span> *@
                         </a>
                         <th:a asp-controller="Role"
                               asp-action="Delete"
                               asp-route-id="@role.Id" class="btn btn-sm btn-default btn-delete" title="Delete role">
                             @* <span class="badge badge-danger" > *@
-                                <i class="fas fa-trash"></i>
+                            <i class="fas fa-trash"></i>
                             @* </span> *@
                         </th:a>
                     </td>
@@ -80,12 +67,32 @@
     <!-- /.card-body -->
 </div>
 <!-- /.card -->
-<th:partial name="Partials/_DynamicModalPopup" model="Model" view-data="ViewData"></th:partial>
+
+<div class="modal fade" id="add-user">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Role</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <th:form class="" asp-controller="Role" asp-action="Create" method="post">
+                <div class="modal-body">
+                    <th:partial name="_RoleForm" model="newRole"/>
+                </div>
+            </th:form>
+        </div>
+    </div>
+</div>
+<th:partial name="Partials/_EditModal" model="newRole" view-data="ViewData"/>
 
 @section scripts
 {
     <th:partial name="_ValidationScriptsPartial"></th:partial>
     <th:partial name="Partials/_ToastScript"></th:partial>
+
+    <th:script src="~/js/edit-form.js"></th:script>
     <script>
                 // useSubmitClass();
                 useDeleteConfirmation();

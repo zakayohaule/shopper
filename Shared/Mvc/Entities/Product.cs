@@ -20,7 +20,7 @@ namespace Shared.Mvc.Entities
         [Column("slug")]
         public string Slug { get; set; }
 
-        [Column("product_category_id"), Required, Display(Name = "product category")]
+        [Column("product_category_id"), Required, Display(Name = "Product category")]
         public ushort ProductCategoryId { get; set; }
 
         [ForeignKey(nameof(ProductCategoryId))]

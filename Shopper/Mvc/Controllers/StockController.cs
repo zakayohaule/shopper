@@ -32,7 +32,7 @@ namespace Shopper.Mvc.Controllers
             ViewData["Products"] = _productService.GetProductsSelectListItems();
             var stockedProducts = _productService.GetStockedProducts();
 
-            // return Ok(stockedProducts);
+            AddPageHeader("");
             return View(stockedProducts);
         }
 

@@ -29,5 +29,6 @@ namespace Shopper.Services.Interfaces
         Task<bool> HasAttributes(uint productId, List<ushort> attributes);
         Task DeleteProductAsync(Product productGroup);
         Task DeleteSkuAsync(Sku sku);
+        Task<ViewProductModel> GetProductViewModelAsync(Product product);
     }
 }

@@ -21,6 +21,14 @@ namespace Shopper.Services.Implementations
             _dbContext = dbContext;
         }
 
+        public async Task<List<SaleInvoice>> GetSaleInvoicesAsync()
+        {
+            return await _dbContext.SaleInvoices
+                .Where(si => si.IsCompleted)
+                .OrderByDescending(si => si.Date)
+                .ToListAsync();
+        }
+
         public async Task<List<SelectListItem>> GetProductsSelectListItemsForSaleASync()
         {
             return await _dbContext.Products
@@ -163,6 +171,10 @@ namespace Shopper.Services.Implementations
                     .Include(si => si.Sales)
                     .ThenInclude(s => s.Sku)
                     .ThenInclude(s => s.Product)
+                    .Include(si => si.Sales)
+                    .ThenInclude(s => s.Sku)
+                    .ThenInclude(s => s.SkuAttributes)
+                    .ThenInclude(s => s.Option)
                     .FirstAsync(si => !si.IsCompleted);
             }
 

@@ -44,6 +44,25 @@ namespace Shopper.Mvc.Controllers
             return View(products);
         }
 
+        [Permission("product_view"), Toast]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Show(uint id)
+        {
+            var product = await _productService
+                .FindByIdAsyncQ(id)
+                .Include(p => p.Skus)
+                .ThenInclude(s => s.SkuAttributes)
+                .ThenInclude(sa => sa.Option)
+                .FirstOrDefaultAsync();
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            // ViewProductModel viewModel = await _productService.GetProductViewModelAsync(product);
+            return View(product);
+        }
+
         [HttpPost(""), Permission("product_add"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductFormModel newProduct)
         {

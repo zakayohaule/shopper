@@ -233,5 +233,10 @@ namespace Shopper.Services.Implementations
             _dbContext.Skus.Remove(sku);
             await _dbContext.SaveChangesAsync();
         }
+
+        public Task<ViewProductModel> GetProductViewModelAsync(Product product)
+        {
+            return null;
+        }
     }
 }

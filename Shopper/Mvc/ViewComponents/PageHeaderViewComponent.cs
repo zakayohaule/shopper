@@ -16,7 +16,7 @@ namespace Shopper.Mvc.ViewComponents
 
             if (ViewBag.PageHeader == null)
             {
-                message = Tuple.Create(string.Empty, string.Empty);
+                message = Tuple.Create(ViewData["Title"]?.ToString(), string.Empty);
             }
             else
             {

@@ -24,9 +24,17 @@ namespace Shopper.Mvc.Controllers
         [HttpGet(""), Permission("sale_view"), Toast]
         public async Task<IActionResult> Index()
         {
+            AddPageHeader("Sale invoice list");
+            var invoices = await _saleService.GetSaleInvoicesAsync();
+            return View(invoices);
+        }
+
+        [HttpGet("add-sale"), Permission("sale_record"), Toast]
+        public async Task<IActionResult> Create()
+        {
             var invoice = await _saleService.GetInCompleteInvoiceAsync();
             var productSelectItems = await _saleService.GetProductsSelectListItemsForSaleASync();
-            SaleViewModal viewModel = null;
+            SaleViewModal viewModel;
             if (invoice != null)
             {
                 viewModel = new SaleViewModal
@@ -85,7 +93,7 @@ namespace Shopper.Mvc.Controllers
                 ToastError(e.Message);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Create");
         }
 
         [HttpPost("{id}/update-sale"), ValidateAntiForgeryToken]

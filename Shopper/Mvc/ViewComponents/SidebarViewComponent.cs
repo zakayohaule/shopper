@@ -14,12 +14,9 @@ namespace Shopper.Mvc.ViewComponents
         private readonly IUserClaimService _userClaimService;
         private long UserId { get; set; }
 
-        private string UserManagementPermissions { get; }
-
         public SidebarViewComponent(IUserClaimService userClaimService)
         {
             _userClaimService = userClaimService;
-            UserManagementPermissions = "user_view,role_view";
         }
 
         public IViewComponentResult Invoke(long userId)
@@ -30,9 +27,13 @@ namespace Shopper.Mvc.ViewComponents
 
             // sidebars.Add(ModuleHelper.AddHeader("  User Management"));
 
+            if (_userClaimService.HasPermission(userId, "sale_record"))
+            {
+                sidebars.Add(ModuleHelper.AddModuleLink("Add Sale", Url.Action("Create", "Sale"), "fas fa-shopping-cart"));
+            }
 
             //User Management Module
-            if (_userClaimService.HasAnyPermission(userId, UserManagementPermissions))
+            if (_userClaimService.HasAnyPermission(userId, "user_view,role_view"))
             {
                 var userManagement = ModuleHelper.AddTree("User Management", "fa fa-users");
                 links = new List<SidebarMenu>();
@@ -93,7 +94,7 @@ namespace Shopper.Mvc.ViewComponents
                 }
                 if (_userClaimService.HasPermission(userId, "sale_view"))
                 {
-                    links.Add(ModuleHelper.AddModuleLink("Sales", Url.Action("Index", "Sale")));
+                    links.Add(ModuleHelper.AddModuleLink("Sale Invoices", Url.Action("Index", "Sale")));
                 }
 
                 productManagement.TreeChild = links;

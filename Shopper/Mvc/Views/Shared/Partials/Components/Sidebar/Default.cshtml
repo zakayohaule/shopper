@@ -57,7 +57,8 @@
                     {
                         var active = string.Empty;
                         var menuopen = string.Empty;
-                        if (menu.TreeChild.Any(x => @Context.Request.Path.Value.Contains(x.URLPath)))
+                        var pathValue = Context.Request.Path.Value;
+                        if (menu.TreeChild.Any(x => pathValue.Contains(x.URLPath) && !pathValue.Contains("add-sale")))
                         {
                             active = "active";
                             menuopen = "menu-open";

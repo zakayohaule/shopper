@@ -1,0 +1,153 @@
+﻿@model Shopper.Mvc.ViewModels.SaleViewModal;
+
+@{
+    Layout = "_Layout";
+    var today = DateTime.Now;
+    var productSelectItems = Model.ProductSelectListItems;
+}
+
+@section css {
+    <th:partial name="Partials/_DtCss"></th:partial>
+    <th:link rel="stylesheet" href="~/plugins/select2/css/select2.min.css"></th:link>
+    <th:link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"></th:link>
+    <!-- Toastr -->
+    <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
+}
+
+<div class="card with-border">
+    <div class="card-header border-0">
+        <div class="d-flex justify-content-between">
+            <h3 class="card-title">Manage Sale</h3>
+            <span class="pull pull-right" style="font-weight: bolder">@today.ToLongDateString()</span>
+        </div>
+    </div>
+    <!-- /.card-header -->
+
+    <div class="card-body">
+        <div class="row">
+            <table class="table table-borderless col-md-12" id="sales">
+                <thead>
+                <tr>
+                    <th style="width:40%"></th>
+                    <th style="width:20%"></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr id="row_1">
+                    <td>
+                        <th:select class="form-control select2bs4" name="products" id="products" asp-items="productSelectItems">
+                            <option value="">-- Select Product --</option>
+                        </th:select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary" onclick="openSalesModal()">
+                            <i class="fa fa-cart-arrow-down"></i> Add To Cart
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th style="width: 35%">Name</th>
+                        <th style="width: 15%; text-align: center">Quantity</th>
+                        <th style="width: 15%; text-align: center">Unit Price</th>
+                        <th style="width: 25%; text-align: center">Amount</th>
+                        <th style="width: 10%; text-align: center"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="sales-table">
+                    @foreach (var sale in Model.Sales)
+                    {
+                        <tr>
+                            <td>@sale.Sku.Product.Name [ @string.Join(" - ", sale.Sku.SkuAttributes.Select(skuAtt => skuAtt.Option.Name))]</td>
+                            <td style="text-align: center">@sale.Quantity.ToString("N0")</td>
+                            <td style="text-align: center">@sale.Price.ToString("N0")/-</td>
+                            <td style="text-align: center">@((sale.Price * sale.Quantity).ToString("N0"))/-</td>
+                            <td>
+                                <th:a onclick="openFormModal('@Url.Action("OpenSaleEditModal", new {id = sale.Id})',
+                                                     'Edit Sale', null,  true)"
+                                      class="btn btn-default btn-sm" title="Edit sale">
+                                    <i class="fas fa-edit"></i>
+                                </th:a>
+
+                                <th:a asp-action="DeleteSale"
+                                      asp-route-id="@sale.Id" class="btn btn-default btn-sm btn-delete" title="Delete sale">
+                                    @* <span class="badge badge-danger" title="Delete product"> *@
+                                    <i class="fas fa-trash"></i>
+                                    @* </span> *@
+                                </th:a>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-8"></div>
+            <div class="col-4">
+                <div class="table-responsive">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th style="font-weight: normal">Discount:</th>
+                            <td style="font-weight: bolder">@Model.TotalDiscount.ToString("N0")/=</td>
+                        </tr>
+                        <tr>
+                            <th style="font-weight: normal">Total:</th>
+                            <td style="font-weight: bolder" id="total-amount">@Model.TotalAmount.ToString("N0")/=</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+
+        <th:form asp-controller="Sale" asp-action="SubmitPayment" asp-route-id="@Model.InvoiceId" class="form">
+            <div class="row">
+                <div class="col-sm-12 text-right">
+                    <button onclick="return confirm('Are you sure you want to cancel this payment?')" type="submit" class="btn btn-danger" name="action" value="cancel">Cancel</button>
+                    <button onclick="return confirm('Are you sure you want to submit this payment?')" type="submit" class="btn btn-success" name="action" value="submit">Sumbit Payment</button>
+                </div>
+            </div>
+        </th:form>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->
+<th:partial name="Partials/_DynamicModalPopup" model="Model" view-data="ViewData"></th:partial>
+
+@section scripts
+{
+    <th:partial name="Partials/_DtJs"></th:partial>
+    <!-- Select2 -->
+    <th:script src="~/plugins/select2/js/select2.full.min.js"></th:script>
+
+    <!-- Number formatter -->
+    <th:script src="~/js/number-formatter.js"></th:script>
+
+
+    <script >
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+          theme: 'bootstrap4'
+        })
+
+        // useSubmitClass();
+        useDeleteConfirmation();
+        function openSalesModal(){
+        var selected = $("#products option:selected");
+        console.log("The selected product is: " + selected.html() + " ("+selected.val() + ")");
+        if (selected.val()){
+            openFormModal("/sales/" + selected.val() + "/open-sales-modal", 'Record Sale - ' + selected.html() , 'md', true);
+        }}
+    </script>
+    <th:partial name="Partials/_ToastScript"></th:partial>
+}

@@ -9,6 +9,7 @@ namespace Shopper.Services.Interfaces
 {
     public interface ISaleService
     {
+        public Task<List<SaleInvoice>> GetSaleInvoicesAsync();
         public Task<List<SelectListItem>> GetProductsSelectListItemsForSaleASync();
         public IQueryable<Sku> GetProductSkus(uint id);
         public Task<SaleInvoice> FindInvoiceByIdAsync(ulong id);

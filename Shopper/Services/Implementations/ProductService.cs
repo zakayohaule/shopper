@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Extensions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting.Internal;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities;
 using Shopper.Database;
@@ -125,10 +128,10 @@ namespace Shopper.Services.Implementations
             return product;
         }
 
-        public async Task<Product> CreateProductAsync(ProductFormModel newProduct)
+        public async Task<Product> CreateProductAsync(ProductFormModel newProduct, string imageName)
         {
             var product = await _dbContext.Products.AddAsync(new Product
-                {Name = newProduct.Name, ProductCategoryId = newProduct.ProductCategoryId});
+                {Name = newProduct.Name, ProductCategoryId = newProduct.ProductCategoryId, ImagePath = imageName});
 
             if (newProduct.Attributes.Any())
             {
@@ -139,11 +142,17 @@ namespace Shopper.Services.Implementations
             }
 
             await _dbContext.SaveChangesAsync();
+
             return product.Entity;
         }
 
-        public async Task<Product> UpdateProductAsync(ProductFormModel productModel, Product productToUpdate)
+        public async Task<Product> UpdateProductAsync(ProductFormModel productModel, Product productToUpdate,
+            string imageName)
         {
+            if (!imageName.IsNullOrEmpty())
+            {
+                productToUpdate.ImagePath = imageName;
+            }
             productToUpdate.Name = productModel.Name;
             productToUpdate.ProductCategoryId = productModel.ProductCategoryId;
             // productToUpdate.Attributes.Clear();

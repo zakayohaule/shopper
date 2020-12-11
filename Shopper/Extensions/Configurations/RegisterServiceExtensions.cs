@@ -31,6 +31,7 @@ namespace Shopper.Extensions.Configurations
             services.AddScoped<IAttributeService, AttributeService>();
             services.AddScoped<IAttributeOptionService, AttributeOptionService>();
             services.AddScoped<ISaleService, SaleService>();
+            services.AddScoped<IFileUploadService, FileUploadService>();
         }
     }
 }

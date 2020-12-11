@@ -46,6 +46,8 @@
     <ItemGroup>
       <Folder Include="Migrations" />
       <Folder Include="wwwroot\plugins\select2-4.0.5" />
+      <Folder Include="wwwroot\uploads\products" />
+      <Folder Include="wwwroot\uploads\products\kea_db" />
     </ItemGroup>
 
     <ItemGroup>

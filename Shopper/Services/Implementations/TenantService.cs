@@ -3,6 +3,7 @@ using IdentityServer4.Stores.Serialization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Shopper.Extensions.Helpers;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Services.Implementations
@@ -28,22 +29,13 @@ namespace Shopper.Services.Implementations
             if (!httpContext.User.IsAuthenticated())
             {
                 return GetTenantFromSubDomain();
-            } 
+            }
             return GetTenantFromSubDomain();
         }
 
         private string GetTenantFromSubDomain()
         {
-            var subDomain = string.Empty;
-            var host = _httpContextAccessor.HttpContext.Request.Host.Host;
-
-            if (!string.IsNullOrWhiteSpace(host))
-            {
-                if (host.Contains("."))
-                {
-                    subDomain = host.Split('.')[0];
-                }
-            }
+            var subDomain = _httpContextAccessor.HttpContext.GetTenantFromSubdomain();
 
             if (string.IsNullOrEmpty(subDomain))
             {

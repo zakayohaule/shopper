@@ -50,9 +50,13 @@ namespace Shopper.Mvc.Controllers
         {
             var product = await _productService
                 .FindByIdAsyncQ(id)
+                .Include(p => p.Attributes)
+                .Include(p => p.ProductCategory)
                 .Include(p => p.Skus)
                 .ThenInclude(s => s.SkuAttributes)
                 .ThenInclude(sa => sa.Option)
+                .Include(p => p.Skus)
+                .ThenInclude(s => s.Sales)
                 .FirstOrDefaultAsync();
             if (product == null)
             {
@@ -64,7 +68,7 @@ namespace Shopper.Mvc.Controllers
         }
 
         [HttpPost(""), Permission("product_add"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProductFormModel newProduct)
+        public async Task<IActionResult> Create(ProductFormModel newProduct, [FromServices] IFileUploadService fileUploadService)
         {
             // return Ok(newProduct);
             if (_productService.IsDuplicate(newProduct.Name, newProduct.Id))
@@ -73,7 +77,9 @@ namespace Shopper.Mvc.Controllers
                 return RedirectToAction("Index");
             }
 
-            var product = await _productService.CreateProductAsync(newProduct);
+            var imageName = await fileUploadService.UploadProductImageAsync(newProduct.Image);
+
+            var product = await _productService.CreateProductAsync(newProduct, imageName);
 
             // return Ok(newProduct);
             if (product.IsNotNull())
@@ -90,7 +96,7 @@ namespace Shopper.Mvc.Controllers
 
 
         [HttpPost("{id}", Name = "product-edit"), Permission("product_edit"), ValidateAntiForgeryToken,]
-        public async Task<IActionResult> Update(uint id, ProductFormModel formModel)
+        public async Task<IActionResult> Update(uint id, ProductFormModel formModel, [FromServices] IFileUploadService fileUploadService)
         {
             if (_productService.IsDuplicate(formModel.Name, formModel.Id))
             {
@@ -105,7 +111,12 @@ namespace Shopper.Mvc.Controllers
                 return NotFound($"Product with id {id} not found");
             }
 
-            product = await _productService.UpdateProductAsync(formModel, product);
+            var imageName = "";
+            if (formModel.Image != null)
+            {
+                imageName = await fileUploadService.UploadProductImageAsync(formModel.Image);
+            }
+            product = await _productService.UpdateProductAsync(formModel, product, imageName);
 
             ToastSuccess("Product edited successfully!");
             return RedirectToAction("Index");

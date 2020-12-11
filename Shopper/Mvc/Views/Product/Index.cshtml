@@ -5,6 +5,7 @@
     Layout = "_Layout";
     var newProduct = new ProductFormModel();
     ViewData["FormName"] = "_ProductForm";
+    ViewData["AllowFileUpload"] = true;
 }
 
 @section css {
@@ -89,7 +90,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <th:form class="" id="form" asp-controller="Product" asp-action="Create" method="post">
+                <th:form class="" enctype="multipart/form-data" id="form" asp-controller="Product" asp-action="Create" method="post">
                     <th:partial name="_ProductForm" model="newProduct"/>
                 </th:form>
             </div>

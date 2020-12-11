@@ -12,7 +12,6 @@ using Shared.Mvc.Entities;
 using Shopper.Attributes;
 using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
-using SixLabors.ImageSharp;
 
 namespace Shopper.Mvc.Controllers
 {

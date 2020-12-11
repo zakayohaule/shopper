@@ -1,5 +1,11 @@
 @{
     var partialName = ViewData["FormName"];
+    var enctype = "application/x-www-form-urlencoded";
+    if (ViewData["AllowFileUpload"] != null)
+    {
+        var allowFileUploads = (bool)ViewData["AllowFileUpload"];
+        enctype = allowFileUploads ? "multipart/form-data" : enctype;
+    }
 }
 <div class="modal fade" id="edit-modal">
     <div class="modal-dialog modal-lg" id="modal-dialog">
@@ -11,7 +17,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <th:form class="" id="edit-form" method="post">
+                <th:form class="" enctype="@enctype" id="edit-form" method="post">
                     <th:partial name="@partialName" view-data="ViewData"/>
                 </th:form>
             </div>

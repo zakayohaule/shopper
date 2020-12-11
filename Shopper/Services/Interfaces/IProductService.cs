@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Shared.Mvc.Entities;
 using Shopper.Mvc.ViewModels;
@@ -21,8 +22,8 @@ namespace Shopper.Services.Interfaces
         List<Product> GetStockedProducts();
         public bool IsDuplicate(string name, uint id);
         public Task<bool> ExistsByIdAsync(uint id);
-        Task<Product> CreateProductAsync(ProductFormModel newProduct);
-        Task<Product> UpdateProductAsync(ProductFormModel newProduct, Product productToUpdate);
+        Task<Product> CreateProductAsync(ProductFormModel newProduct, string imageName);
+        Task<Product> UpdateProductAsync(ProductFormModel newProduct, Product productToUpdate, string imageName);
 
         Task<Sku> AddProductToStockAsync(Sku sku, List<ushort> attributeOptions);
         Task<Sku> UpdateStockItemAsync(Sku sku,Sku updated, List<ushort> attributeOptionIds);

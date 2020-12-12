@@ -12,6 +12,7 @@ namespace Shopper.Services.Interfaces
     public interface IProductService
     {
         Task<Product> FindByIdAsync(uint id);
+        Task<ProductImage> FindProductImageByIdAsync(ulong id);
         IQueryable<Sku> FindSkuByIdAsync(ulong skuId);
         IQueryable<Product> FindByIdAsyncQ(uint id);
         IQueryable<Product> GetAllProducts();
@@ -22,7 +23,7 @@ namespace Shopper.Services.Interfaces
         List<Product> GetStockedProducts();
         public bool IsDuplicate(string name, uint id);
         public Task<bool> ExistsByIdAsync(uint id);
-        Task<Product> CreateProductAsync(ProductFormModel newProduct, string imageName);
+        Task<Product> CreateProductAsync(ProductFormModel newProduct);
         Task<Product> UpdateProductAsync(ProductFormModel newProduct, Product productToUpdate, string imageName);
 
         Task<Sku> AddProductToStockAsync(Sku sku, List<ushort> attributeOptions);
@@ -30,6 +31,10 @@ namespace Shopper.Services.Interfaces
         Task<bool> HasAttributes(uint productId, List<ushort> attributes);
         Task DeleteProductAsync(Product productGroup);
         Task DeleteSkuAsync(Sku sku);
-        Task<ViewProductModel> GetProductViewModelAsync(Product product);
+        Task AddProductImages(Product product, ImagesUploadModel viewModel);
+        Task DeleteProductMainImage(Product product);
+        Task DeleteProductImageAsync(ProductImage image);
+        Task UpdateMainImage(Product product, UpdateImageModel imageModel);
+        Task UpdateProductImageAsync(ProductImage image, UpdateImageModel imageModel);
     }
 }

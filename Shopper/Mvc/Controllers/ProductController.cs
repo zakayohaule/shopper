@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -50,6 +51,7 @@ namespace Shopper.Mvc.Controllers
         {
             var product = await _productService
                 .FindByIdAsyncQ(id)
+                .Include(p => p.Images)
                 .Include(p => p.Attributes)
                 .Include(p => p.ProductCategory)
                 .Include(p => p.Skus)
@@ -57,6 +59,7 @@ namespace Shopper.Mvc.Controllers
                 .ThenInclude(sa => sa.Option)
                 .Include(p => p.Skus)
                 .ThenInclude(s => s.Sales)
+                .ThenInclude(sale => sale.SaleInvoice)
                 .FirstOrDefaultAsync();
             if (product == null)
             {
@@ -76,10 +79,7 @@ namespace Shopper.Mvc.Controllers
                 ToastError($"Product with name {newProduct.Name} already exists! Please use another name.");
                 return RedirectToAction("Index");
             }
-
-            var imageName = await fileUploadService.UploadProductImageAsync(newProduct.Image);
-
-            var product = await _productService.CreateProductAsync(newProduct, imageName);
+            var product = await _productService.CreateProductAsync(newProduct);
 
             // return Ok(newProduct);
             if (product.IsNotNull())
@@ -153,16 +153,85 @@ namespace Shopper.Mvc.Controllers
         [HttpGet("{id}/delete", Name = "product-delete"), Permission("product_delete")]
         public async Task<IActionResult> Delete(ushort id)
         {
-            var productGroup = await _productService.FindByIdAsync(id);
-            if (productGroup.IsNull())
+            var product = await _productService.FindByIdAsync(id);
+            if (product.IsNull())
             {
                 return NotFound();
             }
 
-            await _productService.DeleteProductAsync(productGroup);
+            await _productService.DeleteProductAsync(product);
 
             ToastSuccess("Product deleted successfully!");
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost("{id}/add-images"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddImages(uint id, ImagesUploadModel model)
+        {
+            var product = await _productService.FindByIdAsync(id);
+            if (product.IsNull())
+            {
+                return NotFound();
+            }
+
+            await _productService.AddProductImages(product, model);
+            return RedirectToAction("Show", new {id = id});
+        }
+
+        [HttpGet("{id}/delete-main-image")]
+        public async Task<IActionResult> DeleteMainImage(uint id)
+        {
+            var product = await _productService.FindByIdAsync(id);
+            if (product.IsNull())
+            {
+                return NotFound();
+            }
+
+            await _productService.DeleteProductMainImage(product);
+
+            return RedirectToAction("Show", new {id = id});
+        }
+
+        [HttpGet("{id}/delete-other-product-image")]
+        public async Task<IActionResult> DeleteOtherImage(ulong id)
+        {
+            var image = await _productService.FindProductImageByIdAsync(id);
+            if (image.IsNull())
+            {
+                return NotFound();
+            }
+
+            await _productService.DeleteProductImageAsync(image);
+
+            return RedirectToAction("Show", new {id = image.ProductId});
+        }
+
+        [HttpPost("{id}/update-main-image"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateMainImage(uint id, UpdateImageModel imageModel)
+        {
+            var product = await _productService.FindByIdAsync(id);
+            if (product.IsNull())
+            {
+                return NotFound();
+            }
+
+            await _productService.UpdateMainImage(product, imageModel);
+
+            return RedirectToAction("Show", new {id = id});
+        }
+
+        [HttpPost("{id}/update-other-image"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateOtherImage(ulong id, UpdateImageModel imageModel)
+        {
+            var image = await _productService.FindProductImageByIdAsync(id);
+            if (image.IsNull())
+            {
+                return NotFound();
+            }
+
+            await _productService.UpdateProductImageAsync(image,imageModel);
+
+            return RedirectToAction("Show", new {id = image.ProductId});
         }
     }
 }

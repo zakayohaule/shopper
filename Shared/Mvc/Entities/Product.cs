@@ -31,5 +31,8 @@ namespace Shared.Mvc.Entities
 
         [InverseProperty("Product")]
         public ICollection<ProductAttribute> Attributes { get; set; }
+
+        [InverseProperty("Product")]
+        public ICollection<ProductImage> Images { get; set; }
     }
 }

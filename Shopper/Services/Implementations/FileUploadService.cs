@@ -24,6 +24,8 @@ namespace Shopper.Services.Implementations
 
         public async Task<string> UploadProductImageAsync(IFormFile formFile)
         {
+            // @todo validate file type to only images
+
             var tenant = _tenantService.GetCurrentTenant();
             var webRoot = $"{_hostEnvironment.ContentRootPath}/wwwroot";
             var imageUploadPath = @$"{webRoot}/uploads/products/{tenant}/";
@@ -33,7 +35,7 @@ namespace Shopper.Services.Implementations
             }
 
             var image = await Image.LoadAsync(formFile.OpenReadStream());
-            image.Mutate(x => x.Resize(500,380));
+            image.Mutate(x => x.Resize(500,250));
             var ext = formFile.FileName.Split(".")[1];
             if (ext.IsNullOrEmpty())
             {

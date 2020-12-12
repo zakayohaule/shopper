@@ -20,14 +20,22 @@ namespace Shopper.Services.Implementations
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public ProductService(ApplicationDbContext dbContext)
+        private readonly IFileUploadService _fileUploadService;
+
+        public ProductService(ApplicationDbContext dbContext, IFileUploadService fileUploadService)
         {
             _dbContext = dbContext;
+            _fileUploadService = fileUploadService;
         }
 
         async Task<Product> IProductService.FindByIdAsync(uint id)
         {
             return await _dbContext.Products.FindAsync(id);
+        }
+
+        public async Task<ProductImage> FindProductImageByIdAsync(ulong id)
+        {
+            return await _dbContext.ProductImages.FindAsync(id);
         }
 
         public IQueryable<Sku> FindSkuByIdAsync(ulong id)
@@ -128,8 +136,14 @@ namespace Shopper.Services.Implementations
             return product;
         }
 
-        public async Task<Product> CreateProductAsync(ProductFormModel newProduct, string imageName)
+        public async Task<Product> CreateProductAsync(ProductFormModel newProduct)
         {
+            string imageName = null;
+            if (newProduct.Image != null)
+            {
+                imageName = await _fileUploadService.UploadProductImageAsync(newProduct.Image);
+            }
+
             var product = await _dbContext.Products.AddAsync(new Product
                 {Name = newProduct.Name, ProductCategoryId = newProduct.ProductCategoryId, ImagePath = imageName});
 
@@ -243,9 +257,50 @@ namespace Shopper.Services.Implementations
             await _dbContext.SaveChangesAsync();
         }
 
-        public Task<ViewProductModel> GetProductViewModelAsync(Product product)
+        public async Task AddProductImages(Product product, ImagesUploadModel viewModel)
         {
-            return null;
+            if (viewModel.MainImage != null)
+            {
+                product.ImagePath = await _fileUploadService.UploadProductImageAsync(viewModel.MainImage);
+                _dbContext.Products.Update(product);
+            }
+
+            if (viewModel.Images.IsNotNull() && viewModel.Images.Count > 0)
+            {
+                foreach (var viewModelImage in viewModel.Images)
+                {
+                    var image = new ProductImage();
+                    image.Product = product;
+                    image.ImagePath = await _fileUploadService.UploadProductImageAsync(viewModelImage);
+                    _dbContext.ProductImages.Add(image);
+                }
+            }
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteProductMainImage(Product product)
+        {
+            product.ImagePath = null;
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteProductImageAsync(ProductImage image)
+        {
+            _dbContext.ProductImages.Remove(image);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateMainImage(Product product, UpdateImageModel imageModel)
+        {
+            product.ImagePath = await _fileUploadService.UploadProductImageAsync(imageModel.Image);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateProductImageAsync(ProductImage image, UpdateImageModel imageModel)
+        {
+            image.ImagePath = await _fileUploadService.UploadProductImageAsync(imageModel.Image);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

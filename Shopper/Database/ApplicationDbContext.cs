@@ -48,6 +48,7 @@ namespace Shopper.Database
         public DbSet<AttributeOption> AttributeOptions { get; set; }
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Sku> Skus { get; set; }
         public DbSet<SkuAttribute> SkuAttributes { get; set; }
         public DbSet<PriceType> PriceTypes { get; set; }

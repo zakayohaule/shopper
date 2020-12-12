@@ -1,0 +1,58 @@
+@model Product
+
+@{
+    var product = Model;
+}
+<table class="table table-bordered table-hover" style="text-align: center;">
+    <thead>
+    <tr>
+        <th style="width: 10px;">#</th>
+        @if (product.Skus.Any(sku => sku.SkuAttributes.Any()))
+        {
+            <th>Attributes</th>
+        }
+        <th>Quantity</th>
+        <th>Remaining Quantity</th>
+        <th>Buying Price</th>
+        <th>Selling Price</th>
+        <th>Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    @{
+        int index = 0;
+    }
+    @foreach (var sku in Model.Skus.OrderByDescending(s => s.Date))
+    {
+        index++;
+        <tr>
+            <td>@index</td>
+            @if (product.Skus.Any(sku1 => sku1.SkuAttributes.Any()))
+            {
+                <td style="font-weight: bolder">
+                    @string.Join(" - ", sku.SkuAttributes.Select(skuAtt => skuAtt.Option.Name))
+                </td>
+            }
+            else
+            {
+                <td style="font-weight: bolder">
+                    N/A
+                </td>
+            }
+            <td>@sku.Quantity</td>
+            <td>@sku.RemainingQuantity</td>
+            <td>@sku.BuyingPrice.ToString("N0")/-</td>
+            <td>@sku.SellingPrice.ToString("N0")/-</td>
+            <td>@sku.Date.ToString("dd-MM-yyyy")</td>
+        </tr>
+    }
+    </tbody>
+    <tfoot>
+    <tr>
+        <th colspan="2">Total</th>
+        <th>@product.Skus.Sum(sku => sku.Quantity)</th>
+        <th>@product.Skus.Sum(sku => sku.RemainingQuantity)</th>
+        <th>@product.Skus.Sum(sku => sku.Quantity * sku.BuyingPrice).ToString("N0")/-</th>
+    </tr>
+    </tfoot>
+</table>

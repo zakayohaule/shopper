@@ -1,0 +1,16 @@
+@model Shopper.Mvc.ViewModels.UpdateImageModel;
+
+<div class="form-group">
+    <fieldset>
+        <legend>Upload Image</legend>
+        <div class="custom-file">
+            <th:input asp-for="Image" class="custom-file-input" id="exampleInputFile"></th:input>
+            <label class="custom-file-label" for="exampleInputFile">Upload Image</label>
+        </div>
+        <th:span asp-validation-for="Image" class="text-danger"></th:span>
+    </fieldset>
+</div>
+
+<div class="form-group col-12 text-right">
+    <button type="submit" class="btn btn-primary" name="button">Submit</button>
+</div>

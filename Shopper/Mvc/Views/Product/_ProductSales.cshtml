@@ -1,0 +1,64 @@
+@model Product
+
+@{
+    var product = Model;
+}
+<table class="table table-bordered table-hover" style="text-align: center;">
+    <thead>
+    <tr>
+        <th style="width: 10px;">#</th>
+        @if (product.Skus.Any(sku => sku.SkuAttributes.Any()))
+        {
+            <th>Attributes</th>
+        }
+        <th>Date</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Total Amount</th>
+        <th>Total Profit</th>
+        <th>Total Discount</th>
+    </tr>
+    </thead>
+    <tbody>
+    @{
+        int index = 0;
+    }
+    @foreach (var sku in Model.Skus.OrderByDescending(s => s.Date))
+    {
+        @foreach (var sale in sku.Sales.OrderByDescending(s => s.SaleInvoice.Date))
+        {
+            index++;
+            <tr>
+                <td>@index</td>
+                @if (product.Skus.Any(sku1 => sku1.SkuAttributes.Any()))
+                {
+                    <td style="font-weight: bolder">
+                        @string.Join(" - ", sku.SkuAttributes.Select(skuAtt => skuAtt.Option.Name))
+                    </td>
+                }
+                else
+                {
+                    <td style="font-weight: bolder">
+                        N/A
+                    </td>
+                }
+                <td>@sale.SaleInvoice.Date.ToString("dd-MM-yyyy")</td>
+                <td>@sale.Price.ToString("N0")/-</td>
+                <td>@sale.Quantity</td>
+                <td>@((sale.Price * sale.Quantity).ToString("N0"))/-</td>
+                <td>@((sale.Profit * sale.Quantity).ToString("N0"))/-</td>
+                <td>@((sale.Discount * sale.Quantity).ToString("N0"))/-</td>
+            </tr>
+        }
+    }
+    </tbody>
+    <tfoot>
+    <tr>
+        <th colspan="4">Total</th>
+        <th>@product.Skus.Sum(sku => sku.Sales.Sum(s => s.Quantity))</th>
+        <th>@product.Skus.Sum(sku => sku.Sales.Sum(sale => sale.Price * sale.Quantity)).ToString("N0")/-</th>
+        <th>@product.Skus.Sum(sku => sku.Sales.Sum(sale => sale.Profit * sale.Quantity)).ToString("N0")/-</th>
+        <th>@product.Skus.Sum(sku => sku.Sales.Sum(sale => sale.Discount * sale.Quantity)).ToString("N0")/-</th>
+    </tr>
+    </tfoot>
+</table>

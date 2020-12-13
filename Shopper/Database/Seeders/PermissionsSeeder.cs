@@ -22,7 +22,7 @@ namespace Shopper.Database.Seeders
                 .SingleOrDefault(group => group.Name == "Role Management");
 
             var productGroupManagement =
-                dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Product Group Management"));
+                dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Expenditure Type Management"));
 
             var productCategoryManagement =
                 dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Product Category Management"));
@@ -40,6 +40,9 @@ namespace Shopper.Database.Seeders
                 dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Stock Management"));
             var saleManagement =
                 dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Sale Management"));
+
+            var expenditureManagement =
+                dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Expenditure Management"));
 
             var permissions = new List<Permission>
             {
@@ -74,6 +77,10 @@ namespace Shopper.Database.Seeders
                 new Permission {Name = "product_group_view", DisplayName = "View Product Groups", Module = productGroupManagement},
                 new Permission {Name = "product_group_edit", DisplayName = "Edit Product Groups", Module = productGroupManagement},
                 new Permission {Name = "product_group_delete", DisplayName = "Delete Product Groups", Module = productGroupManagement},
+                new Permission {Name = "expenditure_type_add", DisplayName = "Add Expenditure Types", Module = expenditureManagement},
+                new Permission {Name = "expenditure_type_view", DisplayName = "View Expenditure Types", Module = expenditureManagement},
+                new Permission {Name = "expenditure_type_edit", DisplayName = "Edit Expenditure Types", Module = expenditureManagement},
+                new Permission {Name = "expenditure_type_delete", DisplayName = "Delete Expenditure Types", Module = expenditureManagement},
                 new Permission {Name = "product_add", DisplayName = "Add Products", Module = productManagement},
                 new Permission {Name = "product_view", DisplayName = "View Products", Module = productManagement},
                 new Permission {Name = "product_edit", DisplayName = "Edit Products", Module = productManagement},

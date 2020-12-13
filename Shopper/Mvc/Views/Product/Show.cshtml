@@ -2,6 +2,7 @@
 @using Shopper.Extensions.Helpers
 @using Microsoft.AspNetCore.Http
 @using Shopper.Mvc.ViewModels
+@using IdentityServer4.Extensions
 @model Product;
 @{
     Layout = "_Layout";
@@ -21,6 +22,14 @@
         .product-image-wrapper, .product-image-thumb {
           position: relative;
         ...
+        }
+        .product-image-wrapper #edit-button,
+        .product-image-wrapper #delete-button {
+          visibility: hidden;
+        }
+        .product-image-wrapper:hover #edit-button,
+        .product-image-wrapper:hover #delete-button {
+          visibility: visible;
         }
         .close-button {
           position: absolute;
@@ -45,7 +54,7 @@
         		padding: 10px;
         		position: relative;
         		border-radius:4px;
-        		background-color:#f5f5f5;
+        		/*background-color:#f5f5f5;*/
         		padding-left:10px!important;
         	}
 
@@ -58,7 +67,7 @@
         			border: 1px solid #ddd;
         			border-radius: 4px;
         			padding: 5px 5px 5px 10px;
-        			background-color: #ffffff;
+        			/*background-color: #ffffff;*/
         		}
       </style>
 }
@@ -68,11 +77,18 @@
         <div class="row">
             <div class="col-12 col-sm-6">
                 <div class="col-12 product-image-wrapper">
-                    <th:a class="product-image-delete-link btn-delete" id="delete-button" asp-controller="Product" asp-action="DeleteMainImage" asp-route-id="@product.Id" style="color: red">
-                        <i class="fas fa-times-circle close-button"></i>
-                    </th:a>
-                    <i class="fas fa-edit edit-button" id="edit-button" onclick="openImageEditModal('@Url.Action("UpdateMainImage", "Product", new {id = product.Id})')"></i>
-                    <th:img asp-append-version="true" src="@product.ImagePath.LoadProductImage(ViewContext.HttpContext)" class="product-image" alt="Product Image"/>
+                        @if (!product.ImagePath.IsNullOrEmpty())
+                        {
+                            <th:a class="product-image-delete-link btn-delete" id="delete-button" asp-controller="Product" asp-action="DeleteMainImage" asp-route-id="@product.Id" style="color: red">
+                                <i class="fas fa-times-circle close-button"></i>
+                            </th:a>
+                            <i class="fas fa-edit edit-button" id="edit-button" onclick="openImageEditModal('@Url.Action("UpdateMainImage", "Product", new {id = product.Id})')"></i>
+                            <th:img asp-append-version="true" src="@product.ImagePath.LoadProductImage(ViewContext.HttpContext)" class="product-image" alt="Product Image"/>
+                        }
+                        @*else
+                        {
+                            <th:img asp-append-version="true" src="/images/no-image-2.jpg" class="product-image" alt="Upload product images"/>
+                        }*@
                 </div>
             </div>
             <div class="col-12 col-sm-6">
@@ -94,22 +110,22 @@
                 }
                 <hr>
 
+                <h4>Product images</h4>
                 <div class="col-12 product-image-thumbs">
-                    <div class="product-image-thumb active">
-                        <th:a asp-controller="Product" asp-action="DeleteMainImage" asp-route-id="@product.Id" class="delete-image" hidden>
-                        </th:a>
-                        <i class="fas fa-edit edit-image" hidden onclick="openImageEditModal('@Url.Action("UpdateMainImage", "Product", new {id = product.Id})')"></i>
-                        <th:img asp-append-version="true" src="@product.ImagePath.LoadProductImage(ViewContext.HttpContext)" alt="Product Image"/>
-                    </div>
+                    @if (!product.ImagePath.IsNullOrEmpty())
+                    {
+                        <th:partial name="_ProductMainImage"></th:partial>
+                    }
+                    else
+                    {
+                        <div class="product-image-thumb active">
+                           <th:img asp-append-version="true" src="/images/no-image-2.jpg" class="product-image" alt="Upload product images"/>
+                        </div>
+
+                    }
                     @foreach (var image in product.Images)
                     {
-                        var editLink = $"edit_{image.Id}";
-                        <div class="product-image-thumb">
-                            <th:a asp-controller="Product" asp-action="DeleteOtherImage" asp-route-id="@image.Id" class="delete-image btn-delete" hidden>
-                            </th:a>
-                            <i class="fas fa-edit edit-image" hidden onclick="openImageEditModal('@Url.Action("UpdateOtherImage", "Product", new {id = image.Id})')"></i>
-                            <img src="@image.ImagePath.LoadProductImage(ViewContext.HttpContext)" alt="Product Image">
-                        </div>
+                        <th:partial name="_ProductOtherImage" model="image"></th:partial>
                     }
                     @if (product.Images.Count < 4)
                     {
@@ -191,42 +207,6 @@
             <!-- /.col -->
         </div>
         <!-- /.row -->
-        @*<div class="row">
-            <div class="col-sm-3 col-6">
-                <div class="description-block border-right">
-                    <span class="description-text">Total stock units</span>
-                    <h5 class="description-header">@product.Skus.Sum(s => s.Quantity)</h5>
-                </div>
-                <!-- /.description-block -->
-            </div>
-            <!-- /.col -->
-            <div class="col-sm-3 col-6">
-                <div class="description-block border-right">
-                    $1$ <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span> #1#
-                    <span class="description-text">In stock</span>
-                    <h5 class="description-header">@product.Skus.Where(s => s.RemainingQuantity > 0).Sum(s => s.RemainingQuantity)</h5>
-                </div>
-                <!-- /.description-block -->
-            </div>
-            <!-- /.col -->
-            <div class="col-sm-3 col-6">
-                <div class="description-block border-right">
-                    $1$ <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 20%</span> #1#
-                    <span class="description-text">Total stock value</span>
-                    <h5 class="description-header">@product.Skus.Sum(s => s.BuyingPrice * s.Quantity).ToString("N0")/-</h5>
-                </div>
-                <!-- /.description-block -->
-            </div>
-            <!-- /.col -->
-            <div class="col-sm-3 col-6">
-                <div class="description-block">
-                    $1$ <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span> #1#
-                    <span class="description-text">Total sales</span>
-                    <h5 class="description-header">@product.Skus.Sum(s => s.Sales.Any() ? s.Sales.Select(sale => sale.Price * sale.Quantity).First() : 0).ToString("N0")/-</h5>
-                </div>
-                <!-- /.description-block -->
-            </div>
-        </div>*@
         <div class="row mt-4">
             <nav class="w-100">
                 <div class="nav nav-tabs" id="product-tab" role="tablist">

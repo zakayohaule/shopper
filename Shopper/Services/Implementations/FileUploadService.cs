@@ -35,7 +35,7 @@ namespace Shopper.Services.Implementations
             }
 
             var image = await Image.LoadAsync(formFile.OpenReadStream());
-            image.Mutate(x => x.Resize(500,250));
+            image.Mutate(x => x.Resize(500,380));
             var ext = formFile.FileName.Split(".")[1];
             if (ext.IsNullOrEmpty())
             {

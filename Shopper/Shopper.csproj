@@ -38,24 +38,8 @@
         <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
         <PackageReference Include="SixLabors.ImageSharp" Version="1.0.2" />
     </ItemGroup>
-    
+
     <ItemGroup>
         <ProjectReference Include="..\Shared\Shared.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Migrations" />
-      <Folder Include="wwwroot\plugins\select2-4.0.5" />
-      <Folder Include="wwwroot\uploads\products" />
-      <Folder Include="wwwroot\uploads\products\kea_db" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="wwwroot\dist\img\credit\american-express.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\img\credit\cirrus.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\img\credit\mastercard.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\img\credit\paypal.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\img\credit\paypal2.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\img\credit\visa.png" />
     </ItemGroup>
 </Project>

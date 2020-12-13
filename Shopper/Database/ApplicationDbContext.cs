@@ -55,6 +55,8 @@ namespace Shopper.Database
         public DbSet<SkuSellingPrice> SkuSellingPrices { get; set; }
         public DbSet<Sale> Sales { get; set; }
         public DbSet<SaleInvoice> SaleInvoices { get; set; }
+        public DbSet<ExpenditureType> ExpenditureTypes { get; set; }
+        public DbSet<Expenditure> Expenditures { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -1,0 +1,97 @@
+﻿@model List<ExpenditureType>;
+
+@{
+    Layout = "_Layout";
+    var newExpenditureType = new ExpenditureType();
+    ViewData["FormName"] = "_ExpenditureTypeForm";
+}
+
+@section css {
+    <!-- Toastr -->
+    <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
+}
+
+<div class="card with-border">
+    <div class="card-header">
+        <a href="" data-toggle="modal" data-target="#add-user" class="btn btn-sm btn-primary float-right" title="Add User">
+            <i class="fas fa-user-plus"> Add</i>
+        </a>
+    </div>
+    <!-- /.card-header -->
+
+    <div class="modal fade" id="add-user">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Expenditure Type</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <th:form class="" asp-controller="ExpenditureType" asp-action="Create" method="post">
+                    <div class="modal-body">
+                        <th:partial name="_ExpenditureTypeForm" model="newExpenditureType"/>
+                    </div>
+                </th:form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body table-responsive p-3">
+        <table class="table table-sm table-hover">
+            <thead>
+            <tr>
+                <th style="width: 10px">#</th>
+                <th>Name</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                int index = 0;
+            }
+            @foreach (var expenditureType in Model)
+            {
+                index++;
+                <tr>
+                    <td>@index</td>
+                    <td>@expenditureType.Name</td>
+                    <td>
+                        <a href="#" onclick="openEditModal('@Url.Action("EditExpenditureTypeModal", new {id = expenditureType.Id})',
+                         '@Url.Action("Update", new {id = expenditureType.Id})',
+                         'Edit Expenditure Type')"
+                           class="btn btn-default btn-sm"
+                           title="Edit expenditure type">
+                            @* <span class="badge badge-warning" title="Edit expenditure type"> *@
+                            <i class="fas fa-edit"></i>
+                            @* </span> *@
+                        </a>
+                        <th:a asp-controller="ExpenditureType"
+                              asp-action="Delete"
+                              asp-route-id="@expenditureType.Id" class="btn btn-default btn-sm btn-delete" title="Delete expenditure type">
+                            @* <span class="badge badge-danger" title="Delete expenditure type"> *@
+                            <i class="fas fa-trash"></i>
+                            @* </span> *@
+                        </th:a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->
+
+<th:partial name="Partials/_EditModal" model="newExpenditureType" view-data="ViewData"/>
+
+@section scripts
+{
+    <th:script src="~/js/edit-form.js"></th:script>
+    <th:partial name="_ValidationScriptsPartial"></th:partial>
+    <th:partial name="Partials/_ToastScript"></th:partial>
+    <script>
+                // useSubmitClass();
+                useDeleteConfirmation();
+        </script>
+}

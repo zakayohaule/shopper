@@ -8,7 +8,7 @@ namespace Shared.Common
         {
         }
 
-        public OutOfStockException(string? message) : base(message)
+        public OutOfStockException(string message) : base(message)
         {
         }
     }

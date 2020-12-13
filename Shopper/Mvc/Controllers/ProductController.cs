@@ -66,6 +66,7 @@ namespace Shopper.Mvc.Controllers
                 return NotFound();
             }
 
+            // return Ok(product);
             // ViewProductModel viewModel = await _productService.GetProductViewModelAsync(product);
             return View(product);
         }

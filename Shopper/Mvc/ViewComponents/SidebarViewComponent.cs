@@ -74,6 +74,10 @@ namespace Shopper.Mvc.ViewComponents
                 {
                     links.Add(ModuleHelper.AddModuleLink("Price Types", Url.Action("Index", "PriceType")));
                 }
+                if (_userClaimService.HasPermission(userId, "expenditure_type_view"))
+                {
+                    links.Add(ModuleHelper.AddModuleLink("Expenditure Types", Url.Action("Index", "ExpenditureType")));
+                }
 
                 settings.TreeChild = links;
                 sidebars.Add(settings);

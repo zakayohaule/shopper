@@ -110,14 +110,17 @@
             <!-- /.col -->
         </div>
 
-        <th:form asp-controller="Sale" asp-action="SubmitPayment" asp-route-id="@Model.InvoiceId" class="form">
-            <div class="row">
-                <div class="col-sm-12 text-right">
-                    <button onclick="return confirm('Are you sure you want to cancel this payment?')" type="submit" class="btn btn-danger" name="action" value="cancel">Cancel</button>
-                    <button onclick="return confirm('Are you sure you want to submit this payment?')" type="submit" class="btn btn-success" name="action" value="submit">Sumbit Payment</button>
+        @if (Model.InvoiceId != 0)
+        {
+            <th:form asp-controller="Sale" asp-action="SubmitPayment" asp-route-id="@Model.InvoiceId" class="form">
+                <div class="row">
+                    <div class="col-sm-12 text-right">
+                        <button onclick="return confirm('Are you sure you want to cancel this payment?')" type="submit" class="btn btn-danger" name="action" value="cancel">Cancel</button>
+                        <button onclick="return confirm('Are you sure you want to submit this payment?')" type="submit" class="btn btn-success" name="action" value="submit">Sumbit Payment</button>
+                    </div>
                 </div>
-            </div>
-        </th:form>
+            </th:form>
+        }
     </div>
     <!-- /.card-body -->
 </div>

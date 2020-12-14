@@ -1,8 +1,6 @@
-@using Microsoft.EntityFrameworkCore.Internal
-@using Shopper.Extensions.Helpers
-@using Microsoft.AspNetCore.Http
-@using Shopper.Mvc.ViewModels
 @using IdentityServer4.Extensions
+@using Shopper.Extensions.Helpers
+@using Shopper.Mvc.ViewModels
 @model Product;
 @{
     Layout = "_Layout";
@@ -77,7 +75,9 @@
         <div class="row">
             <div class="col-12 col-sm-6">
                 <div class="col-12 product-image-wrapper">
-                        @if (!product.ImagePath.IsNullOrEmpty())
+                    @if (!product.ImagePath.IsNullOrEmpty() || product.Images.Any())
+                    {
+                        if (!product.ImagePath.IsNullOrEmpty())
                         {
                             <th:a class="product-image-delete-link btn-delete" id="delete-button" asp-controller="Product" asp-action="DeleteMainImage" asp-route-id="@product.Id" style="color: red">
                                 <i class="fas fa-times-circle close-button"></i>
@@ -85,10 +85,20 @@
                             <i class="fas fa-edit edit-button" id="edit-button" onclick="openImageEditModal('@Url.Action("UpdateMainImage", "Product", new {id = product.Id})')"></i>
                             <th:img asp-append-version="true" src="@product.ImagePath.LoadProductImage(ViewContext.HttpContext)" class="product-image" alt="Product Image"/>
                         }
-                        @*else
+                        else if (product.Images.Any())
                         {
-                            <th:img asp-append-version="true" src="/images/no-image-2.jpg" class="product-image" alt="Upload product images"/>
-                        }*@
+                            var image = product.Images.First();
+                            <th:a class="product-image-delete-link btn-delete" id="delete-button" asp-controller="Product" asp-action="DeleteOtherImage" asp-route-id="@image.Id" style="color: red">
+                                <i class="fas fa-times-circle close-button"></i>
+                            </th:a>
+                            <i class="fas fa-edit edit-button" id="edit-button" onclick="openImageEditModal('@Url.Action("UpdateOtherImage", "Product", new {id = image.Id})')"></i>
+                            <th:img asp-append-version="true" src="@image.ImagePath.LoadProductImage(ViewContext.HttpContext)" class="product-image" alt="Product Image"/>
+                        }
+                    }
+                    else
+                    {
+                        <th:img asp-append-version="true" src="/images/no-image-2.jpg" class="product-image" alt="Upload product images"/>
+                    }
                 </div>
             </div>
             <div class="col-12 col-sm-6">
@@ -97,7 +107,7 @@
                 {
                     <hr>
                     <h4>Available Options</h4>
-                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <div class="btn-group btn-group-toggle">
                         @foreach (var skuAtt in product
                             .Skus
                             .Select(sku => string.Join(" - ", sku.SkuAttributes.Select(skuAtt => skuAtt.Option.Name))).ToList().Distinct())
@@ -114,20 +124,13 @@
                 <div class="col-12 product-image-thumbs">
                     @if (!product.ImagePath.IsNullOrEmpty())
                     {
-                        <th:partial name="_ProductMainImage"></th:partial>
-                    }
-                    else
-                    {
-                        <div class="product-image-thumb active">
-                           <th:img asp-append-version="true" src="/images/no-image-2.jpg" class="product-image" alt="Upload product images"/>
-                        </div>
-
+                         <th:partial name="_ProductMainImage"></th:partial>
                     }
                     @foreach (var image in product.Images)
                     {
-                        <th:partial name="_ProductOtherImage" model="image"></th:partial>
+                         <th:partial name="_ProductOtherImage" model="image"></th:partial>
                     }
-                    @if (product.Images.Count < 4)
+                    @if (product.Images.Count < 4 || product.ImagePath.IsNullOrEmpty())
                     {
                         <a href="" data-toggle="modal" data-target="#add-product-images" title="Add Product Images">
                             <i style="padding-top: 20px" class="fas fa-plus fa-3x"></i>

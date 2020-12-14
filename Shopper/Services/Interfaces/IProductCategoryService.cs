@@ -3,8 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Shared.Mvc.Entities;
-using Shared.Mvc.Entities.Identity;
-using Shared.Mvc.ViewModels;
 
 namespace Shopper.Services.Interfaces
 {

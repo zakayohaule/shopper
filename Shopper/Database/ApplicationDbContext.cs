@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Shared.Mvc.Entities.Identity;
 using Shared.Mvc.Entities;
+using Shared.Mvc.Entities.Identity;
 using Shopper.Services.Interfaces;
 using Attribute = Shared.Mvc.Entities.Attribute;
 

@@ -1,18 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using Shopper.Attributes;
-using Shopper.Database;
-using Shopper.Extensions.Helpers;
-using Shared.Mvc.Entities;
-using Shopper.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities.Identity;
+using Shopper.Attributes;
+using Shopper.Services.Interfaces;
 
 namespace Shopper.Mvc.Controllers
 {

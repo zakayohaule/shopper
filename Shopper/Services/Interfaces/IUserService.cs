@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Shared.Mvc.Entities;
 using Shared.Mvc.Entities.Identity;
 using Shared.Mvc.ViewModels;
 using Shared.Mvc.ViewModels.Emails;

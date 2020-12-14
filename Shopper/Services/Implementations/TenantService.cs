@@ -1,7 +1,5 @@
 using IdentityServer4.Extensions;
-using IdentityServer4.Stores.Serialization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Shopper.Extensions.Helpers;
 using Shopper.Services.Interfaces;

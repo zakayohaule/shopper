@@ -1,6 +1,4 @@
-﻿﻿using System;
- using System.Diagnostics;
- using System.IO;
+﻿﻿using System.Diagnostics;
  using Microsoft.AspNetCore.Authorization;
  using Microsoft.AspNetCore.Mvc;
  using Serilog;

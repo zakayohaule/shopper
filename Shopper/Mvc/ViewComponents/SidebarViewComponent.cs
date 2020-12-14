@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Common;
 using Shared.Mvc.Entities;
-using Shopper.Extensions.Helpers;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Mvc.ViewComponents

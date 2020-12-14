@@ -1,8 +1,4 @@
-using Shopper.Database;
-using Shopper.Extensions.Configurations;
-using Shared.Mvc.Entities;
 using JetBrains.Annotations;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Shared.Mvc.Entities.Identity;
+using Shopper.Database;
+using Shopper.Extensions.Configurations;
 
 [assembly: AspMvcViewLocationFormat(@"~\Mvc\Views\{1}\{0}.cshtml")]
 [assembly: AspMvcViewLocationFormat(@"~\Mvc\Views\Shared\{0}.cshtml")]

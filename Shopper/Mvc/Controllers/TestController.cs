@@ -1,16 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using FluentEmail.Core;
-using IdentityModel.Client;
-using Microsoft.AspNetCore.Authorization;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using Shopper.Database;
-using Shopper.Extensions.Helpers;
-using Shopper.Services.Interfaces;
 
 namespace Shopper.Mvc.Controllers
 {

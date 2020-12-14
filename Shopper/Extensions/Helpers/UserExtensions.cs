@@ -1,15 +1,13 @@
 ﻿﻿using System;
-using System.IO;
-using System.Linq;
-using System.Security.Claims;
-using Shopper.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis.Text;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.JsonWebTokens;
+ using System.IO;
+ using System.Linq;
+ using System.Security.Claims;
+ using Microsoft.AspNetCore.Http;
+ using Microsoft.Extensions.DependencyInjection;
+ using Microsoft.Extensions.Hosting;
+ using Microsoft.IdentityModel.JsonWebTokens;
  using Shared.Extensions.Helpers;
+ using Shopper.Services.Interfaces;
 
  namespace Shopper.Extensions.Helpers
 {

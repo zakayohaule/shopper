@@ -1,8 +1,6 @@
-﻿using Shopper.Extensions.Helpers;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Newtonsoft.Json;
+using Shopper.Extensions.Helpers;
 
 namespace Shopper.Attributes
 {

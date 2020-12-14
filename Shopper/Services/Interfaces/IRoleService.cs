@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Shared.Mvc.Entities;
 using Shared.Mvc.Entities.Identity;
 using Shared.Mvc.ViewModels;
 

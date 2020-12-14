@@ -1,10 +1,9 @@
-﻿using Shared.Mvc.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Shared.Mvc.Entities.Identity;
 using Shopper.Services.Implementations;
 using Shopper.Services.Implementations.ReplaceDefaults;
 using Shopper.Services.Interfaces;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using Shared.Mvc.Entities.Identity;
 
 namespace Shopper.Extensions.Configurations
 {

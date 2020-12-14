@@ -1,10 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 using Shared.Mvc.Entities;
 using Shared.Mvc.Enums;

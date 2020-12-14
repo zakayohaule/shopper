@@ -1,14 +1,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities;
-using Shared.Mvc.Entities.Identity;
 using Shopper.Attributes;
 using Shopper.Services.Interfaces;
 

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Shopper.Services.Interfaces
+﻿namespace Shopper.Services.Interfaces
 {
     public interface INotificationService
     {

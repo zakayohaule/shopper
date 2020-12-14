@@ -9,11 +9,11 @@
  using PasswordGenerator;
  using Serilog;
  using Shared.Extensions.Helpers;
- using Shopper.Database;
- using Shopper.Extensions.Helpers;
  using Shared.Mvc.Entities.Identity;
  using Shared.Mvc.ViewModels;
  using Shared.Mvc.ViewModels.Emails;
+ using Shopper.Database;
+ using Shopper.Extensions.Helpers;
  using Shopper.Services.Interfaces;
 
  namespace Shopper.Services.Implementations

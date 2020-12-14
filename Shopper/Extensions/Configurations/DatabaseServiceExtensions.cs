@@ -1,7 +1,6 @@
-﻿using Shopper.Database;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shopper.Database;
 
 namespace Shopper.Extensions.Configurations
 {

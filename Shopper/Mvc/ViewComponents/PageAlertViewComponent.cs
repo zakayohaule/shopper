@@ -1,7 +1,6 @@
-﻿using Shared.Mvc.Entities;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+using Shared.Mvc.Entities;
 
 namespace Shopper.Mvc.ViewComponents
 {

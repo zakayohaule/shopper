@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -157,7 +158,7 @@ namespace Shopper.Mvc.Controllers
 
         public IActionResult DeleteSale()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         private async Task<SaleFormViewModel> GetSaleFormModalFromSaleIdAsync(uint id)

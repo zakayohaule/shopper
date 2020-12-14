@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Shopper.Extensions.Helpers;
-using Shopper.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
+using Shopper.Extensions.Helpers;
 
 namespace Shopper.Attributes
 {

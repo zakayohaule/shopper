@@ -42,52 +42,54 @@
                 </div>
             </div>
         </div>
-        <div class="col-6">
-            <th:form asp-action="UpdateBusinessInfo" enctype="multipart/form-data">
-                <th:input asp-for="Id"  value="@Model.Id" hidden />
-                <div class="form-group">
-                    <th:label asp-for="Name">Name</th:label>
-                    <th:input asp-for="Name" class="form-control"/>
-                    <th:span asp-validation-for="Name" class="text-danger"></th:span>
-                </div>
-                <div class="form-group">
-                    <th:label asp-for="Email">Email</th:label>
-                    <th:input asp-for="Email" class="form-control"/>
-                    <th:span asp-validation-for="Email" class="text-danger"></th:span>
-                </div>
-                <div class="form-group">
-                    <th:label asp-for="Address">Address</th:label>
-                    <th:input asp-for="Address" class="form-control"/>
-                    <th:span asp-validation-for="Address" class="text-danger"></th:span>
-                </div>
-                <div class="form-group">
-                    <th:label asp-for="Phone1"></th:label>
-                    <th:input asp-for="Phone1" class="form-control"/>
-                    <th:span asp-validation-for="Phone1" class="text-danger"></th:span>
-                </div>
-                <div class="form-group">
-                    <th:label asp-for="Phone2"></th:label>
-                    <th:input asp-for="Phone2" class="form-control"/>
-                    <th:span asp-validation-for="Phone2" class="text-danger"></th:span>
-                </div>
-                <div class="form-group">
-                    <th:label asp-for="Description">Description</th:label>
-                    <th:textarea asp-for="Description" class="form-control" rows="4"></th:textarea>
-                    <th:span asp-validation-for="Description" class="text-danger"></th:span>
-                </div>
-                <div class="form-group">
-                    @{ var logoLabel = Model.LogoPath.IsNullOrEmpty() ? "Upload Logo" : "Change Logo"; }
-                    <th:label asp-for="Image">@logoLabel</th:label>
-                    <div class="custom-file">
-                        <th:input asp-for="Image" class="custom-file-input" id="exampleInputFile"></th:input>
-                        <label class="custom-file-label" for="exampleInputFile"></label>
+        <th:permission name="business_info_update">
+            <div class="col-6">
+                <th:form asp-action="UpdateBusinessInfo" enctype="multipart/form-data">
+                    <th:input asp-for="Id" value="@Model.Id" hidden/>
+                    <div class="form-group">
+                        <th:label asp-for="Name">Name</th:label>
+                        <th:input asp-for="Name" class="form-control"/>
+                        <th:span asp-validation-for="Name" class="text-danger"></th:span>
                     </div>
-                </div>
-                <div class="form-group">
-                    <input type="submit" class="btn btn-primary" value="Save">
-                </div>
-            </th:form>
-        </div>
+                    <div class="form-group">
+                        <th:label asp-for="Email">Email</th:label>
+                        <th:input asp-for="Email" class="form-control"/>
+                        <th:span asp-validation-for="Email" class="text-danger"></th:span>
+                    </div>
+                    <div class="form-group">
+                        <th:label asp-for="Address">Address</th:label>
+                        <th:input asp-for="Address" class="form-control"/>
+                        <th:span asp-validation-for="Address" class="text-danger"></th:span>
+                    </div>
+                    <div class="form-group">
+                        <th:label asp-for="Phone1"></th:label>
+                        <th:input asp-for="Phone1" class="form-control"/>
+                        <th:span asp-validation-for="Phone1" class="text-danger"></th:span>
+                    </div>
+                    <div class="form-group">
+                        <th:label asp-for="Phone2"></th:label>
+                        <th:input asp-for="Phone2" class="form-control"/>
+                        <th:span asp-validation-for="Phone2" class="text-danger"></th:span>
+                    </div>
+                    <div class="form-group">
+                        <th:label asp-for="Description">Description</th:label>
+                        <th:textarea asp-for="Description" class="form-control" rows="4"></th:textarea>
+                        <th:span asp-validation-for="Description" class="text-danger"></th:span>
+                    </div>
+                    <div class="form-group">
+                        @{ var logoLabel = Model.LogoPath.IsNullOrEmpty() ? "Upload Logo" : "Change Logo"; }
+                        <th:label asp-for="Image">@logoLabel</th:label>
+                        <div class="custom-file">
+                            <th:input asp-for="Image" class="custom-file-input" id="exampleInputFile"></th:input>
+                            <label class="custom-file-label" for="exampleInputFile"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Save">
+                    </div>
+                </th:form>
+            </div>
+        </th:permission>
     </div>
 </div>
 

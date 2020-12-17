@@ -60,16 +60,14 @@ namespace Shopper
             [FromServices] ILogger logger,
             [FromServices] IServiceProvider serviceProvider)
         {
-            dbContext.Database.Migrate();
-            adminAppDbContext.Database.Migrate();
             //If you want to initialize the database, go to appSettings.json and set "Database.Seed" to true;
-            /*var seedDatabase = Configuration.GetSection("Database").GetValue<bool?>("Seed") ?? false;
+            var seedDatabase = Configuration.GetSection("Database").GetValue<bool?>("Seed") ?? false;
             if (seedDatabase)
             {
                 logger.Information("********** Seeding database *************");
                 app.InitializeDatabase(dbContext,adminAppDbContext, userManager,passwordHasher, logger, Configuration, serviceProvider);
             }
-            app.UpdateRoleClaims(dbContext, logger);*/
+            app.UpdateRoleClaims(dbContext, logger);
 
             if (Environment.IsDevelopment())
             {

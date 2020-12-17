@@ -40,6 +40,9 @@ namespace Shopper.Database.Seeders
             var expenditureManagement =
                 dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Expenditure Management"));
 
+            var businessInfoManagement =
+                dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Business Info Management"));
+
             var permissions = new List<Permission>
             {
                 new Permission {Name = "user_add", DisplayName = "Create Own Institution's User", Module = userManagement},
@@ -91,6 +94,8 @@ namespace Shopper.Database.Seeders
                 new Permission {Name = "stock_delete", DisplayName = "Delete Stock Keeping Item", Module = stockManagement},
                 new Permission {Name = "sale_record", DisplayName = "Record Sale", Module = saleManagement},
                 new Permission {Name = "sale_view", DisplayName = "View Sales", Module = saleManagement},
+                new Permission {Name = "business_info_view", DisplayName = "View Business Information", Module = businessInfoManagement},
+                new Permission {Name = "business_info_update", DisplayName = "Update Business Information", Module = businessInfoManagement},
             }.ToList();
 
             permissions.ForEach(permission =>

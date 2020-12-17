@@ -1,0 +1,104 @@
+@using Shopper.Extensions.Helpers
+@using Shopper.Mvc.ViewModels
+@using IdentityServer4.Extensions
+@model Shopper.Mvc.ViewModels.BusinessInfoModel
+
+@{
+    Layout = "_Layout";
+}
+
+@section css
+{
+    <style type="text/css">
+        #logo {
+            width: 200px;
+            border-radius: 8px;
+        }
+    </style>
+}
+
+<div class="card">
+    <div class="card-body row">
+        <div class="col-6 text-center d-flex align-items-center justify-content-center">
+            <div class="row">
+                <div class="col-12">
+                    <th:img asp-append-version="true" class="img-fluid" id="logo" src="@Model.LogoPath"></th:img>
+                </div>
+                <br>
+                <div class="col-12">
+                    @* @Model.LogoPath *@
+                    @* <th:img class="profile-user-img img-fluid img-circle" src="@Model.LogoPath.LoadProductImage(ViewContext.HttpContext)" alt="Business logo"/> *@
+                    <h2>
+                        <strong>@Model.Name</strong>
+                    </h2>
+                    <p class="lead mb-5">
+                        Address:<strong> @Model.Address</strong><br>
+                        Phone 1:<strong> @Model.Phone1</strong><br>
+                        Phone 2:<strong> @Model.Phone2 </strong><br>
+                        Email :<strong> @Model.Email </strong><br>
+                        Subscription Type :<strong> @Model.SubscriptionType </strong><br>
+                        Valid To :<strong> @Model.ValidTo.FormatWithSuffix() </strong><br>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <th:form asp-action="UpdateBusinessInfo" enctype="multipart/form-data">
+                <th:input asp-for="Id"  value="@Model.Id" hidden />
+                <div class="form-group">
+                    <th:label asp-for="Name">Name</th:label>
+                    <th:input asp-for="Name" class="form-control"/>
+                    <th:span asp-validation-for="Name" class="text-danger"></th:span>
+                </div>
+                <div class="form-group">
+                    <th:label asp-for="Email">Email</th:label>
+                    <th:input asp-for="Email" class="form-control"/>
+                    <th:span asp-validation-for="Email" class="text-danger"></th:span>
+                </div>
+                <div class="form-group">
+                    <th:label asp-for="Address">Address</th:label>
+                    <th:input asp-for="Address" class="form-control"/>
+                    <th:span asp-validation-for="Address" class="text-danger"></th:span>
+                </div>
+                <div class="form-group">
+                    <th:label asp-for="Phone1"></th:label>
+                    <th:input asp-for="Phone1" class="form-control"/>
+                    <th:span asp-validation-for="Phone1" class="text-danger"></th:span>
+                </div>
+                <div class="form-group">
+                    <th:label asp-for="Phone2"></th:label>
+                    <th:input asp-for="Phone2" class="form-control"/>
+                    <th:span asp-validation-for="Phone2" class="text-danger"></th:span>
+                </div>
+                <div class="form-group">
+                    <th:label asp-for="Description">Description</th:label>
+                    <th:textarea asp-for="Description" class="form-control" rows="4"></th:textarea>
+                    <th:span asp-validation-for="Description" class="text-danger"></th:span>
+                </div>
+                <div class="form-group">
+                    @{ var logoLabel = Model.LogoPath.IsNullOrEmpty() ? "Upload Logo" : "Change Logo"; }
+                    <th:label asp-for="Image">@logoLabel</th:label>
+                    <div class="custom-file">
+                        <th:input asp-for="Image" class="custom-file-input" id="exampleInputFile"></th:input>
+                        <label class="custom-file-label" for="exampleInputFile"></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Save">
+                </div>
+            </th:form>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <th:script src="~/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></th:script>
+    <script >
+        $(function () {
+          bsCustomFileInput.init();
+        });
+    </script>
+    <th:partial name="_ValidationScriptsPartial"></th:partial>
+    <th:partial name="Partials/_ToastScript"></th:partial>
+}

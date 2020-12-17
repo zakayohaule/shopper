@@ -51,8 +51,8 @@
                 {
                     options.Authority = "http://localhost:5000";
                     options.SaveToken = true;
-                    
-                    // todo Remove this in production
+
+                    // @todo Remove this in production
                     options.RequireHttpsMetadata = false;
                     options.Audience = "egov_apis";
                     options.TokenValidationParameters = new TokenValidationParameters

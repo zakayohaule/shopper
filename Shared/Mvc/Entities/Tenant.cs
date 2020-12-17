@@ -8,18 +8,6 @@ namespace Shared.Mvc.Entities
     [Table("tenants")]
     public class Tenant : NoTenantBaseEntity<Guid>
     {
-        /*[NotMapped]
-        public string Identifier {
-            get
-            {
-                return Domain;
-            }
-            set
-            {
-                Domain = value;
-            }
-        }*/
-
         [Column("name")]
         public string Name { get; set; }
 
@@ -43,6 +31,9 @@ namespace Shared.Mvc.Entities
 
         [Column("connection_string")]
         public string ConnectionString { get; set; }
+
+        [Column("logo_path")]
+        public string LogoPath { get; set; }
 
         [Column("subscription_type")]
         public SubscriptionType SubscriptionType { get; set; }

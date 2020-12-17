@@ -35,6 +35,7 @@ namespace Shopper.Extensions.Configurations
             services.AddScoped<IExpenditureTypeService, ExpenditureTypeService>();
             services.AddScoped<IExpenditureService, ExpenditureService>();
             services.AddScoped<TenantResolver>();
+            services.AddScoped<IBusinessService, BusinessService>();
         }
     }
 }

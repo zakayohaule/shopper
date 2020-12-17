@@ -136,8 +136,13 @@
     <th:partial name="_ValidationScriptsPartial"></th:partial>
     <th:partial name="Partials/_ToastScript"></th:partial>
     <script>
-                // useSubmitClass();
-                useDeleteConfirmation();
+    //Initialize Select2 Elements
+            $('.select2bs4').select2({
+              theme: 'bootstrap4'
+            })
+
+            // useSubmitClass();
+            useDeleteConfirmation();
 
     function openStockModal(){
         var selected = $("#products option:selected");

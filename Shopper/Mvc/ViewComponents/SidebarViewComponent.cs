@@ -59,6 +59,10 @@ namespace Shopper.Mvc.ViewComponents
             {
                 var settings = ModuleHelper.AddTree("Settings", "fas fa-cog");
                 links = new List<SidebarMenu>();
+                if (_userClaimService.HasPermission(userId, "business_info_view"))
+                {
+                    links.Add(ModuleHelper.AddModuleLink(name:"Business Info", Url.Action("Show", "Business"), "fas fa-sitemap"));
+                }
                 if (_userClaimService.HasPermission(userId, "product_group_view"))
                 {
                     links.Add(ModuleHelper.AddModuleLink(name:"Product Groups", Url.Action("Index", "ProductGroup"), "fas fa-sitemap"));
@@ -79,6 +83,7 @@ namespace Shopper.Mvc.ViewComponents
                 {
                     links.Add(ModuleHelper.AddModuleLink("Expenditure Types", Url.Action("Index", "ExpenditureType")));
                 }
+
 
                 settings.TreeChild = links;
                 sidebars.Add(settings);

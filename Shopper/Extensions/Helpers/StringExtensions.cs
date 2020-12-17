@@ -14,5 +14,15 @@ namespace Shopper.Extensions.Helpers
             }
             return $"/uploads/products/{tenant.Domain.Split(".")[0]}/{imageName}";
         }
+
+        public static string LoadTenantImage(this string imageName, HttpContext context)
+        {
+            var tenant = context.GetCurrentTenant();
+            if (tenant == null)
+            {
+                return "kea";
+            }
+            return $"/uploads/logo/{tenant.Domain.Split(".")[0]}/{imageName}";
+        }
     }
 }

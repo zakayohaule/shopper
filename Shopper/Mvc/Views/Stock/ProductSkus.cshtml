@@ -25,10 +25,8 @@
             <thead>
             <tr>
                 <th style="width: 10px;">#</th>
-                @if (product.Skus.Any(sku => sku.SkuAttributes.Any()))
-                {
-                    <th>Attributes</th>
-                }
+
+                <th>Attributes</th>
                 <th>Quantity</th>
                 <th>Remaining Quantity</th>
                 <th>Buying Price</th>
@@ -66,7 +64,7 @@
                     <td>
                         <th:a onclick="openFormModal('@Url.Action("OpenProductSkusEditModal", new {id = sku.Id})',
                          'Edit @Model.Name stock item', null,  true)"
-                           class="btn btn-default btn-sm" title="Edit entry">
+                              class="btn btn-default btn-sm" title="Edit entry">
                             <i class="fas fa-edit"></i>
                         </th:a>
 

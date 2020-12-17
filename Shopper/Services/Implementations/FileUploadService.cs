@@ -45,5 +45,29 @@ namespace Shopper.Services.Implementations
             await image.SaveAsync($"{imageUploadPath}/{imageName}");
             return imageName;
         }
+
+        public async Task<string> UploadTenantLogo(IFormFile formFile)
+        {
+            // @todo validate file type to only images
+
+            var tenant = _tenantService.GetTenantFromRequest();
+            var webRoot = $"{_hostEnvironment.ContentRootPath}/wwwroot";
+            var imageUploadPath = @$"{webRoot}/uploads/logo/{tenant.Domain.Split(".")[0]}/";
+            if (!Directory.Exists(imageUploadPath))
+            {
+                Directory.CreateDirectory(imageUploadPath);
+            }
+
+            var image = await Image.LoadAsync(formFile.OpenReadStream());
+            image.Mutate(x => x.Resize(500,380));
+            var ext = formFile.FileName.Split(".")[1];
+            if (ext.IsNullOrEmpty())
+            {
+                ext = "jpeg";
+            }
+            var imageName = $"{DateTimeOffset.Now.ToUnixTimeSeconds().ToString()}.{ext}";
+            await image.SaveAsync($"{imageUploadPath}/{imageName}");
+            return imageName;
+        }
     }
 }

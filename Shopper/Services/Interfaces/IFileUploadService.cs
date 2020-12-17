@@ -6,5 +6,6 @@ namespace Shopper.Services.Interfaces
     public interface IFileUploadService
     {
         Task<string> UploadProductImageAsync(IFormFile image);
+        Task<string> UploadTenantLogo(IFormFile image);
     }
 }

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Serilog;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities.Identity;
+using Shopper.Database;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Services.Implementations
@@ -21,6 +22,7 @@ namespace Shopper.Services.Implementations
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly ApplicationDbContext _dbContext;
 
         private readonly ILogger _logger;
         // private readonly string _prefix = "PERMISSION";
@@ -28,13 +30,14 @@ namespace Shopper.Services.Implementations
         public UserClaimService(IMemoryCache memoryCache,
             UserManager<AppUser> userManager,
             RoleManager<Role> roleManager,
-            IConfiguration configuration, ILogger logger)
+            IConfiguration configuration, ILogger logger, ApplicationDbContext dbContext)
         {
             _memoryCache = memoryCache;
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             _logger = logger;
+            _dbContext = dbContext;
         }
 
 
@@ -51,17 +54,19 @@ namespace Shopper.Services.Implementations
         public List<string> GetUserClaims(long userId)
         {
             var claims = new List<string>();
-            var user = _userManager.FindByIdAsync(userId.ToString()).Result;
+            var user = _dbContext.Users.Find(userId);
             if (user.IsNull())
             {
                 return claims;
             }
+
             var userRoles = _userManager.GetRolesAsync(user).Result.ToList();
 
             userRoles.ForEach(roleName =>
             {
                 Console.WriteLine(roleName);
-                var role = _roleManager.FindByNameAsync(roleName).Result;
+                // var role = _roleManager.FindByNameAsync(roleName).Result;
+                var role = _dbContext.Roles.FirstOrDefault(r => r.Name.Equals(roleName) && r.TenantId == user.TenantId);
                 var roleClaims = _roleManager.GetClaimsAsync(role).Result;
                 claims.AddRange(roleClaims.Select(claim => claim.Value).ToList());
             });
@@ -71,7 +76,11 @@ namespace Shopper.Services.Implementations
 
         public bool HasPermission(long userId, string permission)
         {
-            if (_memoryCache.TryGetValue(userId, out List<string> userClaims)) return userClaims.Contains(permission);
+            if (_memoryCache.TryGetValue(userId, out List<string> userClaims))
+            {
+                return userClaims.Contains(permission);
+            }
+
             _logger.Information("******** re-caching user role claims");
             userClaims = GetUserClaims(userId);
             CacheClaims(userId, userClaims);
@@ -120,7 +129,6 @@ namespace Shopper.Services.Implementations
                 userClaims = GetUserClaims(appUser.Id);
                 CacheClaims(appUser.Id, userClaims);
             }
-
         }
     }
 }

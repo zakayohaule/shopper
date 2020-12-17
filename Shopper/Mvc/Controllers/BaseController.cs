@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Shared.Mvc.Entities;
@@ -26,8 +27,11 @@ namespace Shopper.Mvc.Controllers
                 messages = ViewBag.Breadcrumb as List<Message>;
             }
 
-            messages.Add(new Message { DisplayName = displayName, URLPath = urlPath });
-            ViewBag.Breadcrumb = messages;
+            if (messages != null)
+            {
+                messages.Add(new Message {DisplayName = displayName, URLPath = urlPath});
+                ViewBag.Breadcrumb = messages;
+            }
         }
 
         internal void AddPageHeader(string pageHeader = "", string pageDescription = "")

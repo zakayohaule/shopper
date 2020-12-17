@@ -3,10 +3,13 @@
  using System.Linq;
  using System.Security.Claims;
  using Microsoft.AspNetCore.Http;
+ using Microsoft.AspNetCore.Mvc.Rendering;
  using Microsoft.Extensions.DependencyInjection;
  using Microsoft.Extensions.Hosting;
  using Microsoft.IdentityModel.JsonWebTokens;
+ using Shared.Common;
  using Shared.Extensions.Helpers;
+ using Shared.Mvc.Entities;
  using Shopper.Services.Interfaces;
 
  namespace Shopper.Extensions.Helpers
@@ -150,6 +153,17 @@
             }
 
             return subDomain;
+        }
+
+        public static Tenant GetCurrentTenant(this ViewContext viewContext)
+        {
+            var tenant = (Tenant)viewContext.HttpContext.Items["tenant"];
+            return tenant;
+        }
+
+        public static Tenant GetCurrentTenant(this HttpContext httpContext)
+        {
+            return (Tenant) httpContext.Items["tenant"];
         }
     }
 }

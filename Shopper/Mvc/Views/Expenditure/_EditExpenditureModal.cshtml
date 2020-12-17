@@ -1,0 +1,5 @@
+﻿@model Expenditure
+
+<th:form class="" asp-controller="ProductCategory" asp-action="Update" asp-route-id="@Model.Id">
+    <th:partial name="_EditExpenditureModal" model="Model"/>
+</th:form>

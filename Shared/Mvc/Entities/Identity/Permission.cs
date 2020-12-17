@@ -1,18 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Shared.Mvc.Entities.BaseEntities;
 
 namespace Shared.Mvc.Entities.Identity
 {
     [Table(("permissions"))]
-    public class Permission
+    public class Permission : NoTenantBaseEntity<ushort>
     {
-        [Column("id")] public ushort Id { get; set; }
-
         [Column("name")] public string Name { get; set; }
 
         [Column("display_name")] public string DisplayName { get; set; }
 
-        [Column("module_id")] public short ModuleId { get; set; }
+        [Column("module_id")] public ushort ModuleId { get; set; }
 
-        [ForeignKey(nameof(ModuleId))] public Module Module { get; set; }
+        [ForeignKey(nameof(ModuleId))]
+        public Module Module { get; set; }
     }
 }

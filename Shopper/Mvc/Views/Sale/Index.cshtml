@@ -1,3 +1,5 @@
+@using Humanizer
+@using Shopper.Extensions.Helpers
 @model List<SaleInvoice>;
 
 @{
@@ -39,7 +41,7 @@
                 <tr>
                     <td>@index</td>
                     <td>@invoice.Number</td>
-                    <td>@invoice.Date.ToString("ddd dd, MMM yyyy")</td>
+                    <td>@invoice.Date.FormatWithSuffix()</td>
                     <td>@invoice.Amount.ToString("N0") /-</td>
                     <td>
                         <th:a asp-controller="Sale"

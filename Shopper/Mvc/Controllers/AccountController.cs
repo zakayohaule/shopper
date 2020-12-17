@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities.Identity;
 using Shared.Mvc.ViewModels;
 using Shared.Mvc.ViewModels.Emails;
 using Shopper.Attributes;
+using Shopper.Database;
 using Shopper.Extensions.Helpers;
 using Shopper.Services.Interfaces;
 
@@ -43,12 +45,12 @@ namespace Shopper.Mvc.Controllers
             return View(new LoginModel());
         }
 
-        [HttpPost("login", Name = "login"), ValidateAntiForgeryToken, ValidateModel]
+        [HttpPost("login", Name = "login"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel loginModel, string returnTo)
         {
             var user = await _userManager.FindByEmailAsync(loginModel.Email);
-            // return Ok(loginModel);
-            if (user.IsNull())
+            // var user = await _userService.FindByEmail(loginModel.Email);
+            if (user.IsNull() || !user.TenantId.Equals(HttpContext.GetCurrentTenant().Id))
             {
                 AddPageAlerts(PageAlertType.Error, "Invalid login credentials!");
                 return View();
@@ -243,7 +245,7 @@ namespace Shopper.Mvc.Controllers
 
             await _signInManager.SignOutAsync();
 
-            
+
             AddPageAlerts(PageAlertType.Success, "Your password has been reset successfully, Please login!");
             return View(nameof(Login));
         }

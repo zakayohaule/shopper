@@ -1,8 +1,12 @@
 ﻿﻿using System.Diagnostics;
  using Microsoft.AspNetCore.Authorization;
  using Microsoft.AspNetCore.Mvc;
+ using Microsoft.Extensions.DependencyInjection;
  using Serilog;
+ using Shared.Mvc.Entities;
+ using Shared.Mvc.Entities.BaseEntities;
  using Shared.Mvc.ViewModels;
+ using Shopper.Services;
 
  namespace Shopper.Mvc.Controllers
 {
@@ -14,7 +18,7 @@
         {
             _logger = logger;
         }
-        
+
         public IActionResult Index()
         {
             AddPageHeader("Dashboard");

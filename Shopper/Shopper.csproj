@@ -12,6 +12,7 @@
         <Watch Remove="wwwroot\*" />
     </ItemGroup>
     <ItemGroup>
+        <PackageReference Include="Finbuckle.MultiTenant.AspNetCore" Version="6.1.0" />
         <PackageReference Include="FluentEmail.Core" Version="2.7.0" />
         <PackageReference Include="FluentEmail.Mailtrap" Version="2.7.0" />
         <PackageReference Include="FluentEmail.Razor" Version="2.7.0" />
@@ -41,5 +42,10 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Shared\Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Migrations" />
+      <Folder Include="wwwroot\uploads\products" />
     </ItemGroup>
 </Project>

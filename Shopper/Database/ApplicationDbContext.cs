@@ -1,13 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using Finbuckle.MultiTenant;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyModel;
 using Shared.Mvc.Entities;
+using Shared.Mvc.Entities.BaseEntities;
 using Shared.Mvc.Entities.Identity;
+using Shopper.Extensions.Configurations;
+using Shopper.Extensions.Helpers;
 using Shopper.Services.Interfaces;
 using Attribute = Shared.Mvc.Entities.Attribute;
+using Module = Shared.Mvc.Entities.Identity.Module;
 
 namespace Shopper.Database
 {
@@ -18,15 +30,20 @@ namespace Shopper.Database
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ITenantService _tenantService;
 
+        public Tenant Tenant { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
             IConfiguration configuration,
-            IHttpContextAccessor httpContextAccessor,
-            ITenantService tenantService)
+            ITenantService httpContextAccessor, IHttpContextAccessor httpContextAccessor1, ITenantService tenantService)
             : base(options)
         {
             _configuration = configuration;
-            _httpContextAccessor = httpContextAccessor;
+            _httpContextAccessor = httpContextAccessor1;
             _tenantService = tenantService;
+            if (Tenant == null)
+            {
+                Tenant = httpContextAccessor.GetTenantFromRequest();
+            }
         }
 
         //Identity entities
@@ -40,6 +57,7 @@ namespace Shopper.Database
 
 
         //custom entities
+        public DbSet<Tenant> Tenants { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Module> Modules { get; set; }
         public DbSet<ProductGroup> ProductGroups { get; set; }
@@ -60,13 +78,24 @@ namespace Shopper.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // optionsBuilder.EnableDetailedErrors();
             try
             {
+                var connectionString = "";
                 base.OnConfiguring(optionsBuilder);
-                var dbName =  _tenantService.GetCurrentTenant();
-                var con = _configuration.GetConnectionString("Default");
-                var connectionString = con.Replace("{dbName}", dbName);
+                if (Tenant.ConnectionString.IsNullOrEmpty())
+                {
+                    connectionString = _configuration.GetConnectionString("Default").Replace("{dbName}", "shopper");
+                    /*var tenantConnectionString = _tenantService.GetCurrentTenantConnectionString();
+
+                    connectionString = tenantConnectionString.IsNullOrEmpty()
+                        ? _configuration.GetConnectionString("Default").Replace("{dbName}", "shopper")
+                        : tenantConnectionString;*/
+                }
+                else
+                {
+                    connectionString = Tenant.ConnectionString;
+                }
+
                 optionsBuilder.UseMySql(connectionString);
             }
             catch (ArgumentException e)
@@ -81,15 +110,48 @@ namespace Shopper.Database
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            Console.WriteLine("******************* This method is being called now! *******************");
             base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(typeof(AppUser).Assembly);
+            builder.Entity<AppUser>().HasQueryFilter(e => e.TenantId == Tenant.Id);
+            builder.Entity<Role>().HasQueryFilter(e => e.TenantId == Tenant.Id);
+            builder.Entity<Attribute>().HasQueryFilter(e => e.TenantId == Tenant.Id);
+            builder.Entity<AttributeOption>().HasQueryFilter(e => e.TenantId == Tenant.Id);
+            builder.Entity<Expenditure>().HasQueryFilter(e => e.TenantId == Tenant.Id);
+            builder.Entity<ExpenditureType>().HasQueryFilter(e => e.TenantId == Tenant.Id);
+            builder.Entity<PriceType>().HasQueryFilter(e => e.TenantId == Tenant.Id);
+            builder.Entity<Product>().HasQueryFilter(e => e.TenantId == Tenant.Id);
+            builder.Entity<Sale>().HasQueryFilter(e => e.TenantId == Tenant.Id);
+            builder.Entity<SaleInvoice>().HasQueryFilter(e => e.TenantId == Tenant.Id);
+            builder.Entity<Sku>().HasQueryFilter(e => e.TenantId == Tenant.Id);
         }
 
-        public Task<int> SaveChangesAsync()
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            return base.SaveChangesAsync();
+            SetTenantId();
+            return base.SaveChangesAsync(cancellationToken);
         }
 
+        public override int SaveChanges()
+        {
+            SetTenantId();
+            return base.SaveChanges();
+        }
 
+        private void SetTenantId()
+        {
+            foreach (var entityEntry in ChangeTracker.Entries().Where(entry => entry.State == EntityState.Added)
+            ) // Iterate all made changes
+            {
+                if (entityEntry.Properties.Any(entry => entry.Metadata.Name.Equals("TenantId")))
+                {
+                    var tenantIdProp = entityEntry.Property("TenantId");
+                    var tenant = Tenant ?? _tenantService.GetTenantFromRequest();
+                    tenantIdProp.CurrentValue = tenant.Id;
+                    // entityEntry.Property("TenantId").CurrentValue = _tenantService.GetTenantFromRequest().Id;
+                }
+            }
+        }
     }
 }

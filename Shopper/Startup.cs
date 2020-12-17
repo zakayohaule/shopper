@@ -1,12 +1,15 @@
+using System;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Shared.Mvc.Entities;
 using Shared.Mvc.Entities.Identity;
 using Shopper.Database;
 using Shopper.Extensions.Configurations;
@@ -33,7 +36,7 @@ namespace Shopper
         public void ConfigureServices(IServiceCollection services)
         {
             services.ShowBannerIfEnabled(Configuration);
-            
+
             services.ConfigureMvc();
 
             services.ConfigureDatabase(Configuration);
@@ -52,16 +55,21 @@ namespace Shopper
             IApplicationBuilder app,
             [FromServices] UserManager<AppUser> userManager,
             [FromServices] ApplicationDbContext dbContext,
-            [FromServices] ILogger logger)
+            [FromServices] AdminAppDbContext adminAppDbContext,
+            [FromServices] IPasswordHasher<AppUser> passwordHasher,
+            [FromServices] ILogger logger,
+            [FromServices] IServiceProvider serviceProvider)
         {
+            dbContext.Database.Migrate();
+            adminAppDbContext.Database.Migrate();
             //If you want to initialize the database, go to appSettings.json and set "Database.Seed" to true;
-            var seedDatabase = Configuration.GetSection("Database").GetValue<bool?>("Seed") ?? false;
+            /*var seedDatabase = Configuration.GetSection("Database").GetValue<bool?>("Seed") ?? false;
             if (seedDatabase)
             {
                 logger.Information("********** Seeding database *************");
-                app.InitializeDatabase(dbContext, userManager, logger);
+                app.InitializeDatabase(dbContext,adminAppDbContext, userManager,passwordHasher, logger, Configuration, serviceProvider);
             }
-            app.UpdateRoleClaims(dbContext, logger);
+            app.UpdateRoleClaims(dbContext, logger);*/
 
             if (Environment.IsDevelopment())
             {
@@ -78,7 +86,7 @@ namespace Shopper
 
             // app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseTenantResolver();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

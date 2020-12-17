@@ -40,7 +40,6 @@ namespace Shopper.Services.Implementations
         {
             return await _dbContext
                 .Roles
-                .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(r =>
                     string.Equals(r.DisplayName, displayName, StringComparison.OrdinalIgnoreCase));
         }
@@ -140,7 +139,6 @@ namespace Shopper.Services.Implementations
             if (includeDeleted)
             {
                 return _dbContext.Roles
-                    .IgnoreQueryFilters()
                     .AsNoTracking()
                     .Any(r => r.Id == id);
             }

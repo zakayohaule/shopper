@@ -1,13 +1,53 @@
-﻿using IdentityServer4.EntityFramework.Entities;
+﻿using System;
+using System.Linq.Expressions;
+using IdentityServer4.EntityFramework.Entities;
 using Microsoft.EntityFrameworkCore;
+using Shared.Mvc.Entities;
+using Shared.Mvc.Entities.BaseEntities;
+using Shared.Mvc.Entities.Identity;
+using Attribute = Shared.Mvc.Entities.Attribute;
 
 namespace Shopper.Extensions.Configurations
 {
     public static class ModelBuilderExtensions
     {
-        public static void CustomConfigureClientContext(this ModelBuilder modelBuilder)
+        public static void ApplyTenantQueryFilter(this ModelBuilder builder,Guid tenantId)
+
         {
-            modelBuilder.Entity<Client>(client =>
+            builder.Entity<AppUser>().HasQueryFilter(e => e.TenantId == tenantId);
+            builder.Entity<Role>().HasQueryFilter(e => e.TenantId == tenantId);
+            builder.Entity<Attribute>().HasQueryFilter(e => e.TenantId == tenantId);
+            builder.Entity<AttributeOption>().HasQueryFilter(e => e.TenantId == tenantId);
+            builder.Entity<Expenditure>().HasQueryFilter(e => e.TenantId == tenantId);
+            builder.Entity<ExpenditureType>().HasQueryFilter(e => e.TenantId == tenantId);
+            builder.Entity<PriceType>().HasQueryFilter(e => e.TenantId == tenantId);
+            builder.Entity<Product>().HasQueryFilter(e => e.TenantId == tenantId);
+            builder.Entity<Sale>().HasQueryFilter(e => e.TenantId == tenantId);
+            builder.Entity<SaleInvoice>().HasQueryFilter(e => e.TenantId == tenantId);
+            builder.Entity<Sku>().HasQueryFilter(e => e.TenantId == tenantId);
+        }
+        /*public static void ApplyTenantQueryFilter(this ModelBuilder builder,Guid tenantId)
+
+        {
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                var foundProperty = entityType.FindProperty("TenantId");
+
+                if (foundProperty != null)
+                {
+                    var newParam = Expression.Parameter(entityType.ClrType);
+
+                    var filter = Expression.Lambda(Expression.Equal(Expression.Property(newParam, "TenantId"),
+                        Expression.Constant(tenantId)), newParam);
+
+                    builder.Entity(entityType.ClrType).HasQueryFilter(filter);
+                }
+            }
+        }*/
+
+        public static void CustomConfigureClientContext(this ModelBuilder builder)
+        {
+            builder.Entity<Client>(client =>
             {
                 client.ToTable("clients");
                 client.HasKey(x => x.Id);
@@ -19,10 +59,14 @@ namespace Shopper.Extensions.Configurations
                 client.Property(x => x.ClientUri).HasMaxLength(2000).HasColumnName("client_uri");
                 client.Property(x => x.LogoUri).HasMaxLength(2000).HasColumnName("logo_uri");
                 client.Property(x => x.Description).HasMaxLength(1000).HasColumnName("description");
-                client.Property(x => x.FrontChannelLogoutUri).HasMaxLength(2000).HasColumnName("front_channel_logout_uri");
-                client.Property(x => x.FrontChannelLogoutSessionRequired).HasColumnName("front_channel_logout_session_required");
-                client.Property(x => x.BackChannelLogoutUri).HasMaxLength(2000).HasColumnName("back_channel_logout_uri");
-                client.Property(x => x.BackChannelLogoutSessionRequired).HasColumnName("back_channel_logout_session_required");
+                client.Property(x => x.FrontChannelLogoutUri).HasMaxLength(2000)
+                    .HasColumnName("front_channel_logout_uri");
+                client.Property(x => x.FrontChannelLogoutSessionRequired)
+                    .HasColumnName("front_channel_logout_session_required");
+                client.Property(x => x.BackChannelLogoutUri).HasMaxLength(2000)
+                    .HasColumnName("back_channel_logout_uri");
+                client.Property(x => x.BackChannelLogoutSessionRequired)
+                    .HasColumnName("back_channel_logout_session_required");
                 client.Property(x => x.ClientClaimsPrefix).HasMaxLength(200).HasColumnName("client_claims_prefix");
                 client.Property(x => x.PairWiseSubjectSalt).HasMaxLength(200).HasColumnName("pairwise_subject_salt");
                 client.Property(x => x.UserCodeType).HasMaxLength(100).HasColumnName("user_code_type");
@@ -30,7 +74,8 @@ namespace Shopper.Extensions.Configurations
                 client.Property(x => x.RequireClientSecret).HasColumnName("require_client_secret");
                 client.Property(x => x.RequireConsent).HasColumnName("require_consent");
                 client.Property(x => x.AllowRememberConsent).HasColumnName("allow_remember_consent");
-                client.Property(x => x.AlwaysIncludeUserClaimsInIdToken).HasColumnName("always_include_user_claim_in_idtoken");
+                client.Property(x => x.AlwaysIncludeUserClaimsInIdToken)
+                    .HasColumnName("always_include_user_claim_in_idtoken");
                 client.Property(x => x.RequirePkce).HasColumnName("require_pkce");
                 client.Property(x => x.AllowPlainTextPkce).HasColumnName("allow_plain_text_pkce");
                 client.Property(x => x.AllowAccessTokensViaBrowser).HasColumnName("allow_access_token_via_browser");
@@ -42,7 +87,8 @@ namespace Shopper.Extensions.Configurations
                 client.Property(x => x.AbsoluteRefreshTokenLifetime).HasColumnName("absolute_refresh_token_lifetime");
                 client.Property(x => x.SlidingRefreshTokenLifetime).HasColumnName("sliding_refresh_token_lifetime");
                 client.Property(x => x.RefreshTokenUsage).HasColumnName("refresh_token_usage");
-                client.Property(x => x.UpdateAccessTokenClaimsOnRefresh).HasColumnName("update_access_token_claims_on_refresh");
+                client.Property(x => x.UpdateAccessTokenClaimsOnRefresh)
+                    .HasColumnName("update_access_token_claims_on_refresh");
                 client.Property(x => x.RefreshTokenExpiration).HasColumnName("refresh_token_expiration");
                 client.Property(x => x.AccessTokenType).HasColumnName("access_token_type");
                 client.Property(x => x.EnableLocalLogin).HasColumnName("enable_local_login");
@@ -57,18 +103,27 @@ namespace Shopper.Extensions.Configurations
 
                 client.HasIndex(x => x.ClientId).IsUnique();
 
-                client.HasMany(x => x.AllowedGrantTypes).WithOne(x => x.Client).HasForeignKey(x=>x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-                client.HasMany(x => x.RedirectUris).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-                client.HasMany(x => x.PostLogoutRedirectUris).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-                client.HasMany(x => x.AllowedScopes).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-                client.HasMany(x => x.ClientSecrets).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-                client.HasMany(x => x.Claims).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-                client.HasMany(x => x.IdentityProviderRestrictions).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-                client.HasMany(x => x.AllowedCorsOrigins).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-                client.HasMany(x => x.Properties).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.AllowedGrantTypes).WithOne(x => x.Client).HasForeignKey(x => x.ClientId)
+                    .IsRequired().OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.RedirectUris).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired()
+                    .OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.PostLogoutRedirectUris).WithOne(x => x.Client).HasForeignKey(x => x.ClientId)
+                    .IsRequired().OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.AllowedScopes).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired()
+                    .OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.ClientSecrets).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired()
+                    .OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.Claims).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired()
+                    .OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.IdentityProviderRestrictions).WithOne(x => x.Client)
+                    .HasForeignKey(x => x.ClientId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.AllowedCorsOrigins).WithOne(x => x.Client).HasForeignKey(x => x.ClientId)
+                    .IsRequired().OnDelete(DeleteBehavior.Cascade);
+                client.HasMany(x => x.Properties).WithOne(x => x.Client).HasForeignKey(x => x.ClientId).IsRequired()
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<ClientGrantType>(grantType =>
+            builder.Entity<ClientGrantType>(grantType =>
             {
                 grantType.ToTable("client_grant_types");
                 grantType.Property(x => x.Id).HasColumnName("id");
@@ -76,7 +131,7 @@ namespace Shopper.Extensions.Configurations
                 grantType.Property(x => x.ClientId).HasColumnName("client_id");
             });
 
-            modelBuilder.Entity<ClientRedirectUri>(redirectUri =>
+            builder.Entity<ClientRedirectUri>(redirectUri =>
             {
                 redirectUri.ToTable("client_redirect_uris");
                 redirectUri.Property(x => x.Id).HasColumnName("id");
@@ -84,15 +139,16 @@ namespace Shopper.Extensions.Configurations
                 redirectUri.Property(x => x.ClientId).HasColumnName("client_id");
             });
 
-            modelBuilder.Entity<ClientPostLogoutRedirectUri>(postLogoutRedirectUri =>
+            builder.Entity<ClientPostLogoutRedirectUri>(postLogoutRedirectUri =>
             {
                 postLogoutRedirectUri.ToTable("client_post_logout_redirect_uris");
                 postLogoutRedirectUri.Property(x => x.Id).HasColumnName("id");
-                postLogoutRedirectUri.Property(x => x.PostLogoutRedirectUri).HasMaxLength(2000).IsRequired().HasColumnName("post_logout_redirect_uri");
+                postLogoutRedirectUri.Property(x => x.PostLogoutRedirectUri).HasMaxLength(2000).IsRequired()
+                    .HasColumnName("post_logout_redirect_uri");
                 postLogoutRedirectUri.Property(x => x.ClientId).HasColumnName("client_id");
             });
 
-            modelBuilder.Entity<ClientScope>(scope =>
+            builder.Entity<ClientScope>(scope =>
             {
                 scope.ToTable("client_scopes");
                 scope.Property(x => x.Id).HasColumnName("id");
@@ -100,7 +156,7 @@ namespace Shopper.Extensions.Configurations
                 scope.Property(x => x.ClientId).HasColumnName("client_id");
             });
 
-            modelBuilder.Entity<ClientSecret>(secret =>
+            builder.Entity<ClientSecret>(secret =>
             {
                 secret.ToTable("client_secrets");
                 secret.Property(x => x.Id).HasColumnName("id");
@@ -112,7 +168,7 @@ namespace Shopper.Extensions.Configurations
                 secret.Property(x => x.Created).HasColumnName("created");
             });
 
-            modelBuilder.Entity<ClientClaim>(claim =>
+            builder.Entity<ClientClaim>(claim =>
             {
                 claim.ToTable("client_claims");
                 claim.Property(x => x.Id).HasColumnName("id");
@@ -121,7 +177,7 @@ namespace Shopper.Extensions.Configurations
                 claim.Property(x => x.ClientId).HasColumnName("client_id");
             });
 
-            modelBuilder.Entity<ClientIdPRestriction>(idPRestriction =>
+            builder.Entity<ClientIdPRestriction>(idPRestriction =>
             {
                 idPRestriction.ToTable("client_idp_restriction");
                 idPRestriction.Property(x => x.Id).HasColumnName("id");
@@ -129,7 +185,7 @@ namespace Shopper.Extensions.Configurations
                 idPRestriction.Property(x => x.ClientId).HasColumnName("client_id");
             });
 
-            modelBuilder.Entity<ClientCorsOrigin>(corsOrigin =>
+            builder.Entity<ClientCorsOrigin>(corsOrigin =>
             {
                 corsOrigin.ToTable("client_cors_origins");
                 corsOrigin.Property(x => x.Id).HasColumnName("id");
@@ -137,7 +193,7 @@ namespace Shopper.Extensions.Configurations
                 corsOrigin.Property(x => x.ClientId).HasColumnName("client_id");
             });
 
-            modelBuilder.Entity<ClientProperty>(property =>
+            builder.Entity<ClientProperty>(property =>
             {
                 property.ToTable("client_properties");
                 property.Property(x => x.Key).HasMaxLength(250).IsRequired().HasColumnName("key");
@@ -146,9 +202,9 @@ namespace Shopper.Extensions.Configurations
             });
         }
 
-        public static void CustomConfigureResourceContext(this ModelBuilder modelBuilder)
+        public static void CustomConfigureResourceContext(this ModelBuilder builder)
         {
-            modelBuilder.Entity<IdentityResource>(identityResource =>
+            builder.Entity<IdentityResource>(identityResource =>
             {
                 identityResource.ToTable("identity_resources").HasKey(x => x.Id);
 
@@ -165,11 +221,13 @@ namespace Shopper.Extensions.Configurations
 
                 identityResource.HasIndex(x => x.Name).IsUnique();
 
-                identityResource.HasMany(x => x.UserClaims).WithOne(x => x.IdentityResource).HasForeignKey(x => x.IdentityResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-                identityResource.HasMany(x => x.Properties).WithOne(x => x.IdentityResource).HasForeignKey(x => x.IdentityResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                identityResource.HasMany(x => x.UserClaims).WithOne(x => x.IdentityResource)
+                    .HasForeignKey(x => x.IdentityResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                identityResource.HasMany(x => x.Properties).WithOne(x => x.IdentityResource)
+                    .HasForeignKey(x => x.IdentityResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<IdentityClaim>(claim =>
+            builder.Entity<IdentityClaim>(claim =>
             {
                 claim.ToTable("identity_claims").HasKey(x => x.Id);
 
@@ -178,7 +236,7 @@ namespace Shopper.Extensions.Configurations
                 claim.Property(x => x.IdentityResourceId).HasColumnName("identity_resource_id");
             });
 
-            modelBuilder.Entity<IdentityResourceProperty>(property =>
+            builder.Entity<IdentityResourceProperty>(property =>
             {
                 property.ToTable("identity_resource_properties");
                 property.Property(x => x.Id).HasColumnName("id");
@@ -188,8 +246,7 @@ namespace Shopper.Extensions.Configurations
             });
 
 
-
-            modelBuilder.Entity<ApiResource>(apiResource =>
+            builder.Entity<ApiResource>(apiResource =>
             {
                 apiResource.ToTable("api_resources").HasKey(x => x.Id);
 
@@ -205,13 +262,17 @@ namespace Shopper.Extensions.Configurations
 
                 apiResource.HasIndex(x => x.Name).IsUnique();
 
-                apiResource.HasMany(x => x.Secrets).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-                apiResource.HasMany(x => x.Scopes).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-                apiResource.HasMany(x => x.UserClaims).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
-                apiResource.HasMany(x => x.Properties).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                apiResource.HasMany(x => x.Secrets).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId)
+                    .IsRequired().OnDelete(DeleteBehavior.Cascade);
+                apiResource.HasMany(x => x.Scopes).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId)
+                    .IsRequired().OnDelete(DeleteBehavior.Cascade);
+                apiResource.HasMany(x => x.UserClaims).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId)
+                    .IsRequired().OnDelete(DeleteBehavior.Cascade);
+                apiResource.HasMany(x => x.Properties).WithOne(x => x.ApiResource).HasForeignKey(x => x.ApiResourceId)
+                    .IsRequired().OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<ApiSecret>(apiSecret =>
+            builder.Entity<ApiSecret>(apiSecret =>
             {
                 apiSecret.ToTable("api_secrets").HasKey(x => x.Id);
 
@@ -224,7 +285,7 @@ namespace Shopper.Extensions.Configurations
                 apiSecret.Property(x => x.Created).HasColumnName("created");
             });
 
-            modelBuilder.Entity<ApiResourceClaim>(apiClaim =>
+            builder.Entity<ApiResourceClaim>(apiClaim =>
             {
                 apiClaim.ToTable("api_claims").HasKey(x => x.Id);
 
@@ -233,7 +294,7 @@ namespace Shopper.Extensions.Configurations
                 apiClaim.Property(x => x.ApiResourceId).HasColumnName("api_resource_id");
             });
 
-            modelBuilder.Entity<ApiScope>(apiScope =>
+            builder.Entity<ApiScope>(apiScope =>
             {
                 apiScope.ToTable("api_scopes").HasKey(x => x.Id);
 
@@ -248,10 +309,11 @@ namespace Shopper.Extensions.Configurations
 
                 apiScope.HasIndex(x => x.Name).IsUnique();
 
-                apiScope.HasMany(x => x.UserClaims).WithOne(x => x.ApiScope).HasForeignKey(x => x.ApiScopeId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+                apiScope.HasMany(x => x.UserClaims).WithOne(x => x.ApiScope).HasForeignKey(x => x.ApiScopeId)
+                    .IsRequired().OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<ApiScopeClaim>(apiScopeClaim =>
+            builder.Entity<ApiScopeClaim>(apiScopeClaim =>
             {
                 apiScopeClaim.ToTable("api_scope_claims").HasKey(x => x.Id);
 
@@ -260,7 +322,7 @@ namespace Shopper.Extensions.Configurations
                 apiScopeClaim.Property(x => x.ApiScopeId).HasColumnName("api_scope_id");
             });
 
-            modelBuilder.Entity<ApiResourceProperty>(property =>
+            builder.Entity<ApiResourceProperty>(property =>
             {
                 property.ToTable("api_resource_properties");
                 property.Property(x => x.Key).HasMaxLength(250).IsRequired().HasColumnName("key");
@@ -269,9 +331,9 @@ namespace Shopper.Extensions.Configurations
             });
         }
 
-        public static void CustomConfigurePersistedGrantContext(this ModelBuilder modelBuilder)
+        public static void CustomConfigurePersistedGrantContext(this ModelBuilder builder)
         {
-            modelBuilder.Entity<PersistedGrant>(grant =>
+            builder.Entity<PersistedGrant>(grant =>
             {
                 grant.ToTable("persisted_grants");
 
@@ -287,11 +349,11 @@ namespace Shopper.Extensions.Configurations
 
                 grant.HasKey(x => x.Key);
 
-                grant.HasIndex(x => new { x.SubjectId, x.ClientId, x.Type });
+                grant.HasIndex(x => new {x.SubjectId, x.ClientId, x.Type});
                 grant.HasIndex(x => x.Expiration);
             });
 
-            modelBuilder.Entity<DeviceFlowCodes>(codes =>
+            builder.Entity<DeviceFlowCodes>(codes =>
             {
                 codes.ToTable("device_flows_codes");
 

@@ -69,7 +69,6 @@
         public async Task<AppUser> FindByEmail(string email)
         {
             return await _dbContext.Users
-                .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(user => String.Equals(user.Email, email, StringComparison.CurrentCultureIgnoreCase));
         }
 
@@ -177,7 +176,7 @@
         {
             return _dbContext
                 .Users
-                .IgnoreQueryFilters().Any(user => user.Id == userId);
+                .Any(user => user.Id == userId);
         }
 
         public bool ExistsByUserName(string userName)

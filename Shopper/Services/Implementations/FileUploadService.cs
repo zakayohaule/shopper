@@ -26,9 +26,9 @@ namespace Shopper.Services.Implementations
         {
             // @todo validate file type to only images
 
-            var tenant = _tenantService.GetCurrentTenant();
+            var tenant = _tenantService.GetTenantFromRequest();
             var webRoot = $"{_hostEnvironment.ContentRootPath}/wwwroot";
-            var imageUploadPath = @$"{webRoot}/uploads/products/{tenant}/";
+            var imageUploadPath = @$"{webRoot}/uploads/products/{tenant.Domain.Split(".")[0]}/";
             if (!Directory.Exists(imageUploadPath))
             {
                 Directory.CreateDirectory(imageUploadPath);

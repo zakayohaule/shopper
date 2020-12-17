@@ -1,1 +1,6 @@
-﻿
+﻿@using Shopper.Extensions.Helpers
+@{
+    var tenant = ViewContext.GetCurrentTenant();
+}
+
+@tenant?.Name;

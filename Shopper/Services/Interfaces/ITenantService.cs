@@ -1,7 +1,10 @@
+using Shared.Mvc.Entities;
+
 namespace Shopper.Services.Interfaces
 {
     public interface ITenantService
     {
-        string GetCurrentTenant();
+        string GetCurrentTenantConnectionString();
+        public Tenant GetTenantFromRequest();
     }
 }

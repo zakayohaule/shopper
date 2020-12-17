@@ -144,7 +144,7 @@ namespace Shopper.Services.Implementations
             var product = await _dbContext.Products.AddAsync(new Product
                 {Name = newProduct.Name, ProductCategoryId = newProduct.ProductCategoryId, ImagePath = imageName});
 
-            if (newProduct.Attributes.Any())
+            if (newProduct.Attributes.IsNotNull() && newProduct.Attributes.Any())
             {
                 var productAttributes = newProduct.Attributes.Select(attribute => new ProductAttribute
                     {AttributeId = attribute, Product = product.Entity,}).ToList();

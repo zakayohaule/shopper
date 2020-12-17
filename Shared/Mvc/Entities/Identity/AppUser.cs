@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Shared.Mvc.Entities.Identity
 {
@@ -45,17 +46,27 @@ namespace Shared.Mvc.Entities.Identity
 
         [Column("access_failed_count")] public override int AccessFailedCount { get; set; }
 
+        [Column("is_deleted")] public bool IsDeleted { get; set; } = false;
+
+        [Column("has_reset_password")] public bool HasResetPassword { get; set; } = false;
+
+        [Column("tenant_id")]
+        public Guid TenantId { get; set; }
+
+        [ForeignKey(nameof(TenantId))]
+        public Tenant Tenant { get; set; }
+
         [Column("created_at")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [BindNever]
+        // [JsonIgnore]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         [Column("updated_at")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [BindNever]
+        // [JsonIgnore]
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
-
-        [Column("is_deleted")] public bool IsDeleted { get; set; } = false;
-
-        [Column("has_reset_password")] public bool HasResetPassword { get; set; } = false;
 
         public List<UserClaim> Claims { get; set; }
         public List<UserLogin> Logins { get; set; }

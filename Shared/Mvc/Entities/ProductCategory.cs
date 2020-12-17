@@ -6,7 +6,7 @@ using Shared.Mvc.Entities.BaseEntities;
 namespace Shared.Mvc.Entities
 {
     [Table("product_categories")]
-    public class ProductCategory : BaseEntity<ushort>
+    public class ProductCategory : NoTenantBaseEntity<ushort>
     {
         [Column(name: "name"), Required]
         public string Name { get; set; }

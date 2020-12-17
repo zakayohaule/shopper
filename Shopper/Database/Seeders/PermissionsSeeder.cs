@@ -18,7 +18,7 @@ namespace Shopper.Database.Seeders
                 .SingleOrDefault(group => group.Name == "Role Management");
 
             var productGroupManagement =
-                dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Expenditure Type Management"));
+                dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Product Group Management"));
 
             var productCategoryManagement =
                 dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Product Category Management"));
@@ -77,6 +77,10 @@ namespace Shopper.Database.Seeders
                 new Permission {Name = "expenditure_type_view", DisplayName = "View Expenditure Types", Module = expenditureManagement},
                 new Permission {Name = "expenditure_type_edit", DisplayName = "Edit Expenditure Types", Module = expenditureManagement},
                 new Permission {Name = "expenditure_type_delete", DisplayName = "Delete Expenditure Types", Module = expenditureManagement},
+                new Permission {Name = "expenditure_add", DisplayName = "Add Expenditure", Module = expenditureManagement},
+                new Permission {Name = "expenditure_view", DisplayName = "View Expenditure", Module = expenditureManagement},
+                new Permission {Name = "expenditure_edit", DisplayName = "Edit Expenditure", Module = expenditureManagement},
+                new Permission {Name = "expenditure_delete", DisplayName = "Delete Expenditure", Module = expenditureManagement},
                 new Permission {Name = "product_add", DisplayName = "Add Products", Module = productManagement},
                 new Permission {Name = "product_view", DisplayName = "View Products", Module = productManagement},
                 new Permission {Name = "product_edit", DisplayName = "Edit Products", Module = productManagement},

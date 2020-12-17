@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Shared.Mvc.Entities.Identity;
 
@@ -8,47 +11,74 @@ namespace Shopper.Database.Seeders
 {
     public class UsersSeeder
     {
-        public static void Seed(ApplicationDbContext dbContext, UserManager<AppUser> userManager, ILogger logger)
+        public static void Seed(IServiceProvider serviceProvider, ApplicationDbContext dbContext, IPasswordHasher<AppUser> passwordHasher,
+            UserManager<AppUser> userManager, ILogger logger)
         {
-            // var eGa = dbContext.Institutions.First(institution => institution.VoteCode == "TR97");
-            var user = new AppUser
+            var keaTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == "kea.localhost");
+            var localhostTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == "localhost");
+            var users = new List<AppUser>
             {
-                UserName = "admin",
-                FullName = "Admin Admin",
-                Email = "admin@admin.com",
-                EmailConfirmed = true,
-                HasResetPassword = true,
-                // Institution = eGa
+                new AppUser
+                {
+                    UserName = "admin",
+                    FullName = "Admin Admin",
+                    Email = "admin@admin.com",
+                    EmailConfirmed = true,
+                    HasResetPassword = true,
+                    Tenant = keaTenant,
+                },
+                new AppUser
+                {
+                    UserName = "localhostadmin",
+                    FullName = "Admin Localhost",
+                    Email = "admin@localhost.com",
+                    EmailConfirmed = true,
+                    HasResetPassword = true,
+                    Tenant = localhostTenant,
+                }
             };
 
-            if (!dbContext.Users.Any(appUser => appUser.Email == "admin@admin.com"))
+            foreach (var aUser in users)
             {
-                var result = userManager.CreateAsync(user, "123456").Result;
-                if (!result.Succeeded)
+                if (!dbContext.Users.IgnoreQueryFilters().Any(u => u.Email.Equals(aUser.Email)))
                 {
-                    logger.Error($"Could not create user => {user.Email}");
-                    return;
+
+                    dbContext.Tenant = aUser.Tenant;
+                    /*aUser.PasswordHash = passwordHasher.HashPassword(aUser, "123456");
+                    aUser.NormalizedEmail = aUser.Email.ToUpper();
+                    aUser.NormalizedUserName = aUser.UserName.ToUpper();
+                    dbContext.Users.Add(aUser);*/
+                    var result = userManager.CreateAsync(aUser, "123456").Result;
+                    if (!result.Succeeded)
+                    {
+                        logger.Error($"Could not create user => {aUser.Email}");
+                        return;
+                    }
+
+                    logger.Information($"Seeding user => {aUser.Email}");
+                    dbContext.SaveChanges();
+                }
+                else
+                {
+                    continue;
                 }
 
-                logger.Information($"Seeding user => {user.Email}");
-            }
-            else
-            {
-                return;
-            }
+                var adminUser = dbContext.Users
+                    .IgnoreQueryFilters()
+                    .FirstOrDefault(u => u.Email.Equals(aUser.Email));
 
-            var adminUser = userManager.FindByEmailAsync("admin@admin.com").Result;
+                var adminRole = dbContext.Roles
+                    .IgnoreQueryFilters()
+                    .FirstOrDefault(r => r.Name.Equals("Administrator") && r.TenantId.Equals(aUser.TenantId));
 
-            var adminRole = dbContext.Roles.SingleOrDefault(role => role.Name == "Administrator");
+                if (adminUser == null || adminRole == null)
+                {
+                    logger.Error("Role or user not found");
+                    throw new NullReferenceException("Role or User is null");
+                }
 
-            if (adminUser == null || adminRole == null)
-            {
-                logger.Error("Role or user not found");
-                throw new NullReferenceException("Role or User is null");
-            }
-
-            if (!dbContext.UserRoles.Any(role => role.RoleId == adminRole.Id & role.UserId == adminUser.Id))
-            {
+                if (dbContext.UserRoles.IgnoreQueryFilters().Any(role => role.RoleId == adminRole.Id & role.UserId == adminUser.Id))
+                    continue;
                 var userRole = new UserRole
                 {
                     Role = adminRole,
@@ -57,9 +87,8 @@ namespace Shopper.Database.Seeders
 
                 logger.Information($"Seeding user role {userRole.User.Email} => {adminRole.Name}");
                 dbContext.UserRoles.Add(userRole);
+                dbContext.SaveChanges();
             }
-
-            dbContext.SaveChanges();
         }
     }
 }

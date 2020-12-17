@@ -7,6 +7,8 @@ using Newtonsoft.Json;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities.Identity;
 using Shopper.Attributes;
+using Shopper.Database;
+using Shopper.Extensions.Helpers;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Mvc.Controllers
@@ -38,14 +40,17 @@ namespace Shopper.Mvc.Controllers
 
         [HttpPost(""), Permission("role_add"), ValidateAntiForgeryToken,
             /*ValidateModelWithRedirect()*/]
-        public async Task<IActionResult> Create(Role role)
+        public async Task<IActionResult> Create(Role role, [FromServices] ApplicationDbContext dbContext)
         {
             IdentityResult result;
             var roleName = _roleService.GenerateRoleName(role.DisplayName);
             role.Name = roleName;
-            result = await _roleManager.CreateAsync(role);
+            role.NormalizedName = $"{role.Name}_{HttpContext.GetCurrentTenant().Id}";
+            var newRole = dbContext.Roles.Add(role);
+            await dbContext.SaveChangesAsync();
+            // result = await _roleManager.CreateAsync(role);
             // }
-            if (result.Succeeded)
+            if (newRole.Entity != null)
             {
                 ToastSuccess("Role created successfully!");
                 return RedirectToAction(nameof(Index));

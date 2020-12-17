@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Mvc.Entities.Identity;
+using Shopper.Services;
 using Shopper.Services.Implementations;
 using Shopper.Services.Implementations.ReplaceDefaults;
 using Shopper.Services.Interfaces;
@@ -32,6 +33,8 @@ namespace Shopper.Extensions.Configurations
             services.AddScoped<ISaleService, SaleService>();
             services.AddScoped<IFileUploadService, FileUploadService>();
             services.AddScoped<IExpenditureTypeService, ExpenditureTypeService>();
+            services.AddScoped<IExpenditureService, ExpenditureService>();
+            services.AddScoped<TenantResolver>();
         }
     }
 }

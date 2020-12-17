@@ -7,12 +7,12 @@ namespace Shopper.Extensions.Helpers
     {
         public static string LoadProductImage(this string imageName, HttpContext context)
         {
-            var tenant = context.GetTenantFromSubdomain();
-            if (tenant.IsNullOrEmpty())
+            var tenant = context.GetCurrentTenant();
+            if (tenant == null)
             {
-                tenant = "kea_db";
+                return "kea";
             }
-            return $"/uploads/products/{tenant}/{imageName}";
+            return $"/uploads/products/{tenant.Domain.Split(".")[0]}/{imageName}";
         }
     }
 }

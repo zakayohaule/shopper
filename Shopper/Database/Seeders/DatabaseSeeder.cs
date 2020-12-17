@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using Shared.Mvc.Entities.Identity;
 
@@ -6,12 +8,17 @@ namespace Shopper.Database.Seeders
 {
     public class DatabaseSeeder
     {
-        public static void Seed(ApplicationDbContext dbContext, UserManager<AppUser> userManager, ILogger logger)
+        public static void Seed(ApplicationDbContext dbContext,AdminAppDbContext adminAppDbContext,
+            IPasswordHasher<AppUser> passwordHasher, UserManager<AppUser> userManager,
+            ILogger logger
+            ,IServiceProvider serviceProvider)
         {
             ModulesSeeder.Seed(dbContext, logger);
             PermissionsSeeder.Seed(dbContext, logger);
-            RoleSeeder.Seed(dbContext, logger);
-            UsersSeeder.Seed(dbContext, userManager, logger);
+            TenantSeeder.Seed(adminAppDbContext, logger);
+            TenantSeeder.Seed(dbContext,adminAppDbContext, logger);
+            RoleSeeder.Seed(serviceProvider, dbContext, logger);
+            UsersSeeder.Seed(serviceProvider, dbContext,passwordHasher, userManager, logger);
         }
     }
 }

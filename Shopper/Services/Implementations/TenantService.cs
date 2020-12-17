@@ -1,6 +1,12 @@
-using IdentityServer4.Extensions;
+using System;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
+using Shared.Common;
+using Shared.Extensions.Helpers;
+using Shared.Mvc.Entities;
+using Shopper.Database;
 using Shopper.Extensions.Helpers;
 using Shopper.Services.Interfaces;
 
@@ -9,37 +15,46 @@ namespace Shopper.Services.Implementations
     public class TenantService : ITenantService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IConfiguration _configuration;
 
-        public TenantService(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
+        public TenantService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
-            _configuration = configuration;
         }
 
-        public string GetCurrentTenant()
+        public string GetCurrentTenantConnectionString()
         {
             var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext == null)
-            {
-                return _configuration.GetValue<string>("DefaultTenantDb");
-            }
-            if (!httpContext.User.IsAuthenticated())
-            {
-                return GetTenantFromSubDomain();
-            }
-            return GetTenantFromSubDomain();
+            var tenant = httpContext?.GetCurrentTenant();
+            return tenant?.ConnectionString;
         }
 
-        private string GetTenantFromSubDomain()
+        public Tenant GetTenantFromRequest()
         {
-            var subDomain = _httpContextAccessor.HttpContext.GetTenantFromSubdomain();
-
-            if (string.IsNullOrEmpty(subDomain))
+            var httpContext = _httpContextAccessor.HttpContext;
+            var tenant = httpContext?.GetCurrentTenant();
+            if (tenant == null)
             {
-                subDomain = _configuration.GetValue<string>("DefaultTenantDb");
+                return new Tenant
+                {
+                    Id = Guid.Parse("08d8a20e-2272-4843-8c78-0e4d97771414"),
+                    Domain = "kea.localhost"
+                };
             }
-            return subDomain.Trim().ToLower();
+
+            return tenant;
         }
+
+        public Tenant GetTenantFromRequestOrDefault()
+        {
+            var httpContext = _httpContextAccessor.HttpContext;
+            var tenant = httpContext.GetCurrentTenant();
+            if (tenant == null)
+            {
+                throw new InvalidTenantException("Invalid tenant");
+            }
+
+            return null;
+        }
+
     }
 }

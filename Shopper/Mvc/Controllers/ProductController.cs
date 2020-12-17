@@ -69,6 +69,8 @@ namespace Shopper.Mvc.Controllers
         [HttpPost(""), Permission("product_add"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductFormModel newProduct, [FromServices] IFileUploadService fileUploadService)
         {
+            // @todo Preselect product category/group if only one is present
+
             // return Ok(newProduct);
             if (_productService.IsDuplicate(newProduct.Name, newProduct.Id))
             {

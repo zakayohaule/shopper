@@ -1,0 +1,30 @@
+﻿@model Shopper.Mvc.ViewModels.ExpenditureModel
+@{
+    var expenditureTypes = ViewData["ExpenditureTypes"] as List<SelectListItem>;
+}
+<div class="form-group col-12">
+    <th:label asp-for="ExpenditureTypeId">Type</th:label>
+    <th:select class="form-control select2bs4" asp-for="ExpenditureTypeId" asp-items="expenditureTypes">
+        <option value="">-- Select --</option>
+    </th:select>
+    <th:span asp-validation-for="ExpenditureTypeId" class="text-danger"></th:span>
+</div>
+<div class="form-group col-12">
+    <th:label asp-for="Date"></th:label>
+    <th:input asp-for="Date" class="form-control"></th:input>
+    <th:span asp-validation-for="Date" class="text-danger"></th:span>
+</div>
+<div class="form-group col-12">
+    <th:label asp-for="Amount"></th:label>
+    <th:input asp-for="Amount" class="form-control" onkeyup="formatNumber(event)" type="text"></th:input>
+    <th:span asp-validation-for="Amount" class="text-danger"></th:span>
+</div>
+<div class="form-group col-12">
+    <th:label asp-for="Description"></th:label>
+    <th:input asp-for="Description" type="textarea" class="form-control"></th:input>
+    <th:span asp-validation-for="Description" class="text-danger"></th:span>
+</div>
+
+<div class="form-group col-12 text-right">
+    <button type="submit" class="btn btn-primary" name="button">Submit</button>
+</div>

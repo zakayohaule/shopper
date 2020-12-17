@@ -8,7 +8,7 @@ using Shared.Mvc.Entities.BaseEntities;
 namespace Shared.Mvc.Entities
 {
     [Table("product_groups")]
-    public class ProductGroup : BaseEntity<ushort>
+    public class ProductGroup : NoTenantBaseEntity<ushort>
     {
         [Column(name: "name"), Required]
         [Remote("ValidateProductGroupName", AdditionalFields = "Id"), DisplayName("Product Group Name")]

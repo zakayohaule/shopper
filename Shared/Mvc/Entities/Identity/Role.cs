@@ -14,6 +14,12 @@ namespace Shared.Mvc.Entities.Identity
         [Column("id")]
         public override long Id { get; set; }
 
+        [Column("tenant_id")]
+        public Guid TenantId { get; set; }
+
+        [ForeignKey(nameof(TenantId))]
+        public Tenant Tenant { get; set; }
+
         [Column("name")]
         public override string Name { get; set; }
 

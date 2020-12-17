@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Shared.Mvc.Entities;
 
 namespace Shopper.Database
 {
@@ -8,5 +9,7 @@ namespace Shopper.Database
         public AdminAppDbContext([NotNull] DbContextOptions<AdminAppDbContext> options) : base(options)
         {
         }
+
+        public DbSet<Tenant> Tenants { get; set; }
     }
 }

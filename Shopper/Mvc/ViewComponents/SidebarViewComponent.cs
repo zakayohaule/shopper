@@ -28,6 +28,10 @@ namespace Shopper.Mvc.ViewComponents
             {
                 sidebars.Add(ModuleHelper.AddModuleLink("Add Sale", Url.Action("Create", "Sale"), "fas fa-shopping-cart"));
             }
+            if (_userClaimService.HasPermission(userId, "expenditure_add"))
+            {
+                sidebars.Add(ModuleHelper.AddModuleLink("Expenditures", Url.Action("Index", "Expenditure"), "fas fa-money-bill-wave"));
+            }
 
             //User Management Module
             if (_userClaimService.HasAnyPermission(userId, "user_view,role_view"))

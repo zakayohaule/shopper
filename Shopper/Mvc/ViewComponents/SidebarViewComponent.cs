@@ -23,7 +23,7 @@ namespace Shopper.Mvc.ViewComponents
             var links = new List<SidebarMenu>();
 
             // sidebars.Add(ModuleHelper.AddHeader("  User Management"));
-
+            sidebars.Add(ModuleHelper.AddModuleLink("Dashboard", Url.Action("Index", "Home"), "fa fa-home"));
             if (_userClaimService.HasPermission(userId, "sale_record"))
             {
                 sidebars.Add(ModuleHelper.AddModuleLink("Add Sale", Url.Action("Create", "Sale"), "fas fa-shopping-cart"));

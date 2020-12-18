@@ -8,6 +8,7 @@
 }
 
 @section css {
+    <th:partial name="Partials/_DtCss"></th:partial>
     <th:link rel="stylesheet" href="~/plugins/select2-4.0.5/css/select2.min.css"></th:link>
     <th:link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"></th:link>
     <!-- Toastr -->
@@ -41,7 +42,7 @@
     </div>
 
     <div class="card-body table-responsive p-3">
-        <table class="table table-sm table-hover">
+        <table class="table table-sm table-hover dt-table">
             <thead>
             <tr>
                 <th style="width: 10px">#</th>
@@ -92,6 +93,8 @@
 
 @section scripts
 {
+    <th:partial name="Partials/_DtJs"></th:partial>
+
     <th:partial name="_ValidationScriptsPartial"></th:partial>
     <th:partial name="Partials/_ToastScript"></th:partial>
     <!-- Select2 -->

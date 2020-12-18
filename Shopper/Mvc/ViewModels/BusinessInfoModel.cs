@@ -30,6 +30,7 @@ namespace Shopper.Mvc.ViewModels
 
         public DateTime ValidTo { get; set; }
 
+        [Remote("ValidateImageExtension")]
         public IFormFile Image { get; set; }
     }
 }

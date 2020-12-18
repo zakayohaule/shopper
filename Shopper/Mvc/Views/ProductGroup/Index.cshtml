@@ -9,6 +9,7 @@
 @section css {
     <!-- Toastr -->
     <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
+    <th:partial name="Partials/_DtCss"></th:partial>
 }
 
 <div class="card with-border">
@@ -38,7 +39,7 @@
     </div>
 
     <div class="card-body table-responsive p-3">
-        <table class="table table-sm table-hover">
+        <table class="table table-sm table-hover dt-table">
             <thead>
             <tr>
                 <th style="width: 10px">#</th>
@@ -87,6 +88,7 @@
 
 @section scripts
 {
+    <th:partial name="Partials/_DtJs"></th:partial>
     <th:script src="~/js/edit-form.js"></th:script>
     <th:partial name="_ValidationScriptsPartial"></th:partial>
     <th:partial name="Partials/_ToastScript"></th:partial>

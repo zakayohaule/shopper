@@ -14,8 +14,7 @@
 
 @section css
 {
-    <!-- dropzonejs -->
-    <th:link rel="stylesheet" href="~/plugins/dropzone/min/dropzone.min.css"></th:link>
+    <th:partial name="Partials/_DtCss"></th:partial>
     <style type="text/css">
         .product-image-wrapper, .product-image-thumb {
           position: relative;
@@ -229,7 +228,7 @@
                 <div class="tab-pane fade" id="sales" role="tabpanel" aria-labelledby="sales-tab">
                     <div class="row">
                         <div class="col-md-12">
-                            <th:partial name="_ProductSales"></th:partial>
+                            <th:partial name="_ProductSales"/>
                         </div>
                     </div>
                 </div>
@@ -279,8 +278,8 @@
 @section scripts
 {
     <!-- dropzonejs -->
-    <th:script src="~/plugins/dropzone/min/dropzone.min.js"></th:script>
     <th:script src="~/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></th:script>
+    <th:partial name="Partials/_DtJs"></th:partial>
     <script >
     $('.product-image-thumb').on('click', function () {
         var image_element = $(this).find('img');

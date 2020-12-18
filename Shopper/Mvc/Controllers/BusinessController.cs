@@ -1,6 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Configuration;
 using Shopper.Attributes;
 using Shopper.Extensions.Helpers;
 using Shopper.Mvc.ViewModels;
@@ -52,6 +57,25 @@ namespace Shopper.Mvc.Controllers
             return await _businessService.IsDuplicateAsync(name, id)
                 ? Json("Another business with this name with this name already exists")
                 : Json(true);
+        }
+
+        [AcceptVerbs("GET", Route = "validate-image-extension", Name = "ValidateImageExtension")]
+        public IActionResult ExistsByDisplayName(string image, [FromServices] IConfiguration configuration)
+        {
+            var acceptedImageFormatsKvp = configuration.GetSection("ImageFormats").AsEnumerable();
+            var acceptedImageFormats = acceptedImageFormatsKvp.Where(s => s.Value!=null).Select(s => s.Value).ToList();
+            var imageParts = image.Split(".");
+            if (imageParts.Length != 2)
+            {
+                return Json("Invalid image file!");
+            }
+
+            if (!acceptedImageFormats.Contains(imageParts[1].ToLower()))
+            {
+                return Json($"Only '{acceptedImageFormats.Join(", ")}' image types are supported");
+            }
+
+            return Json(true);
         }
     }
 }

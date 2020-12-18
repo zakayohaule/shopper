@@ -12,8 +12,8 @@ namespace Shopper.Extensions.Configurations
     {
         public static void ConfigureMvc(this IServiceCollection services)
         {
-            /*services.AddMultiTenant<Tenant>()
-                .WithHostStrategy("_tenant_");*/
+            // @todo create middleware to log request time
+
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
                 {

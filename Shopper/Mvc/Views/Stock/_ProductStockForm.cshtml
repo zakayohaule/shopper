@@ -32,7 +32,7 @@
         <div class="form-group row">
             <label for="" class="col-sm-4 col-form-label">@att.Name</label>
             <div class="col-sm-8">
-                <th:select class="form-control select2bs4" asp-for="Attributes[i]" id="attribute_@att.Id"
+                <th:select class="form-control select2bs4" asp-for="Attributes[i]" required id="attribute_@att.Id"
                            asp-items="@att.Options">
                     <option value="">-- Select @att.Name --</option>
                 </th:select>

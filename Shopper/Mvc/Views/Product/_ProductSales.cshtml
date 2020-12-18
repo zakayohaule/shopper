@@ -4,11 +4,16 @@
     var product = Model;
 }
 <table class="table table-bordered table-hover" style="text-align: center;">
+    @{
+        int index = 0;
+        int colSpan = 3;
+    }
     <thead>
     <tr>
         <th style="width: 10px;">#</th>
         @if (product.Skus.Any(sku => sku.SkuAttributes.Any()))
         {
+            colSpan++;
             <th>Attributes</th>
         }
         <th>Date</th>
@@ -20,9 +25,6 @@
     </tr>
     </thead>
     <tbody>
-    @{
-        int index = 0;
-    }
     @foreach (var sku in Model.Skus.OrderByDescending(s => s.Date))
     {
         @foreach (var sale in sku.Sales.OrderByDescending(s => s.SaleInvoice.Date))
@@ -33,13 +35,14 @@
                 @if (product.Skus.Any(sku1 => sku1.SkuAttributes.Any()))
                 {
                     <td style="font-weight: bolder">
-                        @string.Join(" - ", sku.SkuAttributes.Select(skuAtt => skuAtt.Option.Name))
-                    </td>
-                }
-                else
-                {
-                    <td style="font-weight: bolder">
-                        N/A
+                        @if (sku.SkuAttributes.Any())
+                        {
+                            @string.Join(" - ", sku.SkuAttributes.Select(skuAtt => skuAtt.Option.Name))
+                        }
+                        else
+                        {
+                            <span>N/A</span>
+                        }
                     </td>
                 }
                 <td>@sale.SaleInvoice.Date.ToString("dd-MM-yyyy")</td>
@@ -54,7 +57,7 @@
     </tbody>
     <tfoot>
     <tr>
-        <th colspan="4">Total</th>
+        <th colspan="@colSpan">Total</th>
         <th>@product.Skus.Sum(sku => sku.Sales.Sum(s => s.Quantity))</th>
         <th>@product.Skus.Sum(sku => sku.Sales.Sum(sale => sale.Price * sale.Quantity)).ToString("N0")/-</th>
         <th>@product.Skus.Sum(sku => sku.Sales.Sum(sale => sale.Profit * sale.Quantity)).ToString("N0")/-</th>

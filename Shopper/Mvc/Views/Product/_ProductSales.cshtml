@@ -27,7 +27,7 @@
     <tbody>
     @foreach (var sku in Model.Skus.OrderByDescending(s => s.Date))
     {
-        @foreach (var sale in sku.Sales.OrderByDescending(s => s.SaleInvoice.Date))
+        @foreach (var sale in sku.Sales.Where(s => s.IsConfirmed).OrderByDescending(s => s.SaleInvoice.Date))
         {
             index++;
             <tr>
@@ -58,10 +58,10 @@
     <tfoot>
     <tr>
         <th colspan="@colSpan">Total</th>
-        <th>@product.Skus.Sum(sku => sku.Sales.Sum(s => s.Quantity))</th>
-        <th>@product.Skus.Sum(sku => sku.Sales.Sum(sale => sale.Price * sale.Quantity)).ToString("N0")/-</th>
-        <th>@product.Skus.Sum(sku => sku.Sales.Sum(sale => sale.Profit * sale.Quantity)).ToString("N0")/-</th>
-        <th>@product.Skus.Sum(sku => sku.Sales.Sum(sale => sale.Discount * sale.Quantity)).ToString("N0")/-</th>
+        <th>@product.Skus.Sum(sku => sku.Sales.Where(s => s.IsConfirmed).Sum(s => s.Quantity))</th>
+        <th>@ViewData["TotalSales"]/-</th>
+        <th>@product.Skus.Sum(sku => sku.Sales.Where(s => s.IsConfirmed).Sum(sale => sale.Profit * sale.Quantity)).ToString("N0")/-</th>
+        <th>@product.Skus.Sum(sku => sku.Sales.Where(s => s.IsConfirmed).Sum(sale => sale.Discount * sale.Quantity)).ToString("N0")/-</th>
     </tr>
     </tfoot>
 </table>

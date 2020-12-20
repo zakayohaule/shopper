@@ -8,7 +8,7 @@ namespace Shopper.Services.Interfaces
 {
     public interface IExpenditureService
     {
-        IQueryable<Expenditure> GetAllExpenditures();
+        IQueryable<Expenditure> GetExpenditureAsQuerable();
         Task<Expenditure> FindByIdAsync(ulong id);
         Task<Expenditure> CreateAsync(Expenditure expenditure);
         Task<Expenditure> UpdateAsync(Expenditure expenditure);

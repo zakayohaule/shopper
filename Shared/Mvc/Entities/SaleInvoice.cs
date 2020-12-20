@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Shared.Mvc.Entities.BaseEntities;
+using Shared.Mvc.Entities.Identity;
 
 namespace Shared.Mvc.Entities
 {
@@ -23,6 +24,12 @@ namespace Shared.Mvc.Entities
 
         [Column("is_canceled")]
         public bool IsCanceled { get; set; } = false;
+
+        [Column("user_id")]
+        public long UserId { get; set; }
+
+        [ForeignKey(nameof(UserId))]
+        public AppUser User { get; set; }
 
         [InverseProperty("SaleInvoice")]
         public ICollection<Sale> Sales { get; set; }

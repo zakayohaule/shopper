@@ -14,12 +14,13 @@ namespace Shopper.Services.Interfaces
         public IQueryable<Sku> GetProductSkus(uint id);
         public Task<SaleInvoice> FindInvoiceByIdAsync(ulong id);
         public Task<Sale> FindSaleByIdAsync(ulong id);
-        public Task<SaleInvoice> AddToInvoiceAsync(SaleFormViewModel formViewModel);
+        public Task<SaleInvoice> AddToInvoiceAsync(SaleFormViewModel formViewModel, long userId);
         public Task<Sale> UpdateSaleAsync(Sale sale, SaleFormViewModel viewModel);
         public Task<SaleInvoice> GetInCompleteInvoiceAsync();
         public Task<string> GenerateInvoiceNumberAsync();
         public Task<SaleInvoice> ConfirmPaymentAsync(SaleInvoice invoice);
         public Task<string> IsAvailableInStockAsync(int quantity, ulong skuId);
         public Task<SaleInvoice> CancelPaymentAsync(SaleInvoice invoice);
+        IQueryable<Sale> GetSalesAsQueryable();
     }
 }

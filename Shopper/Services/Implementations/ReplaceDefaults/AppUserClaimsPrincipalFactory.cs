@@ -31,10 +31,9 @@ namespace Shopper.Services.Implementations.ReplaceDefaults
             var id = new ClaimsIdentity("Identity.Application", // REVIEW: Used to match Application scheme
                 Options.ClaimsIdentity.UserNameClaimType,
                 Options.ClaimsIdentity.RoleClaimType);
-            
+
             id.AddClaim(new Claim("FullName", user.FullName));
             id.AddClaim(new Claim("Email", email));
-            // id.AddClaim(new Claim("InstitutionId", user.InstitutionId.ToString()));
             id.AddClaim(new Claim(Options.ClaimsIdentity.UserIdClaimType, userId));
             id.AddClaim(new Claim(Options.ClaimsIdentity.UserNameClaimType, userName));
             if (UserManager.SupportsUserSecurityStamp)

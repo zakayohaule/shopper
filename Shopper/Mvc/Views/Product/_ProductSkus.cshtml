@@ -55,7 +55,7 @@
         <th colspan="@colSpan">Total</th>
         <th>@product.Skus.Sum(sku => sku.Quantity)</th>
         <th>@product.Skus.Sum(sku => sku.RemainingQuantity)</th>
-        <th>@product.Skus.Sum(sku => sku.Quantity * sku.BuyingPrice).ToString("N0")/-</th>
+        <th>@ViewData["TotalStockValue"]/-</th>
     </tr>
     </tfoot>
 </table>

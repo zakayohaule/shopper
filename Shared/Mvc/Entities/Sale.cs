@@ -22,7 +22,7 @@ namespace Shared.Mvc.Entities
         [Column("quantity")]
         public int Quantity { get; set; }
 
-        [Column("is_confirmed")] public bool IsConfirmed { get; set; } = true;
+        [Column("is_confirmed")] public bool IsConfirmed { get; set; } = false;
 
         [ForeignKey(nameof(SkuId))]
         public Sku Sku { get; set; }

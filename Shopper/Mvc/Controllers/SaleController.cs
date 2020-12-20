@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Shared.Common;
 using Shared.Extensions.Helpers;
 using Shopper.Attributes;
+using Shopper.Extensions.Helpers;
 using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
 
@@ -87,7 +88,7 @@ namespace Shopper.Mvc.Controllers
         {
             try
             {
-                await _saleService.AddToInvoiceAsync(formViewModel);
+                await _saleService.AddToInvoiceAsync(formViewModel, HttpContext.GetUserId());
             }
             catch (OutOfStockException e)
             {

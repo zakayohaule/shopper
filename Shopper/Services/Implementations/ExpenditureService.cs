@@ -19,7 +19,7 @@ namespace Shopper.Services.Implementations
             _dbContext = dbContext;
         }
 
-        public IQueryable<Expenditure> GetAllExpenditures()
+        public IQueryable<Expenditure> GetExpenditureAsQuerable()
         {
             return _dbContext.Expenditures.AsQueryable();
         }

@@ -59,7 +59,7 @@ namespace Shopper.Services.Implementations
             return await _dbContext.Sales.Include(s => s.Sku).FirstOrDefaultAsync(s => s.Id.Equals(id));
         }
 
-        public async Task<SaleInvoice> AddToInvoiceAsync(SaleFormViewModel formViewModel)
+        public async Task<SaleInvoice> AddToInvoiceAsync(SaleFormViewModel formViewModel, long userId)
         {
             var sku = await _dbContext.Skus.FirstOrDefaultAsync(sku1 => sku1.Id == formViewModel.SkuId);
             if (sku == null)
@@ -76,6 +76,7 @@ namespace Shopper.Services.Implementations
                     Price = price,
                     Quantity = formViewModel.Quantity,
                     SkuId = formViewModel.SkuId,
+                    IsConfirmed = false,
                     Discount = sku.SellingPrice > price
                         ? (uint) ((sku.SellingPrice - price) * formViewModel.Quantity)
                         : 0,
@@ -92,6 +93,7 @@ namespace Shopper.Services.Implementations
                 {
                     invoice = new SaleInvoice
                     {
+                        UserId = userId,
                         Amount = (ulong) (sale.Price * sale.Quantity), Date = DateTime.Now,
                         Number = await GenerateInvoiceNumberAsync()
                     };
@@ -197,7 +199,17 @@ namespace Shopper.Services.Implementations
         {
             invoice.IsCompleted = true;
             invoice.IsCanceled = false;
+
+            await _dbContext.Entry(invoice)
+                .Collection(i => i.Sales)
+                .LoadAsync();
+            foreach (var invoiceSale in invoice.Sales)
+            {
+                invoiceSale.IsConfirmed = true;
+            }
+
             var updatedInvoice = _dbContext.SaleInvoices.Update(invoice);
+
 
             await _dbContext.SaveChangesAsync();
             return updatedInvoice.Entity;
@@ -235,6 +247,11 @@ namespace Shopper.Services.Implementations
                 Console.WriteLine(e);
                 return null;
             }
+        }
+
+        public IQueryable<Sale> GetSalesAsQueryable()
+        {
+            return _dbContext.Sales.AsQueryable();
         }
 
         public async Task<string> IsAvailableInStockAsync(int quantity, ulong skuId)

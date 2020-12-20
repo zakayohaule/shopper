@@ -17,7 +17,8 @@ namespace Shopper.Mvc.Controllers
         private readonly IExpenditureService _expenditureService;
         private readonly IExpenditureTypeService _expenditureTypeService;
 
-        public ExpenditureController(IExpenditureService expenditureService, IExpenditureTypeService expenditureTypeService)
+        public ExpenditureController(IExpenditureService expenditureService,
+            IExpenditureTypeService expenditureTypeService)
         {
             _expenditureService = expenditureService;
             _expenditureTypeService = expenditureTypeService;
@@ -28,7 +29,7 @@ namespace Shopper.Mvc.Controllers
         {
             Title = "Expenditures";
             AddPageHeader(Title);
-            var expenditures = _expenditureService.GetAllExpenditures().ToList();
+            var expenditures = _expenditureService.GetExpenditureAsQuerable().OrderByDescending(e => e.Date).ToList();
             ViewData["ExpenditureTypes"] = _expenditureTypeService.GetExpenditureTypeSelectListItems();
             return View(expenditures);
         }
@@ -62,22 +63,18 @@ namespace Shopper.Mvc.Controllers
          ValidateAntiForgeryToken,]
         public async Task<IActionResult> Update(ulong id, ExpenditureModel formModel)
         {
+            var expenditure = await _expenditureService.FindByIdAsync(id);
 
-            if (!await _expenditureService.ExistsByIdAsync(id))
+            if (expenditure == null)
             {
                 return NotFound("Expenditure not found");
             }
 
-            var expenditure = new Expenditure
-            {
-                Id = id,
-                Date = formModel.Date,
-                Amount = uint.Parse(formModel.Amount.Replace(",", "")),
-                ExpenditureTypeId = formModel.ExpenditureTypeId,
-                Description = formModel.Description
-            };
+            expenditure.Date = formModel.Date;
+            expenditure.Amount = uint.Parse(formModel.Amount.Replace(",", ""));
+            expenditure.ExpenditureTypeId = formModel.ExpenditureTypeId;
+            expenditure.Description = formModel.Description;
 
-            expenditure.Id = id;
             expenditure = await _expenditureService.UpdateAsync(expenditure);
 
             if (expenditure != null)
@@ -100,7 +97,7 @@ namespace Shopper.Mvc.Controllers
                 return NotFound();
             }
 
-            await _expenditureService.DeleteExpenditureAsync(new Expenditure{Id = id});
+            await _expenditureService.DeleteExpenditureAsync(new Expenditure {Id = id});
 
             ToastSuccess("Expenditure deleted successfully!");
             return RedirectToAction(nameof(Index));
@@ -111,7 +108,7 @@ namespace Shopper.Mvc.Controllers
         {
             var expenditure = await _expenditureService.FindByIdAsync(id);
 
-            return Json(expenditure, new JsonSerializerSettings{ContractResolver = null});
+            return Json(expenditure, new JsonSerializerSettings {ContractResolver = null});
         }
     }
 }

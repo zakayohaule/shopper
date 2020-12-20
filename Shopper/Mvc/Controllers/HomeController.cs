@@ -1,12 +1,18 @@
-﻿﻿using System.Diagnostics;
+﻿﻿using System;
+ using System.Diagnostics;
+ using System.Linq;
+ using System.Threading.Tasks;
  using Microsoft.AspNetCore.Authorization;
  using Microsoft.AspNetCore.Mvc;
+ using Microsoft.EntityFrameworkCore;
  using Microsoft.Extensions.DependencyInjection;
  using Serilog;
  using Shared.Mvc.Entities;
  using Shared.Mvc.Entities.BaseEntities;
  using Shared.Mvc.ViewModels;
+ using Shopper.Mvc.ViewModels;
  using Shopper.Services;
+ using Shopper.Services.Interfaces;
 
  namespace Shopper.Mvc.Controllers
 {
@@ -14,15 +20,25 @@
     public class HomeController : BaseController
     {
         private readonly ILogger _logger;
-        public HomeController(ILogger logger)
+        private readonly IReportService _reportService;
+
+        public HomeController(ILogger logger, IReportService reportService)
         {
             _logger = logger;
+            _reportService = reportService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var sales = await _reportService.GetThisYearSalesAsync();
+            var expenditures = await _reportService.GetThisYearExpenditure();
+            var dashboardModal = new DashboardModel
+            {
+                Summaries = _reportService.GetSummariesAsync(sales, expenditures)
+            };
+
             AddPageHeader("Dashboard");
-            return View();
+            return View(dashboardModal);
         }
 
         public IActionResult Privacy()

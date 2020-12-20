@@ -10,6 +10,9 @@
         CurrentImageName = product.ImagePath,
         ImagesCount = (short) (4 - product.Images.Count)
     };
+
+    ViewData["TotalSales"] = product.Skus.Sum(s => s.Sales.Any(s1 => s1.IsConfirmed) ? s.Sales.Where(s1 => s1.IsConfirmed).Select(sale => sale.Price * sale.Quantity).First() : 0).ToString("N0");
+    ViewData["TotalStockValue"] = product.Skus.Sum(s => s.BuyingPrice * s.Quantity).ToString("N0");
 }
 
 @section css
@@ -185,7 +188,7 @@
 
                     <div class="info-box-content">
                         <span class="info-box-text">Total stock value</span>
-                        <h5 class="info-box-number">@product.Skus.Sum(s => s.BuyingPrice * s.Quantity).ToString("N0")/-</h5>
+                        <h5 class="info-box-number">@ViewData["TotalStockValue"]/-</h5>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -200,7 +203,7 @@
 
                     <div class="info-box-content">
                         <span class="info-box-text">Total sales</span>
-                        <h5 class="info-box-number">@product.Skus.Sum(s => s.Sales.Any() ? s.Sales.Select(sale => sale.Price * sale.Quantity).First() : 0).ToString("N0")/-</h5>
+                        <h5 class="info-box-number">@ViewData["TotalSales"]/-</h5>
                     </div>
                     <!-- /.info-box-content -->
                 </div>

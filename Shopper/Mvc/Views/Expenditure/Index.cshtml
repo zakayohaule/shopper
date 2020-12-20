@@ -1,9 +1,11 @@
 ﻿@using Shopper.Mvc.ViewModels
+@using Shopper.Extensions.Helpers
 @model List<Expenditure>;
 
 @{
     Layout = "_Layout";
-    var newExpenditure = new ExpenditureModel {Date = DateTime.Today};
+    var dateTime = DateTime.Now;
+    var newExpenditure = new ExpenditureModel {Date = DateTime.Parse(dateTime.ToString(""))};
     ViewData["FormName"] = "_ExpenditureForm";
 }
 
@@ -63,7 +65,7 @@
                     <td>@index</td>
                     <td>@expenditure.ExpenditureType.Name</td>
                     <td>@expenditure.Amount</td>
-                    <td>@expenditure.Date</td>
+                    <td>@expenditure.Date.FormatWithSuffixAndTime()</td>
                     <td>
                         <a href="#" onclick="openEditModal('@Url.Action("EditExpenditureModal", new {id = expenditure.Id})',
                          '@Url.Action("Update", new {id = expenditure.Id})',

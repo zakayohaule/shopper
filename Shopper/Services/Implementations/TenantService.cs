@@ -32,15 +32,6 @@ namespace Shopper.Services.Implementations
         {
             var httpContext = _httpContextAccessor.HttpContext;
             var tenant = httpContext?.GetCurrentTenant();
-            if (tenant == null)
-            {
-                return new Tenant
-                {
-                    Id = Guid.Parse("08d8a20e-2272-4843-8c78-0e4d97771414"),
-                    Domain = "kea.localhost"
-                };
-            }
-
             return tenant;
         }
 

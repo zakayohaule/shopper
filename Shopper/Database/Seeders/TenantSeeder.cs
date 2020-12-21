@@ -14,6 +14,7 @@ namespace Shopper.Database.Seeders
         public static void Seed(AdminAppDbContext adminDbContext,IConfiguration configuration, ILogger logger)
         {
             var appDomain = configuration.GetValue<string>("AppDomain");
+            var defaultConnectString = configuration.GetConnectionString("Default").Replace("{dbName}", "shopper");
             var tenants = new List<Tenant>
             {
                 new Tenant
@@ -25,7 +26,7 @@ namespace Shopper.Database.Seeders
                     Email = "kea@kea.com",
                     Name = "Kea Baby Shop",
                     ConnectionString =
-                        "Server=localhost; Port=3306; Database=shopper; Uid=root; Allow User Variables=true",
+                        defaultConnectString,
                     SubscriptionType = SubscriptionType.Annual,
                 },
                 new Tenant
@@ -37,7 +38,7 @@ namespace Shopper.Database.Seeders
                     Email = "admin@shopper.com",
                     Name = "Localhost Shop",
                     ConnectionString =
-                        "Server=localhost; Port=3306; Database=shopper; Uid=root; Allow User Variables=true",
+                        defaultConnectString,
                     SubscriptionType = SubscriptionType.Annual,
                 },
             };

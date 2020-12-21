@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Shared.Mvc.Entities.Identity;
@@ -14,8 +15,10 @@ namespace Shopper.Database.Seeders
         public static void Seed(IServiceProvider serviceProvider, ApplicationDbContext dbContext, IPasswordHasher<AppUser> passwordHasher,
             UserManager<AppUser> userManager, ILogger logger)
         {
-            var keaTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == "kea.localhost");
-            var localhostTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == "localhost");
+            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            var appDomain = configuration.GetValue<string>("AppDomain");
+            var keaTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == $"kea.{appDomain}");
+            var localhostTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == $"{appDomain}");
             var users = new List<AppUser>
             {
                 new AppUser

@@ -32,6 +32,14 @@ namespace Shopper.Services.Implementations
         {
             var httpContext = _httpContextAccessor.HttpContext;
             var tenant = httpContext?.GetCurrentTenant();
+            if (tenant == null)
+            {
+                return new Tenant
+                {
+
+                };
+            }
+
             return tenant;
         }
 

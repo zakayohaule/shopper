@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using Shared.Mvc.Entities;
 using Shared.Mvc.Entities.Identity;
@@ -10,8 +11,9 @@ namespace Shopper.Database.Seeders
 {
     public class TenantSeeder
     {
-        public static void Seed(AdminAppDbContext adminDbContext, ILogger logger)
+        public static void Seed(AdminAppDbContext adminDbContext,IConfiguration configuration, ILogger logger)
         {
+            var appDomain = configuration.GetValue<string>("AppDomain");
             var tenants = new List<Tenant>
             {
                 new Tenant
@@ -19,7 +21,7 @@ namespace Shopper.Database.Seeders
                     Active = true,
                     Address = "Sinza Madukani",
                     Description = "Baby Shop",
-                    Domain = "kea.localhost",
+                    Domain = $"kea.{appDomain}",
                     Email = "kea@kea.com",
                     Name = "Kea Baby Shop",
                     ConnectionString =
@@ -31,7 +33,7 @@ namespace Shopper.Database.Seeders
                     Active = true,
                     Address = "Localhost",
                     Description = "Localhost shop",
-                    Domain = "localhost",
+                    Domain = $"{appDomain}",
                     Email = "admin@shopper.com",
                     Name = "Localhost Shop",
                     ConnectionString =

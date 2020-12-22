@@ -19,10 +19,16 @@
     <th:span asp-validation-for="Name" class="text-danger"></th:span>
 </div>
 <div class="form-group col-12">
-    <th>Product Attributes</th>
+    <th:label asp-for="Attributes">Product Attributes</th:label>
     <th:select class="form-control select2bs4" multiple="multiple" data-placeholder="-- Select product attributes --" asp-for="Attributes" asp-items="attributes">
     </th:select>
     <th:span asp-validation-for="Attributes" class="text-danger"></th:span>
+</div>
+<div class="form-group col-12">
+    <div class="icheck-primary">
+        <th:input asp-for="HasExpirationDate"></th:input>
+        <th:label asp-for="HasExpirationDate">Has Expiration Date?</th:label>
+    </div>
 </div>
 <div class="form-group">
     <th:label asp-for="Image">Product Image</th:label>

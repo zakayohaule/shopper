@@ -3,13 +3,18 @@
 
 @{
     Layout = "_Layout";
-    var newProduct = new ProductFormModel();
+    var newProduct = new ProductFormModel
+    {
+        HasExpirationDate = false
+    };
     ViewData["FormName"] = "_ProductForm";
     ViewData["AllowFileUpload"] = true;
 }
 
 @section css {
     <th:partial name="Partials/_DtCss"></th:partial>
+    <!-- iCheck for checkboxes and radio inputs -->
+    <th:link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css"></th:link>
     <th:link rel="stylesheet" href="~/plugins/select2-4.0.5/css/select2.min.css"></th:link>
     <th:link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"></th:link>
     <!-- Toastr -->

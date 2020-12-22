@@ -39,6 +39,7 @@ namespace Shared.Mvc.Entities
         [Column("is_on_sale")]
         public bool IsOnSale { get; set; } = false;
 
+
         [ForeignKey(nameof(ProductId))]
         public Product Product{ get; set; }
 
@@ -47,5 +48,8 @@ namespace Shared.Mvc.Entities
 
         [InverseProperty(("Sku"))]
         public ICollection<Sale> Sales { get; set; }
+
+        [InverseProperty("Sku")]
+        public Expiration Expiration { get; set; }
     }
 }

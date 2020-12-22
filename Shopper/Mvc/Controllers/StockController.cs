@@ -41,6 +41,9 @@ namespace Shopper.Mvc.Controllers
             var product = await _productService.FindByIdWithAttributesAsync(id);
             stockViewModel.Product = product;
             stockViewModel.StockDate = DateTime.Today.Date;
+            stockViewModel.HasExpirationDate = product.HasExpiration;
+            stockViewModel.ExpirationDate = DateTime.Now.AddYears(1);
+            stockViewModel.MaximumDiscount = 0.ToString();
             stockViewModel.AttributeSelects = _productService.GetProductAttributeSelects(product, new Sku());
             return PartialView("../Stock/_ProductStockForm", stockViewModel);
         }

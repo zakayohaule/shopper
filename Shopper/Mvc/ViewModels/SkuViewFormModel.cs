@@ -34,6 +34,10 @@ namespace Shopper.Mvc.ViewModels
 
         [Required] public List<string> Attributes { get; set; }
 
+        public bool HasExpirationDate { get; set; }
+
+        public DateTime ExpirationDate { get; set; }
+
         public List<AttributeSelect> AttributeSelects { get; set; }
     }
 }

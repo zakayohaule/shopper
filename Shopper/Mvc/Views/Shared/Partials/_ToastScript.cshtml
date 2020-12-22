@@ -27,14 +27,13 @@
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     }
-    var body = '@toastModel.Body';
-    if ('@toastModel.Type' === 'Success!')
-        toastr.success(body, "Success");
+    if ('@toastModel.Type.ToString()' === 'Success')
+        toastr.success('@toastModel.Body', "Success!");
     if ('@toastModel.Type' === 'Info')
-        toastr.info(body, "Info!");
+        toastr.info('@toastModel.Body', "Info!");
     if ('@toastModel.Type' === 'Warning')
-        toastr.warning(body, "Warning!");
+        toastr.warning('@toastModel.Body', "Warning!");
     if ('@toastModel.Type' === 'Error' || '@toastModel.Type' === 'Danger')
-        toastr.error(body, "Failed!");
+        toastr.error('@toastModel.Body', "Failed!");
     </script>
 }

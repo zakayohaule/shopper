@@ -71,7 +71,6 @@ namespace Shopper.Mvc.Controllers
         {
             // @todo Preselect product category/group if only one is present
 
-            // return Ok(newProduct);
             if (_productService.IsDuplicate(newProduct.Name, newProduct.Id))
             {
                 ToastError($"Product with name {newProduct.Name} already exists! Please use another name.");
@@ -134,6 +133,7 @@ namespace Shopper.Mvc.Controllers
                 Id = product.Id,
                 Name = product.Name,
                 ProductCategoryId = product.ProductCategoryId,
+                HasExpirationDate = product.HasExpiration,
                 Attributes = product.Attributes.Select(at => at.AttributeId)
             };
             return Json(formData, new JsonSerializerSettings {ContractResolver = null});

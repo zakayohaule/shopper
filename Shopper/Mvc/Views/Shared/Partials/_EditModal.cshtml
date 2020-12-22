@@ -1,5 +1,11 @@
+@using Shared.Extensions.Helpers
 @{
     var partialName = ViewData["FormName"];
+
+    if (partialName.IsNull())
+    {
+        throw new ArgumentNullException($"You must provide a ViewData value to specify the partial to use for editiing");
+    }
     var enctype = "application/x-www-form-urlencoded";
     if (ViewData["AllowFileUpload"] != null)
     {

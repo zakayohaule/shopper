@@ -21,12 +21,12 @@ namespace Shopper.Mvc.Controllers
         }
 
         [HttpGet("", Name = "product-group-index"), Permission("product_group_view"), Toast]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             Title = "Product Groups";
 
             var productGroups = _productGroupService.GetAllProductGroups().ToList();
-
+            
             AddPageHeader(Title);
             return View(productGroups);
         }

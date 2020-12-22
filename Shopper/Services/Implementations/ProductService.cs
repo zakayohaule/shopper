@@ -142,7 +142,12 @@ namespace Shopper.Services.Implementations
             }
 
             var product = await _dbContext.Products.AddAsync(new Product
-                {Name = newProduct.Name, ProductCategoryId = newProduct.ProductCategoryId, ImagePath = imageName});
+            {
+                Name = newProduct.Name,
+                ProductCategoryId = newProduct.ProductCategoryId,
+                ImagePath = imageName,
+                HasExpiration = newProduct.HasExpirationDate
+            });
 
             if (newProduct.Attributes.IsNotNull() && newProduct.Attributes.Any())
             {
@@ -166,10 +171,11 @@ namespace Shopper.Services.Implementations
             }
             productToUpdate.Name = productModel.Name;
             productToUpdate.ProductCategoryId = productModel.ProductCategoryId;
-            // productToUpdate.Attributes.Clear();
+            productToUpdate.HasExpiration = productModel.HasExpirationDate;
             _dbContext.ProductAttributes.RemoveRange(productToUpdate.Attributes);
             if (productModel.Attributes.IsNotNull() && productModel.Attributes.Any())
             {
+                productToUpdate.Attributes.Clear();
                 var productAttributes = productModel.Attributes.Select(attribute => new ProductAttribute
                     {AttributeId = attribute, Product = productToUpdate,}).ToList();
 

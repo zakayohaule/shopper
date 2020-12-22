@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -25,6 +26,9 @@ namespace Shared.Mvc.Entities
 
         [ForeignKey(nameof(ProductCategoryId))]
         public ProductCategory ProductCategory { get; set; }
+
+        [Column("has_expiration")]
+        public bool HasExpiration { get; set; } = false;
 
         [InverseProperty("Product")]
         public List<Sku> Skus { get; set; }

@@ -174,6 +174,45 @@ namespace Shopper.Migrations
                     b.ToTable("expenditure_types");
                 });
 
+            modelBuilder.Entity("Shared.Mvc.Entities.Expiration", b =>
+                {
+                    b.Property<ulong>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnName("expiration_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<ulong>("SkuId")
+                        .HasColumnName("sku_Id")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnName("tenant_id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SkuId")
+                        .IsUnique();
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("Expiration");
+                });
+
             modelBuilder.Entity("Shared.Mvc.Entities.Identity.AppUser", b =>
                 {
                     b.Property<long>("Id")
@@ -564,6 +603,10 @@ namespace Shopper.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("created_at")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("HasExpiration")
+                        .HasColumnName("has_expiration")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("ImagePath")
                         .HasColumnName("image_path")
@@ -1128,6 +1171,21 @@ namespace Shopper.Migrations
 
             modelBuilder.Entity("Shared.Mvc.Entities.ExpenditureType", b =>
                 {
+                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.Expiration", b =>
+                {
+                    b.HasOne("Shared.Mvc.Entities.Sku", "Sku")
+                        .WithOne("Expiration")
+                        .HasForeignKey("Shared.Mvc.Entities.Expiration", "SkuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")

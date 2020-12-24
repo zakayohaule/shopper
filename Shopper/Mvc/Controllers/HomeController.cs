@@ -10,6 +10,7 @@
  using Shared.Mvc.Entities;
  using Shared.Mvc.Entities.BaseEntities;
  using Shared.Mvc.ViewModels;
+ using Shopper.Extensions.Helpers;
  using Shopper.Mvc.ViewModels;
  using Shopper.Services;
  using Shopper.Services.Interfaces;
@@ -30,14 +31,19 @@
 
         public async Task<IActionResult> Index()
         {
+            // return Ok(DateTime.Now.DateWithSuffix());
             var sales = await _reportService.GetThisYearSalesAsync();
             var expenditures = await _reportService.GetThisYearExpenditure();
             var dashboardModal = new DashboardModel
             {
+                Sales = sales,
+                Expenditures = expenditures,
                 Summaries = _reportService.GetSummariesAsync(sales, expenditures)
             };
 
             AddPageHeader("Dashboard");
+
+            // return Ok(dashboardModal.Sales.ToArray());
             return View(dashboardModal);
         }
 

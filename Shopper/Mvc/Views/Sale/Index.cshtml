@@ -45,7 +45,7 @@
                     <td>@invoice.Amount.ToString("N0") /-</td>
                     <td>
                         <th:a asp-controller="Sale"
-                              asp-action="Index"
+                              asp-action="InvoiceSales"
                               asp-route-id="@invoice.Id" class="btn btn-default btn-sm" title="View Sales">
                             @* <span class="badge badge-danger" title="Delete product"> *@
                             <i class="fas fa-list"></i>

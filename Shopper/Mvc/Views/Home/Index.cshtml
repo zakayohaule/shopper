@@ -1,8 +1,49 @@
 ﻿@using Shopper.Mvc.ViewModels
 @using Shared.Mvc.Enums
+@using Shopper.Extensions.Helpers
+@using System.Collections
+@using Newtonsoft.Json
 @model Shopper.Mvc.ViewModels.DashboardModel
 @{
     var model = Model;
+
+    var dates = new List<string>();
+    var thisWeekData = new List<int>();
+    var lastWeekData = new List<int>();
+    for (int i = 0; i < 7; i++)
+    {
+        var date = DateTime.Now.AddDays(-i);
+        var lastWeekDate = DateTime.Now.AddDays(-(i + 7));
+        uint sale = 0;
+        uint lastWeekSale = 0;
+        var sales = model.Sales?.Where(s => s.SaleInvoice.Date.Date == date.Date).AsEnumerable();
+        var lastWeekSales = model.Sales?.Where(s => s.SaleInvoice.Date.Date == lastWeekDate.Date).AsEnumerable();
+        if (sales != null)
+        {
+            foreach (var s in sales)
+            {
+                sale += (uint) (s.Quantity * s.Price);
+            }
+        }
+        if (lastWeekSales != null)
+        {
+            foreach (var s in lastWeekSales)
+            {
+                lastWeekSale += (uint) (s.Quantity * s.Price);
+            }
+        }
+        thisWeekData.Add((int) sale);
+        lastWeekData.Add((int) lastWeekSale);
+        dates.Add($"{date.DateWithSuffix()} {date.ToString("MMM")}");
+    }
+    dates[0] = "today";
+    dates.Reverse();
+    thisWeekData.Reverse();
+    lastWeekData.Reverse();
+
+    var thisWeekTotal = thisWeekData.Sum();
+    var lastWeekTotal = lastWeekData.Sum();
+    var percentage = (thisWeekTotal - lastWeekTotal) * 100 / lastWeekTotal;
 }
 
 <!-- Left col -->
@@ -52,267 +93,90 @@
     <!-- /.card -->
 </section>
 
-@*<!-- /.Left col -->
-<h4>Today's Summary</h4>
-<!-- Small boxes (Stat box) -->
-<div class="row">
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-info">
-            <div class="inner">
-                <h3>150</h3>
 
-                <p>Sold Items</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-bag"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-success">
-            <div class="inner">
-                <h3>1,200,500/-<sup style="font-size: 20px">%</sup></h3>
+<th:partial name="_WeekOrMonthSalesGraph" />
 
-                <p>Total Sales</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-warning">
-            <div class="inner">
-                <h3>44</h3>
+@section scripts
+{
+    <th:script src="~/plugins/chart.js/Chart.min.js"></th:script>
+    <th:script src="~/js/dashboard.js"></th:script>
 
-                <p>Total Profit</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-person-add"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-danger">
-            <div class="inner">
-                <h3>9,000/-</h3>
 
-                <p>Total Expneses</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-</div>
-<!-- /.row -->
+    <script>
 
-<h4>This Week's Summary</h4>
-<!-- Small boxes (Stat box) -->
-<div class="row">
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-info">
-            <div class="inner">
-                <h3>150</h3>
-
-                <p>Sold Items</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-bag"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-success">
-            <div class="inner">
-                <h3>1,200,500/-<sup style="font-size: 20px">%</sup></h3>
-
-                <p>Total Sales</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-warning">
-            <div class="inner">
-                <h3>44</h3>
-
-                <p>Total Profit</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-person-add"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-danger">
-            <div class="inner">
-                <h3>9,000/-</h3>
-
-                <p>Total Expneses</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-</div>
-<!-- /.row -->
-
-<h4>This Month's Summary</h4>
-<!-- Small boxes (Stat box) -->
-<div class="row">
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-info">
-            <div class="inner">
-                <h3>150</h3>
-
-                <p>Sold Items</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-bag"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-success">
-            <div class="inner">
-                <h3>1,200,500/-<sup style="font-size: 20px">%</sup></h3>
-
-                <p>Total Sales</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-warning">
-            <div class="inner">
-                <h3>44</h3>
-
-                <p>Total Profit</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-person-add"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-danger">
-            <div class="inner">
-                <h3>9,000/-</h3>
-
-                <p>Total Expneses</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-</div>
-<!-- /.row -->
-
-<h4>This Years Summary</h4>
-<!-- Small boxes (Stat box) -->
-<div class="row">
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-info">
-            <div class="inner">
-                <h3>150</h3>
-
-                <p>Sold Items</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-bag"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-success">
-            <div class="inner">
-                <h3>1,200,500/-<sup style="font-size: 20px">%</sup></h3>
-
-                <p>Total Sales</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-warning">
-            <div class="inner">
-                <h3>44</h3>
-
-                <p>Total Profit</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-person-add"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-        <!-- small box -->
-        <div class="small-box bg-danger">
-            <div class="inner">
-                <h3>9,000/-</h3>
-
-                <p>Total Expneses</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    <!-- ./col -->
-</div>
-<!-- /.row -->*@
+    var dates = @Html.Raw(JsonConvert.SerializeObject(dates));
+    var thisWeekData = @Html.Raw(JsonConvert.SerializeObject(thisWeekData));
+    var lastWeekData = @Html.Raw(JsonConvert.SerializeObject(lastWeekData));
+    var mode = 'index';
+    var intersect = true;
+    var ticksStyle = {
+        fontColor: '#495057',
+        fontStyle: 'bold'
+    }
+    var $visitorsChart = $('#sales-chart');
+    // eslint-disable-next-line no-unused-vars
+    var visitorsChart = new Chart($visitorsChart, {
+        data: {
+            labels: dates,
+            datasets: [{
+                type: 'line',
+                data: thisWeekData,
+                backgroundColor: 'transparent',
+                borderColor: '#007bff',
+                pointBorderColor: '#007bff',
+                pointBackgroundColor: '#007bff',
+                fill: false
+                // pointHoverBackgroundColor: '#007bff',
+                // pointHoverBorderColor    : '#007bff'
+            },
+                {
+                    type: 'line',
+                    data: lastWeekData,
+                    backgroundColor: 'tansparent',
+                    borderColor: '#ced4da',
+                    pointBorderColor: '#ced4da',
+                    pointBackgroundColor: '#ced4da',
+                    fill: false
+                    // pointHoverBackgroundColor: '#ced4da',
+                    // pointHoverBorderColor    : '#ced4da'
+                }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            tooltips: {
+                mode: mode,
+                intersect: intersect
+            },
+            hover: {
+                mode: mode,
+                intersect: intersect
+            },
+            legend: {
+                display: false
+            },
+            scales: {
+                yAxes: [{
+                    // display: false,
+                    gridLines: {
+                        display: true,
+                        lineWidth: '4px',
+                        color: 'rgba(0, 0, 0, .2)',
+                        zeroLineColor: 'transparent'
+                    },
+                    ticks: $.extend({
+                        beginAtZero: true,
+                        suggestedMax: 200
+                    }, ticksStyle)
+                }],
+                xAxes: [{
+                    display: true,
+                    gridLines: {
+                        display: false
+                    },
+                    ticks: ticksStyle
+                }]
+            }
+        }
+    })
+    </script>
+}

@@ -49,6 +49,11 @@ namespace Shopper.Services.Implementations
                 .AsQueryable();
         }
 
+        public IQueryable<SaleInvoice> GetInvoiceAsQueryable(ulong id)
+        {
+            return _dbContext.SaleInvoices.Where(si => si.Id.Equals(id)).AsQueryable();
+        }
+
         public async Task<SaleInvoice> FindInvoiceByIdAsync(ulong id)
         {
             return await _dbContext.SaleInvoices.FindAsync(id);
@@ -57,6 +62,11 @@ namespace Shopper.Services.Implementations
         public async Task<Sale> FindSaleByIdAsync(ulong id)
         {
             return await _dbContext.Sales.Include(s => s.Sku).FirstOrDefaultAsync(s => s.Id.Equals(id));
+        }
+
+        public IQueryable<Sale> FindSalesByInvoiceIdAsQueryable(ulong id)
+        {
+            return _dbContext.Sales.Where(s => s.SaleInvoiceId.Equals(id));
         }
 
         public async Task<SaleInvoice> AddToInvoiceAsync(SaleFormViewModel formViewModel, long userId)
@@ -130,6 +140,13 @@ namespace Shopper.Services.Implementations
                 Console.WriteLine(e);
                 throw;
             }
+        }
+
+        public async Task<SaleInvoice> UpdateInvoiceDateAsync(SaleInvoice invoice)
+        {
+            var inv = _dbContext.SaleInvoices.Update(invoice);
+            await _dbContext.SaveChangesAsync();
+            return inv.Entity;
         }
 
         public async Task<Sale> UpdateSaleAsync(Sale sale, SaleFormViewModel viewModel)

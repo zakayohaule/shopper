@@ -42,14 +42,11 @@ namespace Shopper.Mvc.Controllers
             /*ValidateModelWithRedirect()*/]
         public async Task<IActionResult> Create(Role role, [FromServices] ApplicationDbContext dbContext)
         {
-            IdentityResult result;
             var roleName = _roleService.GenerateRoleName(role.DisplayName);
             role.Name = roleName;
             role.NormalizedName = $"{role.Name}_{HttpContext.GetCurrentTenant().Id}";
             var newRole = dbContext.Roles.Add(role);
             await dbContext.SaveChangesAsync();
-            // result = await _roleManager.CreateAsync(role);
-            // }
             if (newRole.Entity != null)
             {
                 ToastSuccess("Role created successfully!");

@@ -141,7 +141,7 @@
 
         }
 
-        public static string GetTenantFromSubdomain(this HttpContext httpContext)
+        public static string GetSubdomain(this HttpContext httpContext)
         {
             var subDomain = string.Empty;
             var host = httpContext.Request.Host.Host;
@@ -149,7 +149,21 @@
             if (string.IsNullOrWhiteSpace(host)) return subDomain;
             if (host.Contains("."))
             {
-                subDomain = host.Split('.')[0];
+                var domainParts = host.Split(".");
+                if (domainParts.Length == 2)
+                {
+                    subDomain = domainParts[0];
+                }
+
+                if (domainParts.Length == 3)
+                {
+                    subDomain = string.Join(".", domainParts[..2]);
+                }
+
+                if (domainParts.Length == 4)
+                {
+                    subDomain = string.Join(".", domainParts[1..3]);
+                }
             }
 
             return subDomain;
@@ -157,8 +171,7 @@
 
         public static Tenant GetCurrentTenant(this ViewContext viewContext)
         {
-            var tenant = (Tenant)viewContext.HttpContext.Items["tenant"];
-            return tenant;
+            return viewContext.HttpContext.GetCurrentTenant();
         }
 
         public static Tenant GetCurrentTenant(this HttpContext httpContext)

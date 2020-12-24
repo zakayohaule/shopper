@@ -52,7 +52,7 @@ namespace Shopper.Services.Implementations
 
             var tenant = _tenantService.GetTenantFromRequest();
             var webRoot = $"{_hostEnvironment.ContentRootPath}/wwwroot";
-            var imageUploadPath = @$"{webRoot}/uploads/logo/{tenant.Domain.Split(".")[0]}/";
+            var imageUploadPath = @$"{webRoot}/uploads/logo/{tenant.Domain}/";
             if (!Directory.Exists(imageUploadPath))
             {
                 Directory.CreateDirectory(imageUploadPath);
@@ -67,6 +67,10 @@ namespace Shopper.Services.Implementations
             }
             var imageName = $"{DateTimeOffset.Now.ToUnixTimeSeconds().ToString()}.{ext}";
             await image.SaveAsync($"{imageUploadPath}/{imageName}");
+
+            image.Mutate(x => x.Resize(128,128));
+            await image.SaveAsync($"{imageUploadPath}/thumb_{imageName}");
+
             return imageName;
         }
     }

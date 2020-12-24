@@ -25,6 +25,8 @@ namespace Shopper.Services.Implementations
         {
             return await _dbContext.Sales
                 .Include(s => s.SaleInvoice)
+                .Include(s => s.Sku)
+                .ThenInclude(s => s.Product)
                 .Where(s => s.SaleInvoice.Date.Year == DateTime.Today.Year && s.IsConfirmed)
                 .ToListAsync();
         }

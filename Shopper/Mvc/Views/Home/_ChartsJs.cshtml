@@ -1,0 +1,124 @@
+@using Shopper.Extensions.Helpers
+@using Newtonsoft.Json
+@using Shared.Mvc.Enums
+@model Shopper.Mvc.ViewModels.ChartModel
+@{
+    var chartId = Model.ChartId;
+    var allSales = Model.Sales;
+    var dates = new List<string>();
+    var thisWeekData = new List<int>();
+    var lastWeekData = new List<int>();
+    var numberOfDays = 0;
+    if (Model.SummaryType == SummaryType.Week)
+    {
+        numberOfDays = 7;
+    }
+    else
+    {
+
+    }
+    for (int i = 0; i < 7; i++)
+    {
+        var date = DateTime.Now.AddDays(-i);
+        var lastWeekDate = DateTime.Now.AddDays(-(i + 7));
+        uint sale = 0;
+        uint lastWeekSale = 0;
+        var sales = allSales.Where(s => s.SaleInvoice.Date.Date == date.Date).AsEnumerable();
+        var lastWeekSales = allSales.Where(s => s.SaleInvoice.Date.Date == lastWeekDate.Date).AsEnumerable();
+        foreach (var s in sales)
+        {
+            sale += (uint) (s.Quantity * s.Price);
+        }
+        foreach (var s in lastWeekSales)
+        {
+            lastWeekSale += (uint) (s.Quantity * s.Price);
+        }
+        thisWeekData.Add((int) sale);
+        lastWeekData.Add((int) lastWeekSale);
+        dates.Add($"{date.DateWithSuffix()} {date.ToString("MMM")}");
+    }
+    dates[0] = "today";
+    dates.Reverse();
+    thisWeekData.Reverse();
+    lastWeekData.Reverse();
+
+    var thisWeekTotal = thisWeekData.Sum();
+    var lastWeekTotal = lastWeekData.Sum();
+    var percentage = (thisWeekTotal - lastWeekTotal) * 100 / lastWeekTotal;
+}
+<script >
+var dates = @Html.Raw(JsonConvert.SerializeObject(dates));
+    var thisWeekData = @Html.Raw(JsonConvert.SerializeObject(thisWeekData));
+    var lastWeekData = @Html.Raw(JsonConvert.SerializeObject(lastWeekData));
+    var mode = 'index';
+    var intersect = true;
+    var ticksStyle = {
+        fontColor: '#495057',
+        fontStyle: 'bold'
+    }
+    var $visitorsChart = $('#@chartId');
+    // eslint-disable-next-line no-unused-vars
+    var visitorsChart = new Chart($visitorsChart, {
+        data: {
+            labels: dates,
+            datasets: [{
+                type: 'line',
+                data: thisWeekData,
+                backgroundColor: 'transparent',
+                borderColor: '#007bff',
+                pointBorderColor: '#007bff',
+                pointBackgroundColor: '#007bff',
+                fill: false
+                // pointHoverBackgroundColor: '#007bff',
+                // pointHoverBorderColor    : '#007bff'
+            },
+                {
+                    type: 'line',
+                    data: lastWeekData,
+                    backgroundColor: 'tansparent',
+                    borderColor: '#ced4da',
+                    pointBorderColor: '#ced4da',
+                    pointBackgroundColor: '#ced4da',
+                    fill: false
+                    // pointHoverBackgroundColor: '#ced4da',
+                    // pointHoverBorderColor    : '#ced4da'
+                }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            tooltips: {
+                mode: mode,
+                intersect: intersect
+            },
+            hover: {
+                mode: mode,
+                intersect: intersect
+            },
+            legend: {
+                display: false
+            },
+            scales: {
+                yAxes: [{
+                    // display: false,
+                    gridLines: {
+                        display: true,
+                        lineWidth: '4px',
+                        color: 'rgba(0, 0, 0, .2)',
+                        zeroLineColor: 'transparent'
+                    },
+                    ticks: $.extend({
+                        beginAtZero: true,
+                        suggestedMax: 200
+                    }, ticksStyle)
+                }],
+                xAxes: [{
+                    display: true,
+                    gridLines: {
+                        display: false
+                    },
+                    ticks: ticksStyle
+                }]
+            }
+        }
+    })
+</script>

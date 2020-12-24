@@ -41,6 +41,7 @@
                 Summaries = _reportService.GetSummariesAsync(sales, expenditures)
             };
 
+            // return Ok(dashboardModal.Sales.GroupBy(s => s.Sku.Product).Select(g => g.Key.Skus.SelectMany(sku => sku.Sales).Sum(sale => sale.Price*sale.Quantity)));
             AddPageHeader("Dashboard");
 
             // return Ok(dashboardModal.Sales.ToArray());

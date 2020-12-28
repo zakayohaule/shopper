@@ -1,5 +1,6 @@
 ﻿﻿using System;
  using System.Diagnostics;
+ using System.Globalization;
  using System.Linq;
  using System.Threading.Tasks;
  using Microsoft.AspNetCore.Authorization;
@@ -31,7 +32,7 @@
 
         public async Task<IActionResult> Index()
         {
-            // return Ok(DateTime.Now.DateWithSuffix());
+            // return Ok(DateTime.Now.AddHours(10).Hour);
             var sales = await _reportService.GetThisYearSalesAsync();
             var expenditures = await _reportService.GetThisYearExpenditure();
             var dashboardModal = new DashboardModel
@@ -41,7 +42,7 @@
                 Summaries = _reportService.GetSummariesAsync(sales, expenditures)
             };
 
-            // return Ok(dashboardModal.Sales.GroupBy(s => s.Sku.Product).Select(g => g.Key.Skus.SelectMany(sku => sku.Sales).Sum(sale => sale.Price*sale.Quantity)));
+            // return Ok(dashboardModal.Sales.GroupBy(s => s.Sku.Product).OrderByDescending(grouping => grouping.Sum(sale => sale.Quantity)).Take(2).Select(grouping => grouping.Sum(sale => sale.Quantity)));
             AddPageHeader("Dashboard");
 
             // return Ok(dashboardModal.Sales.ToArray());

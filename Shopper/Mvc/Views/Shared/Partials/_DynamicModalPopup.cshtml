@@ -11,7 +11,7 @@
         size = "";
     }
 }
-<div class="modal" id="edit-modal">
+<div class="modal" id="dynamic-modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -20,7 +20,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id="edit-modal-body">
+            <div class="modal-body" id="dynamic-modal-body">
 
             </div>
         </div>
@@ -39,8 +39,8 @@
                 if (size){
                     $(".modal-dialog").addClass("modal-" + size)
                     }
-                $("#edit-modal-body").html(response);
-                $("#edit-modal").modal("show");
+                $("#dynamic-modal-body").html(response);
+                $("#dynamic-modal").modal("show");
                 if (hasSelectFields){
                     $('.select2bs4').select2({
                           theme: 'bootstrap4'

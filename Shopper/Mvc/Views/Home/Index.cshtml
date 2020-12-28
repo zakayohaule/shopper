@@ -6,38 +6,33 @@
 @model Shopper.Mvc.ViewModels.DashboardModel
 @{
     var model = Model;
-
-    var dates = new List<string>();
-    var thisWeekData = new List<int>();
-    var lastWeekData = new List<int>();
-    for (int i = 0; i < 7; i++)
+    var weekChartModel = new ChartModel
     {
-        var date = DateTime.Now.AddDays(-i);
-        var lastWeekDate = DateTime.Now.AddDays(-(i + 7));
-        uint sale = 0;
-        uint lastWeekSale = 0;
-        var sales = model.Sales.Where(s => s.SaleInvoice.Date.Date == date.Date).AsEnumerable();
-        var lastWeekSales = model.Sales.Where(s => s.SaleInvoice.Date.Date == lastWeekDate.Date).AsEnumerable();
-        foreach (var s in sales)
-        {
-            sale += (uint) (s.Quantity * s.Price);
-        }
-        foreach (var s in lastWeekSales)
-        {
-            lastWeekSale += (uint) (s.Quantity * s.Price);
-        }
-        thisWeekData.Add((int) sale);
-        lastWeekData.Add((int) lastWeekSale);
-        dates.Add($"{date.DateWithSuffix()} {date.ToString("MMM")}");
-    }
-    dates[0] = "today";
-    dates.Reverse();
-    thisWeekData.Reverse();
-    lastWeekData.Reverse();
+        Sales = model.Sales,
+        ChartId = "week-sales-chart",
+        SummaryType = SummaryType.Week
+    };
 
-    var thisWeekTotal = thisWeekData.Sum();
-    var lastWeekTotal = lastWeekData.Sum();
-    var percentage = (thisWeekTotal - lastWeekTotal) * 100 / lastWeekTotal;
+    var todayChartModel = new ChartModel
+    {
+        Sales = model.Sales,
+        ChartId = "today-sales-chart",
+        SummaryType = SummaryType.Today
+    };
+
+    var monthChartModel = new ChartModel
+    {
+        Sales = model.Sales,
+        ChartId = "month-sales-chart",
+        SummaryType = SummaryType.Month
+    };
+
+    var annualChartModel = new ChartModel
+    {
+        Sales = model.Sales,
+        ChartId = "annual-sales-chart",
+        SummaryType = SummaryType.Year
+    };
 }
 
 @section css{
@@ -102,17 +97,18 @@
     <!-- /.card -->
 </section>
 <div class="col-lg-12 chart-summary" id="today-chart">
-<div class="row">
-<div class="col-lg-12">
-    <div class="card">
-        <div class="card-header border-0">
-            <div class="d-flex justify-content-between">
-                <h3 class="card-title">Today Sales</h3>
-                @* <a href="javascript:void(0);">View Report</a> *@
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="d-flex">
+    <th:partial name="_Chart" model="todayChartModel"/>
+    @*<div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="d-flex justify-content-between">
+                        <h3 class="card-title">Today Sales</h3>
+                        $1$ <a href="javascript:void(0);">View Report</a> #1#
+                    </div>
+                </div>
+                <div class="card-body">
+                    $1$<div class="d-flex">
                 <p class="ml-auto d-flex flex-column text-right">
                     @if (percentage > 0)
                     {
@@ -128,658 +124,130 @@
                     }
                     <span class="text-muted">Since yesterday</span>
                 </p>
-            </div>
-            <!-- /.d-flex -->
+            </div>#1#
+                    <!-- /.d-flex -->
 
-            <div class="position-relative mb-4">
-                <canvas id="today-sales-chart" height="300"></canvas>
-            </div>
+                    <div class="position-relative mb-4">
+                        <canvas id="today-sales-chart" height="300"></canvas>
+                    </div>
 
-            <div class="d-flex flex-row justify-content-end">
-                <span class="mr-2">
-                    <i class="fas fa-square text-primary"></i> Today
-                </span>
+                    <div class="d-flex flex-row justify-content-end">
+                        <span class="mr-2">
+                            <i class="fas fa-square text-primary"></i> Today
+                        </span>
 
-                <span>
-                    <i class="fas fa-square text-gray"></i> Yesterday
-                </span>
+                        <span>
+                            <i class="fas fa-square text-gray"></i> Yesterday
+                        </span>
+                    </div>
+                </div>
             </div>
+            <!-- /.card -->
         </div>
-    </div>
-    <!-- /.card -->
-</div>
 
-<div class="col-lg-6">
-    <div class="card">
-        <div class="card-header border-0">
-            <h3 class="card-title">Products</h3>
-            <div class="card-tools">
-                <a href="#" class="btn btn-tool btn-sm">
-                    <i class="fas fa-download"></i>
-                </a>
-                <a href="#" class="btn btn-tool btn-sm">
-                    <i class="fas fa-bars"></i>
-                </a>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header border-0">
+                    <h3 class="card-title">Most Selling Products</h3>
+                    <div class="card-tools">
+                        <a href="#" class="btn btn-tool btn-sm">
+                            <i class="fas fa-download"></i>
+                        </a>
+                        <a href="#" class="btn btn-tool btn-sm">
+                            <i class="fas fa-bars"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-striped table-valign-middle">
+                        <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var product in Model
+                            .Sales
+                            .GroupBy(s => s.Sku.Product)
+                            .OrderByDescending(grouping => grouping.Sum(sale => sale.Quantity)).Take(10))
+                        {
+                            <tr>
+                                <td>
+                                    <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
+                                    @product.Key.Name
+                                </td>
+                                <td>
+                                    @product.Sum(sale => sale.Quantity)
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            <!-- /.card -->
         </div>
-        <div class="card-body table-responsive p-0">
-            <table class="table table-striped table-valign-middle">
-                <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Sales</th>
-                    <th>More</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        Some Product
-                    </td>
-                    <td>$13 USD</td>
-                    <td>
-                        <small class="text-success mr-1">
-                            <i class="fas fa-arrow-up"></i>
-                            12%
-                        </small>
-                        12,000 Sold
-                    </td>
-                    <td>
-                        <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header border-0">
+                    <h3 class="card-title">Most Profitable Products</h3>
+                    <div class="card-tools">
+                        <a href="#" class="btn btn-tool btn-sm">
+                            <i class="fas fa-download"></i>
                         </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        Another Product
-                    </td>
-                    <td>$29 USD</td>
-                    <td>
-                        <small class="text-warning mr-1">
-                            <i class="fas fa-arrow-down"></i>
-                            0.5%
-                        </small>
-                        123,234 Sold
-                    </td>
-                    <td>
-                        <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
+                        <a href="#" class="btn btn-tool btn-sm">
+                            <i class="fas fa-bars"></i>
                         </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        Amazing Product
-                    </td>
-                    <td>$1,230 USD</td>
-                    <td>
-                        <small class="text-danger mr-1">
-                            <i class="fas fa-arrow-down"></i>
-                            3%
-                        </small>
-                        198 Sold
-                    </td>
-                    <td>
-                        <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        Perfect Item
-                        <span class="badge bg-danger">NEW</span>
-                    </td>
-                    <td>$199 USD</td>
-                    <td>
-                        <small class="text-success mr-1">
-                            <i class="fas fa-arrow-up"></i>
-                            63%
-                        </small>
-                        87 Sold
-                    </td>
-                    <td>
-                        <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                        </a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <!-- /.card -->
-</div>
-<div class="col-lg-6">
-    <div class="card">
-        <div class="card-header border-0">
-            <h3 class="card-title">Products</h3>
-            <div class="card-tools">
-                <a href="#" class="btn btn-tool btn-sm">
-                    <i class="fas fa-download"></i>
-                </a>
-                <a href="#" class="btn btn-tool btn-sm">
-                    <i class="fas fa-bars"></i>
-                </a>
+                    </div>
+                </div>
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-striped table-valign-middle">
+                        <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Profit</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var product in Model.Sales.GroupBy(s => s.Sku.Product).OrderByDescending(grouping => grouping.Sum(sale => (sale.Quantity * sale.Profit))).Take(10))
+                        {
+                            <tr>
+                                <td>
+                                    <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
+                                    @product.Key.Name
+                                </td>
+                                <td>
+                                    @product.Sum(sale => (sale.Quantity * sale.Profit)).ToString("N0")
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            <!-- /.card -->
         </div>
-        <div class="card-body table-responsive p-0">
-            <table class="table table-striped table-valign-middle">
-                <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Sales</th>
-                    <th>More</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        Some Product
-                    </td>
-                    <td>$13 USD</td>
-                    <td>
-                        <small class="text-success mr-1">
-                            <i class="fas fa-arrow-up"></i>
-                            12%
-                        </small>
-                        12,000 Sold
-                    </td>
-                    <td>
-                        <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        Another Product
-                    </td>
-                    <td>$29 USD</td>
-                    <td>
-                        <small class="text-warning mr-1">
-                            <i class="fas fa-arrow-down"></i>
-                            0.5%
-                        </small>
-                        123,234 Sold
-                    </td>
-                    <td>
-                        <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        Amazing Product
-                    </td>
-                    <td>$1,230 USD</td>
-                    <td>
-                        <small class="text-danger mr-1">
-                            <i class="fas fa-arrow-down"></i>
-                            3%
-                        </small>
-                        198 Sold
-                    </td>
-                    <td>
-                        <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        Perfect Item
-                        <span class="badge bg-danger">NEW</span>
-                    </td>
-                    <td>$199 USD</td>
-                    <td>
-                        <small class="text-success mr-1">
-                            <i class="fas fa-arrow-up"></i>
-                            63%
-                        </small>
-                        87 Sold
-                    </td>
-                    <td>
-                        <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                        </a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <!-- /.card -->
-</div>
-</div>
+    </div>*@
 </div>
 <div class="col-lg-12 chart-summary" id="week-chart">
-<div class="row">
-<div class="col-lg-12">
-    <div class="card">
-        <div class="card-header border-0">
-            <div class="d-flex justify-content-between">
-                <h3 class="card-title">Week Sales</h3>
-                @* <a href="javascript:void(0);">View Report</a> *@
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="d-flex">
-                <p class="ml-auto d-flex flex-column text-right">
-                    @if (percentage > 0)
-                    {
-                        <span class="text-success">
-                            <i class="fas fa-arrow-up"></i> @percentage%
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="text-danger">
-                            <i class="fas fa-arrow-down"></i> @Math.Abs(percentage)%
-                        </span>
-                    }
-                    <span class="text-muted">Since last week</span>
-                </p>
-            </div>
-            <!-- /.d-flex -->
-
-            <div class="position-relative mb-4">
-                <canvas id="week-sales-chart" height="300"></canvas>
-            </div>
-
-            <div class="d-flex flex-row justify-content-end">
-                <span class="mr-2">
-                    <i class="fas fa-square text-primary"></i> This Week
-                </span>
-
-                <span>
-                    <i class="fas fa-square text-gray"></i> Last Week
-                </span>
-            </div>
-        </div>
-    </div>
-    <!-- /.card -->
+    <th:partial name="_Chart" model="weekChartModel"/>
 </div>
-
-<div class="col-lg-6">
-    <div class="card">
-        <div class="card-header border-0">
-            <h3 class="card-title">Products</h3>
-            <div class="card-tools">
-                <a href="#" class="btn btn-tool btn-sm">
-                    <i class="fas fa-download"></i>
-                </a>
-                <a href="#" class="btn btn-tool btn-sm">
-                    <i class="fas fa-bars"></i>
-                </a>
-            </div>
-        </div>
-        <div class="card-body table-responsive p-0">
-            <table class="table table-striped table-valign-middle">
-                <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Sales</th>
-                    <th>More</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        Some Product
-                    </td>
-                    <td>$13 USD</td>
-                    <td>
-                        <small class="text-success mr-1">
-                            <i class="fas fa-arrow-up"></i>
-                            12%
-                        </small>
-                        12,000 Sold
-                    </td>
-                    <td>
-                        <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        Another Product
-                    </td>
-                    <td>$29 USD</td>
-                    <td>
-                        <small class="text-warning mr-1">
-                            <i class="fas fa-arrow-down"></i>
-                            0.5%
-                        </small>
-                        123,234 Sold
-                    </td>
-                    <td>
-                        <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        Amazing Product
-                    </td>
-                    <td>$1,230 USD</td>
-                    <td>
-                        <small class="text-danger mr-1">
-                            <i class="fas fa-arrow-down"></i>
-                            3%
-                        </small>
-                        198 Sold
-                    </td>
-                    <td>
-                        <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        Perfect Item
-                        <span class="badge bg-danger">NEW</span>
-                    </td>
-                    <td>$199 USD</td>
-                    <td>
-                        <small class="text-success mr-1">
-                            <i class="fas fa-arrow-up"></i>
-                            63%
-                        </small>
-                        87 Sold
-                    </td>
-                    <td>
-                        <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                        </a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <!-- /.card -->
+<div class="col-lg-12 chart-summary" id="month-chart">
+    <th:partial name="_Chart" model="monthChartModel"/>
 </div>
-<div class="col-lg-6">
-    <div class="card">
-        <div class="card-header border-0">
-            <h3 class="card-title">Products</h3>
-            <div class="card-tools">
-                <a href="#" class="btn btn-tool btn-sm">
-                    <i class="fas fa-download"></i>
-                </a>
-                <a href="#" class="btn btn-tool btn-sm">
-                    <i class="fas fa-bars"></i>
-                </a>
-            </div>
-        </div>
-        <div class="card-body table-responsive p-0">
-            <table class="table table-striped table-valign-middle">
-                <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Sales</th>
-                    <th>More</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        Some Product
-                    </td>
-                    <td>$13 USD</td>
-                    <td>
-                        <small class="text-success mr-1">
-                            <i class="fas fa-arrow-up"></i>
-                            12%
-                        </small>
-                        12,000 Sold
-                    </td>
-                    <td>
-                        <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        Another Product
-                    </td>
-                    <td>$29 USD</td>
-                    <td>
-                        <small class="text-warning mr-1">
-                            <i class="fas fa-arrow-down"></i>
-                            0.5%
-                        </small>
-                        123,234 Sold
-                    </td>
-                    <td>
-                        <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        Amazing Product
-                    </td>
-                    <td>$1,230 USD</td>
-                    <td>
-                        <small class="text-danger mr-1">
-                            <i class="fas fa-arrow-down"></i>
-                            3%
-                        </small>
-                        198 Sold
-                    </td>
-                    <td>
-                        <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        Perfect Item
-                        <span class="badge bg-danger">NEW</span>
-                    </td>
-                    <td>$199 USD</td>
-                    <td>
-                        <small class="text-success mr-1">
-                            <i class="fas fa-arrow-up"></i>
-                            63%
-                        </small>
-                        87 Sold
-                    </td>
-                    <td>
-                        <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                        </a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <!-- /.card -->
-</div>
-</div>
+<div class="col-lg-12 chart-summary" id="annual-chart">
+    <th:partial name="_Chart" model="annualChartModel"/>
 </div>
 
 @section scripts
 {
     <th:script src="~/js/dashboard.js"></th:script>
-
+    <th:partial name="_ChartsJs" model="@weekChartModel"/>
+    <th:partial name="_ChartsJs" model="@todayChartModel"/>
+    <th:partial name="_ChartsJs" model="@monthChartModel"/>
+    <th:partial name="_ChartsJs" model="@annualChartModel"/>
     <script>
-    var dates = @Html.Raw(JsonConvert.SerializeObject(dates));
-    var thisWeekData = @Html.Raw(JsonConvert.SerializeObject(thisWeekData));
-    var lastWeekData = @Html.Raw(JsonConvert.SerializeObject(lastWeekData));
-    var mode = 'index';
-    var intersect = true;
-    var ticksStyle = {
-        fontColor: '#495057',
-        fontStyle: 'bold'
-    }
-
-    var $todayChart = $('#today-sales-chart');
-        // eslint-disable-next-line no-unused-vars
-      var todayChart = new Chart($todayChart, {
-             data: {
-                 labels: dates,
-                 datasets: [{
-                     type: 'line',
-                     data: thisWeekData,
-                     backgroundColor: 'transparent',
-                     borderColor: '#007bff',
-                     pointBorderColor: '#007bff',
-                     pointBackgroundColor: '#007bff',
-                     fill: false
-                     // pointHoverBackgroundColor: '#007bff',
-                     // pointHoverBorderColor    : '#007bff'
-                 },
-                     {
-                         type: 'line',
-                         data: lastWeekData,
-                         backgroundColor: 'tansparent',
-                         borderColor: '#ced4da',
-                         pointBorderColor: '#ced4da',
-                         pointBackgroundColor: '#ced4da',
-                         fill: false
-                         // pointHoverBackgroundColor: '#ced4da',
-                         // pointHoverBorderColor    : '#ced4da'
-                     }]
-             },
-             options: {
-                 maintainAspectRatio: false,
-                 tooltips: {
-                     mode: mode,
-                     intersect: intersect
-                 },
-                 hover: {
-                     mode: mode,
-                     intersect: intersect
-                 },
-                 legend: {
-                     display: false
-                 },
-                 scales: {
-                     yAxes: [{
-                         // display: false,
-                         gridLines: {
-                             display: true,
-                             lineWidth: '4px',
-                             color: 'rgba(0, 0, 0, .2)',
-                             zeroLineColor: 'transparent'
-                         },
-                         ticks: $.extend({
-                             beginAtZero: true,
-                             suggestedMax: 200
-                         }, ticksStyle)
-                     }],
-                     xAxes: [{
-                         display: true,
-                         gridLines: {
-                             display: false
-                         },
-                         ticks: ticksStyle
-                     }]
-                 }
-             }
-         }
-         )
-
-
-    var $weekChart = $('#week-sales-chart');
-    // eslint-disable-next-line no-unused-vars
-    var weekChart = new Chart($weekChart, {
-        data: {
-            labels: dates,
-            datasets: [{
-                type: 'line',
-                data: thisWeekData,
-                backgroundColor: 'transparent',
-                borderColor: '#007bff',
-                pointBorderColor: '#007bff',
-                pointBackgroundColor: '#007bff',
-                fill: false
-                // pointHoverBackgroundColor: '#007bff',
-                // pointHoverBorderColor    : '#007bff'
-            },
-                {
-                    type: 'line',
-                    data: lastWeekData,
-                    backgroundColor: 'tansparent',
-                    borderColor: '#ced4da',
-                    pointBorderColor: '#ced4da',
-                    pointBackgroundColor: '#ced4da',
-                    fill: false
-                    // pointHoverBackgroundColor: '#ced4da',
-                    // pointHoverBorderColor    : '#ced4da'
-                }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            tooltips: {
-                mode: mode,
-                intersect: intersect
-            },
-            hover: {
-                mode: mode,
-                intersect: intersect
-            },
-            legend: {
-                display: false
-            },
-            scales: {
-                yAxes: [{
-                    // display: false,
-                    gridLines: {
-                        display: true,
-                        lineWidth: '4px',
-                        color: 'rgba(0, 0, 0, .2)',
-                        zeroLineColor: 'transparent'
-                    },
-                    ticks: $.extend({
-                        beginAtZero: true,
-                        suggestedMax: 200
-                    }, ticksStyle)
-                }],
-                xAxes: [{
-                    display: true,
-                    gridLines: {
-                        display: false
-                    },
-                    ticks: ticksStyle
-                }]
-            }
-        }
-    }
-    )
-
     $('.chart-summary').hide();
     $('#today-chart').show();
     </script>

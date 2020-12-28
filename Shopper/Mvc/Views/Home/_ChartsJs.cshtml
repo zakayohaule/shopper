@@ -6,50 +6,96 @@
     var chartId = Model.ChartId;
     var allSales = Model.Sales;
     var dates = new List<string>();
-    var thisWeekData = new List<int>();
-    var lastWeekData = new List<int>();
-    var numberOfDays = 0;
-    if (Model.SummaryType == SummaryType.Week)
+    var currentData = new List<int>();
+    var previousData = new List<int>();
+    var xAxisCount = 0;
+    if (Model.SummaryType == SummaryType.Today)
     {
-        numberOfDays = 7;
-    }
-    else
-    {
-
-    }
-    for (int i = 0; i < 7; i++)
-    {
-        var date = DateTime.Now.AddDays(-i);
-        var lastWeekDate = DateTime.Now.AddDays(-(i + 7));
-        uint sale = 0;
-        uint lastWeekSale = 0;
-        var sales = allSales.Where(s => s.SaleInvoice.Date.Date == date.Date).AsEnumerable();
-        var lastWeekSales = allSales.Where(s => s.SaleInvoice.Date.Date == lastWeekDate.Date).AsEnumerable();
-        foreach (var s in sales)
+        xAxisCount = 24;
+        for (int i = 1; i <= 24; i++)
         {
-            sale += (uint) (s.Quantity * s.Price);
+            int sale = 0;
+            int yesterdaySale = 0;
+            var sales = allSales.Where(s => s.SaleInvoice.Date.Date == DateTime.Now.Date && s.SaleInvoice.Date.Hour == i).AsEnumerable();
+            var yesterdaySales = allSales.Where(s => s.SaleInvoice.Date.Date == DateTime.Now.Date.AddDays(-1) && s.SaleInvoice.Date.Hour == i).AsEnumerable();
+            foreach (var s in sales)
+            {
+                sale += (int) (s.Quantity * s.Price);
+            }
+            foreach (var s in yesterdaySales)
+            {
+                yesterdaySale += (int) (s.Quantity * s.Price);
+            }
+            currentData.Add(sale);
+            previousData.Add(yesterdaySale);
+            dates.Add(i.ToString());
         }
-        foreach (var s in lastWeekSales)
-        {
-            lastWeekSale += (uint) (s.Quantity * s.Price);
-        }
-        thisWeekData.Add((int) sale);
-        lastWeekData.Add((int) lastWeekSale);
-        dates.Add($"{date.DateWithSuffix()} {date.ToString("MMM")}");
+        dates[^1] += "HRS";
+        /*var todayTotal = currentData.Sum();
+        var yesterdayTotal = previousData.Sum();
+        var percentage = (todayTotal - yesterdayTotal) * 100 / yesterdayTotal;*/
     }
-    dates[0] = "today";
-    dates.Reverse();
-    thisWeekData.Reverse();
-    lastWeekData.Reverse();
+    if (Model.SummaryType == SummaryType.Week || Model.SummaryType == SummaryType.Month)
+    {
+        xAxisCount = Model.SummaryType == SummaryType.Week ? 7 : 30;
 
-    var thisWeekTotal = thisWeekData.Sum();
-    var lastWeekTotal = lastWeekData.Sum();
-    var percentage = (thisWeekTotal - lastWeekTotal) * 100 / lastWeekTotal;
+        for (int i = 0; i < xAxisCount; i++)
+        {
+            var date = DateTime.Now.AddDays(-i);
+            var lastWeekDate = DateTime.Now.AddDays(-(i + 7));
+            uint sale = 0;
+            uint lastWeekSale = 0;
+            var sales = allSales.Where(s => s.SaleInvoice.Date.Date == date.Date).AsEnumerable();
+            var lastWeekSales = allSales.Where(s => s.SaleInvoice.Date.Date == lastWeekDate.Date).AsEnumerable();
+            foreach (var s in sales)
+            {
+                sale += (uint) (s.Quantity * s.Price);
+            }
+            foreach (var s in lastWeekSales)
+            {
+                lastWeekSale += (uint) (s.Quantity * s.Price);
+            }
+            currentData.Add((int) sale);
+            previousData.Add((int) lastWeekSale);
+            dates.Add($"{date.DateWithSuffix()} {date.ToString("MMM")}");
+        }
+        dates[0] = "today";
+        dates.Reverse();
+        currentData.Reverse();
+        previousData.Reverse();
+
+        var thisWeekTotal = currentData.Sum();
+        var lastWeekTotal = previousData.Sum();
+        var percentage = (thisWeekTotal - lastWeekTotal) * 100 / lastWeekTotal;
+    }
+    if (Model.SummaryType == SummaryType.Year)
+    {
+        xAxisCount = 12;
+        var jan = DateTime.Now.AddMonths(-(DateTime.Now.Month-1));
+        for (int i = 0; i < xAxisCount; i++)
+        {
+            var month = jan.AddMonths(i);
+            uint sale = 0;
+            var sales = allSales.Where(s => s.SaleInvoice.Date.Month == month.Month).AsEnumerable();
+            foreach (var s in sales)
+            {
+                sale += (uint) (s.Quantity * s.Price);
+            }
+            currentData.Add((int) sale);
+            dates.Add($"{month.ToString("MMM")}");
+        }
+        // dates[0] = "today";
+        // dates.Reverse();
+        // currentData.Reverse();
+        // previousData.Reverse();
+
+        var total = currentData.Sum();
+    }
 }
 <script >
 var dates = @Html.Raw(JsonConvert.SerializeObject(dates));
-    var thisWeekData = @Html.Raw(JsonConvert.SerializeObject(thisWeekData));
-    var lastWeekData = @Html.Raw(JsonConvert.SerializeObject(lastWeekData));
+    var currentData = @Html.Raw(JsonConvert.SerializeObject(currentData));
+    var previousData = @Html.Raw(JsonConvert.SerializeObject(previousData));
     var mode = 'index';
     var intersect = true;
     var ticksStyle = {
@@ -63,7 +109,7 @@ var dates = @Html.Raw(JsonConvert.SerializeObject(dates));
             labels: dates,
             datasets: [{
                 type: 'line',
-                data: thisWeekData,
+                data: currentData,
                 backgroundColor: 'transparent',
                 borderColor: '#007bff',
                 pointBorderColor: '#007bff',
@@ -74,11 +120,11 @@ var dates = @Html.Raw(JsonConvert.SerializeObject(dates));
             },
                 {
                     type: 'line',
-                    data: lastWeekData,
+                    data: previousData,
                     backgroundColor: 'tansparent',
-                    borderColor: '#ced4da',
-                    pointBorderColor: '#ced4da',
-                    pointBackgroundColor: '#ced4da',
+                    borderColor: 'lightgray',
+                    pointBorderColor: 'lightgray',
+                    pointBackgroundColor: 'lightgray',
                     fill: false
                     // pointHoverBackgroundColor: '#ced4da',
                     // pointHoverBorderColor    : '#ced4da'

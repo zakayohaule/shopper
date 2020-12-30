@@ -84,6 +84,9 @@
     </div>
     <!-- /.card-body -->
 </div>
+
+<th:partial name="Partials/_EditModal" model="newProduct" view-data="ViewData"/>
+
 <!-- /.card -->
 <div class="modal fade" id="add-product">
     <div class="modal-dialog modal-lg">
@@ -102,8 +105,6 @@
         </div>
     </div>
 </div>
-
-<th:partial name="Partials/_EditModal" model="newProduct" view-data="ViewData"/>
 
 @section scripts
 {

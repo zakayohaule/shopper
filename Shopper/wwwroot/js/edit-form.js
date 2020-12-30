@@ -7,7 +7,7 @@ for (var i = 0; i < elements.length; i++) {
         if (element.id) {
             var label = $("label[for='" + element.id + "']");
             element.id += "-Edit";
-            if (label != null){
+            if (label != null) {
                 label.attr("for", element.id);
             }
             // console.log(element.id);
@@ -31,26 +31,36 @@ function openEditModal(dataUrl, actionUrl, title = null, size = null) {
             $.each(response, function (key, val) {
                 var $el = form.find('[name="' + key + '"]');
                 var type = $el.attr('type');
+                /*if ($el.is('select')) {
+                    type = 'select';
+                }*/
                 console.log(type + " - " + key + " - " + val);
                 if ($el.attr('hidden') != null) {
-                    console.log("This eleement is hidden! " + key + " = " + val)
+                    console.log("This element is hidden! " + key + " = " + val)
                     $el.attr("value", val);
                 }
                 switch (type) {
                     case 'checkbox':
                         if (val) {
-                            $el.attr('checked', 'checked');
+                            $el.attr('checked', true);
+                        } else {
+                            $el.attr('checked', false)
                         }
-                        // $el.attr('value', val)
                         break;
                     case 'radio':
-                        $el.filter('[value="' + val + '"]').attr('checked', 'checked');
+                        $el.filter('[value="' + val + '"]').attr('checked', true);
                         break;
                     case 'number':
                         $el.val(val)
                         break;
+                    /*case 'select':
+                        $el.val(val);
+                        $el.select2().trigger('change');
+                        break;*/
                     default:
-                        $el.val(val).change();
+                        if (val) {
+                            $el.val(val).change();
+                        }
                 }
             });
             console.log("Editing form action " + actionUrl);

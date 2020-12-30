@@ -9,7 +9,7 @@
     var enctype = "application/x-www-form-urlencoded";
     if (ViewData["AllowFileUpload"] != null)
     {
-        var allowFileUploads = (bool)ViewData["AllowFileUpload"];
+        var allowFileUploads = (bool) ViewData["AllowFileUpload"];
         enctype = allowFileUploads ? "multipart/form-data" : enctype;
     }
 }
@@ -30,3 +30,4 @@
         </div>
     </div>
 </div>
+

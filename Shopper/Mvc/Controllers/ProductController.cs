@@ -119,20 +119,35 @@ namespace Shopper.Mvc.Controllers
 
         [HttpGet("{id}/open-edit-modal")]
         public async Task<JsonResult> EditProductModal(uint id, [FromServices] IAttributeService attributeService,
-            [FromServices] IProductCategoryService productCategoryService)
+            [FromServices] IProductCategoryService productCategoryService,
+            [FromServices] IProductTypeService productTypeService,
+            [FromServices] IProductGroupService productGroupService)
         {
-            var product = await _productService.FindByIdAsyncQ(id).Include(p => p.Attributes).SingleAsync();
+            var product = await _productService.FindByIdAsyncQ(id)
+                .Include(p => p.ProductType)
+                .ThenInclude(p => p.ProductCategory)
+                .Include(p => p.Attributes)
+                .SingleAsync();
             ViewData["Attributes"] = attributeService.GetAllAttributeSelectListItems();
-            ViewData["Categories"] = productCategoryService.GetProductCategorySelectListItems();
-            ViewBag.EditMode = true;
+            ViewData["Groups"] = productGroupService.GetProductGroupSelectListItems();
 
-            var formData = new ProductFormModel
+            var formData = new
             {
-                Id = product.Id,
-                Name = product.Name,
-                ProductTypeId = product.ProductTypeId,
+                product.Id,
+                product.Name,
+                product.ProductType.ProductCategory.ProductGroupId,
+                product.ProductType.ProductCategoryId,
+                product.ProductTypeId,
                 HasExpirationDate = product.HasExpiration,
-                Attributes = product.Attributes.Select(at => at.AttributeId)
+                Attributes = product.Attributes.Select(at => at.AttributeId),
+                CategoryItems = productCategoryService
+                    .GetProductCategorySelectListItemsByGroupId(
+                        product.ProductType.ProductCategory.ProductGroupId,
+                        product.ProductType.ProductCategoryId),
+                TypeItems = productTypeService
+                    .GetProductTypeSelectListItemsByCategoryId(
+                        product.ProductType.ProductCategoryId,
+                        product.ProductTypeId)
             };
             return Json(formData, new JsonSerializerSettings {ContractResolver = null});
             // return PartialView("../Product/_EditProductModal", product);

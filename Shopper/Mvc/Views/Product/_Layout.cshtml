@@ -17,6 +17,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <th:link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css"></th:link>
         <th:link rel="stylesheet" href="~/dist/css/adminlte.css"></th:link>
         <th:script src="~/plugins/jquery/jquery.js" asp-append-version="true"></th:script>
+        <th:script src="~/plugins/bootstrap/js/bootstrap.bundle.js" asp-append-version="true"></th:script>
         @* <th:link rel="stylesheet" href="~/css/site.css"></th:link> *@
     </th:environment>
     <th:environment names="Staging,Production">
@@ -26,6 +27,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <th:link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" asp-append-version="true"></th:link>
         <th:link rel="stylesheet" href="~/dist/css/adminlte.min.css" asp-append-version="true"></th:link>
         <th:script src="~/plugins/jquery/jquery.min.js" asp-append-version="true"></th:script>
+        <th:script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></th:script>
         @* <th:link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"></th:link> *@
     </th:environment>
 
@@ -103,13 +105,10 @@ user experience. Slimscroll is required when using the
 fixed layout. -->
 
 <th:environment names="Development">
-    <th:script src="~/plugins/jquery/jquery.js" asp-append-version="true"></th:script>
-    <th:script src="~/plugins/bootstrap/js/bootstrap.bundle.js" asp-append-version="true"></th:script>
     <th:script src="~/js/site.js" asp-append-version="true"></th:script>
     <th:script src="~/dist/js/adminlte.js" asp-append-version="true"></th:script>
 </th:environment>
 <th:environment names="Staging,Production">
-    <th:script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></th:script>
     <th:script src="~/js/site.min.js" asp-append-version="true"></th:script>
     <th:script src="~/dist/js/adminlte.min.js" asp-append-version="true"></th:script>
 </th:environment>

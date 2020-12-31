@@ -15,7 +15,7 @@
 
 <div class="form-group col-12">
     <th:label asp-for="ProductCategoryId">Product Category</th:label>
-    <th:select class="form-control select2bs4" asp-for="ProductCategoryId">
+    <th:select class="form-control select2bs4" asp-for="ProductCategoryId" disabled>
         <option value="">-- Select Product Group First --</option>
     </th:select>
     <th:span asp-validation-for="ProductCategoryId" class="text-danger"></th:span>
@@ -23,8 +23,8 @@
 
 <div class="form-group col-12">
     <th:label asp-for="ProductTypeId">Product Type</th:label>
-    <th:select class="form-control select2bs4" asp-for="ProductTypeId">
-        <option value="">-- Select Product Type First --</option>
+    <th:select class="form-control select2bs4" asp-for="ProductTypeId" disabled>
+        <option value="">-- Select Product Category First --</option>
     </th:select>
     <th:span asp-validation-for="ProductTypeId" class="text-danger"></th:span>
 </div>

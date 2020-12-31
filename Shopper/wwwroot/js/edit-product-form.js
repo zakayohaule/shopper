@@ -10,7 +10,6 @@ for (var i = 0; i < elements.length; i++) {
             if (label != null) {
                 label.attr("for", element.id);
             }
-            // console.log(element.id);
         }
     }
 }
@@ -22,6 +21,7 @@ function openEditModal(dataUrl, actionUrl, title = null, size = null) {
         type: "GET",
         url: dataUrl.toString(),
         success: function (response) {
+            console.log(response);
             if (title) {
                 $("#edit-title").html(title)
             }
@@ -31,6 +31,9 @@ function openEditModal(dataUrl, actionUrl, title = null, size = null) {
             $.each(response, function (key, val) {
                 var $el = form.find('[name="' + key + '"]');
                 var type = $el.attr('type');
+                if ($el.is('select')) {
+                    type = 'select';
+                }
                 console.log(type + " - " + key + " - " + val);
                 if ($el.attr('hidden') != null) {
                     console.log("This element is hidden! " + key + " = " + val)
@@ -50,18 +53,31 @@ function openEditModal(dataUrl, actionUrl, title = null, size = null) {
                     case 'number':
                         $el.val(val)
                         break;
+                    case 'select':
+                        if (key === 'ProductCategoryId') {
+                            $el.prop("disabled", false)
+                            for (var i = 0; i < response.CategoryItems.length; i++) {
+                                var item = response.CategoryItems[i];
+                                $el.append(new Option(item.Text, item.Value, false, item.Selected));
+                            }
+                        } else if(key === 'ProductTypeId'){
+                            $el.prop("disabled", false)
+                            for (var i = 0; i < response.TypeItems.length; i++) {
+                                var item = response.TypeItems[i];
+                                $el.append(new Option(item.Text, item.Value, false, item.Selected));
+                            }
+                        } else {
+                            $el.val(val).trigger('change');
+                        }
+                        break;
                     default:
                         if (val) {
                             $el.val(val).change();
                         }
                 }
             });
-            console.log("Editing form action " + actionUrl);
             form.attr("action", actionUrl);
             console.log(response);
-            // $('.edit-select2bs4').select2({
-            //     theme: 'bootstrap4'
-            // })
             $("#edit-modal").modal("show");
         }
     });

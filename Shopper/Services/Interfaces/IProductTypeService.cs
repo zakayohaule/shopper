@@ -10,7 +10,7 @@ namespace Shopper.Services.Interfaces
     {
         IQueryable<ProductType> GetAllProductTypes();
         List<SelectListItem> GetProductTypeSelectListItems();
-        List<SelectListItem> GetProductTypeSelectListItemsByCategoryId(ushort categoryId);
+        List<SelectListItem> GetProductTypeSelectListItemsByCategoryId(ushort categoryId, ushort? selectedTypeId);
         Task<ProductType> FindByNameAsync(string name);
         Task<ProductType> FindByIdAsync(ushort id);
         Task<ProductType> CreateAsync(ProductType productType);

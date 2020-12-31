@@ -43,3 +43,60 @@ var Select2Cascade = ( function(window, $) {
     return Select2Cascade;
 
 })( window, $);
+
+function populateChildSelect(parentName, childName, url, selectPlaceholder = null, parentPlaceHolder = null, grandChildName=null)
+{
+
+    $('[name=' + parentName + ']').on("select2:select", function (event) {
+
+        var parentId = $(this).val();
+        var placeHolder = "-- Select --";
+        if (selectPlaceholder)
+        {
+            if (parentId){
+                placeHolder = "-- Select " + selectPlaceholder + " --";
+            }
+            else if(parentPlaceHolder){
+                placeHolder = "-- Select " + parentPlaceHolder + " First --";
+            }
+        }
+        var childSelect = $('[name=' + childName + ']');
+        childSelect.empty();
+        childSelect.append($('<option/>', {
+            value: "",
+            text: placeHolder
+        }));
+        childSelect.prop("disabled", true);
+        if (grandChildName){
+            var grandChildSelect = $('[name=' + grandChildName + ']');
+            grandChildSelect.empty();
+            grandChildSelect.append($('<option/>', {
+                value: "",
+                text: "-- Select " + selectPlaceholder + " First --"
+            }));
+            grandChildSelect.prop("disabled", true);
+        }
+        if (parentId)
+        {
+            $.ajax({
+                url: url.replace(':parentId:', parentId),
+                type: 'GET',
+                cache: false,
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                success: function (result) {
+                    childSelect.prop("disabled", false)
+                    console.log(result);
+                    var markup;
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        childSelect.append(new Option(item.text, item.value, false, item.selected));
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(thrownError);
+                }
+            });
+        }
+    })
+}

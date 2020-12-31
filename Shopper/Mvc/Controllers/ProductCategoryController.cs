@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -112,15 +113,18 @@ namespace Shopper.Mvc.Controllers
                 : Json(true);
         }
 
-        [HttpGet("{groupId}/ajax")]
-        public string ProductCategoryByGroupIdAjax(ushort groupId)
+        [HttpGet("{groupId}/ajax/{selectedCategoryId?}")]
+        public IActionResult ProductCategoryByGroupIdAjax(ushort groupId, ushort? selectedCategoryId = null)
         {
-            return JsonConvert.SerializeObject(_productCategoryService.GetProductCategorySelectListItemsByGroupId(groupId).Select( it => new
+            var si = _productCategoryService.GetProductCategorySelectListItemsByGroupId(groupId, selectedCategoryId).ToList();
+            return Json(si);
+            /*var dict = new Dictionary<string, string>();
+            si.ForEach(item =>
             {
-                id = it.Value,
-                text = it.Text,
-                selected = it.Selected
-            }));
+                dict.Add(item.Value, item.Text);
+            });
+
+            return Json(dict);*/
         }
     }
 }

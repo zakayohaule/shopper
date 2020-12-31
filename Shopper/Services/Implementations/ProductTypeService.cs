@@ -31,11 +31,16 @@ namespace Shopper.Services.Implementations
                 .Select(pt => new SelectListItem {Value = pt.Id.ToString(), Text = $"{pt.ProductCategory.Name} - {pt.Name}"}).ToList();
         }
 
-        public List<SelectListItem> GetProductTypeSelectListItemsByCategoryId(ushort categoryId)
+        public List<SelectListItem> GetProductTypeSelectListItemsByCategoryId(ushort categoryId, ushort? selectedTypeId = null)
         {
             return GetAllProductTypes()
                 .Where(pt => pt.ProductCategoryId.Equals(categoryId))
-                .Select(pt => new SelectListItem {Value = pt.Id.ToString(), Text = pt.Name}).ToList();
+                .Select(pt => new SelectListItem
+                {
+                    Value = pt.Id.ToString(),
+                    Text = pt.Name,
+                    Selected = pt.Id.Equals(selectedTypeId)
+                }).ToList();
         }
 
         public async Task<ProductType> FindByNameAsync(string name)

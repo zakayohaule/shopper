@@ -1,0 +1,106 @@
+﻿@model List<ProductType>;
+
+@{
+    Layout = "_Layout";
+    var newProductType = new ProductType();
+    ViewData["FormName"] = "_ProductTypeForm";
+}
+
+@section css {
+    <th:link rel="stylesheet" href="~/plugins/select2-4.0.5/css/select2.min.css"></th:link>
+    <th:link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"></th:link>
+    <!-- Toastr -->
+    <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
+}
+
+<div class="card card-default">
+    <div class="card-header">
+        <a href="" data-toggle="modal" data-target="#add-product-type" class="btn btn-sm btn-primary float-right" title="Add User">
+            <i class="fas fa-user-plus"> Add</i>
+        </a>
+    </div>
+    <!-- /.card-header -->
+
+    <div class="modal fade" id="add-product-type">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Product Type</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <th:form class="" asp-controller="ProductType" asp-action="Create" method="post">
+                    <div class="modal-body">
+                        <th:partial name="_ProductTypeForm" model="newProductType" view-data="ViewData"/>
+                    </div>
+                </th:form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body table-responsive p-3">
+        <table class="table table-sm table-hover">
+            <thead>
+            <tr>
+                <th style="width: 10px">#</th>
+                <th>Name</th>
+                <th>Product Group</th>
+                <th style="width: 160px"></th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                int index = 0;
+            }
+            @foreach (var productType in Model)
+            {
+                index++;
+                <tr>
+                    <td>@index</td>
+                    <td>@productType.Name</td>
+                    <td>@productType.ProductCategory.Name</td>
+                    <td>
+                        <a href="#" onclick="openEditModal('@Url.Action("EditProductTypeModal", new {id = productType.Id})',
+                         '@Url.Action("Update", new {id = productType.Id})',
+                         'Edit Product Type')"
+                           class="btn btn-default btn-sm"
+                           title="Edit product type">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <th:a asp-controller="ProductType"
+                              asp-action="Delete"
+                              asp-route-id="@productType.Id" class="btn-delete">
+                            <span class="btn btn-default btn-sm" title="Delete product type">
+                                <i class="fas fa-trash"></i>
+                            </span>
+                        </th:a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->
+
+<th:partial name="Partials/_EditModal" model="newProductType" view-data="ViewData"/>
+
+@section scripts
+{
+    <th:partial name="_ValidationScriptsPartial"></th:partial>
+    <th:partial name="Partials/_ToastScript"></th:partial>
+    <!-- Select2 -->
+    <th:script src="~/plugins/select2-4.0.5/js/select2.full.min.js"></th:script>
+
+    <th:script src="~/js/edit-form.js"></th:script>
+    <script >
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+              theme: 'bootstrap4'
+            })
+
+                useDeleteConfirmation();
+        </script>
+}

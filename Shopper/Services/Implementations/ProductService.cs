@@ -85,7 +85,7 @@ namespace Shopper.Services.Implementations
         public List<Product> GetStockedProducts()
         {
             return GetAllProducts()
-                .Include(p => p.ProductCategory)
+                .Include(p => p.ProductType)
                 .Include(p => p.Skus)
                 .ThenInclude(sku => sku.SkuAttributes)
                 .ThenInclude(skuAtt => skuAtt.Option)
@@ -144,7 +144,7 @@ namespace Shopper.Services.Implementations
             var product = await _dbContext.Products.AddAsync(new Product
             {
                 Name = newProduct.Name,
-                ProductCategoryId = newProduct.ProductCategoryId,
+                ProductTypeId = newProduct.ProductTypeId,
                 ImagePath = imageName,
                 HasExpiration = newProduct.HasExpirationDate
             });
@@ -170,7 +170,7 @@ namespace Shopper.Services.Implementations
                 productToUpdate.ImagePath = imageName;
             }
             productToUpdate.Name = productModel.Name;
-            productToUpdate.ProductCategoryId = productModel.ProductCategoryId;
+            productToUpdate.ProductTypeId = productModel.ProductTypeId;
             productToUpdate.HasExpiration = productModel.HasExpirationDate;
             _dbContext.ProductAttributes.RemoveRange(productToUpdate.Attributes);
             if (productModel.Attributes.IsNotNull() && productModel.Attributes.Any())

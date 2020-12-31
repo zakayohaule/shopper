@@ -12,8 +12,14 @@ namespace Shopper.Mvc.ViewModels
         [Required]
         public string Name { get; set; }
 
-        [DisplayName("product category")]
+        [DisplayName("Product Group"), Required]
+        public ushort ProductGroupId { get; set; }
+
+        [DisplayName("Product Category"), Required]
         public ushort ProductCategoryId { get; set; }
+
+        [DisplayName("Product Type"), Required]
+        public ushort ProductTypeId { get; set; }
 
         [DisplayName("Has Expiration Date")]
         public bool HasExpirationDate { get; set; }

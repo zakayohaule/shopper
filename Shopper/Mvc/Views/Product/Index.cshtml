@@ -51,7 +51,7 @@
                 <tr>
                     <td>@index</td>
                     <td>@product.Name</td>
-                    <td>@product.ProductCategory.Name</td>
+                    <td>@product.ProductType.Name</td>
                     <td>@string.Join(", ", product.Attributes.Select(att => att.Attribute.Name))</td>
                     <td>
                         <th:a asp-action="Show" asp-route-id="@product.Id"
@@ -109,6 +109,8 @@
 @section scripts
 {
     <th:partial name="Partials/_DtJs"></th:partial>
+    <th:partial name="_ValidationScriptsPartial"></th:partial>
+    <th:partial name="Partials/_ToastScript"></th:partial>
     <!-- Select2 -->
     <th:script src="~/plugins/select2-4.0.5/js/select2.full.min.js"></th:script>
     <th:script src="~/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></th:script>
@@ -124,7 +126,63 @@
         $(function () {
           bsCustomFileInput.init();
         });
+
+        $("#ProductGroupId").change(function()
+            {
+                var groupId=$(this).val();
+                if (groupId){
+
+                $('#ProductCategoryId').select2({
+                ajax: {
+                  url: 'http://localhost:5000/product-categories/'+groupId+'/ajax',
+                  dataType: 'json',
+                  processResults: function (data) {
+                      console.log(data);
+                    if (data.length !== 0){
+                        console.log('data is not null');
+
+                                                return {
+                                                  results: data
+                                                };
+                                                      } else {
+                                                       $('#ProductCategoryId').val(null).change();
+                                                      }return {
+                      results: data
+                    };
+                  }
+                }
+              });
+                    } else {
+                    $('#ProductCategoryId').val(null).change();
+                    }
+            });
+
+        $("#ProductCategoryId").change(function()
+                    {
+                        var categoryId=$(this).val();
+                        if (categoryId)
+                            {
+
+                        $('#ProductTypeId').select2({
+                        ajax: {
+                          url: 'http://localhost:5000/product-types/'+categoryId+'/ajax',
+                          dataType: 'json',
+                          processResults: function (data) {
+                      console.log(data);
+                              if (data.length !== 0){
+                                  console.log('data is not null');
+                            return {
+                              results: data
+                            };
+                                  } else {
+                                   $('#ProductTypeId').val(null).change();
+                                  }
+                          }
+                        }
+                      });
+                                }  else {
+                                                      $('#ProductTypeId').val(null).change();
+                                                      }
+                    });
     </script>
-    <th:partial name="_ValidationScriptsPartial"></th:partial>
-    <th:partial name="Partials/_ToastScript"></th:partial>
 }

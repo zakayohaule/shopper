@@ -111,5 +111,16 @@ namespace Shopper.Mvc.Controllers
                 ? Json("A product category with this name already exists")
                 : Json(true);
         }
+
+        [HttpGet("{groupId}/ajax")]
+        public string ProductCategoryByGroupIdAjax(ushort groupId)
+        {
+            return JsonConvert.SerializeObject(_productCategoryService.GetProductCategorySelectListItemsByGroupId(groupId).Select( it => new
+            {
+                id = it.Value,
+                text = it.Text,
+                selected = it.Selected
+            }));
+        }
     }
 }

@@ -62,6 +62,7 @@ namespace Shopper.Database
         public DbSet<Module> Modules { get; set; }
         public DbSet<ProductGroup> ProductGroups { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<Attribute> Attributes { get; set; }
         public DbSet<AttributeOption> AttributeOptions { get; set; }
         public DbSet<ProductAttribute> ProductAttributes { get; set; }

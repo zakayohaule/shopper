@@ -1,16 +1,32 @@
 ﻿@model Shopper.Mvc.ViewModels.ProductFormModel
 @{
     var attributes = ViewData["Attributes"] as List<SelectListItem>;
-    var categories = ViewData["Categories"] as List<SelectListItem>;
+    var groups = ViewData["Groups"] as List<SelectListItem>;
 }
 
 <div class="form-group col-12">
     <th:input hidden asp-for="Id" value="@Model.Id"></th:input>
+    <th:label asp-for="ProductGroupId">Product Group</th:label>
+    <th:select class="form-control select2bs4" asp-for="ProductGroupId" asp-items="groups">
+        <option value="">-- Select Product Group --</option>
+    </th:select>
+    <th:span asp-validation-for="ProductGroupId" class="text-danger"></th:span>
+</div>
+
+<div class="form-group col-12">
     <th:label asp-for="ProductCategoryId">Product Category</th:label>
-    <th:select class="form-control select2bs4" asp-for="ProductCategoryId" asp-items="categories">
-        <option value="">-- Select Product Category --</option>
+    <th:select class="form-control select2bs4" asp-for="ProductCategoryId">
+        <option value="">-- Select Product Group First --</option>
     </th:select>
     <th:span asp-validation-for="ProductCategoryId" class="text-danger"></th:span>
+</div>
+
+<div class="form-group col-12">
+    <th:label asp-for="ProductTypeId">Product Type</th:label>
+    <th:select class="form-control select2bs4" asp-for="ProductTypeId">
+        <option value="">-- Select Product Type First --</option>
+    </th:select>
+    <th:span asp-validation-for="ProductTypeId" class="text-danger"></th:span>
 </div>
 
 <div class="form-group col-12">

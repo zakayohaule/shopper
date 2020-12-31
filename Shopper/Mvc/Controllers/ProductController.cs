@@ -15,28 +15,26 @@ namespace Shopper.Mvc.Controllers
     public class ProductController : BaseController
     {
         private readonly IProductService _productService;
-        private readonly IAttributeService _attributeService;
 
-        public ProductController(IProductService productService, IAttributeService attributeService)
+        public ProductController(IProductService productService)
         {
             _productService = productService;
-            _attributeService = attributeService;
         }
 
         [Permission("product_view"), Toast]
         [HttpGet("")]
         public IActionResult Index([FromServices] IAttributeService attributeService,
-            [FromServices] IProductCategoryService productCategoryService)
+            [FromServices] IProductGroupService productGroupService)
         {
             Title = "Products";
             AddPageHeader("Manage products");
             var products = _productService.GetAllProducts()
-                .Include(p => p.ProductCategory)
+                .Include(p => p.ProductType)
                 .Include(p => p.Attributes)
                 .ThenInclude(pa => pa.Attribute)
                 .ToList();
             ViewData["Attributes"] = attributeService.GetAllAttributeSelectListItems();
-            ViewData["Categories"] = productCategoryService.GetProductCategorySelectListItems();
+            ViewData["Groups"] = productGroupService.GetProductGroupSelectListItems();
             return View(products);
         }
 
@@ -48,7 +46,7 @@ namespace Shopper.Mvc.Controllers
                 .FindByIdAsyncQ(id)
                 .Include(p => p.Images)
                 .Include(p => p.Attributes)
-                .Include(p => p.ProductCategory)
+                .Include(p => p.ProductType)
                 .Include(p => p.Skus)
                 .ThenInclude(s => s.SkuAttributes)
                 .ThenInclude(sa => sa.Option)
@@ -132,7 +130,7 @@ namespace Shopper.Mvc.Controllers
             {
                 Id = product.Id,
                 Name = product.Name,
-                ProductCategoryId = product.ProductCategoryId,
+                ProductTypeId = product.ProductTypeId,
                 HasExpirationDate = product.HasExpiration,
                 Attributes = product.Attributes.Select(at => at.AttributeId)
             };

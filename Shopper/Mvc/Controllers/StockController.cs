@@ -41,7 +41,6 @@ namespace Shopper.Mvc.Controllers
             var product = await _productService.FindByIdWithAttributesAsync(id);
             stockViewModel.Product = product;
             stockViewModel.StockDate = DateTime.Today.Date;
-            stockViewModel.HasExpirationDate = product.HasExpiration;
             stockViewModel.ExpirationDate = DateTime.Now.AddYears(1);
             stockViewModel.MaximumDiscount = 0.ToString();
             stockViewModel.AttributeSelects = _productService.GetProductAttributeSelects(product, new Sku());
@@ -62,9 +61,10 @@ namespace Shopper.Mvc.Controllers
                 return BadRequest();
             }
 
-            var sku = GetSkuFromViewModel(skuViewModel);
+            skuViewModel.Sku = GetSkuFromViewModel(skuViewModel);
 
-            var newSku = await _productService.AddProductToStockAsync(sku, attributeOptionIds);
+            var newSku = await _productService.AddProductToStockAsync(skuViewModel, attributeOptionIds);
+
             if (newSku.IsNotNull())
             {
                 ToastSuccess("Product added to stock successfully!");
@@ -96,7 +96,7 @@ namespace Shopper.Mvc.Controllers
 
             var updated = GetSkuFromViewModel(skuViewModel);
 
-            sku = await _productService.UpdateStockItemAsync(sku,updated, attributeOptionIds);
+            sku = await _productService.UpdateStockItemAsync(sku,skuViewModel, attributeOptionIds);
             if (sku.IsNull())
             {
                 ToastError("Stock item could not be updated. Please try again or contact system administrator");

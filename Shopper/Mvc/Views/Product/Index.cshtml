@@ -37,7 +37,10 @@
                 <th>Name</th>
                 <th>Category</th>
                 <th>Attributes</th>
-                <th>Has Expirtion Date</th>
+                @if (Model.Any(p => p.HasExpiration))
+                {
+                    <th>Has Expirtion Date</th>
+                }
                 <th>Action</th>
             </tr>
             </thead>
@@ -55,7 +58,10 @@
                     <td>@product.Name</td>
                     <td>@product.ProductType.Name</td>
                     <td>@string.Join(", ", product.Attributes.Select(att => att.Attribute.Name))</td>
-                    <td>@hasExpiry</td>
+                     @if (Model.Any(p => p.HasExpiration))
+                     {
+                         <td>@hasExpiry</td>
+                     }
                     <td>
                         <th:a asp-action="Show" asp-route-id="@product.Id"
                               class="btn btn-default btn-sm" title="View Details">

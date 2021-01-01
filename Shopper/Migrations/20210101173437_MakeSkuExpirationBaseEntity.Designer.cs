@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shopper.Database;
 
 namespace Shopper.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210101173437_MakeSkuExpirationBaseEntity")]
+    partial class MakeSkuExpirationBaseEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -985,10 +987,6 @@ namespace Shopper.Migrations
                         .HasColumnName("is_on_sale")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int?>("LowStockAmount")
-                        .HasColumnName("low_stock_amount")
-                        .HasColumnType("int");
-
                     b.Property<uint>("MaximumDiscount")
                         .HasColumnName("maximum_discount")
                         .HasColumnType("int unsigned");
@@ -1065,6 +1063,44 @@ namespace Shopper.Migrations
                     b.HasIndex("TenantId");
 
                     b.ToTable("sku_attributes");
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.SkuExpiration", b =>
+                {
+                    b.Property<ulong>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnName("expiration_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<ulong>("SkuId")
+                        .HasColumnName("sku_id")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnName("tenant_id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SkuId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("sku_expirations");
                 });
 
             modelBuilder.Entity("Shared.Mvc.Entities.SkuSellingPrice", b =>
@@ -1466,6 +1502,21 @@ namespace Shopper.Migrations
 
                     b.HasOne("Shared.Mvc.Entities.Sku", "Sku")
                         .WithMany("SkuAttributes")
+                        .HasForeignKey("SkuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.SkuExpiration", b =>
+                {
+                    b.HasOne("Shared.Mvc.Entities.Sku", "Sku")
+                        .WithMany()
                         .HasForeignKey("SkuId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -31,7 +31,11 @@
                 <th>Remaining Quantity</th>
                 <th>Buying Price</th>
                 <th>Selling Price</th>
-                <th>Date</th>
+                <th>Stock Date</th>
+                @if (product.HasExpiration)
+                {
+                    <th>Expiration Date</th>
+                }
                 <th></th>
             </tr>
             </thead>
@@ -61,6 +65,10 @@
                     <td>@sku.BuyingPrice.ToString("N0")</td>
                     <td>@sku.SellingPrice.ToString("N0")</td>
                     <td>@sku.Date.ToString("dd-MM-yyyy")</td>
+                    @if (product.HasExpiration)
+                    {
+                        <td>@sku.Expiration.ExpirationDate.ToString("dd-MM-yyyy")</td>
+                    }
                     <td>
                         <th:a onclick="openFormModal('@Url.Action("OpenProductSkusEditModal", new {id = sku.Id})',
                          'Edit @Model.Name stock item', null,  true)"

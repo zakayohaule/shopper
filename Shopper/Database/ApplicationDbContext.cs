@@ -70,6 +70,7 @@ namespace Shopper.Database
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Sku> Skus { get; set; }
         public DbSet<SkuAttribute> SkuAttributes { get; set; }
+        public DbSet<Expiration> Expirations { get; set; }
         public DbSet<PriceType> PriceTypes { get; set; }
         public DbSet<SkuSellingPrice> SkuSellingPrices { get; set; }
         public DbSet<Sale> Sales { get; set; }

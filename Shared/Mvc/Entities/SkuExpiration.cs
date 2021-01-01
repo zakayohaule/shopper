@@ -1,10 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using Shared.Mvc.Entities.BaseEntities;
 
 namespace Shared.Mvc.Entities
 {
     [Table("sku_expirations")]
-    public class SkuExpiration
+    public class SkuExpiration : BaseEntity<ulong>
     {
         [Column("sku_id")]
         public ulong SkuId { get; set; }

@@ -36,9 +36,12 @@ namespace Shared.Mvc.Entities
         [Display(Name = "Discount")]
         public uint MaximumDiscount { get; set; } = 0;
 
+        [Column("low_stock_amount")]
+        [Display(Name = "Low Stock Amount")]
+        public int? LowStockAmount { get; set; } = null;
+
         [Column("is_on_sale")]
         public bool IsOnSale { get; set; } = false;
-
 
         [ForeignKey(nameof(ProductId))]
         public Product Product{ get; set; }

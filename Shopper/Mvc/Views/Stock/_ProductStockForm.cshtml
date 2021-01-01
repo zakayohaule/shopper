@@ -12,19 +12,6 @@
             <th:span asp-validation-for="StockDate" class="text-danger"></th:span>
         </div>
     </div>
-    @*@for (var i = 0; i < Model.Product.Attributes.Count; i++)
-    {
-        var att = Model.Product.Attributes.ToList()[i].Attribute;
-        <div class="form-group row">
-            <label for="" class="col-sm-4 col-form-label">@att.Name</label>
-            <div class="col-sm-8">
-                <th:select class="form-control select2bs4" asp-for="Attributes[i]" id="attribute_@att.Id"
-                           asp-items="@att.AttributeOptions.Select(ao => new SelectListItem {Text = ao.Name, Value = $"{ao.AttributeId}_{ao.Id}"})">
-                    <option value="">-- Select @att.Name --</option>
-                </th:select>
-            </div>
-        </div>
-    }*@
     @{
         var i = 0;
     }
@@ -69,7 +56,7 @@
             <th:span asp-validation-for="MaximumDiscount" class="text-danger"></th:span>
         </div>
     </div>
-    @if (Model.HasExpirationDate)
+    @if (Model.Product.HasExpiration)
     {
         <div class="form-group row">
             <th:label asp-for="ExpirationDate" class="col-sm-4 col-form-label"></th:label>

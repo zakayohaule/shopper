@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using Shared.Mvc.Entities;
@@ -9,6 +10,7 @@ namespace Shopper.Mvc.ViewModels
     public class SkuViewFormModel
     {
         public Product Product { get; set; }
+
         public Sku Sku { get; set; }
 
         [Display(Name = "Stock Date")]
@@ -34,9 +36,8 @@ namespace Shopper.Mvc.ViewModels
 
         [Required] public List<string> Attributes { get; set; }
 
-        public bool HasExpirationDate { get; set; }
-
-        public DateTime ExpirationDate { get; set; }
+        [DisplayName("Expiration Date")]
+        public DateTime? ExpirationDate { get; set; }
 
         public List<AttributeSelect> AttributeSelects { get; set; }
     }

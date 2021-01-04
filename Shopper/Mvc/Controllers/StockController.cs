@@ -173,6 +173,7 @@ namespace Shopper.Mvc.Controllers
                 BuyingPrice = uint.Parse(skuViewModel.BuyingPrice.Replace(",", "")),
                 SellingPrice = uint.Parse(skuViewModel.SellingPrice.Replace(",", "")),
                 MaximumDiscount = uint.Parse(skuViewModel.MaximumDiscount.Replace(",", "")),
+                LowStockAmount = skuViewModel.ReceiveLowStockAlert ? skuViewModel.LowStockQuantity : null
             };
         }
     }

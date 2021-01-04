@@ -33,7 +33,7 @@ namespace Shopper.Extensions.Helpers
                     break;
             }
 
-            return string.Format("{0:ddd dd}{1} {0:MMM yyyy}", dateTime, ordinal);
+            return string.Format("{0:ddd d}{1} {0:MMM yyyy}", dateTime, ordinal);
         }
 
         public static string FormatDateWithTime(this DateTime dateTime)

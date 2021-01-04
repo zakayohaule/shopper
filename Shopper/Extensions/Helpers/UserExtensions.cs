@@ -131,7 +131,7 @@
             try
             {
                 var path = Path.GetFullPath(Path.Combine(hostEnvironment.ContentRootPath,
-                    $"Mvc/Views/Emails/{templateName}.cshtml"));
+                    $"wwwroot/emails/{templateName}.cshtml"));
                 return path;
             }
             catch (FileNotFoundException fileNotFoundException)

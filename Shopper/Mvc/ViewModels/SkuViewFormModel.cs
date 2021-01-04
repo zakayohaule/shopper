@@ -18,6 +18,7 @@ namespace Shopper.Mvc.ViewModels
         public DateTime StockDate { get; set; }
 
         [Required] public uint ProductId { get; set; }
+
         [Required] public string Quantity { get; set; }
 
         [Display(Name = "Buying Price")]
@@ -31,6 +32,11 @@ namespace Shopper.Mvc.ViewModels
         [Display(Name = "Maximum Discount")]
         [Required]
         public string MaximumDiscount { get; set; }
+
+        [DisplayName("Receive low stock alert?")]
+        public bool ReceiveLowStockAlert { get; set; } = true;
+
+        [DisplayName("Low stock quantity")] public int? LowStockQuantity { get; set; } = 1;
 
         [Required] public IFormFile Image { get; set; }
 

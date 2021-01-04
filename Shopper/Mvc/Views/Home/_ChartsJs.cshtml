@@ -165,7 +165,14 @@ var dates = @Html.Raw(JsonConvert.SerializeObject(dates));
                     },
                     ticks: $.extend({
                         beginAtZero: true,
-                        suggestedMax: 200
+                        suggestedMax: 200,
+                        callback: function(value, index, values) {
+                                      if(parseInt(value) >= 1000){
+                                        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                      } else {
+                                        return value;
+                                      }
+                                    },
                     }, ticksStyle)
                 }],
                 xAxes: [{

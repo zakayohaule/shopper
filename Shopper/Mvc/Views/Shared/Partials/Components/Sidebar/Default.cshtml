@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Hosting
 @using Shopper.Extensions.Helpers
+@using IdentityServer4.Extensions
 @model IEnumerable<SidebarMenu>
 @inject IWebHostEnvironment Environment;
 @{
@@ -10,9 +11,11 @@
 <aside class="main-sidebar sidebar-mini sidebar-dark-lightblue elevation-4">
     <!-- Brand Logo -->
     <a href="/" class="brand-link navbar-lightblue">
-        <img
-            src="@tenant.LogoPath.LoadTenantImageThumbnail(ViewContext.HttpContext)"
-            alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"/>
+        @if (!tenant.LogoPath.IsNullOrEmpty())
+        {
+            <img
+                src="@tenant.LogoPath.LoadTenantImageThumbnail(ViewContext.HttpContext)" class="brand-image img-circle elevation-3" style="opacity: .8"/>
+        }
         <span class="brand-text font-weight-bolder">@tenant.Name</span>
     </a>
 

@@ -12,12 +12,14 @@ namespace Shopper.Services.Implementations
     public class BusinessService : IBusinessService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly AdminAppDbContext _appDbContext;
         private readonly IFileUploadService _fileUploadService;
 
-        public BusinessService(ApplicationDbContext dbContext, IFileUploadService fileUploadService)
+        public BusinessService(ApplicationDbContext dbContext, IFileUploadService fileUploadService, AdminAppDbContext appDbContext)
         {
             _dbContext = dbContext;
             _fileUploadService = fileUploadService;
+            _appDbContext = appDbContext;
         }
 
         public Task<bool> IsDuplicateAsync(string name, Guid id)
@@ -41,7 +43,9 @@ namespace Shopper.Services.Implementations
                 tenant.LogoPath = logoPath;
             }
             _dbContext.Tenants.Update(tenant);
+            _appDbContext.Tenants.Update(tenant);
             await _dbContext.SaveChangesAsync();
+            await _appDbContext.SaveChangesAsync();
         }
     }
 }

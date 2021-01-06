@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Shopper.Migrations
+namespace Shopper.Migrations.AdminAppDb
 {
-    public partial class AddLogoPath : Migration
+    public partial class AddedCodeInTenantModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "logo_path",
+                name: "code",
                 table: "tenants",
                 nullable: true);
         }
@@ -15,7 +15,7 @@ namespace Shopper.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "logo_path",
+                name: "code",
                 table: "tenants");
         }
     }

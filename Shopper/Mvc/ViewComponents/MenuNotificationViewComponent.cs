@@ -20,13 +20,13 @@ namespace Shopper.Mvc.ViewComponents
         private List<Message> GetData()
         {
             var messages = new List<Message>();
-            messages.Add(new Message
+            /*messages.Add(new Message
             {
                 Id = 1,
                 FontAwesomeIcon = "fa fa-users text-aqua",
                 ShortDesc = "5 new members joined today",
                 URLPath = "#",
-            });
+            });*/
 
             return messages;
         }

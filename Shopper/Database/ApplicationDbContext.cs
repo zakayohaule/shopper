@@ -28,18 +28,18 @@ namespace Shopper.Database
     {
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ITenantService _tenantService;
+        private readonly ITenantIdentifierService _tenantIdentifierService;
 
         public Tenant Tenant { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
             IConfiguration configuration,
-            ITenantService httpContextAccessor, IHttpContextAccessor httpContextAccessor1, ITenantService tenantService)
+            ITenantIdentifierService httpContextAccessor, IHttpContextAccessor httpContextAccessor1, ITenantIdentifierService tenantIdentifierService)
             : base(options)
         {
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor1;
-            _tenantService = tenantService;
+            _tenantIdentifierService = tenantIdentifierService;
             if (Tenant == null)
             {
                 Tenant = httpContextAccessor.GetTenantFromRequest();
@@ -62,6 +62,7 @@ namespace Shopper.Database
         public DbSet<Module> Modules { get; set; }
         public DbSet<ProductGroup> ProductGroups { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<Attribute> Attributes { get; set; }
         public DbSet<AttributeOption> AttributeOptions { get; set; }
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
@@ -69,6 +70,7 @@ namespace Shopper.Database
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Sku> Skus { get; set; }
         public DbSet<SkuAttribute> SkuAttributes { get; set; }
+        public DbSet<Expiration> Expirations { get; set; }
         public DbSet<PriceType> PriceTypes { get; set; }
         public DbSet<SkuSellingPrice> SkuSellingPrices { get; set; }
         public DbSet<Sale> Sales { get; set; }
@@ -147,7 +149,7 @@ namespace Shopper.Database
                 if (entityEntry.Properties.Any(entry => entry.Metadata.Name.Equals("TenantId")))
                 {
                     var tenantIdProp = entityEntry.Property("TenantId");
-                    var tenant = Tenant ?? _tenantService.GetTenantFromRequest();
+                    var tenant = Tenant ?? _tenantIdentifierService.GetTenantFromRequest();
                     tenantIdProp.CurrentValue = tenant.Id;
                     // entityEntry.Property("TenantId").CurrentValue = _tenantService.GetTenantFromRequest().Id;
                 }

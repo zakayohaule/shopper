@@ -238,7 +238,8 @@ namespace Shopper.Mvc.Controllers
             {
                 passwordResetResult.Errors.ToList().ForEach(error =>
                 {
-                    ModelState.AddModelError(error.Code, error.Description);
+                    AddPageAlerts(PageAlertType.Error, error.Description);
+                    // ModelState.AddModelError(error.Code, error.Description);
                 });
                 return View();
             }

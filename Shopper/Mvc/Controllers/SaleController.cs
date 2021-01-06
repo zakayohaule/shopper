@@ -31,6 +31,27 @@ namespace Shopper.Mvc.Controllers
             return View(invoices);
         }
 
+        [HttpGet("{id}"), Permission("sale_view"), Toast]
+        public async Task<IActionResult> InvoiceSales(ulong id)
+        {
+            AddPageHeader("Invoice sales list");
+            var invoice = await _saleService.GetInvoiceAsQueryable(id)
+                .Include(si => si.Sales)
+                .ThenInclude(s => s.Sku)
+                .ThenInclude(s => s.Product)
+                .Include(si => si.Sales)
+                .ThenInclude(s => s.Sku)
+                .ThenInclude(s => s.SkuAttributes)
+                .ThenInclude(s => s.Option)
+                .FirstOrDefaultAsync();
+
+            if (invoice == null)
+            {
+                return NotFound("Invoice not found");
+            }
+            return View(invoice);
+        }
+
         [HttpGet("add-sale"), Permission("sale_record"), Toast]
         public async Task<IActionResult> Create()
         {
@@ -88,7 +109,7 @@ namespace Shopper.Mvc.Controllers
         {
             try
             {
-                await _saleService.AddToInvoiceAsync(formViewModel, HttpContext.GetUserId());
+                await _saleService.AddToInvoiceAsync(formViewModel, HttpContext.GetUserId(), HttpContext.GetCurrentTenant());
             }
             catch (OutOfStockException e)
             {
@@ -129,6 +150,7 @@ namespace Shopper.Mvc.Controllers
             if (action.Equals("submit"))
             {
                 invoice = await _saleService.ConfirmPaymentAsync(invoice);
+                return RedirectToAction("InvoiceSales", new {id = invoice.Id});
             }
 
             if (action.Equals("cancel"))
@@ -143,6 +165,20 @@ namespace Shopper.Mvc.Controllers
 
             return RedirectToAction("Index");
             // return Ok($"Confirm payment for invoice with {invoice.Id} with total amount of {invoice.Amount}");
+        }
+
+        [HttpPost("{id}/change-date"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeInvoiceDate(ulong id, InvoiceDateModel formModel)
+        {
+            var invoice = await _saleService.FindInvoiceByIdAsync(id);
+            if (invoice == null)
+            {
+                return NotFound();
+            }
+
+            invoice.Date = formModel.InvoiceDate;
+            await _saleService.UpdateInvoiceDateAsync(invoice);
+            return RedirectToAction("InvoiceSales", new {id = invoice.Id});
         }
 
         [AcceptVerbs("GET", Route = "check-stock-quantity", Name = "CheckStockQuantity")]

@@ -23,11 +23,13 @@ namespace Shopper.Extensions.Configurations
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<ITenantIdentifierService, TenantIdentifierService>();
             services.AddScoped<ITenantService, TenantService>();
             services.AddScoped<IPriceTypeService, PriceTypeService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductGroupService, ProductGroupService>();
             services.AddScoped<IProductCategoryService, ProductCategoryService>();
+            services.AddScoped<IProductTypeService, ProductTypeService>();
             services.AddScoped<IAttributeService, AttributeService>();
             services.AddScoped<IAttributeOptionService, AttributeOptionService>();
             services.AddScoped<ISaleService, SaleService>();

@@ -24,8 +24,8 @@ namespace Shopper.Services.Interfaces
         Task<Product> CreateProductAsync(ProductFormModel newProduct);
         Task<Product> UpdateProductAsync(ProductFormModel newProduct, Product productToUpdate, string imageName);
 
-        Task<Sku> AddProductToStockAsync(Sku sku, List<ushort> attributeOptions);
-        Task<Sku> UpdateStockItemAsync(Sku sku,Sku updated, List<ushort> attributeOptionIds);
+        Task<Sku> AddProductToStockAsync(SkuViewFormModel skuViewFormModel, List<ushort> attributeOptions);
+        Task<Sku> UpdateStockItemAsync(Sku sku,SkuViewFormModel skuViewFormModel, List<ushort> attributeOptionIds);
         Task<bool> HasAttributes(uint productId, List<ushort> attributes);
         Task DeleteProductAsync(Product productGroup);
         Task DeleteSkuAsync(Sku sku);

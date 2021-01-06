@@ -31,6 +31,18 @@ namespace Shopper.Services.Implementations
                 .Select(pg => new SelectListItem {Value = pg.Id.ToString(), Text = $"{pg.ProductGroup.Name} - {pg.Name}"}).ToList();
         }
 
+        public List<SelectListItem> GetProductCategorySelectListItemsByGroupId(ushort groupId, ushort? selectedCategoryId)
+        {
+            return GetAllProductCategories()
+                .Where(pg => pg.ProductGroupId.Equals(groupId))
+                .Select(pg => new SelectListItem
+                {
+                    Value = pg.Id.ToString(),
+                    Text = pg.Name,
+                    Selected =  pg.Id.Equals(selectedCategoryId)
+                }).ToList();
+        }
+
         public async Task<ProductCategory> FindByNameAsync(string name)
         {
             return await _dbContext.ProductCategories.Where(pg => pg.Name.Equals(name)).FirstOrDefaultAsync();

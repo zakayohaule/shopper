@@ -85,7 +85,7 @@ namespace Shopper.Services.Implementations
         public List<Product> GetStockedProducts()
         {
             return GetAllProducts()
-                .Include(p => p.ProductCategory)
+                .Include(p => p.ProductType)
                 .Include(p => p.Skus)
                 .ThenInclude(sku => sku.SkuAttributes)
                 .ThenInclude(skuAtt => skuAtt.Option)
@@ -128,6 +128,8 @@ namespace Shopper.Services.Implementations
                 .Include(p => p.Skus)
                 .ThenInclude(sku => sku.SkuAttributes)
                 .ThenInclude(skuAtt => skuAtt.Option)
+                .Include(p => p.Skus)
+                .ThenInclude(s => s.Expiration)
                 .FirstAsync(p => p.Id.Equals(productId));
             product.Skus = product.Skus.OrderByDescending(sku => sku.CreatedAt).ToList();
             return product;
@@ -142,7 +144,12 @@ namespace Shopper.Services.Implementations
             }
 
             var product = await _dbContext.Products.AddAsync(new Product
-                {Name = newProduct.Name, ProductCategoryId = newProduct.ProductCategoryId, ImagePath = imageName});
+            {
+                Name = newProduct.Name,
+                ProductTypeId = newProduct.ProductTypeId,
+                ImagePath = imageName,
+                HasExpiration = newProduct.HasExpirationDate
+            });
 
             if (newProduct.Attributes.IsNotNull() && newProduct.Attributes.Any())
             {
@@ -165,11 +172,12 @@ namespace Shopper.Services.Implementations
                 productToUpdate.ImagePath = imageName;
             }
             productToUpdate.Name = productModel.Name;
-            productToUpdate.ProductCategoryId = productModel.ProductCategoryId;
-            // productToUpdate.Attributes.Clear();
+            productToUpdate.ProductTypeId = productModel.ProductTypeId;
+            productToUpdate.HasExpiration = productModel.HasExpirationDate;
             _dbContext.ProductAttributes.RemoveRange(productToUpdate.Attributes);
             if (productModel.Attributes.IsNotNull() && productModel.Attributes.Any())
             {
+                productToUpdate.Attributes.Clear();
                 var productAttributes = productModel.Attributes.Select(attribute => new ProductAttribute
                     {AttributeId = attribute, Product = productToUpdate,}).ToList();
 
@@ -181,8 +189,9 @@ namespace Shopper.Services.Implementations
             return prod.Entity;
         }
 
-        public async Task<Sku> AddProductToStockAsync(Sku sku, List<ushort> attributeOptions)
+        public async Task<Sku> AddProductToStockAsync(SkuViewFormModel formModel, List<ushort> attributeOptions)
         {
+            var sku = formModel.Sku;
             sku.RemainingQuantity = sku.Quantity;
             sku.IsOnSale = false;
             var newSku = _dbContext.Skus.Add(sku);
@@ -195,14 +204,24 @@ namespace Shopper.Services.Implementations
                 await _dbContext.SkuAttributes.AddRangeAsync(skuAttributes);
             }
 
+            if (formModel.ExpirationDate != null)
+            {
+                sku.Expiration = new Expiration
+                {
+                    SkuId = sku.Id,
+                    ExpirationDate = formModel.ExpirationDate.Value,
+                };
+            }
+
             await _dbContext.SaveChangesAsync();
             return newSku.Entity;
         }
 
-        public async Task<Sku> UpdateStockItemAsync(Sku sku,Sku updated, List<ushort> attributeOptionIds)
+        public async Task<Sku> UpdateStockItemAsync(Sku sku,SkuViewFormModel formModel, List<ushort> attributeOptionIds)
         {
             try
             {
+                var updated = formModel.Sku;
                 await _dbContext.Database.BeginTransactionAsync();
                 sku.Quantity = updated.Quantity;
                 sku.SellingPrice = updated.SellingPrice;
@@ -210,11 +229,29 @@ namespace Shopper.Services.Implementations
                 sku.MaximumDiscount = updated.MaximumDiscount;
                 sku.Date = updated.Date;
                 await _dbContext.Entry(sku).Collection(s => s.SkuAttributes).LoadAsync();
-                _dbContext.SkuAttributes.RemoveRange(sku.SkuAttributes);
-                var skuAttributes = attributeOptionIds
-                    .Select(attributeOption => new SkuAttribute
-                        {Sku = sku, AttributeOptionId = attributeOption}).ToList();
-                await _dbContext.SkuAttributes.AddRangeAsync(skuAttributes);
+
+                if (sku.SkuAttributes.Any())
+                {
+                    _dbContext.SkuAttributes.RemoveRange(sku.SkuAttributes);
+                }
+
+                if (!attributeOptionIds.IsNullOrEmpty())
+                {
+                    var skuAttributes = attributeOptionIds
+                        .Select(attributeOption => new SkuAttribute
+                            {Sku = sku, AttributeOptionId = attributeOption}).ToList();
+                    await _dbContext.SkuAttributes.AddRangeAsync(skuAttributes);
+                }
+
+                if (formModel.ExpirationDate != null)
+                {
+                    await _dbContext.Expirations.AddAsync(new Expiration
+                    {
+                        SkuId = sku.Id,
+                        ExpirationDate = formModel.ExpirationDate.Value,
+                    });
+                }
+
                 var updatedSku = _dbContext.Skus.Update(sku);
                 await _dbContext.SaveChangesAsync();
                 _dbContext.Database.CommitTransaction();

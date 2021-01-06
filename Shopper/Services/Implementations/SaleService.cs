@@ -49,6 +49,11 @@ namespace Shopper.Services.Implementations
                 .AsQueryable();
         }
 
+        public IQueryable<SaleInvoice> GetInvoiceAsQueryable(ulong id)
+        {
+            return _dbContext.SaleInvoices.Where(si => si.Id.Equals(id)).AsQueryable();
+        }
+
         public async Task<SaleInvoice> FindInvoiceByIdAsync(ulong id)
         {
             return await _dbContext.SaleInvoices.FindAsync(id);
@@ -59,7 +64,12 @@ namespace Shopper.Services.Implementations
             return await _dbContext.Sales.Include(s => s.Sku).FirstOrDefaultAsync(s => s.Id.Equals(id));
         }
 
-        public async Task<SaleInvoice> AddToInvoiceAsync(SaleFormViewModel formViewModel, long userId)
+        public IQueryable<Sale> FindSalesByInvoiceIdAsQueryable(ulong id)
+        {
+            return _dbContext.Sales.Where(s => s.SaleInvoiceId.Equals(id));
+        }
+
+        public async Task<SaleInvoice> AddToInvoiceAsync(SaleFormViewModel formViewModel, long userId, Tenant tenant)
         {
             var sku = await _dbContext.Skus.FirstOrDefaultAsync(sku1 => sku1.Id == formViewModel.SkuId);
             if (sku == null)
@@ -95,7 +105,7 @@ namespace Shopper.Services.Implementations
                     {
                         UserId = userId,
                         Amount = (ulong) (sale.Price * sale.Quantity), Date = DateTime.Now,
-                        Number = await GenerateInvoiceNumberAsync()
+                        Number = await GenerateInvoiceNumberAsync(tenant.Code)
                     };
                     await _dbContext.SaleInvoices.AddAsync(invoice);
                 }
@@ -130,6 +140,13 @@ namespace Shopper.Services.Implementations
                 Console.WriteLine(e);
                 throw;
             }
+        }
+
+        public async Task<SaleInvoice> UpdateInvoiceDateAsync(SaleInvoice invoice)
+        {
+            var inv = _dbContext.SaleInvoices.Update(invoice);
+            await _dbContext.SaveChangesAsync();
+            return inv.Entity;
         }
 
         public async Task<Sale> UpdateSaleAsync(Sale sale, SaleFormViewModel viewModel)
@@ -183,16 +200,23 @@ namespace Shopper.Services.Implementations
             return null;
         }
 
-        public async Task<string> GenerateInvoiceNumberAsync()
+        public async Task<string> GenerateInvoiceNumberAsync(string tenantCode)
         {
-            ulong id = 1;
-            var latest = await _dbContext.SaleInvoices.OrderByDescending(si => si.Id).FirstOrDefaultAsync();
-            if (latest != null)
+            var invoiceNumber = "";
+            var latestInvoice = await _dbContext.SaleInvoices.Where(si => si.CreatedAt.Date == DateTime.Today).OrderByDescending(si => si.CreatedAt)
+                .FirstOrDefaultAsync();
+            if (latestInvoice != null)
             {
-                id = latest.Id;
+                var highestNumber = int.Parse(latestInvoice.Number.Substring(9));
+                var nextNumber = (highestNumber + 1).ToString("00000");
+                invoiceNumber = latestInvoice.Number.Substring(0, 9)+nextNumber;
             }
-
-            return $"{id++}_{DateTimeOffset.Now.ToUnixTimeSeconds()}";
+            else
+            {
+                var today = DateTime.Today;
+                invoiceNumber = $"{tenantCode}{today:yy}{today:MM}{today:dd}00001";
+            }
+            return invoiceNumber;
         }
 
         public async Task<SaleInvoice> ConfirmPaymentAsync(SaleInvoice invoice)

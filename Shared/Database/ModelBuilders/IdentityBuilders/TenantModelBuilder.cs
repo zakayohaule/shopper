@@ -14,6 +14,7 @@ namespace Shared.Database.ModelBuilders.IdentityBuilders
 
             builder.HasIndex(t => t.Domain).IsUnique();
             builder.HasIndex(t => t.Name).IsUnique();
+            builder.HasIndex(t => t.Code).IsUnique();
             // builder.Property(t => t.SubscriptionType).HasConversion(converter);
         }
     }

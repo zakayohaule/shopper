@@ -48,4 +48,9 @@
       <Folder Include="Migrations" />
       <Folder Include="wwwroot\uploads\products" />
     </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Mvc\Views\Emails\EmailVerification.cshtml" />
+      <_ContentIncludedByDefault Remove="Mvc\Views\Emails\ForgotPasswordEmail.cshtml" />
+    </ItemGroup>
 </Project>

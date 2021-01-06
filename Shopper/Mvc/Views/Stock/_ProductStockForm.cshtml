@@ -9,21 +9,9 @@
         <th:label asp-for="StockDate" class="col-sm-4 col-form-label"></th:label>
         <div class="col-sm-8">
             <th:input asp-for="StockDate" type="date" class="form-control"></th:input>
+            <th:span asp-validation-for="StockDate" class="text-danger"></th:span>
         </div>
     </div>
-    @*@for (var i = 0; i < Model.Product.Attributes.Count; i++)
-    {
-        var att = Model.Product.Attributes.ToList()[i].Attribute;
-        <div class="form-group row">
-            <label for="" class="col-sm-4 col-form-label">@att.Name</label>
-            <div class="col-sm-8">
-                <th:select class="form-control select2bs4" asp-for="Attributes[i]" id="attribute_@att.Id"
-                           asp-items="@att.AttributeOptions.Select(ao => new SelectListItem {Text = ao.Name, Value = $"{ao.AttributeId}_{ao.Id}"})">
-                    <option value="">-- Select @att.Name --</option>
-                </th:select>
-            </div>
-        </div>
-    }*@
     @{
         var i = 0;
     }
@@ -44,24 +32,52 @@
         <th:label asp-for="Quantity" class="col-sm-4 col-form-label"></th:label>
         <div class="col-sm-8">
             <th:input asp-for="Quantity" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+            <th:span asp-validation-for="Quantity" class="text-danger"></th:span>
         </div>
     </div>
     <div class="form-group row">
         <th:label asp-for="BuyingPrice" class="col-sm-4 col-form-label"></th:label>
         <div class="col-sm-8">
             <th:input asp-for="BuyingPrice" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+            <th:span asp-validation-for="BuyingPrice" class="text-danger"></th:span>
         </div>
     </div>
     <div class="form-group row">
         <th:label asp-for="SellingPrice" class="col-sm-4 col-form-label"></th:label>
         <div class="col-sm-8">
             <th:input asp-for="SellingPrice" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+            <th:span asp-validation-for="SellingPrice" class="text-danger"></th:span>
         </div>
     </div>
     <div class="form-group row">
         <th:label asp-for="MaximumDiscount" class="col-sm-4 col-form-label"></th:label>
         <div class="col-sm-8">
             <th:input asp-for="MaximumDiscount" type="text" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+            <th:span asp-validation-for="MaximumDiscount" class="text-danger"></th:span>
+        </div>
+    </div>
+    @if (Model.Product.HasExpiration)
+    {
+        <div class="form-group row">
+            <th:label asp-for="ExpirationDate" class="col-sm-4 col-form-label"></th:label>
+            <div class="col-sm-8">
+                <th:input asp-for="ExpirationDate" required type="date" class="form-control"></th:input>
+            </div>
+        </div>
+    }
+
+
+    <div class="form-group col-12">
+        <div class="icheck-primary">
+            <th:input asp-for="ReceiveLowStockAlert"></th:input>
+            <th:label asp-for="ReceiveLowStockAlert">Receive low stock alert?</th:label>
+        </div>
+    </div>
+    <div class="form-group row" id="LowStockDiv">
+        <th:label asp-for="LowStockQuantity" class="col-sm-4 col-form-label"></th:label>
+        <div class="col-sm-8">
+            <th:input asp-for="LowStockQuantity" class="form-control profit"></th:input>
+            <th:span asp-validation-for="LowStockQuantity" class="text-danger"></th:span>
         </div>
     </div>
     @*<div class="form-group row">
@@ -73,3 +89,19 @@
     </div>
     <!-- /.card-footer -->
 </th:form>
+
+<th:partial name="_ValidationScriptsPartial"></th:partial>
+
+<script >
+        var lowStockCheckbox = $('#ReceiveLowStockAlert');
+        lowStockCheckbox.on('change', function (e){
+              var checked = $(this).prop("checked");
+              var lowQuantityField = $('#LowStockQuantity');
+              var lowQuantityDiv = $('#LowStockDiv');
+              if (checked){
+                  lowQuantityDiv.show();
+                  } else {
+                  lowQuantityDiv.hide();
+                  }
+            });
+</script>

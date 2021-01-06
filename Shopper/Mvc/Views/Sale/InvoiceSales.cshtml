@@ -1,0 +1,110 @@
+@using Shopper.Extensions.Helpers
+@using Shopper.Mvc.ViewModels
+@model SaleInvoice;
+@{
+    var invoice = Model;
+    var changeDateModel = new InvoiceDateModel
+    {
+        InvoiceDate = DateTime.Parse(invoice.Date.FormatDateWithTime())
+    };
+}
+
+@section css {
+    <!-- Toastr -->
+    <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
+}
+
+<div class="card with-border">
+    <div class="card-header border-0">
+        <div class="d-flex justify-content-between">
+            <h3 class="card-title">Invoice sale list</h3>
+            <div class="pull pull-right" style="font-weight: bolder">
+                <a href="" data-toggle="modal" data-target="#change-invoice-date" class="btn btn-sm btn-primary float-right" title="Change Invoice Date">
+                    <i class="fas fa-calendar"> Change Invoice Date</i>
+                </a>
+
+            </div>
+        </div>
+    </div>
+    <!-- /.card-header -->
+
+    <div class="modal fade" id="change-invoice-date">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Change invoice date</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <th:form class="" asp-controller="Sale" asp-action="ChangeInvoiceDate" asp-route-id="@invoice.Id" method="post">
+                        <th:partial name="_ChangeInvoiceDateForm" model="@changeDateModel"></th:partial>
+                    </th:form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <h5 style="display:inline-block;">Date: @invoice.Date.FormatDateWithTime()</h5>
+        &nbsp;
+        &nbsp;
+        <h5 style="display:inline-block;">Invoice #: @invoice.Number</h5>
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-striped thead-dark">
+                    <thead>
+                    <tr>
+                        <th style="width: 35%">Name</th>
+                        <th style="width: 15%; text-align: center">Quantity</th>
+                        <th style="width: 15%; text-align: center">Unit Price</th>
+                        <th style="width: 25%; text-align: center">Amount</th>
+                    </tr>
+                    </thead>
+                    <tbody id="sales-table">
+                    @foreach (var sale in Model.Sales)
+                    {
+                        var attributes = "";
+                        if (sale.Sku.SkuAttributes.Any())
+                        {
+                            attributes = $"[ {string.Join(" - ", sale.Sku.SkuAttributes.Select(skuAtt => skuAtt.Option.Name))}]";
+                        }
+                        <tr>
+                            <td>@sale.Sku.Product.Name @attributes</td>
+                            <td style="text-align: center">@sale.Quantity.ToString("N0")</td>
+                            <td style="text-align: center">@sale.Price.ToString("N0")/-</td>
+                            <td style="text-align: center">@((sale.Price * sale.Quantity).ToString("N0"))/-</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-8"></div>
+            <div class="col-4">
+                <div class="table-responsive">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th style="font-weight: normal">Discount:</th>
+                            <td style="font-weight: bolder">@invoice.Sales.Sum(s => s.Discount).ToString("N0")/=</td>
+                        </tr>
+                        <tr>
+                            <th style="font-weight: normal">Total:</th>
+                            <td style="font-weight: bolder" id="total-amount">@Model.Amount.ToString("N0")/=</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+    </div>
+    <!-- /.card-body -->
+</div>
+
+@section scripts
+{
+    <th:partial name="Partials/_ToastScript"></th:partial>
+}

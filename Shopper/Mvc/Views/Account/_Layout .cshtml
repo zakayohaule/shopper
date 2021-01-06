@@ -1,10 +1,14 @@
-﻿<!DOCTYPE html>
+﻿@using Shopper.Extensions.Helpers
+@{
+    var tenant = @ViewContext.GetCurrentTenant();
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Login</title>
+    <title>@tenant.Name</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <th:environment names="Development">
         <th:link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css"/>
@@ -29,17 +33,17 @@
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
-  <div class="login-logo">
-    <a href="#"><b>Admin</b>LTE</a>
-  </div>
-  <!-- /.login-logo -->
-  <div class="card">
-      <div class="card-body login-card-body">
-          @await Component.InvokeAsync("PageAlert")
-          @RenderBody();
-      </div>
-    <!-- /.login-card-body -->
-  </div>
+    <div class="login-logo">
+        <b>@tenant.Name.ToUpper()</b>
+    </div>
+    <!-- /.login-logo -->
+    <div class="card">
+        <div class="card-body login-card-body">
+            @await Component.InvokeAsync("PageAlert")
+            @RenderBody()
+        </div>
+        <!-- /.login-card-body -->
+    </div>
 </div>
 <th:environment names="Development">
     <th:script src="~/lib/jquery/jquery.js" asp-append-version="true"></th:script>
@@ -54,9 +58,17 @@
     <th:script src="~/js/site.min.js" asp-append-version="true"></th:script>
 </th:environment>
 
-@section scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-}
+@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+<script >
+function showPassword(togglePassword,passwordFieldId){
+    console.log($(this));
+    const password = $('#'+passwordFieldId);
+        const type = password.prop('type') === 'password' ? 'text' : 'password';
+        password.prop('type', type);
+        // toggle the eye slash icon
+        togglePassword.classList.toggle('fa-eye-slash');
+    }
+</script>
 
 </body>
 </html>

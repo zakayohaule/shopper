@@ -1,6 +1,9 @@
 ﻿﻿using System;
+ using System.Collections.Generic;
  using System.Diagnostics;
+ using System.Globalization;
  using System.Linq;
+ using System.Security.Cryptography;
  using System.Threading.Tasks;
  using Microsoft.AspNetCore.Authorization;
  using Microsoft.AspNetCore.Mvc;
@@ -10,6 +13,7 @@
  using Shared.Mvc.Entities;
  using Shared.Mvc.Entities.BaseEntities;
  using Shared.Mvc.ViewModels;
+ using Shopper.Extensions.Helpers;
  using Shopper.Mvc.ViewModels;
  using Shopper.Services;
  using Shopper.Services.Interfaces;
@@ -31,13 +35,19 @@
         public async Task<IActionResult> Index()
         {
             var sales = await _reportService.GetThisYearSalesAsync();
+
+            // return Ok(sales.Where(s => s.Sku.ProductId == 2).Select(s => s.Sku.Sales).ToList());
             var expenditures = await _reportService.GetThisYearExpenditure();
             var dashboardModal = new DashboardModel
             {
+                Sales = sales,
+                Expenditures = expenditures,
                 Summaries = _reportService.GetSummariesAsync(sales, expenditures)
             };
 
             AddPageHeader("Dashboard");
+
+            // return Ok(dashboardModal.Sales.ToArray());
             return View(dashboardModal);
         }
 

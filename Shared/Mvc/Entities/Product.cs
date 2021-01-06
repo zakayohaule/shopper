@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -20,11 +21,14 @@ namespace Shared.Mvc.Entities
         [Column("slug")]
         public string Slug { get; set; }
 
-        [Column("product_category_id"), Required, Display(Name = "Product category")]
-        public ushort ProductCategoryId { get; set; }
+        [Column("product_type_id"), Required, Display(Name = "Product type")]
+        public ushort ProductTypeId { get; set; }
 
-        [ForeignKey(nameof(ProductCategoryId))]
-        public ProductCategory ProductCategory { get; set; }
+        [ForeignKey(nameof(ProductTypeId))]
+        public ProductType ProductType { get; set; }
+
+        [Column("has_expiration")]
+        public bool HasExpiration { get; set; } = false;
 
         [InverseProperty("Product")]
         public List<Sku> Skus { get; set; }

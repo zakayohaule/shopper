@@ -1,0 +1,20 @@
+﻿@model ProductType
+@{
+    var productCategorySelectItems = ViewData["ProductCategories"] as List<SelectListItem>;
+}
+<div class="form-group col-12">
+    <th:label asp-for="ProductCategoryId">Product Category</th:label>
+    <th:select class="form-control select2bs4" asp-for="ProductCategoryId" asp-items="productCategorySelectItems">
+        <option value="">-- Select --</option>
+    </th:select>
+    <th:span asp-validation-for="ProductCategoryId" class="text-danger"></th:span>
+</div>
+<div class="form-group col-12">
+    <th:label asp-for="Name"></th:label>
+    <th:input asp-for="Name" class="form-control"></th:input>
+    <th:span asp-validation-for="Name" class="text-danger"></th:span>
+</div>
+
+<div class="form-group col-12 text-right">
+    <button type="submit" class="btn btn-primary" name="button">Submit</button>
+</div>

@@ -124,7 +124,7 @@ namespace Shopper.Services.Implementations
             foreach (var appUser in users)
             {
                 if (!_memoryCache.TryGetValue(appUser.Id, out List<string> userClaims)) continue;
-                Console.WriteLine($"Permission changed, re-caching {appUser.FullName}'s claims!");
+                Console.WriteLine($"Role's permissions changed, re-caching {appUser.FullName}'s claims!");
                 RemoveClaims(appUser.Id);
                 userClaims = GetUserClaims(appUser.Id);
                 CacheClaims(appUser.Id, userClaims);

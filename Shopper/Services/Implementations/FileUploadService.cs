@@ -13,12 +13,12 @@ namespace Shopper.Services.Implementations
     public class FileUploadService : IFileUploadService
     {
 
-        private readonly ITenantService _tenantService;
+        private readonly ITenantIdentifierService _tenantIdentifierService;
         private readonly IHostEnvironment _hostEnvironment;
 
-        public FileUploadService(ITenantService tenantService, IHostEnvironment hostEnvironment)
+        public FileUploadService(ITenantIdentifierService tenantIdentifierService, IHostEnvironment hostEnvironment)
         {
-            _tenantService = tenantService;
+            _tenantIdentifierService = tenantIdentifierService;
             _hostEnvironment = hostEnvironment;
         }
 
@@ -26,7 +26,7 @@ namespace Shopper.Services.Implementations
         {
             // @todo validate file type to only images
 
-            var tenant = _tenantService.GetTenantFromRequest();
+            var tenant = _tenantIdentifierService.GetTenantFromRequest();
             var webRoot = $"{_hostEnvironment.ContentRootPath}/wwwroot";
             var imageUploadPath = @$"{webRoot}/uploads/products/{tenant.Domain.Split(".")[0]}/";
             if (!Directory.Exists(imageUploadPath))
@@ -50,9 +50,9 @@ namespace Shopper.Services.Implementations
         {
             // @todo validate file type to only images
 
-            var tenant = _tenantService.GetTenantFromRequest();
+            var tenant = _tenantIdentifierService.GetTenantFromRequest();
             var webRoot = $"{_hostEnvironment.ContentRootPath}/wwwroot";
-            var imageUploadPath = @$"{webRoot}/uploads/logo/{tenant.Domain.Split(".")[0]}/";
+            var imageUploadPath = @$"{webRoot}/uploads/logo/{tenant.Domain}/";
             if (!Directory.Exists(imageUploadPath))
             {
                 Directory.CreateDirectory(imageUploadPath);
@@ -67,6 +67,10 @@ namespace Shopper.Services.Implementations
             }
             var imageName = $"{DateTimeOffset.Now.ToUnixTimeSeconds().ToString()}.{ext}";
             await image.SaveAsync($"{imageUploadPath}/{imageName}");
+
+            image.Mutate(x => x.Resize(128,128));
+            await image.SaveAsync($"{imageUploadPath}/thumb_{imageName}");
+
             return imageName;
         }
     }

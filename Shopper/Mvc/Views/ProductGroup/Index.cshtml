@@ -14,13 +14,13 @@
 
 <div class="card with-border">
     <div class="card-header">
-        <a href="" data-toggle="modal" data-target="#add-user" class="btn btn-sm btn-primary float-right" title="Add User">
+        <a href="" data-toggle="modal" data-target="#add-product-group" class="btn btn-sm btn-primary float-right" title="Add User">
             <i class="fas fa-user-plus"> Add</i>
         </a>
     </div>
     <!-- /.card-header -->
 
-    <div class="modal fade" id="add-user">
+    <div class="modal fade" id="add-product-group">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -89,9 +89,10 @@
 @section scripts
 {
     <th:partial name="Partials/_DtJs"></th:partial>
-    <th:script src="~/js/edit-form.js"></th:script>
+
     <th:partial name="_ValidationScriptsPartial"></th:partial>
     <th:partial name="Partials/_ToastScript"></th:partial>
+    <th:script src="~/js/edit-form.js"></th:script>
     <script>
                 // useSubmitClass();
                 useDeleteConfirmation();

@@ -13,16 +13,16 @@ namespace Shopper.Database.Seeders
     {
         public static void Seed(AdminAppDbContext adminDbContext,IConfiguration configuration, ILogger logger)
         {
-            var appDomain = configuration.GetValue<string>("AppDomain");
             var defaultConnectString = configuration.GetConnectionString("Default").Replace("{dbName}", "shopper");
             var tenants = new List<Tenant>
             {
                 new Tenant
                 {
                     Active = true,
+                    Code = "KEA",
                     Address = "Sinza Madukani",
                     Description = "Baby Shop",
-                    Domain = $"kea.{appDomain}",
+                    Domain = $"kea",
                     Email = "kea@kea.com",
                     Name = "Kea Baby Shop",
                     ConnectionString =
@@ -32,9 +32,10 @@ namespace Shopper.Database.Seeders
                 new Tenant
                 {
                     Active = true,
+                    Code = "LCH",
                     Address = "Localhost",
                     Description = "Localhost shop",
-                    Domain = $"{appDomain}",
+                    Domain = $"zaks",
                     Email = "admin@shopper.com",
                     Name = "Localhost Shop",
                     ConnectionString =

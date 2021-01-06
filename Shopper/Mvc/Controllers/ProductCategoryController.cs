@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -110,6 +111,20 @@ namespace Shopper.Mvc.Controllers
             return _productCategoryService.IsDuplicate(name, id)
                 ? Json("A product category with this name already exists")
                 : Json(true);
+        }
+
+        [HttpGet("{groupId}/ajax/{selectedCategoryId?}")]
+        public IActionResult ProductCategoryByGroupIdAjax(ushort groupId, ushort? selectedCategoryId = null)
+        {
+            var si = _productCategoryService.GetProductCategorySelectListItemsByGroupId(groupId, selectedCategoryId).ToList();
+            return Json(si);
+            /*var dict = new Dictionary<string, string>();
+            si.ForEach(item =>
+            {
+                dict.Add(item.Value, item.Text);
+            });
+
+            return Json(dict);*/
         }
     }
 }

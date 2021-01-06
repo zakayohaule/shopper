@@ -36,6 +36,10 @@ namespace Shared.Mvc.Entities
         [Display(Name = "Discount")]
         public uint MaximumDiscount { get; set; } = 0;
 
+        [Column("low_stock_amount")]
+        [Display(Name = "Low Stock Amount")]
+        public int? LowStockAmount { get; set; } = null;
+
         [Column("is_on_sale")]
         public bool IsOnSale { get; set; } = false;
 
@@ -47,5 +51,8 @@ namespace Shared.Mvc.Entities
 
         [InverseProperty(("Sku"))]
         public ICollection<Sale> Sales { get; set; }
+
+        [InverseProperty("Sku")]
+        public Expiration Expiration { get; set; }
     }
 }

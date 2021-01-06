@@ -41,6 +41,8 @@ namespace Shopper.Mvc.Controllers
             var product = await _productService.FindByIdWithAttributesAsync(id);
             stockViewModel.Product = product;
             stockViewModel.StockDate = DateTime.Today.Date;
+            stockViewModel.ExpirationDate = DateTime.Now.AddYears(1);
+            stockViewModel.MaximumDiscount = 0.ToString();
             stockViewModel.AttributeSelects = _productService.GetProductAttributeSelects(product, new Sku());
             return PartialView("../Stock/_ProductStockForm", stockViewModel);
         }
@@ -59,9 +61,10 @@ namespace Shopper.Mvc.Controllers
                 return BadRequest();
             }
 
-            var sku = GetSkuFromViewModel(skuViewModel);
+            skuViewModel.Sku = GetSkuFromViewModel(skuViewModel);
 
-            var newSku = await _productService.AddProductToStockAsync(sku, attributeOptionIds);
+            var newSku = await _productService.AddProductToStockAsync(skuViewModel, attributeOptionIds);
+
             if (newSku.IsNotNull())
             {
                 ToastSuccess("Product added to stock successfully!");
@@ -93,7 +96,7 @@ namespace Shopper.Mvc.Controllers
 
             var updated = GetSkuFromViewModel(skuViewModel);
 
-            sku = await _productService.UpdateStockItemAsync(sku,updated, attributeOptionIds);
+            sku = await _productService.UpdateStockItemAsync(sku,skuViewModel, attributeOptionIds);
             if (sku.IsNull())
             {
                 ToastError("Stock item could not be updated. Please try again or contact system administrator");
@@ -170,7 +173,53 @@ namespace Shopper.Mvc.Controllers
                 BuyingPrice = uint.Parse(skuViewModel.BuyingPrice.Replace(",", "")),
                 SellingPrice = uint.Parse(skuViewModel.SellingPrice.Replace(",", "")),
                 MaximumDiscount = uint.Parse(skuViewModel.MaximumDiscount.Replace(",", "")),
+                LowStockAmount = skuViewModel.ReceiveLowStockAlert ? skuViewModel.LowStockQuantity : null
             };
+        }
+
+        [AcceptVerbs("GET", Route = "validate-selling-price", Name = "ValidateSellingPrice")]
+        public IActionResult ValidateSellingPrice(string sellingPrice, string buyingPrice)
+        {
+            if (buyingPrice.IsNullOrEmpty())
+            {
+                return Json("Buying price is required.");
+            }
+            var sPrice = int.Parse(sellingPrice.Replace(",", ""));
+            var bPrice = int.Parse(buyingPrice.Replace(",", ""));
+            if (sPrice >= bPrice)
+            {
+                return Json(true);
+            }
+
+            return Json("Selling price can't be less than the buying price.");
+        }
+
+        [AcceptVerbs("GET", Route = "validate-discount-price", Name = "ValidateMaximumDiscount")]
+        public IActionResult ValidateDiscount(string maximumDiscount, string sellingPrice, string buyingPrice)
+        {
+            if (buyingPrice.IsNullOrEmpty())
+            {
+                return Json("Buying price is required.");
+            }
+
+            if (sellingPrice.IsNullOrEmpty())
+            {
+                return Json("Selling price is required.");
+            }
+            var sPrice = int.Parse(sellingPrice.Replace(",", ""));
+            var bPrice = int.Parse(buyingPrice.Replace(",", ""));
+            var dCount = int.Parse(maximumDiscount.Replace(",", ""));
+            var expectedProfit = sPrice - bPrice;
+            if (expectedProfit < 0)
+            {
+                return Json($"Invalid selling price");
+            }
+            if (dCount <= expectedProfit)
+            {
+                return Json(true);
+            }
+
+            return Json($"Maximum discount can't be more than the expected profit.({expectedProfit.ToString("N0")})");
         }
     }
 }

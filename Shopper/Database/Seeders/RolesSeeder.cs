@@ -16,9 +16,9 @@ namespace Shopper.Database.Seeders
         public static void Seed(IServiceProvider serviceProvider, ApplicationDbContext dbContext, ILogger logger)
         {
             var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-            var appDomain = configuration.GetValue<string>("AppDomain");
-            var keaTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == $"kea.{appDomain}");
-            var localhostTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == $"{appDomain}");
+            var defaultSubdomain = configuration.GetValue<string>("DefaultSubdomain");
+            var keaTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == $"kea");
+            var localhostTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == $"zaks");
             if (keaTenant != null && localhostTenant != null)
             {
                 var roles = new List<Role>

@@ -11,7 +11,7 @@
         ImagesCount = (short) (4 - product.Images.Count)
     };
 
-    ViewData["TotalSales"] = product.Skus.Sum(s => s.Sales.Any(s1 => s1.IsConfirmed) ? s.Sales.Where(s1 => s1.IsConfirmed).Select(sale => sale.Price * sale.Quantity).First() : 0).ToString("N0");
+    ViewData["TotalSales"] = product.Skus.Sum(sku => sku.Sales.Any() ? sku.Sales.Where(s => s.IsConfirmed).Sum(sale => sale.Price * sale.Quantity) : 0).ToString("N0");
     ViewData["TotalStockValue"] = product.Skus.Sum(s => s.BuyingPrice * s.Quantity).ToString("N0");
 }
 
@@ -104,7 +104,7 @@
                 </div>
             </div>
             <div class="col-12 col-sm-6">
-                <h3 class="my-3">@product.Name - @product.ProductCategory.Name</h3>
+                <h3 class="my-3">@product.Name - @product.ProductType.Name</h3>
                 @if (product.Skus.Any() && product.Attributes.Any())
                 {
                     <hr>

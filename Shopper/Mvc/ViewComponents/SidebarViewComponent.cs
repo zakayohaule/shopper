@@ -55,7 +55,7 @@ namespace Shopper.Mvc.ViewComponents
 
 
             //Settings Settings Module
-            if (_userClaimService.HasAnyPermission(userId, "product_group_view,product_category_view,attribute_view,price_type_view"))
+            if (_userClaimService.HasAnyPermission(userId, "product_group_view,product_category_view,product_type_view,attribute_view,price_type_view"))
             {
                 var settings = ModuleHelper.AddTree("Settings", "fas fa-cog");
                 links = new List<SidebarMenu>();
@@ -70,6 +70,10 @@ namespace Shopper.Mvc.ViewComponents
                 if (_userClaimService.HasPermission(userId, "product_category_view"))
                 {
                     links.Add(ModuleHelper.AddModuleLink(name:"Product Categories", Url.Action("Index", "ProductCategory")));
+                }
+                if (_userClaimService.HasPermission(userId, "product_type_view"))
+                {
+                    links.Add(ModuleHelper.AddModuleLink(name:"Product Types", Url.Action("Index", "ProductType")));
                 }
                 if (_userClaimService.HasPermission(userId, "attribute_view"))
                 {

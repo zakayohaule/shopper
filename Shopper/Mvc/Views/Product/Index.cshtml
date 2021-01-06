@@ -3,13 +3,18 @@
 
 @{
     Layout = "_Layout";
-    var newProduct = new ProductFormModel();
+    var newProduct = new ProductFormModel
+    {
+        HasExpirationDate = false
+    };
     ViewData["FormName"] = "_ProductForm";
     ViewData["AllowFileUpload"] = true;
 }
 
 @section css {
     <th:partial name="Partials/_DtCss"></th:partial>
+    <!-- iCheck for checkboxes and radio inputs -->
+    <th:link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css"></th:link>
     <th:link rel="stylesheet" href="~/plugins/select2-4.0.5/css/select2.min.css"></th:link>
     <th:link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"></th:link>
     <!-- Toastr -->
@@ -32,6 +37,10 @@
                 <th>Name</th>
                 <th>Category</th>
                 <th>Attributes</th>
+                @if (Model.Any(p => p.HasExpiration))
+                {
+                    <th>Has Expirtion Date</th>
+                }
                 <th>Action</th>
             </tr>
             </thead>
@@ -42,12 +51,17 @@
             @foreach (var product in Model)
             {
                 var editTitle = $"Edit Product ({product.Name})";
+                var hasExpiry = product.HasExpiration ? "Yes" : "No";
                 index++;
                 <tr>
                     <td>@index</td>
                     <td>@product.Name</td>
-                    <td>@product.ProductCategory.Name</td>
+                    <td>@product.ProductType.Name</td>
                     <td>@string.Join(", ", product.Attributes.Select(att => att.Attribute.Name))</td>
+                     @if (Model.Any(p => p.HasExpiration))
+                     {
+                         <td>@hasExpiry</td>
+                     }
                     <td>
                         <th:a asp-action="Show" asp-route-id="@product.Id"
                               class="btn btn-default btn-sm" title="View Details">
@@ -79,6 +93,11 @@
     </div>
     <!-- /.card-body -->
 </div>
+
+<th:partial name="Partials/_EditModal" model="newProduct" view-data="ViewData"/>
+
+<th:script src="~/js/edit-product-form.js"></th:script>
+
 <!-- /.card -->
 <div class="modal fade" id="add-product">
     <div class="modal-dialog modal-lg">
@@ -98,15 +117,15 @@
     </div>
 </div>
 
-<th:partial name="Partials/_EditModal" model="newProduct" view-data="ViewData"/>
-
 @section scripts
 {
     <th:partial name="Partials/_DtJs"></th:partial>
+    <th:partial name="_ValidationScriptsPartial"></th:partial>
+    <th:partial name="Partials/_ToastScript"></th:partial>
+    <th:script src="~/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></th:script>
     <!-- Select2 -->
     <th:script src="~/plugins/select2-4.0.5/js/select2.full.min.js"></th:script>
-    <th:script src="~/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></th:script>
-    <th:script src="~/js/edit-form.js"></th:script>
+    <th:script src="~/js/cascading-select2.js"></th:script>
     <script >
         //Initialize Select2 Elements
         $('.select2bs4').select2({
@@ -118,7 +137,18 @@
         $(function () {
           bsCustomFileInput.init();
         });
+
+        $('[name=ProductGroupId]').on("change",
+         populateChildSelect("ProductGroupId",
+          "ProductCategoryId",
+           "http://localhost:5000/product-categories/:parentId:/ajax",
+            "Product Category",
+             "Product Group",
+             "ProductTypeId"
+             ));
+        $('[name=roductGroupId]').on("change",
+                 populateChildSelect("ProductCategoryId", "ProductTypeId", "http://localhost:5000/product-types/:parentId:/ajax", "Product Type", "Product Category"));
+        /*new Select2Cascade($('[name=ProductGroupId]'), $('[name=ProductCategoryId]'), 'http://localhost:5000/product-categories/:parentId:/ajax');
+                new Select2Cascade($('[name=ProductCategoryId]'), $('[name=ProductTypeId]'), 'http://localhost:5000/product-types/:parentId:/ajax');*/
     </script>
-    <th:partial name="_ValidationScriptsPartial"></th:partial>
-    <th:partial name="Partials/_ToastScript"></th:partial>
 }

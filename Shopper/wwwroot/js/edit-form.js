@@ -5,7 +5,11 @@ for (var i = 0; i < elements.length; i++) {
     var element = elements[i];
     if (!"button, submit, reset".includes(element.type)) {
         if (element.id) {
+            var label = $("label[for='" + element.id + "']");
             element.id += "-Edit";
+            if (label != null) {
+                label.attr("for", element.id);
+            }
             // console.log(element.id);
         }
     }
@@ -28,22 +32,28 @@ function openEditModal(dataUrl, actionUrl, title = null, size = null) {
                 var $el = form.find('[name="' + key + '"]');
                 var type = $el.attr('type');
                 console.log(type + " - " + key + " - " + val);
-                if ($el.is(":hidden")) {
-                    console.log("This eleement is hidden! " + key + " = " + val)
+                if ($el.attr('hidden') != null) {
+                    console.log("This element is hidden! " + key + " = " + val)
                     $el.attr("value", val);
                 }
                 switch (type) {
                     case 'checkbox':
-                        $el.attr('checked', 'checked');
+                        if (val) {
+                            $el.attr('checked', true);
+                        } else {
+                            $el.attr('checked', false)
+                        }
                         break;
                     case 'radio':
-                        $el.filter('[value="' + val + '"]').attr('checked', 'checked');
+                        $el.filter('[value="' + val + '"]').attr('checked', true);
                         break;
                     case 'number':
                         $el.val(val)
                         break;
                     default:
-                        $el.val(val).change();
+                        if (val) {
+                            $el.val(val).change();
+                        }
                 }
             });
             console.log("Editing form action " + actionUrl);

@@ -59,6 +59,7 @@ namespace Shopper.Migrations
                     description = table.Column<string>(nullable: true),
                     domain = table.Column<string>(nullable: true),
                     connection_string = table.Column<string>(nullable: true),
+                    logo_path = table.Column<string>(nullable: true),
                     subscription_type = table.Column<int>(nullable: false),
                     valid_to = table.Column<DateTime>(nullable: false),
                     Active = table.Column<bool>(nullable: false)
@@ -104,11 +105,18 @@ namespace Shopper.Migrations
                     updated_at = table.Column<DateTime>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
                     name = table.Column<string>(nullable: false),
-                    product_group_id = table.Column<ushort>(nullable: false)
+                    product_group_id = table.Column<ushort>(nullable: false),
+                    parent_category_id = table.Column<ushort>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_product_categories", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_product_categories_product_categories_parent_category_id",
+                        column: x => x.parent_category_id,
+                        principalTable: "product_categories",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_product_categories_product_groups_product_group_id",
                         column: x => x.product_group_id,
@@ -217,34 +225,6 @@ namespace Shopper.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "sale_invoices",
-                columns: table => new
-                {
-                    id = table.Column<ulong>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    tenant_id = table.Column<Guid>(nullable: false),
-                    created_at = table.Column<DateTime>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    updated_at = table.Column<DateTime>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
-                    number = table.Column<string>(nullable: true),
-                    amount = table.Column<ulong>(nullable: false),
-                    date = table.Column<DateTime>(nullable: false),
-                    is_completed = table.Column<bool>(nullable: false),
-                    is_canceled = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_sale_invoices", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_sale_invoices_tenants_tenant_id",
-                        column: x => x.tenant_id,
-                        principalTable: "tenants",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "users",
                 columns: table => new
                 {
@@ -285,34 +265,25 @@ namespace Shopper.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "products",
+                name: "product_types",
                 columns: table => new
                 {
-                    id = table.Column<uint>(nullable: false)
+                    id = table.Column<ushort>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    tenant_id = table.Column<Guid>(nullable: false),
                     created_at = table.Column<DateTime>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     updated_at = table.Column<DateTime>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
                     name = table.Column<string>(nullable: false),
-                    image_path = table.Column<string>(nullable: true),
-                    slug = table.Column<string>(nullable: true),
                     product_category_id = table.Column<ushort>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_products", x => x.id);
+                    table.PrimaryKey("PK_product_types", x => x.id);
                     table.ForeignKey(
-                        name: "FK_products_product_categories_product_category_id",
+                        name: "FK_product_types_product_categories_product_category_id",
                         column: x => x.product_category_id,
                         principalTable: "product_categories",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_products_tenants_tenant_id",
-                        column: x => x.tenant_id,
-                        principalTable: "tenants",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -404,6 +375,41 @@ namespace Shopper.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "sale_invoices",
+                columns: table => new
+                {
+                    id = table.Column<ulong>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    tenant_id = table.Column<Guid>(nullable: false),
+                    created_at = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    updated_at = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
+                    number = table.Column<string>(nullable: true),
+                    amount = table.Column<ulong>(nullable: false),
+                    date = table.Column<DateTime>(nullable: false),
+                    is_completed = table.Column<bool>(nullable: false),
+                    is_canceled = table.Column<bool>(nullable: false),
+                    user_id = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_sale_invoices", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_sale_invoices_tenants_tenant_id",
+                        column: x => x.tenant_id,
+                        principalTable: "tenants",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_sale_invoices_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "user_claims",
                 columns: table => new
                 {
@@ -489,6 +495,40 @@ namespace Shopper.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "products",
+                columns: table => new
+                {
+                    id = table.Column<uint>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    tenant_id = table.Column<Guid>(nullable: false),
+                    created_at = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    updated_at = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
+                    name = table.Column<string>(nullable: false),
+                    image_path = table.Column<string>(nullable: true),
+                    slug = table.Column<string>(nullable: true),
+                    product_type_id = table.Column<ushort>(nullable: false),
+                    has_expiration = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_products", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_products_product_types_product_type_id",
+                        column: x => x.product_type_id,
+                        principalTable: "product_types",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_products_tenants_tenant_id",
+                        column: x => x.tenant_id,
+                        principalTable: "tenants",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "product_attribute",
                 columns: table => new
                 {
@@ -510,6 +550,34 @@ namespace Shopper.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_product_attribute_products_product_id",
+                        column: x => x.product_id,
+                        principalTable: "products",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "product_attribute_options",
+                columns: table => new
+                {
+                    attribute_option_id = table.Column<ushort>(nullable: false),
+                    product_id = table.Column<uint>(nullable: false),
+                    created_at = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    updated_at = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_product_attribute_options", x => new { x.product_id, x.attribute_option_id });
+                    table.ForeignKey(
+                        name: "FK_product_attribute_options_attribute_options_attribute_option~",
+                        column: x => x.attribute_option_id,
+                        principalTable: "attribute_options",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_product_attribute_options_products_product_id",
                         column: x => x.product_id,
                         principalTable: "products",
                         principalColumn: "id",
@@ -585,29 +653,32 @@ namespace Shopper.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "product_attribute_options",
+                name: "expirations",
                 columns: table => new
                 {
-                    attribute_option_id = table.Column<ushort>(nullable: false),
-                    product_id = table.Column<uint>(nullable: false),
+                    id = table.Column<ulong>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    tenant_id = table.Column<Guid>(nullable: false),
                     created_at = table.Column<DateTime>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     updated_at = table.Column<DateTime>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
+                    sku_Id = table.Column<ulong>(nullable: false),
+                    expiration_date = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_product_attribute_options", x => new { x.product_id, x.attribute_option_id });
+                    table.PrimaryKey("PK_expirations", x => x.id);
                     table.ForeignKey(
-                        name: "FK_product_attribute_options_attribute_options_attribute_option~",
-                        column: x => x.attribute_option_id,
-                        principalTable: "attribute_options",
+                        name: "FK_expirations_skus_sku_Id",
+                        column: x => x.sku_Id,
+                        principalTable: "skus",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_product_attribute_options_products_product_id",
-                        column: x => x.product_id,
-                        principalTable: "products",
+                        name: "FK_expirations_tenants_tenant_id",
+                        column: x => x.tenant_id,
+                        principalTable: "tenants",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -763,6 +834,17 @@ namespace Shopper.Migrations
                 column: "tenant_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_expirations_sku_Id",
+                table: "expirations",
+                column: "sku_Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_expirations_tenant_id",
+                table: "expirations",
+                column: "tenant_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_modules_name",
                 table: "modules",
                 column: "name",
@@ -813,6 +895,11 @@ namespace Shopper.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_product_categories_parent_category_id",
+                table: "product_categories",
+                column: "parent_category_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_product_categories_product_group_id",
                 table: "product_categories",
                 column: "product_group_id");
@@ -834,15 +921,20 @@ namespace Shopper.Migrations
                 column: "tenant_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_product_types_product_category_id",
+                table: "product_types",
+                column: "product_category_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_products_name",
                 table: "products",
                 column: "name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_products_product_category_id",
+                name: "IX_products_product_type_id",
                 table: "products",
-                column: "product_category_id");
+                column: "product_type_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_products_tenant_id",
@@ -870,6 +962,11 @@ namespace Shopper.Migrations
                 name: "IX_sale_invoices_tenant_id",
                 table: "sale_invoices",
                 column: "tenant_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_sale_invoices_user_id",
+                table: "sale_invoices",
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_sales_sale_invoice_id",
@@ -966,6 +1063,9 @@ namespace Shopper.Migrations
                 name: "expenditures");
 
             migrationBuilder.DropTable(
+                name: "expirations");
+
+            migrationBuilder.DropTable(
                 name: "permissions");
 
             migrationBuilder.DropTable(
@@ -1032,10 +1132,13 @@ namespace Shopper.Migrations
                 name: "products");
 
             migrationBuilder.DropTable(
-                name: "product_categories");
+                name: "product_types");
 
             migrationBuilder.DropTable(
                 name: "tenants");
+
+            migrationBuilder.DropTable(
+                name: "product_categories");
 
             migrationBuilder.DropTable(
                 name: "product_groups");

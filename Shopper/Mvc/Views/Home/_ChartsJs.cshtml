@@ -1,0 +1,193 @@
+@using Shopper.Extensions.Helpers
+@using Newtonsoft.Json
+@using Shared.Mvc.Enums
+@model Shopper.Mvc.ViewModels.ChartModel
+@{
+    var chartId = Model.ChartId;
+    var allSales = Model.Sales;
+    var dates = new List<string>();
+    var currentData = new List<int>();
+    var previousData = new List<int>();
+    var xAxisCount = 0;
+    int percentage = 0;
+    bool showPercentage = true;
+    if (Model.SummaryType == SummaryType.Today)
+    {
+        xAxisCount = 24;
+        for (int i = 1; i <= xAxisCount; i++)
+        {
+            int sale = 0;
+            int yesterdaySale = 0;
+            var sales = allSales.Where(s => s.SaleInvoice.Date.Date == DateTime.Now.Date && s.SaleInvoice.Date.Hour == i).AsEnumerable();
+            var yesterdaySales = allSales.Where(s => s.SaleInvoice.Date.Date == DateTime.Now.Date.AddDays(-1) && s.SaleInvoice.Date.Hour == i).AsEnumerable();
+            foreach (var s in sales)
+            {
+                sale += (int) (s.Quantity * s.Price);
+            }
+            foreach (var s in yesterdaySales)
+            {
+                yesterdaySale += (int) (s.Quantity * s.Price);
+            }
+            currentData.Add(sale);
+            previousData.Add(yesterdaySale);
+            dates.Add(i.ToString());
+        }
+        dates[^1] += "HRS";
+    }
+    if (Model.SummaryType == SummaryType.Week || Model.SummaryType == SummaryType.Month)
+    {
+        xAxisCount = Model.SummaryType == SummaryType.Week ? 7 : 31;
+
+        for (int i = 0; i < xAxisCount; i++)
+        {
+            var date = DateTime.Now.AddDays(-i);
+            var lastWeekDate = DateTime.Now.AddDays(-(i + 7));
+            uint sale = 0;
+            uint lastWeekSale = 0;
+            var sales = allSales.Where(s => s.SaleInvoice.Date.Date == date.Date).AsEnumerable();
+            var lastWeekSales = allSales.Where(s => s.SaleInvoice.Date.Date == lastWeekDate.Date).AsEnumerable();
+            foreach (var s in sales)
+            {
+                sale += (uint) (s.Quantity * s.Price);
+            }
+            foreach (var s in lastWeekSales)
+            {
+                lastWeekSale += (uint) (s.Quantity * s.Price);
+            }
+            currentData.Add((int) sale);
+            previousData.Add((int) lastWeekSale);
+            dates.Add($"{date.DateWithSuffix()} {date.ToString("MMM")}");
+        }
+        dates[0] = "today";
+        dates.Reverse();
+        currentData.Reverse();
+        previousData.Reverse();
+    }
+    if (Model.SummaryType == SummaryType.Year)
+    {
+        xAxisCount = 12;
+        var jan = DateTime.Now.AddMonths(-(DateTime.Now.Month-1));
+        for (int i = 0; i < xAxisCount; i++)
+        {
+            var month = DateTime.Now.AddMonths(i);
+            uint sale = 0;
+            var sales = allSales.Where(s => s.SaleInvoice.Date.Month == month.Month).AsEnumerable();
+            foreach (var s in sales)
+            {
+                sale += (uint) (s.Quantity * s.Price);
+            }
+            currentData.Add((int) sale);
+            dates.Add($"{month.ToString("MMM")}");
+        }
+        dates.Reverse();
+        currentData.Reverse();
+    }
+
+    var currentTotal = currentData.Sum();
+    var previousTotal = previousData.Sum();
+    if (previousTotal != 0 && currentTotal != 0)
+    {
+        percentage = (currentTotal - previousTotal) * 100 / previousTotal;
+    }
+    else
+    {
+        showPercentage = false;
+    }
+}
+<script >
+var dates = @Html.Raw(JsonConvert.SerializeObject(dates));
+    if (@Json.Serialize(showPercentage))
+        {
+            $('#@chartId-percentage-div').show();
+            var upDown = @percentage>0?"up":"down";
+            var successDanger = @percentage>0?"success":"danger";
+            var percentageSpan = $('#@chartId-percentage');
+                var prcntg = '<span class="text-'+ successDanger +'">'+
+                             '<i class="fas fa-arrow-'+upDown+'"></i>'+ @Math.Abs(@percentage) +
+                             '%</span>';
+                percentageSpan.append(prcntg);
+            } else {
+          $('#@chartId-percentage').remove();
+            $('#@chartId-percentage-div').hide();
+        }
+    var currentData = @Html.Raw(JsonConvert.SerializeObject(currentData));
+    var previousData = @Html.Raw(JsonConvert.SerializeObject(previousData));
+    var mode = 'index';
+    var intersect = true;
+    var ticksStyle = {
+        fontColor: '#495057',
+        fontStyle: 'bold'
+    }
+    var $visitorsChart = $('#@chartId');
+    // eslint-disable-next-line no-unused-vars
+    var visitorsChart = new Chart($visitorsChart, {
+        data: {
+            labels: dates,
+            datasets: [{
+                type: 'line',
+                data: currentData,
+                backgroundColor: 'transparent',
+                borderColor: '#007bff',
+                pointBorderColor: '#007bff',
+                pointBackgroundColor: '#007bff',
+                fill: false
+                // pointHoverBackgroundColor: '#007bff',
+                // pointHoverBorderColor    : '#007bff'
+            },
+                {
+                    type: 'line',
+                    data: previousData,
+                    backgroundColor: 'tansparent',
+                    borderColor: 'lightgray',
+                    pointBorderColor: 'lightgray',
+                    pointBackgroundColor: 'lightgray',
+                    fill: false
+                    // pointHoverBackgroundColor: '#ced4da',
+                    // pointHoverBorderColor    : '#ced4da'
+                }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            tooltips: {
+                mode: mode,
+                intersect: intersect
+            },
+            hover: {
+                mode: mode,
+                intersect: intersect
+            },
+            legend: {
+                display: false
+            },
+            scales: {
+                yAxes: [{
+                    // display: false,
+                    gridLines: {
+                        display: true,
+                        lineWidth: '4px',
+                        color: 'rgba(0, 0, 0, .2)',
+                        zeroLineColor: 'transparent'
+                    },
+                    ticks: $.extend({
+                        beginAtZero: true,
+                        suggestedMax: 200,
+                        callback: function(value, index, values) {
+                                      if(parseInt(value) >= 1000){
+                                        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                      } else {
+                                        return value;
+                                      }
+                                    },
+                    }, ticksStyle)
+                }],
+                xAxes: [{
+                    display: true,
+                    gridLines: {
+                        display: false
+                    },
+                    ticks: ticksStyle
+                }]
+            }
+        }
+    })
+</script>

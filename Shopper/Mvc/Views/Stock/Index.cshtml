@@ -12,6 +12,8 @@
     <th:link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"></th:link>
     <!-- Toastr -->
     <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
+    <!-- iCheck for checkboxes and radio inputs -->
+    <th:link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css"></th:link>
 }
 
 <div class="card with-border">
@@ -94,7 +96,7 @@
                 index++;
                 <tr>
                     <td>@index</td>
-                    <td>@product.ProductCategory.Name</td>
+                    <td>@product.ProductType.Name</td>
                     <td>@product.Name</td>
                     <td>@product.Skus.Sum(sku => sku.Quantity)</td>
                     <td>@product.Skus.Sum(sku => sku.RemainingQuantity)</td>
@@ -133,9 +135,9 @@
     <!-- Number formatter -->
     <th:script src="~/js/number-formatter.js"></th:script>
 
-    <th:partial name="_ValidationScriptsPartial"></th:partial>
     <th:partial name="Partials/_ToastScript"></th:partial>
     <script>
+
     //Initialize Select2 Elements
             $('.select2bs4').select2({
               theme: 'bootstrap4'

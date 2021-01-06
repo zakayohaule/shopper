@@ -15,28 +15,26 @@ namespace Shopper.Mvc.Controllers
     public class ProductController : BaseController
     {
         private readonly IProductService _productService;
-        private readonly IAttributeService _attributeService;
 
-        public ProductController(IProductService productService, IAttributeService attributeService)
+        public ProductController(IProductService productService)
         {
             _productService = productService;
-            _attributeService = attributeService;
         }
 
         [Permission("product_view"), Toast]
         [HttpGet("")]
         public IActionResult Index([FromServices] IAttributeService attributeService,
-            [FromServices] IProductCategoryService productCategoryService)
+            [FromServices] IProductGroupService productGroupService)
         {
             Title = "Products";
             AddPageHeader("Manage products");
             var products = _productService.GetAllProducts()
-                .Include(p => p.ProductCategory)
+                .Include(p => p.ProductType)
                 .Include(p => p.Attributes)
                 .ThenInclude(pa => pa.Attribute)
                 .ToList();
             ViewData["Attributes"] = attributeService.GetAllAttributeSelectListItems();
-            ViewData["Categories"] = productCategoryService.GetProductCategorySelectListItems();
+            ViewData["Groups"] = productGroupService.GetProductGroupSelectListItems();
             return View(products);
         }
 
@@ -48,7 +46,7 @@ namespace Shopper.Mvc.Controllers
                 .FindByIdAsyncQ(id)
                 .Include(p => p.Images)
                 .Include(p => p.Attributes)
-                .Include(p => p.ProductCategory)
+                .Include(p => p.ProductType)
                 .Include(p => p.Skus)
                 .ThenInclude(s => s.SkuAttributes)
                 .ThenInclude(sa => sa.Option)
@@ -71,7 +69,6 @@ namespace Shopper.Mvc.Controllers
         {
             // @todo Preselect product category/group if only one is present
 
-            // return Ok(newProduct);
             if (_productService.IsDuplicate(newProduct.Name, newProduct.Id))
             {
                 ToastError($"Product with name {newProduct.Name} already exists! Please use another name.");
@@ -122,19 +119,35 @@ namespace Shopper.Mvc.Controllers
 
         [HttpGet("{id}/open-edit-modal")]
         public async Task<JsonResult> EditProductModal(uint id, [FromServices] IAttributeService attributeService,
-            [FromServices] IProductCategoryService productCategoryService)
+            [FromServices] IProductCategoryService productCategoryService,
+            [FromServices] IProductTypeService productTypeService,
+            [FromServices] IProductGroupService productGroupService)
         {
-            var product = await _productService.FindByIdAsyncQ(id).Include(p => p.Attributes).SingleAsync();
+            var product = await _productService.FindByIdAsyncQ(id)
+                .Include(p => p.ProductType)
+                .ThenInclude(p => p.ProductCategory)
+                .Include(p => p.Attributes)
+                .SingleAsync();
             ViewData["Attributes"] = attributeService.GetAllAttributeSelectListItems();
-            ViewData["Categories"] = productCategoryService.GetProductCategorySelectListItems();
-            ViewBag.EditMode = true;
+            ViewData["Groups"] = productGroupService.GetProductGroupSelectListItems();
 
-            var formData = new ProductFormModel
+            var formData = new
             {
-                Id = product.Id,
-                Name = product.Name,
-                ProductCategoryId = product.ProductCategoryId,
-                Attributes = product.Attributes.Select(at => at.AttributeId)
+                product.Id,
+                product.Name,
+                product.ProductType.ProductCategory.ProductGroupId,
+                product.ProductType.ProductCategoryId,
+                product.ProductTypeId,
+                HasExpirationDate = product.HasExpiration,
+                Attributes = product.Attributes.Select(at => at.AttributeId),
+                CategoryItems = productCategoryService
+                    .GetProductCategorySelectListItemsByGroupId(
+                        product.ProductType.ProductCategory.ProductGroupId,
+                        product.ProductType.ProductCategoryId),
+                TypeItems = productTypeService
+                    .GetProductTypeSelectListItemsByCategoryId(
+                        product.ProductType.ProductCategoryId,
+                        product.ProductTypeId)
             };
             return Json(formData, new JsonSerializerSettings {ContractResolver = null});
             // return PartialView("../Product/_EditProductModal", product);

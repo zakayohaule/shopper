@@ -174,6 +174,45 @@ namespace Shopper.Migrations
                     b.ToTable("expenditure_types");
                 });
 
+            modelBuilder.Entity("Shared.Mvc.Entities.Expiration", b =>
+                {
+                    b.Property<ulong>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnName("expiration_date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<ulong>("SkuId")
+                        .HasColumnName("sku_Id")
+                        .HasColumnType("bigint unsigned");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnName("tenant_id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SkuId")
+                        .IsUnique();
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("expirations");
+                });
+
             modelBuilder.Entity("Shared.Mvc.Entities.Identity.AppUser", b =>
                 {
                     b.Property<long>("Id")
@@ -565,6 +604,10 @@ namespace Shopper.Migrations
                         .HasColumnName("created_at")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<bool>("HasExpiration")
+                        .HasColumnName("has_expiration")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("ImagePath")
                         .HasColumnName("image_path")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -574,8 +617,8 @@ namespace Shopper.Migrations
                         .HasColumnName("name")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<ushort>("ProductCategoryId")
-                        .HasColumnName("product_category_id")
+                    b.Property<ushort>("ProductTypeId")
+                        .HasColumnName("product_type_id")
                         .HasColumnType("smallint unsigned");
 
                     b.Property<string>("Slug")
@@ -596,7 +639,7 @@ namespace Shopper.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.HasIndex("ProductCategoryId");
+                    b.HasIndex("ProductTypeId");
 
                     b.HasIndex("TenantId");
 
@@ -674,6 +717,10 @@ namespace Shopper.Migrations
                         .HasColumnName("name")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
+                    b.Property<ushort?>("ParentCategoryId")
+                        .HasColumnName("parent_category_id")
+                        .HasColumnType("smallint unsigned");
+
                     b.Property<ushort>("ProductGroupId")
                         .HasColumnName("product_group_id")
                         .HasColumnType("smallint unsigned");
@@ -687,6 +734,8 @@ namespace Shopper.Migrations
 
                     b.HasIndex("Name")
                         .IsUnique();
+
+                    b.HasIndex("ParentCategoryId");
 
                     b.HasIndex("ProductGroupId");
 
@@ -760,6 +809,39 @@ namespace Shopper.Migrations
                     b.HasIndex("TenantId");
 
                     b.ToTable("product_images");
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.ProductType", b =>
+                {
+                    b.Property<ushort>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("smallint unsigned");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<ushort>("ProductCategoryId")
+                        .HasColumnName("product_category_id")
+                        .HasColumnType("smallint unsigned");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductCategoryId");
+
+                    b.ToTable("product_types");
                 });
 
             modelBuilder.Entity("Shared.Mvc.Entities.Sale", b =>
@@ -903,6 +985,10 @@ namespace Shopper.Migrations
                         .HasColumnName("is_on_sale")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int?>("LowStockAmount")
+                        .HasColumnName("low_stock_amount")
+                        .HasColumnType("int");
+
                     b.Property<uint>("MaximumDiscount")
                         .HasColumnName("maximum_discount")
                         .HasColumnType("int unsigned");
@@ -1026,6 +1112,10 @@ namespace Shopper.Migrations
                         .HasColumnName("address")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<string>("Code")
+                        .HasColumnName("code")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
                     b.Property<string>("ConnectionString")
                         .HasColumnName("connection_string")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -1078,6 +1168,9 @@ namespace Shopper.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Code")
+                        .IsUnique();
+
                     b.HasIndex("Domain")
                         .IsUnique();
 
@@ -1128,6 +1221,21 @@ namespace Shopper.Migrations
 
             modelBuilder.Entity("Shared.Mvc.Entities.ExpenditureType", b =>
                 {
+                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.Expiration", b =>
+                {
+                    b.HasOne("Shared.Mvc.Entities.Sku", "Sku")
+                        .WithOne("Expiration")
+                        .HasForeignKey("Shared.Mvc.Entities.Expiration", "SkuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
@@ -1224,9 +1332,9 @@ namespace Shopper.Migrations
 
             modelBuilder.Entity("Shared.Mvc.Entities.Product", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.ProductCategory", "ProductCategory")
+                    b.HasOne("Shared.Mvc.Entities.ProductType", "ProductType")
                         .WithMany("Products")
-                        .HasForeignKey("ProductCategoryId")
+                        .HasForeignKey("ProductTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1269,6 +1377,10 @@ namespace Shopper.Migrations
 
             modelBuilder.Entity("Shared.Mvc.Entities.ProductCategory", b =>
                 {
+                    b.HasOne("Shared.Mvc.Entities.ProductCategory", "ParentCategory")
+                        .WithMany("ChildCategories")
+                        .HasForeignKey("ParentCategoryId");
+
                     b.HasOne("Shared.Mvc.Entities.ProductGroup", "ProductGroup")
                         .WithMany("ProductCategories")
                         .HasForeignKey("ProductGroupId")
@@ -1287,6 +1399,15 @@ namespace Shopper.Migrations
                     b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Shared.Mvc.Entities.ProductType", b =>
+                {
+                    b.HasOne("Shared.Mvc.Entities.ProductCategory", "ProductCategory")
+                        .WithMany()
+                        .HasForeignKey("ProductCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

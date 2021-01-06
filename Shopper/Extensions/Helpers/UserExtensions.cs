@@ -131,7 +131,7 @@
             try
             {
                 var path = Path.GetFullPath(Path.Combine(hostEnvironment.ContentRootPath,
-                    $"Mvc/Views/Emails/{templateName}.cshtml"));
+                    $"wwwroot/emails/{templateName}.cshtml"));
                 return path;
             }
             catch (FileNotFoundException fileNotFoundException)
@@ -141,7 +141,7 @@
 
         }
 
-        public static string GetTenantFromSubdomain(this HttpContext httpContext)
+        public static string GetSubdomain(this HttpContext httpContext)
         {
             var subDomain = string.Empty;
             var host = httpContext.Request.Host.Host;
@@ -150,6 +150,7 @@
             if (host.Contains("."))
             {
                 var domainParts = host.Split(".");
+<<<<<<< HEAD
                                 if (domainParts.Length == 2)
                                 {
                                     subDomain = domainParts[0];
@@ -164,6 +165,22 @@
                                 {
                                     subDomain = string.Join(".", domainParts[1..3]);
                                 }
+=======
+                if (domainParts.Length == 2)
+                {
+                    subDomain = domainParts[0];
+                }
+
+                if (domainParts.Length == 3)
+                {
+                    subDomain = string.Join(".", domainParts[..2]);
+                }
+
+                if (domainParts.Length == 4)
+                {
+                    subDomain = string.Join(".", domainParts[1..3]);
+                }
+>>>>>>> 6e7ada122ec76ec03d78c81abf3f7c8b1c92026f
             }
 
             return subDomain;
@@ -171,8 +188,7 @@
 
         public static Tenant GetCurrentTenant(this ViewContext viewContext)
         {
-            var tenant = (Tenant)viewContext.HttpContext.Items["tenant"];
-            return tenant;
+            return viewContext.HttpContext.GetCurrentTenant();
         }
 
         public static Tenant GetCurrentTenant(this HttpContext httpContext)

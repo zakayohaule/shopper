@@ -16,9 +16,8 @@ namespace Shopper.Database.Seeders
             UserManager<AppUser> userManager, ILogger logger)
         {
             var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-            var appDomain = configuration.GetValue<string>("AppDomain");
-            var keaTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == $"kea.{appDomain}");
-            var localhostTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == $"{appDomain}");
+            var keaTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == $"kea");
+            var localhostTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == $"zaks");
             var users = new List<AppUser>
             {
                 new AppUser

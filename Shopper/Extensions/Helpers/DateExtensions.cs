@@ -33,7 +33,40 @@ namespace Shopper.Extensions.Helpers
                     break;
             }
 
-            return string.Format("{0:ddd dd}{1} {0:MMM yyyy}", dateTime, ordinal);
+            return string.Format("{0:ddd d}{1} {0:MMM yyyy}", dateTime, ordinal);
+        }
+
+        public static string FormatDateWithTime(this DateTime dateTime)
+        {
+            return dateTime.ToString("MM/dd/yyyy, hh:mm tt");
+        }
+
+        public static string DateWithSuffix(this DateTime dateTime)
+        {
+            string ordinal;
+
+            switch (dateTime.Day)
+            {
+                case 1:
+                case 21:
+                case 31:
+                    ordinal = "st";
+                    break;
+                case 2:
+                case 22:
+                    ordinal = "nd";
+                    break;
+                case 3:
+                case 23:
+                    ordinal = "rd";
+                    break;
+                default:
+                    ordinal = "th";
+                    break;
+            }
+
+            return $"{dateTime.Day}{ordinal}";
+            return string.Format("{0:ddd dd}{1}}", dateTime, ordinal);
         }
 
         public static string FormatWithSuffixAndTime(this DateTime dateTime)

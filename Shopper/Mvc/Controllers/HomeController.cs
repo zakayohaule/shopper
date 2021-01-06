@@ -34,6 +34,7 @@
 
         public async Task<IActionResult> Index()
         {
+
             var sales = await _reportService.GetThisYearSalesAsync();
 
             // return Ok(sales.Where(s => s.Sku.ProductId == 2).Select(s => s.Sku.Sales).ToList());

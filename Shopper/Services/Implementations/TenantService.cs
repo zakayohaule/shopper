@@ -44,16 +44,16 @@ namespace Shopper.Services.Implementations
         }
 
         public Tenant GetTenantFromRequestOrDefault()
-        {
-            var httpContext = _httpContextAccessor.HttpContext;
-            var tenant = httpContext.GetCurrentTenant();
-            if (tenant == null)
-            {
-                throw new InvalidTenantException("Invalid tenant");
-            }
+                {
+                    var httpContext = _httpContextAccessor.HttpContext;
+                    var tenant = httpContext.GetCurrentTenant();
+                    if (tenant == null)
+                    {
+                        throw new InvalidTenantException("Invalid tenant");
+                    }
 
-            return null;
-        }
+                    return null;
+                }
 
     }
 }

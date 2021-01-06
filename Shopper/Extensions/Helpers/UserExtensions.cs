@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
  using System.IO;
  using System.Linq;
  using System.Security.Claims;
@@ -149,7 +149,21 @@
             if (string.IsNullOrWhiteSpace(host)) return subDomain;
             if (host.Contains("."))
             {
-                subDomain = host.Split('.')[0];
+                var domainParts = host.Split(".");
+                                if (domainParts.Length == 2)
+                                {
+                                    subDomain = domainParts[0];
+                                }
+                                
+                                if (domainParts.Length == 3)
+                                {
+                                    subDomain = string.Join(".", domainParts[..2]);
+                                }
+                
+                                if (domainParts.Length == 4)
+                                {
+                                    subDomain = string.Join(".", domainParts[1..3]);
+                                }
             }
 
             return subDomain;

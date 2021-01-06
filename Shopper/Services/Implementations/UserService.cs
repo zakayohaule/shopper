@@ -84,13 +84,14 @@
 
         public async Task DeleteUserAsync(AppUser user)
         {
-            _dbContext.Users.Update(user);
+            _dbContext.Users.Remove(user);
             await _dbContext.SaveChangesAsync();
         }
 
         public void SendEmailVerificationEmail(EmailVerificationViewModel model)
         {
             var email = _fluentEmail
+                .SetFrom("amdmin@tzshopper.com")
                 .To(model.Email)
                 .Subject("Email Verification")
                 .UsingTemplateFromFile(_environment.GetEmailTemplate("EmailVerification"), model)

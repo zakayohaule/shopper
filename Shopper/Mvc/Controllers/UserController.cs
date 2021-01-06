@@ -159,7 +159,7 @@ namespace Shopper.Mvc.Controllers
             return Json(true);
         }
 
-        [HttpPost("{id}/roles")]
+        [HttpPost("{id}/roles"), Permission("user_assign_role")]
         public async Task<IActionResult> UpdateUserRoles(long id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
@@ -175,7 +175,7 @@ namespace Shopper.Mvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet("{id}/open-edit-modal")]
+        [HttpGet("{id}/open-edit-modal"), Permission("user_edit")]
         public async Task<JsonResult> EditUserModal(long id)
         {
             var user = await _userService.FindByIdAsync(id);

@@ -89,7 +89,7 @@ namespace Shopper.Mvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet("{id}/open-edit-modal")]
+        [HttpGet("{id}/open-edit-modal"), Permission("attribute_edit")]
         public async Task<JsonResult> EditAttributeModal(ushort id)
         {
             var attribute = await _attributeService.FindByIdAsync(id);
@@ -97,7 +97,7 @@ namespace Shopper.Mvc.Controllers
             return Json(attribute, new JsonSerializerSettings{ContractResolver = null});
         }
 
-        [AcceptVerbs("GET", Route = "validate-attribute-name", Name = "ValidateAttributeName")]
+        [AcceptVerbs("GET", Route = "validate-attribute-name", Name = "ValidateAttributeName"), Permission("attribute_add")]
         public IActionResult ExistsByDisplayName(string name, ushort id)
         {
             return _attributeService.IsDuplicate(name, id)

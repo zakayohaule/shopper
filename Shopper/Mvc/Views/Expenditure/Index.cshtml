@@ -19,29 +19,32 @@
 
 <div class="card card-default">
     <div class="card-header">
-        <a href="" data-toggle="modal" data-target="#add-expenditure" class="btn btn-sm btn-primary float-right" title="Add User">
-            <i class="fas fa-user-plus"> Add</i>
-        </a>
+        <th:permission name="expenditure_add">
+            <a href="" data-toggle="modal" data-target="#add-expenditure" class="btn btn-sm btn-primary float-right" title="Add User">
+                <i class="fas fa-user-plus"> Add</i>
+            </a>
+
+            <div class="modal fade" id="add-expenditure">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Expenditure</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <th:form class="" asp-controller="Expenditure" asp-action="Create" method="post">
+                            <div class="modal-body">
+                                <th:partial name="_ExpenditureForm" model="newExpenditure" view-data="ViewData"/>
+                            </div>
+                        </th:form>
+                    </div>
+                </div>
+            </div>
+        </th:permission>
     </div>
     <!-- /.card-header -->
 
-    <div class="modal fade" id="add-expenditure">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Expenditure</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <th:form class="" asp-controller="Expenditure" asp-action="Create" method="post">
-                    <div class="modal-body">
-                        <th:partial name="_ExpenditureForm" model="newExpenditure" view-data="ViewData"/>
-                    </div>
-                </th:form>
-            </div>
-        </div>
-    </div>
 
     <div class="card-body table-responsive p-3">
         <table class="table table-sm table-hover dt-table">
@@ -67,20 +70,24 @@
                     <td>@expenditure.Amount</td>
                     <td>@expenditure.Date.FormatWithSuffixAndTime()</td>
                     <td>
-                        <a href="#" onclick="openEditModal('@Url.Action("EditExpenditureModal", new {id = expenditure.Id})',
-                         '@Url.Action("Update", new {id = expenditure.Id})',
-                         'Edit Expenditure')"
-                           class="btn btn-default btn-sm"
-                           title="Edit product category">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <th:a asp-controller="Expenditure"
-                              asp-action="Delete"
-                              asp-route-id="@expenditure.Id" class="btn-delete">
-                            <span class="btn btn-default btn-sm" title="Delete product category">
-                                <i class="fas fa-trash"></i>
-                            </span>
-                        </th:a>
+                        <th:permission name="expenditure_edit">
+                            <a href="#" onclick="openEditModal('@Url.Action("EditExpenditureModal", new {id = expenditure.Id})',
+                                                     '@Url.Action("Update", new {id = expenditure.Id})',
+                                                     'Edit Expenditure')"
+                               class="btn btn-default btn-sm"
+                               title="Edit product category">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </th:permission>
+                        <th:permission name="expenditure_delete">
+                            <th:a asp-controller="Expenditure"
+                                  asp-action="Delete"
+                                  asp-route-id="@expenditure.Id" class="btn-delete">
+                                <span class="btn btn-default btn-sm" title="Delete product category">
+                                    <i class="fas fa-trash"></i>
+                                </span>
+                            </th:a>
+                        </th:permission>
                     </td>
                 </tr>
             }
@@ -91,7 +98,9 @@
 </div>
 <!-- /.card -->
 
-<th:partial name="Partials/_EditModal" model="newExpenditure" view-data="ViewData"/>
+<th:permission name="expenditure_edit">
+    <th:partial name="Partials/_EditModal" model="newExpenditure" view-data="ViewData"/>
+</th:permission>
 
 @section scripts
 {

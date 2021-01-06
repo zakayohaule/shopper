@@ -31,7 +31,7 @@ namespace Shopper.Mvc.Controllers
             return View(invoices);
         }
 
-        [HttpGet("{id}"), Permission("sale_view"), Toast]
+        [HttpGet("{id}"), Permission("sale_invoice_view"), Toast]
         public async Task<IActionResult> InvoiceSales(ulong id)
         {
             AddPageHeader("Invoice sales list");
@@ -52,7 +52,7 @@ namespace Shopper.Mvc.Controllers
             return View(invoice);
         }
 
-        [HttpGet("add-sale"), Permission("sale_record"), Toast]
+        [HttpGet("add-sale"), Permission("sale_sell"), Toast]
         public async Task<IActionResult> Create()
         {
             var invoice = await _saleService.GetInCompleteInvoiceAsync();
@@ -80,14 +80,14 @@ namespace Shopper.Mvc.Controllers
             return View(viewModel);
         }
 
-        [HttpGet("{id}/open-sales-modal")]
+        [HttpGet("{id}/open-sales-modal"), Permission("sale_sell")]
         public async Task<IActionResult> OpenSalesFormModal(uint id)
         {
             var viewModel = await GetSaleFormModalFromSaleIdAsync(id);
             return PartialView("../Sale/_SalesFormModal", viewModel);
         }
 
-        [HttpGet("{id}/open-sale-edit-modal")]
+        [HttpGet("{id}/open-sale-edit-modal"), Permission("sale_edit")]
         public async Task<IActionResult> OpenSaleEditModal(ulong id)
         {
             var sale = await _saleService.FindSaleByIdAsync(id);
@@ -104,7 +104,7 @@ namespace Shopper.Mvc.Controllers
             return PartialView("../Sale/_EditSaleModal", viewModel);
         }
 
-        [HttpPost("add-to-cart"), ValidateAntiForgeryToken]
+        [HttpPost("add-to-cart"), ValidateAntiForgeryToken, Permission("sale_sell")]
         public async Task<IActionResult> AddToCart(SaleFormViewModel formViewModel)
         {
             try
@@ -119,7 +119,7 @@ namespace Shopper.Mvc.Controllers
             return RedirectToAction("Create");
         }
 
-        [HttpPost("{id}/update-sale"), ValidateAntiForgeryToken]
+        [HttpPost("{id}/update-sale"), ValidateAntiForgeryToken, Permission("sale_edit")]
         public async Task<IActionResult> UpdateSale(ulong id, SaleFormViewModel viewModel)
         {
             var sale = await _saleService.FindSaleByIdAsync(id);
@@ -133,7 +133,7 @@ namespace Shopper.Mvc.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost("{id}/submit-payment"), ValidateAntiForgeryToken]
+        [HttpPost("{id}/submit-payment"), ValidateAntiForgeryToken, Permission("sale_sell")]
         public async Task<IActionResult> SubmitPayment(ulong id, string action)
         {
             var invoice = await _saleService.FindInvoiceByIdAsync(id);
@@ -167,7 +167,7 @@ namespace Shopper.Mvc.Controllers
             // return Ok($"Confirm payment for invoice with {invoice.Id} with total amount of {invoice.Amount}");
         }
 
-        [HttpPost("{id}/change-date"), ValidateAntiForgeryToken]
+        [HttpPost("{id}/change-date"), ValidateAntiForgeryToken, Permission("sale_invoice_change_date")]
         public async Task<IActionResult> ChangeInvoiceDate(ulong id, InvoiceDateModel formModel)
         {
             var invoice = await _saleService.FindInvoiceByIdAsync(id);

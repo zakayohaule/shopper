@@ -89,7 +89,7 @@ namespace Shopper.Mvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet("{id}/open-edit-modal")]
+        [HttpGet("{id}/open-edit-modal"), Permission("price_type_edit")]
         public async Task<JsonResult> EditPriceTypeModal(ushort id)
         {
             var priceType = await _priceTypeService.FindByIdAsync(id);

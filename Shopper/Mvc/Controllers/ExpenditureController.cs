@@ -103,7 +103,7 @@ namespace Shopper.Mvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet("{id}/open-edit-modal")]
+        [HttpGet("{id}/open-edit-modal"), Permission("expenditure_edit")]
         public async Task<JsonResult> EditExpenditureModal(ulong id)
         {
             var expenditure = await _expenditureService.FindByIdAsync(id);

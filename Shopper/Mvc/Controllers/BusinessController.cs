@@ -57,8 +57,10 @@ namespace Shopper.Mvc.Controllers
                 : Json(true);
         }
 
+        // @todo validate all image uploads
+
         [AcceptVerbs("GET", Route = "validate-image-extension", Name = "ValidateImageExtension")]
-        public IActionResult ExistsByDisplayName(string image, [FromServices] IConfiguration configuration)
+        public IActionResult ValidateImageExtension(string image, [FromServices] IConfiguration configuration)
         {
             var acceptedImageFormatsKvp = configuration.GetSection("ImageFormats").AsEnumerable();
             var acceptedImageFormats = acceptedImageFormatsKvp.Where(s => s.Value!=null).Select(s => s.Value).ToList();

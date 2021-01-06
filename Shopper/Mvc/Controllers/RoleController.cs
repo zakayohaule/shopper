@@ -116,7 +116,7 @@ namespace Shopper.Mvc.Controllers
                 : Json(true);
         }
 
-        [HttpPost("{id}/role-permissions")]
+        [HttpPost("{id}/role-permissions"), Permission("role_permissions_save")]
         public async Task<IActionResult> SaveRolePermissions(long id, [FromServices] IUserClaimService userClaimService)
         {
             var role = await _roleService.FindByIdAsync(id);
@@ -131,7 +131,7 @@ namespace Shopper.Mvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet("{id}/open-edit-modal")]
+        [HttpGet("{id}/open-edit-modal"), Permission("role_edit")]
         public async Task<JsonResult> EditRoleModal(long id)
         {
             var role = await _roleService.FindByIdAsync(id);

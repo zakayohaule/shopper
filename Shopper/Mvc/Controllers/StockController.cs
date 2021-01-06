@@ -78,7 +78,7 @@ namespace Shopper.Mvc.Controllers
         }
 
 
-        [HttpPost("{id}/edit-sku"), Permission("stock_add"), ValidateAntiForgeryToken]
+        [HttpPost("{id}/edit-sku"), Permission("stock_edit"), ValidateAntiForgeryToken]
         public async Task<IActionResult> EditStockItem(ulong id, SkuViewFormModel skuViewModel)
         {
             // @todo validate stock item quantity
@@ -112,7 +112,7 @@ namespace Shopper.Mvc.Controllers
 
             return View("ProductSkus", product);
         }
-        [HttpGet("{id}/open-product-skus-edit-modal")]
+        [HttpGet("{id}/open-product-skus-edit-modal"), Permission("stock_edit")]
         public async Task<IActionResult> OpenProductSkusEditModal(ulong id)
         {
             var sku = await _productService.FindSkuByIdAsync(id)

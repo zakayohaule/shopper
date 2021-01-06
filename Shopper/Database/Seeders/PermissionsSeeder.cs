@@ -46,6 +46,9 @@ namespace Shopper.Database.Seeders
             var businessInfoManagement =
                 dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Business Info Management"));
 
+            var dashboard =
+                dbContext.Modules.SingleOrDefault(module => module.Name.Equals("Dashboard"));
+
             var permissions = new List<Permission>
             {
                 new Permission {Name = "user_add", DisplayName = "Create Own Institution's User", Module = userManagement},
@@ -54,10 +57,12 @@ namespace Shopper.Database.Seeders
                 new Permission {Name = "user_edit_any", DisplayName = "Edit Any User", Module = userManagement},
                 new Permission {Name = "user_view", DisplayName = "View User", Module = userManagement},
                 new Permission {Name = "user_delete", DisplayName = "Delete User", Module = userManagement},
+                new Permission {Name = "user_assign_role", DisplayName = "Assign A User Role(s)", Module = userManagement},
                 new Permission {Name = "role_add", DisplayName = "Create Role", Module = roleManagement},
                 new Permission {Name = "role_edit", DisplayName = "Edit Role", Module = roleManagement},
                 new Permission {Name = "role_view", DisplayName = "View Role", Module = roleManagement},
                 new Permission {Name = "role_delete", DisplayName = "Delete Role", Module = roleManagement},
+                    new Permission {Name = "role_permissions_save", DisplayName = "Save A Role's Permissions", Module = roleManagement},
                 new Permission {Name = "role_permission_view", DisplayName = "View Role Permissions", Module = roleManagement},
                 new Permission {Name = "product_category_add", DisplayName = "Add Product Categories", Module = productCategoryManagement},
                 new Permission {Name = "product_category_view", DisplayName = "View Product Categories", Module = productCategoryManagement},
@@ -99,10 +104,17 @@ namespace Shopper.Database.Seeders
                 new Permission {Name = "stock_view", DisplayName = "View Stock Keeping Item", Module = stockManagement},
                 new Permission {Name = "stock_edit", DisplayName = "Edit Stock Keeping Item", Module = stockManagement},
                 new Permission {Name = "stock_delete", DisplayName = "Delete Stock Keeping Item", Module = stockManagement},
+                new Permission {Name = "sale_sell", DisplayName = "Sell Product", Module = saleManagement},
+                new Permission {Name = "sale_edit", DisplayName = "Edit Sale", Module = saleManagement},
                 new Permission {Name = "sale_record", DisplayName = "Record Sale", Module = saleManagement},
                 new Permission {Name = "sale_view", DisplayName = "View Sales", Module = saleManagement},
+                new Permission {Name = "sale_invoice_view", DisplayName = "View Sale Invoices", Module = saleManagement},
+                new Permission {Name = "sale_invoice_change_date", DisplayName = "Change Invoice Date", Module = saleManagement},
                 new Permission {Name = "business_info_view", DisplayName = "View Business Information", Module = businessInfoManagement},
                 new Permission {Name = "business_info_update", DisplayName = "Update Business Information", Module = businessInfoManagement},
+                new Permission {Name = "summary_view", DisplayName = "View Summaries", Module = dashboard},
+                new Permission {Name = "sales_graph", DisplayName = "View Sales Graphs", Module = dashboard},
+                new Permission {Name = "most_selling_and_profitable_products_view", DisplayName = "View Most Selling & Most Profitable Products", Module = dashboard},
             }.ToList();
 
             permissions.ForEach(permission =>

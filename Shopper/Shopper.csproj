@@ -46,6 +46,7 @@
 
     <ItemGroup>
       <Folder Include="Migrations" />
+      <Folder Include="Migrations\AdminAppDb" />
       <Folder Include="wwwroot\uploads\products" />
     </ItemGroup>
 

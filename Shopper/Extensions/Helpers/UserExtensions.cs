@@ -1,4 +1,4 @@
-﻿using System;
+using System;
  using System.IO;
  using System.Linq;
  using System.Security.Claims;
@@ -142,58 +142,41 @@
         }
 
         public static string GetSubdomain(this HttpContext httpContext)
-        {
-            var subDomain = string.Empty;
-            var host = httpContext.Request.Host.Host;
-
-            if (string.IsNullOrWhiteSpace(host)) return subDomain;
-            if (host.Contains("."))
-            {
-                var domainParts = host.Split(".");
-<<<<<<< HEAD
-                                if (domainParts.Length == 2)
-                                {
-                                    subDomain = domainParts[0];
-                                }
-                                
-                                if (domainParts.Length == 3)
-                                {
-                                    subDomain = string.Join(".", domainParts[..2]);
-                                }
-                
-                                if (domainParts.Length == 4)
-                                {
-                                    subDomain = string.Join(".", domainParts[1..3]);
-                                }
-=======
-                if (domainParts.Length == 2)
                 {
-                    subDomain = domainParts[0];
+                    var subDomain = string.Empty;
+                    var host = httpContext.Request.Host.Host;
+
+                    if (string.IsNullOrWhiteSpace(host)) return subDomain;
+                    if (host.Contains("."))
+                    {
+                        var domainParts = host.Split(".");
+                        if (domainParts.Length == 2)
+                        {
+                            subDomain = domainParts[0];
+                        }
+
+                        if (domainParts.Length == 3)
+                        {
+                            subDomain = string.Join(".", domainParts[..2]);
+                        }
+
+                        if (domainParts.Length == 4)
+                        {
+                            subDomain = string.Join(".", domainParts[1..3]);
+                        }
+                    }
+
+                    return subDomain;
                 }
 
-                if (domainParts.Length == 3)
+                public static Tenant GetCurrentTenant(this ViewContext viewContext)
                 {
-                    subDomain = string.Join(".", domainParts[..2]);
+                    return viewContext.HttpContext.GetCurrentTenant();
                 }
 
-                if (domainParts.Length == 4)
+                public static Tenant GetCurrentTenant(this HttpContext httpContext)
                 {
-                    subDomain = string.Join(".", domainParts[1..3]);
+                    return (Tenant) httpContext.Items["tenant"];
                 }
->>>>>>> 6e7ada122ec76ec03d78c81abf3f7c8b1c92026f
-            }
-
-            return subDomain;
-        }
-
-        public static Tenant GetCurrentTenant(this ViewContext viewContext)
-        {
-            return viewContext.HttpContext.GetCurrentTenant();
-        }
-
-        public static Tenant GetCurrentTenant(this HttpContext httpContext)
-        {
-            return (Tenant) httpContext.Items["tenant"];
-        }
     }
 }

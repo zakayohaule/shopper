@@ -54,20 +54,6 @@ namespace Shopper.Services.Implementations
                 }
             }
 
-<<<<<<< HEAD
-        public Tenant GetTenantFromRequestOrDefault()
-                {
-                    var httpContext = _httpContextAccessor.HttpContext;
-                    var tenant = httpContext.GetCurrentTenant();
-                    if (tenant == null)
-                    {
-                        throw new InvalidTenantException("Invalid tenant");
-                    }
-
-                    return null;
-                }
-
-=======
             code = "".NextAlphabets(3);
             while (_dbContext.Tenants.Any(t => t.Code.Equals(code, StringComparison.OrdinalIgnoreCase)))
             {
@@ -76,6 +62,5 @@ namespace Shopper.Services.Implementations
 
             return code;
         }
->>>>>>> 6e7ada122ec76ec03d78c81abf3f7c8b1c92026f
     }
 }

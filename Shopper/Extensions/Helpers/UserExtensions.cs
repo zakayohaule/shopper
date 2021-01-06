@@ -153,21 +153,14 @@ using System;
                         {
                             subDomain = domainParts[0];
                         }
-
-                        if (domainParts.Length == 3)
+                        else
                         {
-                            subDomain = string.Join(".", domainParts[..2]);
-                        }
-
-                        if (domainParts.Length == 4)
-                        {
-                            subDomain = string.Join(".", domainParts[1..3]);
+                            subDomain = domainParts[1];
                         }
                     }
 
                     return subDomain;
                 }
-<<<<<<< HEAD
 
                 public static Tenant GetCurrentTenant(this ViewContext viewContext)
                 {
@@ -177,11 +170,6 @@ using System;
                 public static Tenant GetCurrentTenant(this HttpContext httpContext)
                 {
                     return (Tenant) httpContext.Items["tenant"];
-=======
-                else
-                {
-                    subDomain = domainParts[1];
->>>>>>> 4bfe379132e37f660a421c3f8ff63ac3066564d6
                 }
     }
 }

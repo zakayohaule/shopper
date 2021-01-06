@@ -22,9 +22,24 @@ namespace Shopper.Mvc.Controllers
         }
 
         [HttpGet("test")]
-        public async Task<IActionResult> Test(int number)
+        public async Task<IActionResult> Test(string host)
         {
-            return Ok(await _saleService.GenerateInvoiceNumberAsync(HttpContext.GetCurrentTenant().Code));
+            var subDomain = string.Empty;
+
+            if (host.Contains("."))
+            {
+                var domainParts = host.Split(".");
+                if (domainParts.Length == 2)
+                {
+                    subDomain = domainParts[0];
+                }
+                else
+                {
+                    subDomain = domainParts[1];
+                }
+            }
+
+            return Ok(subDomain);
         }
     }
 }

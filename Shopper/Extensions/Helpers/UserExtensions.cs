@@ -167,6 +167,7 @@ using System;
 
                     return subDomain;
                 }
+<<<<<<< HEAD
 
                 public static Tenant GetCurrentTenant(this ViewContext viewContext)
                 {
@@ -176,6 +177,11 @@ using System;
                 public static Tenant GetCurrentTenant(this HttpContext httpContext)
                 {
                     return (Tenant) httpContext.Items["tenant"];
+=======
+                else
+                {
+                    subDomain = domainParts[1];
+>>>>>>> 4bfe379132e37f660a421c3f8ff63ac3066564d6
                 }
     }
 }

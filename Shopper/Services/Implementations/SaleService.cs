@@ -132,7 +132,7 @@ namespace Shopper.Services.Implementations
             }
             catch (OutOfStockException e)
             {
-                throw;
+                throw new OutOfStockException(e.Message);
             }
             catch (Exception e)
             {

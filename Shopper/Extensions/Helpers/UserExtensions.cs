@@ -7,7 +7,6 @@ using System;
  using Microsoft.Extensions.DependencyInjection;
  using Microsoft.Extensions.Hosting;
  using Microsoft.IdentityModel.JsonWebTokens;
- using Shared.Common;
  using Shared.Extensions.Helpers;
  using Shared.Mvc.Entities;
  using Shopper.Services.Interfaces;
@@ -136,7 +135,7 @@ using System;
             }
             catch (FileNotFoundException fileNotFoundException)
             {
-                throw new FileNotFoundException($"Email template '{templateName}' could not be found in the Mvc/Views/Emails directory");
+                throw new FileNotFoundException($"Email template '{templateName}' could not be found in the Mvc/Views/Emails directory: {fileNotFoundException.Message}");
             }
 
         }

@@ -66,7 +66,6 @@ namespace Shopper.Extensions.Helpers
             }
 
             return $"{dateTime.Day}{ordinal}";
-            return string.Format("{0:ddd dd}{1}}", dateTime, ordinal);
         }
 
         public static string FormatWithSuffixAndTime(this DateTime dateTime)

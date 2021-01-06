@@ -1,21 +1,10 @@
-﻿﻿using System;
- using System.Collections.Generic;
- using System.Diagnostics;
- using System.Globalization;
- using System.Linq;
- using System.Security.Cryptography;
+﻿﻿using System.Diagnostics;
  using System.Threading.Tasks;
  using Microsoft.AspNetCore.Authorization;
  using Microsoft.AspNetCore.Mvc;
- using Microsoft.EntityFrameworkCore;
- using Microsoft.Extensions.DependencyInjection;
  using Serilog;
- using Shared.Mvc.Entities;
- using Shared.Mvc.Entities.BaseEntities;
  using Shared.Mvc.ViewModels;
- using Shopper.Extensions.Helpers;
  using Shopper.Mvc.ViewModels;
- using Shopper.Services;
  using Shopper.Services.Interfaces;
 
  namespace Shopper.Mvc.Controllers

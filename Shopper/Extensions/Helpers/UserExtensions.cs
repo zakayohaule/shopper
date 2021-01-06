@@ -153,15 +153,9 @@
                 {
                     subDomain = domainParts[0];
                 }
-
-                if (domainParts.Length == 3)
+                else
                 {
-                    subDomain = string.Join(".", domainParts[..2]);
-                }
-
-                if (domainParts.Length == 4)
-                {
-                    subDomain = string.Join(".", domainParts[1..3]);
+                    subDomain = domainParts[1];
                 }
             }
 

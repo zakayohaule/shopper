@@ -22,9 +22,9 @@ namespace Shopper.Database.Seeders
             {
                 new AppUser
                 {
-                    UserName = "admin",
-                    FullName = "Admin Admin",
-                    Email = "admin@admin.com",
+                    UserName = "keaadmin",
+                    FullName = "Ella Maira",
+                    Email = "ellygabbymaira@gmail.com",
                     EmailConfirmed = true,
                     HasResetPassword = true,
                     Tenant = keaTenant,
@@ -46,10 +46,6 @@ namespace Shopper.Database.Seeders
                 {
 
                     dbContext.Tenant = aUser.Tenant;
-                    /*aUser.PasswordHash = passwordHasher.HashPassword(aUser, "123456");
-                    aUser.NormalizedEmail = aUser.Email.ToUpper();
-                    aUser.NormalizedUserName = aUser.UserName.ToUpper();
-                    dbContext.Users.Add(aUser);*/
                     var result = userManager.CreateAsync(aUser, "123456").Result;
                     if (!result.Succeeded)
                     {

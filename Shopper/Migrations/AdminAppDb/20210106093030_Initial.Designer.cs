@@ -9,7 +9,7 @@ using Shopper.Database;
 namespace Shopper.Migrations.AdminAppDb
 {
     [DbContext(typeof(AdminAppDbContext))]
-    [Migration("20201216215704_Initial")]
+    [Migration("20210106093030_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,10 @@ namespace Shopper.Migrations.AdminAppDb
                         .HasColumnName("address")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<string>("Code")
+                        .HasColumnName("code")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<string>("ConnectionString")
                         .HasColumnName("connection_string")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -52,6 +56,10 @@ namespace Shopper.Migrations.AdminAppDb
 
                     b.Property<string>("Email")
                         .HasColumnName("email")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("LogoPath")
+                        .HasColumnName("logo_path")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Name")

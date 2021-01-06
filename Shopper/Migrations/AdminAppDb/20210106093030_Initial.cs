@@ -18,6 +18,7 @@ namespace Shopper.Migrations.AdminAppDb
                     updated_at = table.Column<DateTime>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
                     name = table.Column<string>(nullable: true),
+                    code = table.Column<string>(nullable: true),
                     email = table.Column<string>(nullable: true),
                     address = table.Column<string>(nullable: true),
                     phone_number_1 = table.Column<string>(nullable: true),
@@ -25,6 +26,7 @@ namespace Shopper.Migrations.AdminAppDb
                     description = table.Column<string>(nullable: true),
                     domain = table.Column<string>(nullable: true),
                     connection_string = table.Column<string>(nullable: true),
+                    logo_path = table.Column<string>(nullable: true),
                     subscription_type = table.Column<int>(nullable: false),
                     valid_to = table.Column<DateTime>(nullable: false),
                     Active = table.Column<bool>(nullable: false)

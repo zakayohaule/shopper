@@ -52,6 +52,7 @@ namespace Shopper.Migrations
                     updated_at = table.Column<DateTime>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
                     name = table.Column<string>(nullable: true),
+                    code = table.Column<string>(nullable: true),
                     email = table.Column<string>(nullable: true),
                     address = table.Column<string>(nullable: true),
                     phone_number_1 = table.Column<string>(nullable: true),
@@ -116,7 +117,7 @@ namespace Shopper.Migrations
                         column: x => x.parent_category_id,
                         principalTable: "product_categories",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_product_categories_product_groups_product_group_id",
                         column: x => x.product_group_id,
@@ -633,6 +634,7 @@ namespace Shopper.Migrations
                     quantity = table.Column<int>(nullable: false),
                     remaining_quantity = table.Column<int>(nullable: false),
                     maximum_discount = table.Column<uint>(nullable: false),
+                    low_stock_amount = table.Column<int>(nullable: true),
                     is_on_sale = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -1012,6 +1014,12 @@ namespace Shopper.Migrations
                 name: "IX_skus_tenant_id",
                 table: "skus",
                 column: "tenant_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tenants_code",
+                table: "tenants",
+                column: "code",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_tenants_domain",

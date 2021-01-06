@@ -102,7 +102,7 @@ namespace Shopper.Database
             }
             catch (ArgumentException e)
             {
-                throw;
+                throw new ArgumentException(e.Message);
             }
             catch (Exception e)
             {

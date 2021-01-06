@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Net.Http;
 using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;

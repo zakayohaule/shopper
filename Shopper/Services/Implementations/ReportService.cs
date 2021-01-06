@@ -27,7 +27,7 @@ namespace Shopper.Services.Implementations
                 .Include(s => s.SaleInvoice)
                 .Include(s => s.Sku)
                 .ThenInclude(s => s.Product)
-                .Where(s => s.SaleInvoice.Date.Year == DateTime.Today.Year && s.IsConfirmed)
+                .Where(s => s.SaleInvoice.Date > DateTime.Now.AddMonths(-11) && s.IsConfirmed)
                 .ToListAsync();
         }
 

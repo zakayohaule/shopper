@@ -10,6 +10,7 @@
     var previousData = new List<int>();
     var xAxisCount = 0;
     int percentage = 0;
+    bool showPercentage = true;
     if (Model.SummaryType == SummaryType.Today)
     {
         xAxisCount = 24;
@@ -35,7 +36,7 @@
     }
     if (Model.SummaryType == SummaryType.Week || Model.SummaryType == SummaryType.Month)
     {
-        xAxisCount = Model.SummaryType == SummaryType.Week ? 7 : 30;
+        xAxisCount = Model.SummaryType == SummaryType.Week ? 7 : 31;
 
         for (int i = 0; i < xAxisCount; i++)
         {
@@ -68,7 +69,7 @@
         var jan = DateTime.Now.AddMonths(-(DateTime.Now.Month-1));
         for (int i = 0; i < xAxisCount; i++)
         {
-            var month = jan.AddMonths(i);
+            var month = DateTime.Now.AddMonths(i);
             uint sale = 0;
             var sales = allSales.Where(s => s.SaleInvoice.Date.Month == month.Month).AsEnumerable();
             foreach (var s in sales)
@@ -78,32 +79,36 @@
             currentData.Add((int) sale);
             dates.Add($"{month.ToString("MMM")}");
         }
+        dates.Reverse();
+        currentData.Reverse();
     }
 
-    if (previousData.Sum() != 0)
+    var currentTotal = currentData.Sum();
+    var previousTotal = previousData.Sum();
+    if (previousTotal != 0 && currentTotal != 0)
     {
-        var currentTotal = currentData.Sum();
-        var previousTotal = previousData.Sum();
         percentage = (currentTotal - previousTotal) * 100 / previousTotal;
     }
     else
     {
-        percentage = 0;
+        showPercentage = false;
     }
 }
 <script >
 var dates = @Html.Raw(JsonConvert.SerializeObject(dates));
-    if (@percentage !== 0)
+    if (@Json.Serialize(showPercentage))
         {
+            $('#@chartId-percentage-div').show();
             var upDown = @percentage>0?"up":"down";
             var successDanger = @percentage>0?"success":"danger";
-            var percentageDiv = $('#@chartId-percentage');
+            var percentageSpan = $('#@chartId-percentage');
                 var prcntg = '<span class="text-'+ successDanger +'">'+
-                             '<i class="fas fa-arrow-'+upDown+'"></i>'+ @Math.Abs(percentage) +
+                             '<i class="fas fa-arrow-'+upDown+'"></i>'+ @Math.Abs(@percentage) +
                              '%</span>';
-                percentageDiv.append(prcntg);
+                percentageSpan.append(prcntg);
             } else {
-          $('#@chartId-percentage').remove()
+          $('#@chartId-percentage').remove();
+            $('#@chartId-percentage-div').hide();
         }
     var currentData = @Html.Raw(JsonConvert.SerializeObject(currentData));
     var previousData = @Html.Raw(JsonConvert.SerializeObject(previousData));

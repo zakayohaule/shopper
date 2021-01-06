@@ -40,7 +40,7 @@
                     <h3 class="card-title">
                         @currentName Sales
                     </h3>
-                    <h4 class="pull-right">
+                    <h4 class="pull-right" id="@Model.ChartId-percentage-div">
                         <span id="@Model.ChartId-percentage">
                         </span>
                         @if (!previousName.IsNullOrEmpty())
@@ -121,7 +121,7 @@
                     <tbody>
                     @foreach (var product in query
                         .GroupBy(s => s.Sku.Product)
-                        .OrderByDescending(grouping => grouping.Sum(sale => sale.Quantity)).Take(10))
+                        .OrderByDescending(grouping => grouping.Sum(sale => sale.Sku.Sales.Sum(s => s.Quantity))).Take(10))
                     {
                         <tr>
                             <td>
@@ -129,7 +129,7 @@
                                 @product.Key.Name
                             </td>
                             <td>
-                                @product.Sum(sale => sale.Quantity)
+                                @product.Sum(sale => sale.Sku.Sales.Sum(s => s.Quantity))
                             </td>
                         </tr>
                     }
@@ -163,7 +163,7 @@
                     <tbody>
                     @foreach (var product in query
                         .GroupBy(s => s.Sku.Product)
-                        .OrderByDescending(grouping => grouping.Sum(sale => sale.Quantity * sale.Profit)).Take(10))
+                        .OrderByDescending(grouping => grouping.Sum(sale => sale.Sku.Sales.Sum(s => s.Quantity*s.Profit))).Take(10))
                     {
                         <tr>
                             <td>
@@ -171,7 +171,7 @@
                                 @product.Key.Name
                             </td>
                             <td>
-                                @product.Sum(sale => sale.Quantity * sale.Profit).ToString("N0")
+                                @product.Sum(sale => sale.Sku.Sales.Sum(s => s.Quantity*s.Profit)).ToString("N0")
                             </td>
                         </tr>
                     }

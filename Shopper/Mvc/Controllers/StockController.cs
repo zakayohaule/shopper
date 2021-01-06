@@ -176,5 +176,50 @@ namespace Shopper.Mvc.Controllers
                 LowStockAmount = skuViewModel.ReceiveLowStockAlert ? skuViewModel.LowStockQuantity : null
             };
         }
+
+        [AcceptVerbs("GET", Route = "validate-selling-price", Name = "ValidateSellingPrice")]
+        public IActionResult ValidateSellingPrice(string sellingPrice, string buyingPrice)
+        {
+            if (buyingPrice.IsNullOrEmpty())
+            {
+                return Json("Buying price is required.");
+            }
+            var sPrice = int.Parse(sellingPrice.Replace(",", ""));
+            var bPrice = int.Parse(buyingPrice.Replace(",", ""));
+            if (sPrice >= bPrice)
+            {
+                return Json(true);
+            }
+
+            return Json("Selling price can't be less than the buying price.");
+        }
+
+        [AcceptVerbs("GET", Route = "validate-discount-price", Name = "ValidateMaximumDiscount")]
+        public IActionResult ValidateDiscount(string maximumDiscount, string sellingPrice, string buyingPrice)
+        {
+            if (buyingPrice.IsNullOrEmpty())
+            {
+                return Json("Buying price is required.");
+            }
+
+            if (sellingPrice.IsNullOrEmpty())
+            {
+                return Json("Selling price is required.");
+            }
+            var sPrice = int.Parse(sellingPrice.Replace(",", ""));
+            var bPrice = int.Parse(buyingPrice.Replace(",", ""));
+            var dCount = int.Parse(maximumDiscount.Replace(",", ""));
+            var expectedProfit = sPrice - bPrice;
+            if (expectedProfit < 0)
+            {
+                return Json($"Invalid selling price");
+            }
+            if (dCount <= expectedProfit)
+            {
+                return Json(true);
+            }
+
+            return Json($"Maximum discount can't be more than the expected profit.({expectedProfit.ToString("N0")})");
+        }
     }
 }

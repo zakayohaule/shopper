@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Shared.Mvc.Entities;
 
 namespace Shopper.Mvc.ViewModels
@@ -27,10 +28,12 @@ namespace Shopper.Mvc.ViewModels
 
         [Display(Name = "Selling Price")]
         [Required]
+        [Remote(routeName: "ValidateSellingPrice", AdditionalFields = nameof(BuyingPrice))]
         public string SellingPrice { get; set; }
 
         [Display(Name = "Maximum Discount")]
         [Required]
+        [Remote(routeName: "ValidateMaximumDiscount", AdditionalFields = nameof(BuyingPrice)+","+nameof(SellingPrice))]
         public string MaximumDiscount { get; set; }
 
         [DisplayName("Receive low stock alert?")]

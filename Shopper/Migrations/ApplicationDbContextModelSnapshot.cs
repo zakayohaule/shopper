@@ -1112,6 +1112,10 @@ namespace Shopper.Migrations
                         .HasColumnName("address")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<string>("Code")
+                        .HasColumnName("code")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
                     b.Property<string>("ConnectionString")
                         .HasColumnName("connection_string")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -1163,6 +1167,9 @@ namespace Shopper.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
 
                     b.HasIndex("Domain")
                         .IsUnique();

@@ -109,7 +109,7 @@ namespace Shopper.Mvc.Controllers
         {
             try
             {
-                await _saleService.AddToInvoiceAsync(formViewModel, HttpContext.GetUserId());
+                await _saleService.AddToInvoiceAsync(formViewModel, HttpContext.GetUserId(), HttpContext.GetCurrentTenant());
             }
             catch (OutOfStockException e)
             {

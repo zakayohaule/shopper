@@ -19,6 +19,7 @@ namespace Shopper.Database.Seeders
                 new Tenant
                 {
                     Active = true,
+                    Code = "KEA",
                     Address = "Sinza Madukani",
                     Description = "Baby Shop",
                     Domain = $"kea",
@@ -31,6 +32,7 @@ namespace Shopper.Database.Seeders
                 new Tenant
                 {
                     Active = true,
+                    Code = "LCH",
                     Address = "Localhost",
                     Description = "Localhost shop",
                     Domain = $"zaks",

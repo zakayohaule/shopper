@@ -31,6 +31,10 @@ namespace Shopper.Migrations.AdminAppDb
                         .HasColumnName("address")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<string>("Code")
+                        .HasColumnName("code")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<string>("ConnectionString")
                         .HasColumnName("connection_string")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");

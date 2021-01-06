@@ -16,11 +16,11 @@ namespace Shopper.Services.Interfaces
         public Task<SaleInvoice> FindInvoiceByIdAsync(ulong id);
         public Task<Sale> FindSaleByIdAsync(ulong id);
         public IQueryable<Sale> FindSalesByInvoiceIdAsQueryable(ulong id);
-        public Task<SaleInvoice> AddToInvoiceAsync(SaleFormViewModel formViewModel, long userId);
+        public Task<SaleInvoice> AddToInvoiceAsync(SaleFormViewModel formViewModel, long userId, Tenant tenant);
         public Task<SaleInvoice> UpdateInvoiceDateAsync(SaleInvoice invoice);
         public Task<Sale> UpdateSaleAsync(Sale sale, SaleFormViewModel viewModel);
         public Task<SaleInvoice> GetInCompleteInvoiceAsync();
-        public Task<string> GenerateInvoiceNumberAsync();
+        public Task<string> GenerateInvoiceNumberAsync(string tenantCode);
         public Task<SaleInvoice> ConfirmPaymentAsync(SaleInvoice invoice);
         public Task<string> IsAvailableInStockAsync(int quantity, ulong skuId);
         public Task<SaleInvoice> CancelPaymentAsync(SaleInvoice invoice);

@@ -11,7 +11,7 @@
     }
     else
     {
-        url = $"{request.Scheme}://www.{request.Host.Host}";
+        url = $"{request.Scheme}://{request.Host.Host}";
     }
     var newProduct = new ProductFormModel
     {

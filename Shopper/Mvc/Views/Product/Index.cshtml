@@ -3,6 +3,16 @@
 
 @{
     Layout = "_Layout";
+    var request = @ViewContext.HttpContext.Request;
+    var url = "";
+    if (request.Host.Host.Contains("localhost"))
+    {
+        url = $"{request.Scheme}://{request.Host.Host}:{request.Host.Port}";
+    }
+    else
+    {
+        url = $"{request.Scheme}://www.{request.Host.Host}";
+    }
     var newProduct = new ProductFormModel
     {
         HasExpirationDate = false
@@ -150,14 +160,14 @@
         $('[name=ProductGroupId]').on("change",
          populateChildSelect("ProductGroupId",
           "ProductCategoryId",
-           "http://localhost:5000/product-categories/:parentId:/ajax",
+           '@url'+"/product-categories/:parentId:/ajax",
             "Product Category",
              "Product Group",
              "ProductTypeId"
              ));
         $('[name=roductGroupId]').on("change",
-                 populateChildSelect("ProductCategoryId", "ProductTypeId", "http://localhost:5000/product-types/:parentId:/ajax", "Product Type", "Product Category"));
-        /*new Select2Cascade($('[name=ProductGroupId]'), $('[name=ProductCategoryId]'), 'http://localhost:5000/product-categories/:parentId:/ajax');
-                new Select2Cascade($('[name=ProductCategoryId]'), $('[name=ProductTypeId]'), 'http://localhost:5000/product-types/:parentId:/ajax');*/
+                 populateChildSelect("ProductCategoryId", "ProductTypeId",
+                  '@url'+"/product-types/:parentId:/ajax",
+                   "Product Type", "Product Category"));
     </script>
 }

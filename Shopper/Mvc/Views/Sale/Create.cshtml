@@ -75,18 +75,21 @@
                             <td style="text-align: center">@sale.Price.ToString("N0")/-</td>
                             <td style="text-align: center">@((sale.Price * sale.Quantity).ToString("N0"))/-</td>
                             <td>
-                                <th:a onclick="openFormModal('@Url.Action("OpenSaleEditModal", new {id = sale.Id})',
+                                <th:permission name="sale_edit">
+                                    <th:a onclick="openFormModal('@Url.Action("OpenSaleEditModal", new {id = sale.Id})',
                                                      'Edit Sale', null,  true)"
-                                      class="btn btn-default btn-sm" title="Edit sale">
-                                    <i class="fas fa-edit"></i>
-                                </th:a>
-
-                                <th:a asp-action="DeleteSale"
-                                      asp-route-id="@sale.Id" class="btn btn-default btn-sm btn-delete" title="Delete sale">
-                                    @* <span class="badge badge-danger" title="Delete product"> *@
-                                    <i class="fas fa-trash"></i>
-                                    @* </span> *@
-                                </th:a>
+                                          class="btn btn-default btn-sm" title="Edit sale">
+                                        <i class="fas fa-edit"></i>
+                                    </th:a>
+                                </th:permission>
+                                <th:permission name="sale_delete">
+                                    <th:a asp-action="DeleteSale"
+                                          asp-route-id="@sale.Id" class="btn btn-default btn-sm btn-delete" title="Delete sale">
+                                        @* <span class="badge badge-danger" title="Delete product"> *@
+                                        <i class="fas fa-trash"></i>
+                                        @* </span> *@
+                                    </th:a>
+                                </th:permission>
                             </td>
                         </tr>
                     }

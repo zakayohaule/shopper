@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities;
@@ -25,7 +26,9 @@ namespace Shopper.Mvc.Controllers
         {
             Title = "Product Attributes";
 
-            var attributes = _attributeService.GetAllAttributes().ToList();
+            var attributes = _attributeService.GetAllAttributes()
+                .AsNoTracking()
+                .ToList();
 
             AddPageHeader(Title);
             return View(attributes);

@@ -25,7 +25,9 @@ namespace Shopper.Mvc.Controllers
         {
             Title = "Product Groups";
 
-            var productGroups = _productGroupService.GetAllProductGroups().ToList();
+            var productGroups = _productGroupService
+                .GetAllProductGroups()
+                .ToList();
 
             AddPageHeader(Title);
             return View(productGroups);

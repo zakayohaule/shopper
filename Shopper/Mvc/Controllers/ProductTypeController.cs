@@ -29,7 +29,10 @@ namespace Shopper.Mvc.Controllers
         {
             Title = "Product Types";
             AddPageHeader(Title);
-            var productTypes = _productTypeService.GetAllProductTypes().Include(pc => pc.ProductCategory)
+            var productTypes = _productTypeService
+                .GetAllProductTypes()
+                .AsNoTracking()
+                .Include(pc => pc.ProductCategory)
                 .ToList();
             ViewData["ProductCategories"] = _productCategoryService.GetProductCategorySelectListItems();
             return View(productTypes);

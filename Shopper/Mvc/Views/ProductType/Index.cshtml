@@ -15,29 +15,31 @@
 
 <div class="card card-default">
     <div class="card-header">
-        <a href="" data-toggle="modal" data-target="#add-product-type" class="btn btn-sm btn-primary float-right" title="Add User">
-            <i class="fas fa-user-plus"> Add</i>
-        </a>
+        <th:permission name="product_type_add">
+            <a href="" data-toggle="modal" data-target="#add-product-type" class="btn btn-sm btn-primary float-right" title="Add User">
+                <i class="fas fa-user-plus"> Add</i>
+            </a>
+
+            <div class="modal fade" id="add-product-type">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Product Type</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <th:form class="" asp-controller="ProductType" asp-action="Create" method="post">
+                            <div class="modal-body">
+                                <th:partial name="_ProductTypeForm" model="newProductType" view-data="ViewData"/>
+                            </div>
+                        </th:form>
+                    </div>
+                </div>
+            </div>
+        </th:permission>
     </div>
     <!-- /.card-header -->
-
-    <div class="modal fade" id="add-product-type">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Product Type</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <th:form class="" asp-controller="ProductType" asp-action="Create" method="post">
-                    <div class="modal-body">
-                        <th:partial name="_ProductTypeForm" model="newProductType" view-data="ViewData"/>
-                    </div>
-                </th:form>
-            </div>
-        </div>
-    </div>
 
     <div class="card-body table-responsive p-3">
         <table class="table table-sm table-hover">
@@ -61,13 +63,16 @@
                     <td>@productType.Name</td>
                     <td>@productType.ProductCategory.Name</td>
                     <td>
-                        <a href="#" onclick="openEditModal('@Url.Action("EditProductTypeModal", new {id = productType.Id})',
+                        <th:permission name="product_type_edit">
+                            <a href="#" onclick="openEditModal('@Url.Action("EditProductTypeModal", new {id = productType.Id})',
                          '@Url.Action("Update", new {id = productType.Id})',
                          'Edit Product Type')"
-                           class="btn btn-default btn-sm"
-                           title="Edit product type">
-                            <i class="fas fa-edit"></i>
-                        </a>
+                               class="btn btn-default btn-sm"
+                               title="Edit product type">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </th:permission>
+                        <th:permission name="product_type_delete">
                         <th:a asp-controller="ProductType"
                               asp-action="Delete"
                               asp-route-id="@productType.Id" class="btn-delete">
@@ -75,6 +80,7 @@
                                 <i class="fas fa-trash"></i>
                             </span>
                         </th:a>
+                        </th:permission>
                     </td>
                 </tr>
             }
@@ -85,7 +91,9 @@
 </div>
 <!-- /.card -->
 
-<th:partial name="Partials/_EditModal" model="newProductType" view-data="ViewData"/>
+<th:permission name="product_type_edit">
+    <th:partial name="Partials/_EditModal" model="newProductType" view-data="ViewData"/>
+</th:permission>
 
 @section scripts
 {

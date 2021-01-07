@@ -146,17 +146,15 @@
             var host = httpContext.Request.Host.Host;
 
             if (string.IsNullOrWhiteSpace(host)) return subDomain;
-            if (host.Contains("."))
+            if (!host.Contains(".")) return subDomain;
+            var domainParts = host.Split(".");
+            if (domainParts.Length == 2 || domainParts.Length == 3)
             {
-                var domainParts = host.Split(".");
-                if (domainParts.Length == 2)
-                {
-                    subDomain = domainParts[0];
-                }
-                else
-                {
-                    subDomain = domainParts[1];
-                }
+                subDomain = domainParts[0];
+            }
+            else
+            {
+                subDomain = domainParts[1];
             }
 
             return subDomain;

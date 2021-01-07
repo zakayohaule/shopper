@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +12,7 @@ using Shopper.Services.Interfaces;
 
 namespace Shopper.Mvc.Controllers
 {
-    [Microsoft.AspNetCore.Components.Route("business")]
+    [Route("business"), Authorize]
     public class BusinessController : BaseController
     {
         private readonly IBusinessService _businessService;

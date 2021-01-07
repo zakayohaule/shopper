@@ -34,6 +34,7 @@ namespace Shopper.Services.Implementations
         public List<SelectListItem> GetProductTypeSelectListItemsByCategoryId(ushort categoryId, ushort? selectedTypeId = null)
         {
             return GetAllProductTypes()
+                .AsNoTracking()
                 .Where(pt => pt.ProductCategoryId.Equals(categoryId))
                 .Select(pt => new SelectListItem
                 {

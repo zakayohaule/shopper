@@ -15,29 +15,31 @@
 
 <div class="card card-default">
     <div class="card-header">
-        <a href="" data-toggle="modal" data-target="#add-product-category" class="btn btn-sm btn-primary float-right" title="Add User">
-            <i class="fas fa-user-plus"> Add</i>
-        </a>
+        <th:permission name="product_category_add">
+            <a href="" data-toggle="modal" data-target="#add-product-category" class="btn btn-sm btn-primary float-right" title="Add User">
+                <i class="fas fa-user-plus"> Add</i>
+            </a>
+
+            <div class="modal fade" id="add-product-category">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Product Category</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <th:form class="" asp-controller="ProductCategory" asp-action="Create" method="post">
+                            <div class="modal-body">
+                                <th:partial name="_ProductCategoryForm" model="newProductCategory" view-data="ViewData"/>
+                            </div>
+                        </th:form>
+                    </div>
+                </div>
+            </div>
+        </th:permission>
     </div>
     <!-- /.card-header -->
-
-    <div class="modal fade" id="add-product-category">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Product Category</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <th:form class="" asp-controller="ProductCategory" asp-action="Create" method="post">
-                    <div class="modal-body">
-                        <th:partial name="_ProductCategoryForm" model="newProductCategory" view-data="ViewData"/>
-                    </div>
-                </th:form>
-            </div>
-        </div>
-    </div>
 
     <div class="card-body table-responsive p-3">
         <table class="table table-sm table-hover">
@@ -61,13 +63,16 @@
                     <td>@productCategory.Name</td>
                     <td>@productCategory.ProductGroup.Name</td>
                     <td>
-                        <a href="#" onclick="openEditModal('@Url.Action("EditProductCategoryModal", new {id = productCategory.Id})',
+                        <th:permission name="product_category_edit">
+                            <a href="#" onclick="openEditModal('@Url.Action("EditProductCategoryModal", new {id = productCategory.Id})',
                          '@Url.Action("Update", new {id = productCategory.Id})',
                          'Edit Product Category')"
-                           class="btn btn-default btn-sm"
-                           title="Edit product category">
-                            <i class="fas fa-edit"></i>
-                        </a>
+                               class="btn btn-default btn-sm"
+                               title="Edit product category">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </th:permission>
+                        <th:permission name="product_category_delete">
                         <th:a asp-controller="ProductCategory"
                               asp-action="Delete"
                               asp-route-id="@productCategory.Id" class="btn-delete">
@@ -75,6 +80,7 @@
                                 <i class="fas fa-trash"></i>
                             </span>
                         </th:a>
+                        </th:permission>
                     </td>
                 </tr>
             }
@@ -85,7 +91,9 @@
 </div>
 <!-- /.card -->
 
+<th:permission name="product_category_edit">
 <th:partial name="Partials/_EditModal" model="newProductCategory" view-data="ViewData"/>
+</th:permission>
 
 @section scripts
 {

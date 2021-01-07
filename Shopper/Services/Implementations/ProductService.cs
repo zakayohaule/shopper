@@ -75,6 +75,7 @@ namespace Shopper.Services.Implementations
         public List<SelectListItem> GetProductsSelectListItems()
         {
             return _dbContext.Products
+                .AsNoTracking()
                 .Select(p => new SelectListItem
                 {
                     Value = p.Id.ToString(),
@@ -85,6 +86,7 @@ namespace Shopper.Services.Implementations
         public List<Product> GetStockedProducts()
         {
             return GetAllProducts()
+                .AsNoTracking()
                 .Include(p => p.ProductType)
                 .Include(p => p.Skus)
                 .ThenInclude(sku => sku.SkuAttributes)
@@ -115,6 +117,7 @@ namespace Shopper.Services.Implementations
         {
             return await _dbContext
                 .Products
+                .AsNoTracking()
                 .Include(p => p.Attributes)
                 .ThenInclude(pa => pa.Attribute)
                 .ThenInclude(ao => ao.AttributeOptions)
@@ -125,6 +128,7 @@ namespace Shopper.Services.Implementations
         {
             var product = await _dbContext
                 .Products
+                .AsNoTracking()
                 .Include(p => p.Skus)
                 .ThenInclude(sku => sku.SkuAttributes)
                 .ThenInclude(skuAtt => skuAtt.Option)

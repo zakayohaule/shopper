@@ -29,7 +29,11 @@ namespace Shopper.Mvc.Controllers
         {
             Title = "Expenditures";
             AddPageHeader(Title);
-            var expenditures = _expenditureService.GetExpenditureAsQuerable().OrderByDescending(e => e.Date).ToList();
+            var expenditures = _expenditureService
+                .GetExpenditureAsQuerable()
+                .AsNoTracking()
+                .OrderByDescending(e => e.Date)
+                .ToList();
             ViewData["ExpenditureTypes"] = _expenditureTypeService.GetExpenditureTypeSelectListItems();
             return View(expenditures);
         }

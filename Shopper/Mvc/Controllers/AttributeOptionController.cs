@@ -35,7 +35,10 @@ namespace Shopper.Mvc.Controllers
 
             Title = $"{attribute.Name} Options";
 
-            var attributeOptions = _attributeOptionService.GetAllAttributeOptionsByAttribute(attributeId).Include(ao => ao.Attribute).ToList();
+            var attributeOptions = _attributeOptionService.GetAllAttributeOptionsByAttribute(attributeId)
+                .AsNoTracking()
+                .Include(ao => ao.Attribute)
+                .ToList();
 
             AddPageHeader(Title);
             return View(attributeOptions);

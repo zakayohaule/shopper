@@ -24,6 +24,7 @@ namespace Shopper.Services.Implementations
         public async Task<List<SaleInvoice>> GetSaleInvoicesAsync()
         {
             return await _dbContext.SaleInvoices
+                .AsNoTracking()
                 .Where(si => si.IsCompleted)
                 .OrderByDescending(si => si.Date)
                 .ToListAsync();
@@ -32,6 +33,7 @@ namespace Shopper.Services.Implementations
         public async Task<List<SelectListItem>> GetProductsSelectListItemsForSaleASync()
         {
             return await _dbContext.Products
+                .AsNoTracking()
                 .Include(prod => prod.Skus)
                 .Where(prod => prod.Skus.Any(sku => sku.RemainingQuantity > 0))
                 .Select(prod => new SelectListItem
@@ -187,6 +189,7 @@ namespace Shopper.Services.Implementations
             if (await _dbContext.SaleInvoices.AnyAsync(si => !si.IsCompleted))
             {
                 return await _dbContext.SaleInvoices
+                    .AsNoTracking()
                     .Include(si => si.Sales)
                     .ThenInclude(s => s.Sku)
                     .ThenInclude(s => s.Product)

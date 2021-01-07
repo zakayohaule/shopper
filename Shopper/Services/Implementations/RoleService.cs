@@ -69,6 +69,7 @@ namespace Shopper.Services.Implementations
         public RolePermissionViewModel RolePermissions(long roleId)
         {
             var role = _dbContext.Roles.Where(role => role.Id == roleId).Select(role => new {role.Name, role.Id})
+                .AsNoTracking()
                 .First();
             var modules = _dbContext
                 .Modules
@@ -76,6 +77,7 @@ namespace Shopper.Services.Implementations
                 .Include(module => module.Permissions)
                 .ToList();
             var roleClaims = _dbContext.RoleClaims.Where(claim => claim.RoleId == roleId)
+                .AsNoTracking()
                 .Select(claim => claim.ClaimValue).ToList();
 
             return new RolePermissionViewModel

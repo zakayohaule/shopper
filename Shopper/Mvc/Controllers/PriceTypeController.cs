@@ -25,7 +25,9 @@ namespace Shopper.Mvc.Controllers
         {
             Title = "Price Types";
 
-            var priceTypes = _priceTypeService.GetAllPriceTypes().ToList();
+            var priceTypes = _priceTypeService
+                .GetAllPriceTypes()
+                .ToList();
 
             AddPageHeader(Title);
             return View(priceTypes);

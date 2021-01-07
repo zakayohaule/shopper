@@ -25,7 +25,9 @@ namespace Shopper.Mvc.Controllers
         {
             Title = "Expenditure types";
 
-            var expenditureTypes = _expenditureTypeService.GetAllExpenditureTypes().ToList();
+            var expenditureTypes = _expenditureTypeService.
+                GetAllExpenditureTypes()
+                .ToList();
 
             AddPageHeader(Title);
             return View(expenditureTypes);

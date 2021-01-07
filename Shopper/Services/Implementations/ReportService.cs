@@ -24,6 +24,7 @@ namespace Shopper.Services.Implementations
         public async Task<List<Sale>> GetThisYearSalesAsync()
         {
             return await _dbContext.Sales
+                .AsNoTracking()
                 .Include(s => s.SaleInvoice)
                 .Include(s => s.Sku)
                 .ThenInclude(s => s.Product)
@@ -34,6 +35,7 @@ namespace Shopper.Services.Implementations
         public async Task<List<Expenditure>> GetThisYearExpenditure()
         {
             return await _dbContext.Expenditures
+                .AsNoTracking()
                 .Where(ex => ex.Date.Year == DateTime.Today.Year)
                 .ToListAsync();
         }

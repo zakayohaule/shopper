@@ -21,7 +21,7 @@ namespace Shopper.Services.Implementations
 
         public IQueryable<Attribute> GetAllAttributes()
         {
-            return _dbContext.Attributes.AsQueryable();
+            return _dbContext.Attributes.AsQueryable().AsNoTracking();
         }
 
         public List<SelectListItem> GetAllAttributeSelectListItems()

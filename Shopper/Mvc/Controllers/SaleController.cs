@@ -36,6 +36,7 @@ namespace Shopper.Mvc.Controllers
         {
             AddPageHeader("Invoice sales list");
             var invoice = await _saleService.GetInvoiceAsQueryable(id)
+                .AsNoTracking()
                 .Include(si => si.Sales)
                 .ThenInclude(s => s.Sku)
                 .ThenInclude(s => s.Product)
@@ -201,6 +202,7 @@ namespace Shopper.Mvc.Controllers
         private async Task<SaleFormViewModel> GetSaleFormModalFromSaleIdAsync(uint id)
         {
             var skus = await _saleService.GetProductSkus(id)
+                .AsNoTracking()
                 .Include(sku => sku.SkuAttributes)
                 .ThenInclude(skuAtt => skuAtt.Option)
                 .ToListAsync();

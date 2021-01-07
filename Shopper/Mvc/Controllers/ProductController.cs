@@ -29,6 +29,7 @@ namespace Shopper.Mvc.Controllers
             Title = "Products";
             AddPageHeader("Manage products");
             var products = _productService.GetAllProducts()
+                .AsNoTracking()
                 .Include(p => p.ProductType)
                 .Include(p => p.Attributes)
                 .ThenInclude(pa => pa.Attribute)

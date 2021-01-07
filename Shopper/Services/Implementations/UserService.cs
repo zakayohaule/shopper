@@ -116,7 +116,7 @@
                 .IncludeNumeric()
                 .IncludeUppercase()
                 .IncludeSpecial()
-                .Next();;
+                .Next();
         }
 
         public async Task<string> ChangePasswordAsync(AppUser user)

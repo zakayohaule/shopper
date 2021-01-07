@@ -24,13 +24,11 @@ namespace Shopper.Mvc.Controllers
         [HttpGet("test")]
         public async Task<IActionResult> Test(string host)
         {
-            return Ok(Request.Host);
             var subDomain = string.Empty;
-
             if (host.Contains("."))
             {
                 var domainParts = host.Split(".");
-                if (domainParts.Length == 2)
+                if (domainParts.Length == 2 || domainParts.Length == 3)
                 {
                     subDomain = domainParts[0];
                 }

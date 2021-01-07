@@ -24,6 +24,7 @@ namespace Shopper.Mvc.Controllers
         [HttpGet("test")]
         public async Task<IActionResult> Test(string host)
         {
+            return Ok(Request.Protocol);
             var subDomain = string.Empty;
             if (host.Contains("."))
             {

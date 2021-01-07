@@ -21,7 +21,7 @@ namespace Shopper.Services.Implementations
 
         public IEnumerable<ProductGroup> GetAllProductGroups()
         {
-            return _dbContext.ProductGroups.AsQueryable();
+            return _dbContext.ProductGroups.AsNoTracking().AsQueryable();
         }
 
         public List<SelectListItem> GetProductGroupSelectListItems()

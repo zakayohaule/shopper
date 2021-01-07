@@ -3,7 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+    using Microsoft.EntityFrameworkCore;
+    using Newtonsoft.Json;
 using Serilog;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities.Identity;
@@ -39,6 +40,7 @@ namespace Shopper.Mvc.Controllers
             AddPageHeader("Manage users");
             var users = _userService
                 .GetAllUsers()
+                .AsNoTracking()
                 .Select(user => new UserViewModel
                 {
                     Id = user.Id,
@@ -159,7 +161,7 @@ namespace Shopper.Mvc.Controllers
             return Json(true);
         }
 
-        [HttpPost("{id}/roles")]
+        [HttpPost("{id}/roles"), Permission("user_assign_role")]
         public async Task<IActionResult> UpdateUserRoles(long id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
@@ -175,7 +177,7 @@ namespace Shopper.Mvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet("{id}/open-edit-modal")]
+        [HttpGet("{id}/open-edit-modal"), Permission("user_edit")]
         public async Task<JsonResult> EditUserModal(long id)
         {
             var user = await _userService.FindByIdAsync(id);

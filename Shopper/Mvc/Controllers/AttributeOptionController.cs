@@ -35,7 +35,10 @@ namespace Shopper.Mvc.Controllers
 
             Title = $"{attribute.Name} Options";
 
-            var attributeOptions = _attributeOptionService.GetAllAttributeOptionsByAttribute(attributeId).Include(ao => ao.Attribute).ToList();
+            var attributeOptions = _attributeOptionService.GetAllAttributeOptionsByAttribute(attributeId)
+                .AsNoTracking()
+                .Include(ao => ao.Attribute)
+                .ToList();
 
             AddPageHeader(Title);
             return View(attributeOptions);
@@ -102,7 +105,7 @@ namespace Shopper.Mvc.Controllers
             return RedirectToAction(nameof(Index), new {attributeId = attributeOption?.AttributeId});
         }
 
-        [HttpGet("{id}/open-edit-modal")]
+        [HttpGet("{id}/open-edit-modal"), Permission("attribute_option_edit")]
         public async Task<JsonResult> EditAttributeOptionModal(ushort id)
         {
             var attributeOption = await _attributeOptionService.FindByIdAsync(id);
@@ -110,7 +113,8 @@ namespace Shopper.Mvc.Controllers
             return Json(attributeOption, new JsonSerializerSettings{ContractResolver = null});
         }
 
-        [AcceptVerbs("GET", Route = "validate-attribute-option-name", Name = "ValidateAttributeOptionName")]
+        [AcceptVerbs("GET", Route = "validate-attribute-option-name", Name = "ValidateAttributeOptionName"),
+         Permission("attribute_option_create")]
         public IActionResult ExistsByDisplayName(string name, ushort id)
         {
             return _attributeOptionService.IsDuplicate(name, id)

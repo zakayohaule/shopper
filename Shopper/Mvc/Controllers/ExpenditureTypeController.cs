@@ -25,7 +25,9 @@ namespace Shopper.Mvc.Controllers
         {
             Title = "Expenditure types";
 
-            var expenditureTypes = _expenditureTypeService.GetAllExpenditureTypes().ToList();
+            var expenditureTypes = _expenditureTypeService.
+                GetAllExpenditureTypes()
+                .ToList();
 
             AddPageHeader(Title);
             return View(expenditureTypes);
@@ -89,7 +91,7 @@ namespace Shopper.Mvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet("{id}/open-edit-modal")]
+        [HttpGet("{id}/open-edit-modal"), Permission("expenditure_type_edit")]
         public async Task<JsonResult> EditExpenditureTypeModal(ushort id)
         {
             var expenditureType = await _expenditureTypeService.FindByIdAsync(id);

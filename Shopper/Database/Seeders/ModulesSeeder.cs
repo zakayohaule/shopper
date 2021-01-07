@@ -23,6 +23,7 @@ namespace Shopper.Database.Seeders
                 new Module {Name = "Sale Management"},
                 new Module {Name = "Expenditure Management"},
                 new Module {Name = "Business Info Management"},
+                new Module {Name = "Dashboard"}
             }.ToList();
 
             modules.ForEach(pg =>

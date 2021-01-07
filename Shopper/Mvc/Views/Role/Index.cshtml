@@ -13,9 +13,29 @@
 
 <div class="card card-default">
     <div class="card-header">
-        <a href="" data-toggle="modal" data-target="#add-user" class="btn btn-sm btn-primary float-right" title="Add User">
-            <i class="fas fa-user-plus"> Add</i>
-        </a>
+        <th:permission name="role_add">
+            <a href="" data-toggle="modal" data-target="#add-user" class="btn btn-sm btn-primary float-right" title="Add User">
+                <i class="fas fa-user-plus"> Add</i>
+            </a>
+
+            <div class="modal fade" id="add-user">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Role</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <th:form class="" asp-controller="Role" asp-action="Create" method="post">
+                            <div class="modal-body">
+                                <th:partial name="_RoleForm" model="newRole"/>
+                            </div>
+                        </th:form>
+                    </div>
+                </div>
+            </div>
+        </th:permission>
     </div>
     <!-- /.card-header -->
 
@@ -39,25 +59,31 @@
                     <td>@index</td>
                     <td>@role.DisplayName</td>
                     <td>
-                        <th:a asp-controller="Role" asp-action="RolePermissions" asp-route-id="@role.Id" title="Role permissions" class="btn btn-sm btn-default">
-                            <i class="fa fa-list-ul"></i>
-                        </th:a>
-                        <a href="#" onclick="openEditModal('@Url.Action("EditRoleModal", new {id = role.Id})',
+                        <th:permission name="role_permissions_save">
+                            <th:a asp-controller="Role" asp-action="RolePermissions" asp-route-id="@role.Id" title="Role permissions" class="btn btn-sm btn-default">
+                                <i class="fa fa-list-ul"></i>
+                            </th:a>
+                        </th:permission>
+                        <th:permission name="role_edit">
+                            <a href="#" onclick="openEditModal('@Url.Action("EditRoleModal", new {id = role.Id})',
                          '@Url.Action("Update", new {id = role.Id})',
                          'Edit Role')"
-                           title="Edit role"
-                           class="btn btn-sm btn-default">
-                            @* <span class="badge badge-warning" > *@
-                            <i class="fas fa-edit"></i>
-                            @* </span> *@
-                        </a>
-                        <th:a asp-controller="Role"
-                              asp-action="Delete"
-                              asp-route-id="@role.Id" class="btn btn-sm btn-default btn-delete" title="Delete role">
-                            @* <span class="badge badge-danger" > *@
-                            <i class="fas fa-trash"></i>
-                            @* </span> *@
-                        </th:a>
+                               title="Edit role"
+                               class="btn btn-sm btn-default">
+                                @* <span class="badge badge-warning" > *@
+                                <i class="fas fa-edit"></i>
+                                @* </span> *@
+                            </a>
+                        </th:permission>
+                        <th:permission name="role_delete">
+                            <th:a asp-controller="Role"
+                                  asp-action="Delete"
+                                  asp-route-id="@role.Id" class="btn btn-sm btn-default btn-delete" title="Delete role">
+                                @* <span class="badge badge-danger" > *@
+                                <i class="fas fa-trash"></i>
+                                @* </span> *@
+                            </th:a>
+                        </th:permission>
                     </td>
                 </tr>
             }
@@ -68,24 +94,9 @@
 </div>
 <!-- /.card -->
 
-<div class="modal fade" id="add-user">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Add Role</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <th:form class="" asp-controller="Role" asp-action="Create" method="post">
-                <div class="modal-body">
-                    <th:partial name="_RoleForm" model="newRole"/>
-                </div>
-            </th:form>
-        </div>
-    </div>
-</div>
-<th:partial name="Partials/_EditModal" model="newRole" view-data="ViewData"/>
+<th:permission name="role_edit">
+    <th:partial name="Partials/_EditModal" model="newRole" view-data="ViewData"/>
+</th:permission>
 
 @section scripts
 {

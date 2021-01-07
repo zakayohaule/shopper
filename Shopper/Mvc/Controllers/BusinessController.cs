@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +12,7 @@ using Shopper.Services.Interfaces;
 
 namespace Shopper.Mvc.Controllers
 {
-    [Microsoft.AspNetCore.Components.Route("business")]
+    [Route("business"), Authorize]
     public class BusinessController : BaseController
     {
         private readonly IBusinessService _businessService;
@@ -57,8 +58,10 @@ namespace Shopper.Mvc.Controllers
                 : Json(true);
         }
 
+        // @todo validate all image uploads
+
         [AcceptVerbs("GET", Route = "validate-image-extension", Name = "ValidateImageExtension")]
-        public IActionResult ExistsByDisplayName(string image, [FromServices] IConfiguration configuration)
+        public IActionResult ValidateImageExtension(string image, [FromServices] IConfiguration configuration)
         {
             var acceptedImageFormatsKvp = configuration.GetSection("ImageFormats").AsEnumerable();
             var acceptedImageFormats = acceptedImageFormatsKvp.Where(s => s.Value!=null).Select(s => s.Value).ToList();

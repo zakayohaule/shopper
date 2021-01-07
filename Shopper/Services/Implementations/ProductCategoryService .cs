@@ -27,6 +27,7 @@ namespace Shopper.Services.Implementations
         public List<SelectListItem> GetProductCategorySelectListItems()
         {
             return GetAllProductCategories()
+                .AsNoTracking()
                 .Include(pg => pg.ProductGroup)
                 .Select(pg => new SelectListItem {Value = pg.Id.ToString(), Text = $"{pg.ProductGroup.Name} - {pg.Name}"}).ToList();
         }
@@ -85,6 +86,7 @@ namespace Shopper.Services.Implementations
         {
             return _dbContext
                 .ProductCategories
+                .AsNoTracking()
                 .Any(pg => pg.Name.Equals(name, StringComparison.OrdinalIgnoreCase) &&
                            pg.Id != id);
         }

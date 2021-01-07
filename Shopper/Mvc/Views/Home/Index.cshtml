@@ -49,53 +49,55 @@
     </style>
 }
 
-<!-- Left col -->
-<section class="col-lg-12 connectedSortable">
-    <!-- Custom tabs (Charts with tabs)-->
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">
-                <i class="fas fa-chart-pie mr-1"></i>
-                Summary
-            </h3>
-            <div class="card-tools">
-                <ul class="nav nav-pills ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#today-summary" data-toggle="tab">Today</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#week-summary" data-toggle="tab">This Week</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#month-summary" data-toggle="tab">This Month</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#annual-summary" data-toggle="tab">This Year</a>
-                    </li>
-                </ul>
-            </div>
-        </div><!-- /.card-header -->
-        <div class="card-body">
-            <div class="tab-content p-0">
-                <!-- Morris chart - Sales -->
-                <div class="chart tab-pane active" id="today-summary">
-                    <th:partial name="_Summary" model="model.Summaries.SingleOrDefault(s => s.SummaryType == SummaryType.Today)"/>
+<th:permission name="summary_view">
+    <!-- Left col -->
+    <section class="col-lg-12 connectedSortable">
+        <!-- Custom tabs (Charts with tabs)-->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-chart-pie mr-1"></i>
+                    Summary
+                </h3>
+                <div class="card-tools">
+                    <ul class="nav nav-pills ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#today-summary" data-toggle="tab">Today</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#week-summary" data-toggle="tab">This Week</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#month-summary" data-toggle="tab">This Month</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#annual-summary" data-toggle="tab">This Year</a>
+                        </li>
+                    </ul>
                 </div>
+            </div><!-- /.card-header -->
+            <div class="card-body">
+                <div class="tab-content p-0">
+                    <!-- Morris chart - Sales -->
+                    <div class="chart tab-pane active" id="today-summary">
+                        <th:partial name="_Summary" model="model.Summaries.SingleOrDefault(s => s.SummaryType == SummaryType.Today)"/>
+                    </div>
 
-                <div class="chart tab-pane" id="week-summary">
-                    <th:partial name="_Summary" model="model.Summaries.SingleOrDefault(s => s.SummaryType == SummaryType.Week)"/>
+                    <div class="chart tab-pane" id="week-summary">
+                        <th:partial name="_Summary" model="model.Summaries.SingleOrDefault(s => s.SummaryType == SummaryType.Week)"/>
+                    </div>
+                    <div class="chart tab-pane" id="month-summary">
+                        <th:partial name="_Summary" model="model.Summaries.SingleOrDefault(s => s.SummaryType == SummaryType.Month)"/>
+                    </div>
+                    <div class="chart tab-pane" id="annual-summary">
+                        <th:partial name="_Summary" model="model.Summaries.SingleOrDefault(s => s.SummaryType == SummaryType.Year)"/>
+                    </div>
                 </div>
-                <div class="chart tab-pane" id="month-summary">
-                    <th:partial name="_Summary" model="model.Summaries.SingleOrDefault(s => s.SummaryType == SummaryType.Month)"/>
-                </div>
-                <div class="chart tab-pane" id="annual-summary">
-                    <th:partial name="_Summary" model="model.Summaries.SingleOrDefault(s => s.SummaryType == SummaryType.Year)"/>
-                </div>
-            </div>
-        </div><!-- /.card-body -->
-    </div>
-    <!-- /.card -->
-</section>
+            </div><!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </section>
+</th:permission>
 <div class="col-lg-12 chart-summary" id="today-chart">
     <th:partial name="_Chart" model="todayChartModel"/>
     @*<div class="row">

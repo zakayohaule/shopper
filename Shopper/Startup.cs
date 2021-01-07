@@ -21,6 +21,8 @@ using Shopper.Extensions.Configurations;
 [assembly: AspMvcPartialViewLocationFormat(@"~\Mvc\Views\Shared\Partials\Components\{0}.cshtml")]
 namespace Shopper
 {
+    // @todo Add a suggestion feature;
+
     public class Startup
     {
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)

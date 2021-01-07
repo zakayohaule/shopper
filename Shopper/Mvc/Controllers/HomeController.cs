@@ -23,7 +23,6 @@
 
         public async Task<IActionResult> Index()
         {
-
             var sales = await _reportService.GetThisYearSalesAsync();
 
             // return Ok(sales.Where(s => s.Sku.ProductId == 2).Select(s => s.Sku.Sales).ToList());
@@ -39,11 +38,6 @@
 
             // return Ok(dashboardModal.Sales.ToArray());
             return View(dashboardModal);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

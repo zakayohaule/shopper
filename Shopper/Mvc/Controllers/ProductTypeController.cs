@@ -29,7 +29,10 @@ namespace Shopper.Mvc.Controllers
         {
             Title = "Product Types";
             AddPageHeader(Title);
-            var productTypes = _productTypeService.GetAllProductTypes().Include(pc => pc.ProductCategory)
+            var productTypes = _productTypeService
+                .GetAllProductTypes()
+                .AsNoTracking()
+                .Include(pc => pc.ProductCategory)
                 .ToList();
             ViewData["ProductCategories"] = _productCategoryService.GetProductCategorySelectListItems();
             return View(productTypes);
@@ -97,7 +100,7 @@ namespace Shopper.Mvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet("{id}/open-edit-modal")]
+        [HttpGet("{id}/open-edit-modal"), Permission("product_type_edit")]
         public async Task<JsonResult> EditProductTypeModal(ushort id)
         {
             var productType = await _productTypeService.FindByIdAsync(id);
@@ -116,16 +119,8 @@ namespace Shopper.Mvc.Controllers
         [HttpGet("{categoryId}/ajax/{selectedTypeId?}")]
         public IActionResult ProductTypeByCategoryIdAjax(ushort categoryId, ushort? selectedTypeId)
         {
-
-            var si = _productTypeService.GetProductTypeSelectListItemsByCategoryId(categoryId, selectedTypeId).ToList();
-            return Json(si);
-            /*var dict = new Dictionary<string, string>();
-            si.ForEach(item =>
-            {
-                dict.Add(item.Value, item.Text);
-            });
-
-            return Json(dict);*/
+            var selectListItems = _productTypeService.GetProductTypeSelectListItemsByCategoryId(categoryId, selectedTypeId).ToList();
+            return Json(selectListItems);
         }
     }
 }

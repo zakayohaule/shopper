@@ -24,6 +24,7 @@ namespace Shopper.Services.Implementations
         public async Task<List<Sale>> GetThisYearSalesAsync()
         {
             return await _dbContext.Sales
+                .AsNoTracking()
                 .Include(s => s.SaleInvoice)
                 .Include(s => s.Sku)
                 .ThenInclude(s => s.Product)
@@ -34,6 +35,7 @@ namespace Shopper.Services.Implementations
         public async Task<List<Expenditure>> GetThisYearExpenditure()
         {
             return await _dbContext.Expenditures
+                .AsNoTracking()
                 .Where(ex => ex.Date.Year == DateTime.Today.Year)
                 .ToListAsync();
         }
@@ -72,10 +74,10 @@ namespace Shopper.Services.Implementations
             return new DashboardSummary
             {
                 SummaryType = SummaryType.Today,
-                ItemsSold = (uint) itemsSold,
-                Sales = (ulong) totalSales,
-                Expenditure = (ulong) expenditure,
-                Profit = (ulong) (profit - expenditure)
+                ItemsSold = itemsSold,
+                Sales = totalSales,
+                Expenditure = expenditure,
+                Profit = profit - expenditure
             };
         }
 
@@ -96,10 +98,10 @@ namespace Shopper.Services.Implementations
             return new DashboardSummary
             {
                 SummaryType = SummaryType.Week,
-                ItemsSold = (uint) itemsSold,
-                Sales = (ulong) totalSales,
-                Expenditure = (ulong) expenditure,
-                Profit = (ulong) (profit - expenditure)
+                ItemsSold = itemsSold,
+                Sales = totalSales,
+                Expenditure = expenditure,
+                Profit = (profit - expenditure)
             };
         }
 
@@ -120,10 +122,10 @@ namespace Shopper.Services.Implementations
             return new DashboardSummary
             {
                 SummaryType = SummaryType.Month,
-                ItemsSold = (uint) itemsSold,
-                Sales = (ulong) totalSales,
-                Expenditure = (ulong) expenditure,
-                Profit = (ulong) (profit - expenditure)
+                ItemsSold = itemsSold,
+                Sales = totalSales,
+                Expenditure = expenditure,
+                Profit = (profit - expenditure)
             };
         }
 
@@ -144,10 +146,10 @@ namespace Shopper.Services.Implementations
             return new DashboardSummary
             {
                 SummaryType = SummaryType.Year,
-                ItemsSold = (uint) itemsSold,
-                Sales = (ulong) totalSales,
-                Expenditure = (ulong) expenditure,
-                Profit = (ulong) (profit - expenditure)
+                ItemsSold = itemsSold,
+                Sales = totalSales,
+                Expenditure = expenditure,
+                Profit = (profit - expenditure)
             };
         }
     }

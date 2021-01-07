@@ -14,29 +14,31 @@
 
 <div class="card with-border">
     <div class="card-header">
-        <a href="" data-toggle="modal" data-target="#add-product-group" class="btn btn-sm btn-primary float-right" title="Add User">
-            <i class="fas fa-user-plus"> Add</i>
-        </a>
+        <th:permission name="product_group_add">
+            <a href="" data-toggle="modal" data-target="#add-product-group" class="btn btn-sm btn-primary float-right" title="Add User">
+                <i class="fas fa-user-plus"> Add</i>
+            </a>
+
+            <div class="modal fade" id="add-product-group">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Product Group</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <th:form class="" asp-controller="ProductGroup" asp-action="Create" method="post">
+                            <div class="modal-body">
+                                <th:partial name="_ProductGroupForm" model="newProductGroup"/>
+                            </div>
+                        </th:form>
+                    </div>
+                </div>
+            </div>
+        </th:permission>
     </div>
     <!-- /.card-header -->
-
-    <div class="modal fade" id="add-product-group">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Product Group</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <th:form class="" asp-controller="ProductGroup" asp-action="Create" method="post">
-                    <div class="modal-body">
-                        <th:partial name="_ProductGroupForm" model="newProductGroup"/>
-                    </div>
-                </th:form>
-            </div>
-        </div>
-    </div>
 
     <div class="card-body table-responsive p-3">
         <table class="table table-sm table-hover dt-table">
@@ -58,22 +60,26 @@
                     <td>@index</td>
                     <td>@productGroup.Name</td>
                     <td>
-                        <a href="#" onclick="openEditModal('@Url.Action("EditProductGroupModal", new {id = productGroup.Id})',
-                         '@Url.Action("Update", new {id = productGroup.Id})',
-                         'Edit Product Group')"
-                           class="btn btn-default btn-sm"
-                           title="Edit product group">
-                            @* <span class="badge badge-warning" title="Edit product group"> *@
-                            <i class="fas fa-edit"></i>
-                            @* </span> *@
-                        </a>
-                        <th:a asp-controller="ProductGroup"
-                              asp-action="Delete"
-                              asp-route-id="@productGroup.Id" class="btn btn-default btn-sm btn-delete" title="Delete product group">
-                            @* <span class="badge badge-danger" title="Delete product group"> *@
-                            <i class="fas fa-trash"></i>
-                            @* </span> *@
-                        </th:a>
+                        <th:permission name="product_group_edit">
+                            <a href="#" onclick="openEditModal('@Url.Action("EditProductGroupModal", new {id = productGroup.Id})',
+                                                     '@Url.Action("Update", new {id = productGroup.Id})',
+                                                     'Edit Product Group')"
+                               class="btn btn-default btn-sm"
+                               title="Edit product group">
+                                @* <span class="badge badge-warning" title="Edit product group"> *@
+                                <i class="fas fa-edit"></i>
+                                @* </span> *@
+                            </a>
+                        </th:permission>
+                        <th:permission name="product_group_delete">
+                            <th:a asp-controller="ProductGroup"
+                                  asp-action="Delete"
+                                  asp-route-id="@productGroup.Id" class="btn btn-default btn-sm btn-delete" title="Delete product group">
+                                @* <span class="badge badge-danger" title="Delete product group"> *@
+                                <i class="fas fa-trash"></i>
+                                @* </span> *@
+                            </th:a>
+                        </th:permission>
                     </td>
                 </tr>
             }
@@ -83,8 +89,9 @@
     <!-- /.card-body -->
 </div>
 <!-- /.card -->
-
-<th:partial name="Partials/_EditModal" model="newProductGroup" view-data="ViewData"/>
+<th:permission name="product_group_edit">
+    <th:partial name="Partials/_EditModal" model="newProductGroup" view-data="ViewData"/>
+</th:permission>
 
 @section scripts
 {

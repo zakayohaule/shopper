@@ -21,7 +21,7 @@ namespace Shopper.Services.Implementations
 
         public IEnumerable<PriceType> GetAllPriceTypes()
         {
-            return _dbContext.PriceTypes.AsQueryable();
+            return _dbContext.PriceTypes.AsQueryable().AsNoTracking();
         }
 
         public List<SelectListItem> GetPriceTypeSelectListItems()

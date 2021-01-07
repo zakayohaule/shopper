@@ -70,18 +70,21 @@
                         <td>@sku.Expiration.ExpirationDate.ToString("dd-MM-yyyy")</td>
                     }
                     <td>
-                        <th:a onclick="openFormModal('@Url.Action("OpenProductSkusEditModal", new {id = sku.Id})',
+                        <th:permission name="stock_edit">
+                            <th:a onclick="openFormModal('@Url.Action("OpenProductSkusEditModal", new {id = sku.Id})',
                          'Edit @Model.Name stock item', null,  true)"
-                              class="btn btn-default btn-sm" title="Edit entry">
-                            <i class="fas fa-edit"></i>
-                        </th:a>
-
-                        <th:a asp-action="DeleteSku"
-                              asp-route-id="@sku.Id" class="btn btn-default btn-sm btn-delete" title="Delete entry">
-                            @* <span class="badge badge-danger" title="Delete product"> *@
-                            <i class="fas fa-trash"></i>
-                            @* </span> *@
-                        </th:a>
+                                  class="btn btn-default btn-sm" title="Edit entry">
+                                <i class="fas fa-edit"></i>
+                            </th:a>
+                        </th:permission>
+                        <th:permission name="stock_delete">
+                            <th:a asp-action="DeleteSku"
+                                  asp-route-id="@sku.Id" class="btn btn-default btn-sm btn-delete" title="Delete entry">
+                                @* <span class="badge badge-danger" title="Delete product"> *@
+                                <i class="fas fa-trash"></i>
+                                @* </span> *@
+                            </th:a>
+                        </th:permission>
                     </td>
                 </tr>
             }

@@ -29,7 +29,10 @@ namespace Shopper.Mvc.Controllers
         {
             Title = "Product Categories";
             AddPageHeader(Title);
-            var productCategories = _productCategoryService.GetAllProductCategories().Include(pc => pc.ProductGroup)
+            var productCategories = _productCategoryService
+                .GetAllProductCategories()
+                .AsNoTracking()
+                .Include(pc => pc.ProductGroup)
                 .ToList();
             ViewData["ProductGroups"] = _productGroupService.GetProductGroupSelectListItems();
             return View(productCategories);
@@ -97,7 +100,7 @@ namespace Shopper.Mvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet("{id}/open-edit-modal")]
+        [HttpGet("{id}/open-edit-modal"), Permission("product_category_edit")]
         public async Task<JsonResult> EditProductCategoryModal(ushort id)
         {
             var productCategory = await _productCategoryService.FindByIdAsync(id);
@@ -118,13 +121,6 @@ namespace Shopper.Mvc.Controllers
         {
             var si = _productCategoryService.GetProductCategorySelectListItemsByGroupId(groupId, selectedCategoryId).ToList();
             return Json(si);
-            /*var dict = new Dictionary<string, string>();
-            si.ForEach(item =>
-            {
-                dict.Add(item.Value, item.Text);
-            });
-
-            return Json(dict);*/
         }
     }
 }

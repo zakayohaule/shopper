@@ -14,29 +14,33 @@
 
 <div class="card with-border">
     <div class="card-header">
-        <a href="" data-toggle="modal" data-target="#add-attribute-option" class="btn btn-sm btn-primary float-right" title="Add Attribute">
-            <i class="fas fa-user-plus"> Add</i>
-        </a>
+        <th:permission name="attribute_option_add">
+            <a href="" data-toggle="modal" data-target="#add-attribute-option" class="btn btn-sm btn-primary float-right" title="Add Attribute">
+                <i class="fas fa-user-plus"> Add</i>
+            </a>
+
+
+            <div class="modal fade" id="add-attribute-option">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Attribute Option</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <th:form class="" asp-controller="AttributeOption" asp-action="Create" method="post">
+                            <div class="modal-body">
+                                <th:partial name="_AttributeOptionForm" model="attributeOption"/>
+                            </div>
+                        </th:form>
+                    </div>
+                </div>
+            </div>
+        </th:permission>
     </div>
     <!-- /.card-header -->
 
-    <div class="modal fade" id="add-attribute-option">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Attribute Option</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <th:form class="" asp-controller="AttributeOption" asp-action="Create" method="post">
-                    <div class="modal-body">
-                        <th:partial name="_AttributeOptionForm" model="attributeOption"/>
-                    </div>
-                </th:form>
-            </div>
-        </div>
-    </div>
 
     <div class="card-body table-responsive p-3">
         <table class="table table-sm table-hover">
@@ -60,25 +64,26 @@
                     <td>@att.Name</td>
                     <td>@att.Attribute.Name</td>
                     <td>
-                        @*<th:a asp-controller="Role" asp-action="RolePermissions" asp-route-id="@role.Id" title="Role permissions" class="btn btn-sm btn-default">
-                            <i class="fa fa-list-ul"></i>
-                        </th:a>*@
-                        <a href="#" onclick="openEditModal('@Url.Action("EditAttributeOptionModal", new {id = att.Id})',
-                         '@Url.Action("Update", new {id = att.Id})',
-                         'Edit Attribute Option')"
-                           class="btn btn-default btn-sm"
-                           title="Edit attribute option">
-                            @* <span class="badge badge-warning" title="Edit attribute"> *@
-                            <i class="fas fa-edit"></i>
-                            @* </span> *@
-                        </a>
-                        <th:a asp-controller="AttributeOption"
-                              asp-action="Delete"
-                              asp-route-id="@att.Id" class="btn btn-default btn-sm btn-delete" title="Delete attribute option">
-                            @* <span class="badge badge-danger" title="Delete attribute"> *@
-                            <i class="fas fa-trash"></i>
-                            @* </span> *@
-                        </th:a>
+                        <th:permission name="attribute_option_edit">
+                            <a href="#" onclick="openEditModal('@Url.Action("EditAttributeOptionModal", new {id = att.Id})',
+                                                     '@Url.Action("Update", new {id = att.Id})',
+                                                     'Edit Attribute Option')"
+                               class="btn btn-default btn-sm"
+                               title="Edit attribute option">
+                                @* <span class="badge badge-warning" title="Edit attribute"> *@
+                                <i class="fas fa-edit"></i>
+                                @* </span> *@
+                            </a>
+                        </th:permission>
+                        <th:permission name="attribute_option_delete">
+                            <th:a asp-controller="AttributeOption"
+                                  asp-action="Delete"
+                                  asp-route-id="@att.Id" class="btn btn-default btn-sm btn-delete" title="Delete attribute option">
+                                @* <span class="badge badge-danger" title="Delete attribute"> *@
+                                <i class="fas fa-trash"></i>
+                                @* </span> *@
+                            </th:a>
+                        </th:permission>
                     </td>
                 </tr>
             }
@@ -88,8 +93,9 @@
     <!-- /.card-body -->
 </div>
 <!-- /.card -->
-
-<th:partial name="Partials/_EditModal" model="attributeOption" view-data="ViewData"/>
+<th:permission name="attribute_option_edit">
+    <th:partial name="Partials/_EditModal" model="attributeOption" view-data="ViewData"/>
+</th:permission>
 
 @section scripts
 {

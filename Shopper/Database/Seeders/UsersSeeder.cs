@@ -24,7 +24,7 @@ namespace Shopper.Database.Seeders
                 {
                     UserName = "keaadmin",
                     FullName = "Ella Maira",
-                    Email = "ellygabbymaira@gmail.com",
+                    Email = "ellagabbymaira@gmail.com",
                     EmailConfirmed = true,
                     HasResetPassword = true,
                     Tenant = keaTenant,

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -29,7 +30,15 @@ namespace Shopper.Services.Implementations
             {
                 var queuedMail = _emailQueueService.DequeueMail(cancellationToken);
 
-                await queuedMail;
+                try
+                {
+                    var result = await queuedMail;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
             }
         }
     }

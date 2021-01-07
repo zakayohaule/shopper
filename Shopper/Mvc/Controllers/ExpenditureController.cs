@@ -29,7 +29,11 @@ namespace Shopper.Mvc.Controllers
         {
             Title = "Expenditures";
             AddPageHeader(Title);
-            var expenditures = _expenditureService.GetExpenditureAsQuerable().OrderByDescending(e => e.Date).ToList();
+            var expenditures = _expenditureService
+                .GetExpenditureAsQuerable()
+                .AsNoTracking()
+                .OrderByDescending(e => e.Date)
+                .ToList();
             ViewData["ExpenditureTypes"] = _expenditureTypeService.GetExpenditureTypeSelectListItems();
             return View(expenditures);
         }
@@ -103,7 +107,7 @@ namespace Shopper.Mvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet("{id}/open-edit-modal")]
+        [HttpGet("{id}/open-edit-modal"), Permission("expenditure_edit")]
         public async Task<JsonResult> EditExpenditureModal(ulong id)
         {
             var expenditure = await _expenditureService.FindByIdAsync(id);

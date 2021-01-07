@@ -25,8 +25,10 @@ namespace Shopper.Mvc.Controllers
         {
             Title = "Product Groups";
 
-            var productGroups = _productGroupService.GetAllProductGroups().ToList();
-            
+            var productGroups = _productGroupService
+                .GetAllProductGroups()
+                .ToList();
+
             AddPageHeader(Title);
             return View(productGroups);
         }
@@ -89,7 +91,7 @@ namespace Shopper.Mvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet("{id}/open-edit-modal")]
+        [HttpGet("{id}/open-edit-modal"), Permission("product_group_edit")]
         public async Task<JsonResult> EditProductGroupModal(ushort id)
         {
             var productGroup = await _productGroupService.FindByIdAsync(id);

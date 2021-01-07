@@ -141,35 +141,33 @@ using System;
         }
 
         public static string GetSubdomain(this HttpContext httpContext)
-                {
-                    var subDomain = string.Empty;
-                    var host = httpContext.Request.Host.Host;
+        {
+            var subDomain = string.Empty;
+            var host = httpContext.Request.Host.Host;
 
-                    if (string.IsNullOrWhiteSpace(host)) return subDomain;
-                    if (host.Contains("."))
-                    {
-                        var domainParts = host.Split(".");
-                        if (domainParts.Length == 2)
-                        {
-                            subDomain = domainParts[0];
-                        }
-                        else
-                        {
-                            subDomain = domainParts[1];
-                        }
-                    }
+            if (string.IsNullOrWhiteSpace(host)) return subDomain;
+            if (!host.Contains(".")) return subDomain;
+            var domainParts = host.Split(".");
+            if (domainParts.Length == 2 || domainParts.Length == 3)
+            {
+                subDomain = domainParts[0];
+            }
+            else
+            {
+                subDomain = domainParts[1];
+            }
 
-                    return subDomain;
-                }
+            return subDomain;
+        }
 
-                public static Tenant GetCurrentTenant(this ViewContext viewContext)
-                {
-                    return viewContext.HttpContext.GetCurrentTenant();
-                }
+        public static Tenant GetCurrentTenant(this ViewContext viewContext)
+        {
+           return viewContext.HttpContext.GetCurrentTenant();
+        }
 
-                public static Tenant GetCurrentTenant(this HttpContext httpContext)
-                {
-                    return (Tenant) httpContext.Items["tenant"];
-                }
+        public static Tenant GetCurrentTenant(this HttpContext httpContext)
+        {
+          return (Tenant) httpContext.Items["tenant"];
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace Shopper.Services.Implementations
 
         public IEnumerable<ExpenditureType> GetAllExpenditureTypes()
         {
-            return _dbContext.ExpenditureTypes.AsQueryable();
+            return _dbContext.ExpenditureTypes.AsQueryable().AsNoTracking();
         }
 
         public List<SelectListItem> GetExpenditureTypeSelectListItems()

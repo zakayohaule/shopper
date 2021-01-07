@@ -6,9 +6,9 @@ namespace Shopper.Mvc.ViewModels
     public class DashboardSummary
     {
         public SummaryType SummaryType { get; set; }
-        public uint ItemsSold { get; set; }
-        public ulong Sales { get; set; }
-        public ulong Profit { get; set; }
-        public ulong Expenditure { get; set; }
+        public int ItemsSold { get; set; }
+        public long Sales { get; set; }
+        public long Profit { get; set; }
+        public long Expenditure { get; set; }
     }
 }

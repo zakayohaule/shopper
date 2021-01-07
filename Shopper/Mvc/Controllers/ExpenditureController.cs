@@ -32,6 +32,7 @@ namespace Shopper.Mvc.Controllers
             var expenditures = _expenditureService
                 .GetExpenditureAsQuerable()
                 .AsNoTracking()
+                .Include(e => e.ExpenditureType)
                 .OrderByDescending(e => e.Date)
                 .ToList();
             ViewData["ExpenditureTypes"] = _expenditureTypeService.GetExpenditureTypeSelectListItems();

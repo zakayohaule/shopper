@@ -44,7 +44,7 @@ namespace Shopper.Mvc.Controllers
             return View(attributeOptions);
         }
 
-        [HttpPost("", Name = "attribute-option-add"), Permission("attribute_option_add"), ValidateAntiForgeryToken,
+        [HttpPost("", Name = "attribute-option-add")/*, Permission("attribute_option_add")*/, ValidateAntiForgeryToken,
             /*ValidateModelWithRedirect()*/]
         public async Task<IActionResult> Create(AttributeOption attributeOption)
         {
@@ -113,8 +113,7 @@ namespace Shopper.Mvc.Controllers
             return Json(attributeOption, new JsonSerializerSettings{ContractResolver = null});
         }
 
-        [AcceptVerbs("GET", Route = "validate-attribute-option-name", Name = "ValidateAttributeOptionName"),
-         Permission("attribute_option_create")]
+        [AcceptVerbs("GET", Route = "validate-attribute-option-name", Name = "ValidateAttributeOptionName")]
         public IActionResult ExistsByDisplayName(string name, ushort id)
         {
             return _attributeOptionService.IsDuplicate(name, id)

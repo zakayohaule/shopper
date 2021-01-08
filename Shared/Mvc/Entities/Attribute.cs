@@ -11,7 +11,7 @@ namespace Shared.Mvc.Entities
     {
         [Column(name: "name")]
         [Required]
-        [Remote("ValidateAttributeName", AdditionalFields = nameof(Id))]
+        // [Remote("ValidateAttributeName", AdditionalFields = nameof(Id))]
         public string Name { get; set; }
 
         [InverseProperty("Attribute")]

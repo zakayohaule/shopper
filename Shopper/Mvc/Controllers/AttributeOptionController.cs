@@ -14,6 +14,8 @@ namespace Shopper.Mvc.Controllers
     [Route("attribute-option-options"), Authorize]
     public class AttributeOptionController : BaseController
     {
+        // @todo Handle ajax call errors i.e 401,501 etc
+
         private readonly IAttributeOptionService _attributeOptionService;
         private readonly IAttributeService _attributeService;
 

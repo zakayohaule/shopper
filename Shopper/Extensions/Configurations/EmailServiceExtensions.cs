@@ -10,24 +10,32 @@ namespace Shopper.Extensions.Configurations
     {
         public static void ConfigureMailServer(this IServiceCollection services, IWebHostEnvironment environment)
         {
-            var builder = services.AddFluentEmail("zackhaule@gmail.com")
+            var builder = services.AddFluentEmail("tzshopper@gmail.com")
                 .AddRazorRenderer();
+
 
             if (environment.IsDevelopment())
             {
-                var smtpClient = new SmtpClient("smtp.gmail.com")
+                var smtpClient = new SmtpClient("smtp.gmail.com", 587)
                 {
-                    Port = 587,
                     EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
                     Credentials = new NetworkCredential("zackhaule@gmail.com", "@BoH0810"),
                 };
-                // builder.AddSmtpSender("zackhaule@Gmail.com", "@BoH0810", "smtp.gmail.com", 587);
                 builder.AddSmtpSender(smtpClient);
                 // builder.AddMailtrapSender("51f7f8fd58db29", "3ef16ce8493234", "smtp.mailtrap.io", 2525);
             }
             else
             {
-                builder.AddSmtpSender("some-production-mail-server", 000, "username", "password");
+                var smtpClient = new SmtpClient("smtp.gmail.com", 587)
+                {
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential("zackhaule@gmail.com", "@BoH0810"),
+                };
+                builder.AddSmtpSender(smtpClient);
             }
         }
     }

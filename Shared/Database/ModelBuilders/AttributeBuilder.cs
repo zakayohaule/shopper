@@ -8,7 +8,7 @@ namespace Shared.Database.ModelBuilders
     {
         public void Configure(EntityTypeBuilder<Attribute> builder)
         {
-            builder.HasIndex(attribute => attribute.Name).IsUnique();
+
         }
     }
 }

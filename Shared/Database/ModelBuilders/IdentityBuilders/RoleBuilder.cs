@@ -20,7 +20,7 @@ namespace Shared.Database.ModelBuilders.IdentityBuilders
                 .HasForeignKey(rc => rc.RoleId)
                 .IsRequired();
 
-            b.HasIndex(role => role.NormalizedName).IsUnique();
+            b.HasIndex(role => role.NormalizedName);
         }
     }
 }

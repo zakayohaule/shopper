@@ -28,16 +28,18 @@ namespace Shopper.Services.Implementations
         {
             while (!cancellationToken.IsCancellationRequested)
             {
+                _logger.Information("************ Dequeuing email for sending *****************");
                 var queuedMail = _emailQueueService.DequeueMail(cancellationToken);
 
                 try
                 {
-                    var result = await queuedMail;
+                    _logger.Information("************ Sending email for sending after dequeuing *****************");
+                    await queuedMail;
                 }
                 catch (Exception e)
                 {
+                    _logger.Error(e.Message);
                     Console.WriteLine(e);
-                    throw;
                 }
             }
         }

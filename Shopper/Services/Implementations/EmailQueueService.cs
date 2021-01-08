@@ -10,7 +10,7 @@
     public class EmailQueueService : IEmailQueueService
     {
         private readonly ILogger _logger;
-        
+
         public ConcurrentQueue<Func<CancellationToken, Task>> _emailQueue =
             new ConcurrentQueue<Func<CancellationToken, Task>>();
 
@@ -27,8 +27,8 @@
             {
                 throw new ArgumentNullException($"The email task can not be null");
             }
-            
-            _logger.Warning($"Sending email to {mail.Target.ToString()}");
+
+            _logger.Warning($"Sending email to {mail}");
             _emailQueue.Enqueue(mail);
             _signal.Release();
         }

@@ -11,7 +11,7 @@ namespace Shared.Mvc.Entities
     public class ExpenditureType : BaseEntity<ushort>
     {
         [Column(name: "name"), Required]
-        [Remote("ValidateExpenditureTypeName", AdditionalFields = "Id"), DisplayName("Expenditure Type")]
+        // [Remote("ValidateExpenditureTypeName", AdditionalFields = "Id"), DisplayName("Expenditure Type")]
         public string Name { get; set; }
 
         [InverseProperty("ExpenditureType")]

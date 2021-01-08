@@ -10,7 +10,7 @@ namespace Shared.Mvc.Entities
     {
         [Column(name: "name")]
         [Required]
-        [Remote("ValidateAttributeOptionName", AdditionalFields = nameof(Id))]
+        // [Remote("ValidateAttributeOptionName", AdditionalFields = nameof(Id))]
         public string Name { get; set; }
 
         [Column("attribute_id")]

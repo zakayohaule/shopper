@@ -11,7 +11,7 @@ namespace Shared.Mvc.Entities
     {
 
         [Column(name: "name"), Required]
-        [Remote("ValidatePriceTypeName", AdditionalFields = "Id"), DisplayName("Price type")]
+        // [Remote("ValidatePriceTypeName", AdditionalFields = "Id"), DisplayName("Price type")]
         public string Name { get; set; }
     }
 }

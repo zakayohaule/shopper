@@ -28,7 +28,7 @@ namespace Shared.Mvc.Entities.Identity
 
         [Column("display_name")]
         [Required]
-        [Remote("ValidateRoleDisplayName", AdditionalFields = "Id"), DisplayName("Role Name")]
+        // [Remote("ValidateRoleDisplayName", AdditionalFields = "Id"), DisplayName("Role Name")]
         public string DisplayName { get; set; }
 
         [Column("concurrency_stamp")]

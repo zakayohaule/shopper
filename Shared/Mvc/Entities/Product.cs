@@ -12,7 +12,7 @@ namespace Shared.Mvc.Entities
     public class Product: BaseEntity<uint>
     {
         [Column("name"), Required]
-        [Remote("ValidateProductName", AdditionalFields = "Id"), DisplayName("Product Name")]
+        // [Remote("ValidateProductName", AdditionalFields = "Id"), DisplayName("Product Name")]
         public string Name { get; set; }
 
         [Column("image_path")]

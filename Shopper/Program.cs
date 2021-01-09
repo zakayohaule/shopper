@@ -38,7 +38,11 @@ namespace Shopper
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>()
+                        .UseKestrel(options => options.Limits.MaxRequestBodySize = null);
+                })
                 .ConfigureLogging(builder => builder.ClearProviders())
                 .UseSerilog((context, configuration) =>
                 {

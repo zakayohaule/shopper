@@ -117,6 +117,7 @@ namespace Shopper.Mvc.Controllers
         {
             var sku = await _productService.FindSkuByIdAsync(id)
                 .Include(s => s.SkuAttributes)
+                .Include(s => s.Product)
                 .SingleOrDefaultAsync();
             var product = await _productService.FindByIdWithAttributesAsync(sku.ProductId);
             var stockViewModel = new SkuViewFormModel

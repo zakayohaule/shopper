@@ -186,12 +186,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> CheckStockQuantity(int quantity, ulong skuId)
         {
             var message = await _saleService.IsAvailableInStockAsync(quantity, skuId);
-            if (message == null)
-            {
-                return Json(true);
-            }
-
-            return Json(message);
+            return message == null ? Json(true) : Json(message);
         }
 
         public IActionResult DeleteSale()
@@ -219,7 +214,12 @@ namespace Shopper.Mvc.Controllers
                 {
                     Value = sku.Id.ToString(),
                     Text = sku.SellingPrice.ToString()
-                }).ToList()
+                }).ToList(),
+                MaximumDiscounts = skus.Select(sku => new SelectListItem
+                {
+                    Value = sku.Id.ToString(),
+                    Text = sku.MaximumDiscount.ToString("N0")
+                }).ToList(),
             };
         }
     }

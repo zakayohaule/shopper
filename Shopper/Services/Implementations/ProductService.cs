@@ -129,6 +129,8 @@ namespace Shopper.Services.Implementations
             var product = await _dbContext
                 .Products
                 .AsNoTracking()
+                .Include(p => p.Attributes)
+                .ThenInclude(p => p.Attribute)
                 .Include(p => p.Skus)
                 .ThenInclude(sku => sku.SkuAttributes)
                 .ThenInclude(skuAtt => skuAtt.Option)
@@ -232,6 +234,7 @@ namespace Shopper.Services.Implementations
                 sku.BuyingPrice = updated.BuyingPrice;
                 sku.MaximumDiscount = updated.MaximumDiscount;
                 sku.Date = updated.Date;
+                sku.LowStockAmount = updated.LowStockAmount;
                 await _dbContext.Entry(sku).Collection(s => s.SkuAttributes).LoadAsync();
 
                 if (sku.SkuAttributes.Any())

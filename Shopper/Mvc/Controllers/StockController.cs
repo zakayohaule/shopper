@@ -50,6 +50,7 @@ namespace Shopper.Mvc.Controllers
         [HttpPost(""), Permission("stock_add"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SkuViewFormModel skuViewModel)
         {
+            // return Ok(skuViewModel);
             if (!await _productService.ExistsByIdAsync(skuViewModel.ProductId))
             {
                 return NotFound("Product not found");
@@ -94,8 +95,7 @@ namespace Shopper.Mvc.Controllers
                 return BadRequest();
             }
 
-            var updated = GetSkuFromViewModel(skuViewModel);
-
+            skuViewModel.Sku = GetSkuFromViewModel(skuViewModel);
             sku = await _productService.UpdateStockItemAsync(sku,skuViewModel, attributeOptionIds);
             if (sku.IsNull())
             {
@@ -130,7 +130,9 @@ namespace Shopper.Mvc.Controllers
                Quantity = sku.Quantity.ToString(),
                StockDate = sku.Date,
                ProductId = sku.ProductId,
-               AttributeSelects = _productService.GetProductAttributeSelects(product, sku)
+               AttributeSelects = _productService.GetProductAttributeSelects(product, sku),
+               ReceiveLowStockAlert = sku.LowStockAmount != null,
+               LowStockQuantity = sku.LowStockAmount
             };
             return PartialView("../Stock/_EditStockItem", stockViewModel);
         }

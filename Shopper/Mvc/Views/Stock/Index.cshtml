@@ -55,7 +55,7 @@
             <thead>
             <tr>
                 <th style="width: 10px">#</th>
-                <th>Category</th>
+                <th>Type</th>
                 <th>Name</th>
                 <th>Quantity</th>
                 <th>Quantity In Stock</th>
@@ -74,7 +74,19 @@
                     <td>@product.ProductType.Name</td>
                     <td>@product.Name</td>
                     <td>@product.Skus.Sum(sku => sku.Quantity)</td>
-                    <td>@product.Skus.Sum(sku => sku.RemainingQuantity)</td>
+                    <td>
+                        @product.Skus.Sum(sku => sku.RemainingQuantity)
+                        @if (product.Skus.Any(sku => sku.RemainingQuantity <= sku.LowStockAmount && sku.LowStockAmount != null))
+                        {
+                            var lowStockCount = product.Skus.Count(sku => sku.RemainingQuantity != 0 && sku.RemainingQuantity <= sku.LowStockAmount && sku.LowStockAmount != null);
+                            <small class="badge bg-warning">(@lowStockCount) low stock</small>
+                        }
+                        @if (product.Skus.Any(sku => sku.RemainingQuantity == 0 && sku.LowStockAmount != null))
+                        {
+                            var outOfStockCount = product.Skus.Count(sku => sku.RemainingQuantity == 0 && sku.LowStockAmount != null);
+                            <small class="badge bg-danger">(@outOfStockCount) out of stock</small>
+                        }
+                    </td>
                     <td>
                         <th:permission name="stock_view">
                             <th:a asp-action="OpenProductSkus" asp-route-id="@product.Id"

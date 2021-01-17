@@ -5,6 +5,7 @@
     Layout = "_Layout";
     var attributeOption = new AttributeOption();
     ViewData["FormName"] = "_AttributeOptionForm";
+    <th:partial name="Partials/_DtCss"></th:partial>
 }
 
 @section css {
@@ -16,7 +17,7 @@
     <div class="card-header">
         <th:permission name="attribute_option_add">
             <a href="" data-toggle="modal" data-target="#add-attribute-option" class="btn btn-sm btn-primary float-right" title="Add Attribute">
-                <i class="fas fa-user-plus"> Add</i>
+                Add Option
             </a>
 
 
@@ -99,7 +100,7 @@
 
 @section scripts
 {
-
+    <th:partial name="Partials/_DtJs"></th:partial>
     <th:partial name="_ValidationScriptsPartial"></th:partial>
     <th:partial name="Partials/_ToastScript"></th:partial>
     <th:script src="~/js/edit-form.js"></th:script>

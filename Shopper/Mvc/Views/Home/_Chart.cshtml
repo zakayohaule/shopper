@@ -52,27 +52,6 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    @*@if (!previousName.IsNullOrEmpty())
-                {
-                    <div class="d-flex">
-                        <p class="ml-auto d-flex flex-column text-right">
-                            @if (percentage > 0)
-                            {
-                                <span class="text-success">
-                                    <i class="fas fa-arrow-up"></i> @percentage%
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="text-danger">
-                                    <i class="fas fa-arrow-down"></i> @Math.Abs(percentage)%
-                                </span>
-                            }
-                        </p>
-                    </div>
-                }*@
-                    <!-- /.d-flex -->
-
                     <div class="position-relative mb-4">
                         <canvas id="@Model.ChartId" height="300"></canvas>
                     </div>
@@ -121,18 +100,27 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach (var product in query
-                            .GroupBy(s => s.Sku.Product)
-                            .OrderByDescending(grouping => grouping.Sum(sale => sale.Sku.Sales.Sum(s => s.Quantity))).Take(10))
+                        @if (query.Count() > 0)
+                        {
+                            @foreach (var product in query
+                                .GroupBy(s => s.Sku.Product)
+                                .OrderByDescending(grouping => grouping.Sum(sale => sale.Sku.Sales.Sum(s => s.Quantity))).Take(10))
+                            {
+                                <tr>
+                                    <td>
+                                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
+                                        @product.Key.Name
+                                    </td>
+                                    <td>
+                                        @product.Sum(sale => sale.Sku.Sales.Sum(s => s.Quantity))
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
                         {
                             <tr>
-                                <td>
-                                    <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                                    @product.Key.Name
-                                </td>
-                                <td>
-                                    @product.Sum(sale => sale.Sku.Sales.Sum(s => s.Quantity))
-                                </td>
+                                <td colspan="2" class="text-center">No records found</td>
                             </tr>
                         }
                         </tbody>
@@ -163,18 +151,27 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach (var product in query
-                            .GroupBy(s => s.Sku.Product)
-                            .OrderByDescending(grouping => grouping.Sum(sale => sale.Sku.Sales.Sum(s => s.Quantity * s.Profit))).Take(10))
+                        @if (query.Count() > 0)
+                        {
+                            @foreach (var product in query
+                                .GroupBy(s => s.Sku.Product)
+                                .OrderByDescending(grouping => grouping.Sum(sale => sale.Sku.Sales.Sum(s => s.Quantity * s.Profit))).Take(10))
+                            {
+                                <tr>
+                                    <td>
+                                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
+                                        @product.Key.Name
+                                    </td>
+                                    <td>
+                                        @product.Sum(sale => sale.Sku.Sales.Sum(s => s.Quantity * s.Profit)).ToString("N0")
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
                         {
                             <tr>
-                                <td>
-                                    <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                                    @product.Key.Name
-                                </td>
-                                <td>
-                                    @product.Sum(sale => sale.Sku.Sales.Sum(s => s.Quantity * s.Profit)).ToString("N0")
-                                </td>
+                                <td colspan="2"> No records found </td>
                             </tr>
                         }
                         </tbody>

@@ -38,7 +38,7 @@ namespace Shared.Mvc.Entities
 
         [Column("low_stock_amount")]
         [Display(Name = "Low Stock Amount")]
-        public int? LowStockAmount { get; set; } = null;
+        public int? LowStockAmount { get; set; } = 0;
 
         [Column("is_on_sale")]
         public bool IsOnSale { get; set; } = false;

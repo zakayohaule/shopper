@@ -11,13 +11,14 @@
     <th:link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"></th:link>
     <!-- Toastr -->
     <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
+    <th:partial name="Partials/_DtCss"></th:partial>
 }
 
 <div class="card card-default">
     <div class="card-header">
         <th:permission name="product_category_add">
             <a href="" data-toggle="modal" data-target="#add-product-category" class="btn btn-sm btn-primary float-right" title="Add User">
-                <i class="fas fa-user-plus"> Add</i>
+                Add Category
             </a>
 
             <div class="modal fade" id="add-product-category">
@@ -42,13 +43,13 @@
     <!-- /.card-header -->
 
     <div class="card-body table-responsive p-3">
-        <table class="table table-sm table-hover">
+        <table class="table table-sm table-hover dt-table">
             <thead>
             <tr>
                 <th style="width: 10px">#</th>
                 <th>Name</th>
                 <th>Product Group</th>
-                <th style="width: 160px"></th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -73,13 +74,13 @@
                             </a>
                         </th:permission>
                         <th:permission name="product_category_delete">
-                        <th:a asp-controller="ProductCategory"
-                              asp-action="Delete"
-                              asp-route-id="@productCategory.Id" class="btn-delete">
-                            <span class="btn btn-default btn-sm" title="Delete product category">
-                                <i class="fas fa-trash"></i>
-                            </span>
-                        </th:a>
+                            <th:a asp-controller="ProductCategory"
+                                  asp-action="Delete"
+                                  asp-route-id="@productCategory.Id" class="btn-delete">
+                                <span class="btn btn-default btn-sm" title="Delete product category">
+                                    <i class="fas fa-trash"></i>
+                                </span>
+                            </th:a>
                         </th:permission>
                     </td>
                 </tr>
@@ -92,11 +93,12 @@
 <!-- /.card -->
 
 <th:permission name="product_category_edit">
-<th:partial name="Partials/_EditModal" model="newProductCategory" view-data="ViewData"/>
+    <th:partial name="Partials/_EditModal" model="newProductCategory" view-data="ViewData"/>
 </th:permission>
 
 @section scripts
 {
+    <th:partial name="Partials/_DtJs"></th:partial>
     <th:partial name="_ValidationScriptsPartial"></th:partial>
     <th:partial name="Partials/_ToastScript"></th:partial>
     <!-- Select2 -->

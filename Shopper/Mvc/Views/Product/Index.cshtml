@@ -1,5 +1,6 @@
 ﻿@using Shopper.Mvc.ViewModels
 @using Shopper.Extensions.Helpers
+@using IdentityServer4.Extensions
 @model List<Product>;
 
 @{
@@ -69,7 +70,10 @@
                 <tr>
                     <td>@index</td>
                     <td>
-                        <img class="table-avatar" style="border-radius: 50%; display: inline; width: 2.5rem" src="@product.ImagePath.LoadProductImageThumbnail(ViewContext.HttpContext)" alt="">
+                        @if (!product.ImagePath.IsNullOrEmpty())
+                        {
+                            <img class="table-avatar" style="border-radius: 15%; display: inline; width: 2.5rem" src="@product.ImagePath.LoadProductImageThumbnail(ViewContext.HttpContext)" alt="">
+                        }
                         @product.Name
                     </td>
                     <td>@product.ProductType.Name</td>

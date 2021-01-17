@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using Shared.Mvc.Entities.Identity;
 using Shopper.Database;
@@ -16,31 +16,46 @@ namespace Shopper.Extensions.Configurations
 {
     public static class AppBuilderExtensions
     {
-        public static void InitializeDatabase(this IApplicationBuilder app,
-            ApplicationDbContext dbContext,
-            AdminAppDbContext adminAppDbContext,
-            UserManager<AppUser> userManager,
-            IPasswordHasher<AppUser> passwordHasher,
-            ILogger logger,
-            IConfiguration configuration,
-            IServiceProvider serviceProvider)
+        public static IHost SeedDatabase(this IHost host)
         {
-            DatabaseSeeder.Seed(dbContext,adminAppDbContext,passwordHasher, userManager, logger,serviceProvider);
+            using (var scope = host.Services.CreateScope())
+            {
+                var dbContext = scope.GetService<ApplicationDbContext>();
+                var adminAppDbContext = scope.GetService<AdminAppDbContext>();
+                var passwordHasher = scope.GetService<IPasswordHasher<AppUser>>();
+                var userManager = scope.GetService<UserManager<AppUser>>();
+                var logger = scope.GetService<ILogger>();
+                var serviceProvider = scope.GetService<IServiceProvider>();
+                var configuration = host.GetService<IConfiguration>();
+
+                var seedDatabase = configuration.GetSection("Database").GetValue<bool?>("Seed") ?? false;
+                if (seedDatabase)
+                {
+                    logger.Information("********** Seeding database *************");
+                    DatabaseSeeder.Seed(dbContext, adminAppDbContext, passwordHasher, userManager, logger, serviceProvider);
+                }
+                ModulesSeeder.Seed(dbContext, logger);
+                PermissionsSeeder.Seed(dbContext, logger);
+                RoleClaimsSeeder.Seed(dbContext, logger);
+            }
+
+            return host;
         }
 
-        public static void UpdateRoleClaims(this IApplicationBuilder app,
-            ApplicationDbContext dbContext,
-            ILogger logger)
+        public static T GetService<T>(this IServiceScope scope)
         {
-            ModulesSeeder.Seed(dbContext, logger);
-            PermissionsSeeder.Seed(dbContext, logger);
-            RoleClaimsSeeder.Seed(dbContext, logger);
+            return scope.ServiceProvider.GetRequiredService<T>();
+        }
+
+        public static T GetService<T>(this IHost host)
+        {
+            return host.Services.GetService<T>();
         }
 
         public static void ShowBanner()
         {
             var file = new FileStream(@"C:\Users\user\RiderProjects\Shopper\Shopper\banner.txt"
-                ,FileMode.Open, FileAccess.Read,FileShare.ReadWrite);
+                , FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
             var reader = new StreamReader(file);
             while (!reader.EndOfStream)

@@ -103,7 +103,7 @@
                 </div>
             </div>
             <div class="col-12 col-sm-6">
-                <h3 class="my-3">@product.Name - @product.ProductType.Name</h3>
+                <h3 class="my-3">@product.Name</h3>
                 @if (product.Skus.Any() && product.Attributes.Any())
                 {
                     <hr>
@@ -119,8 +119,17 @@
                         }
                     </div>
                 }
-                <hr>
-
+                <ul class="list-group list-group-unbordered mb-3 col-6" >
+                    <li class="list-group-item">
+                        <b>Group</b> <a class="float-right">@product.ProductType.ProductCategory.ProductGroup.Name</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Category</b> <a class="float-right">@product.ProductType.ProductCategory.Name</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Type</b> <a class="float-right">@product.ProductType.Name</a>
+                    </li>
+                </ul>
                 <h4>Product images</h4>
                 <div class="col-12 product-image-thumbs">
                     @if (!product.ImagePath.IsNullOrEmpty())

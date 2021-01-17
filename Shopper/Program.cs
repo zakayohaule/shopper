@@ -1,10 +1,12 @@
 using System;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Filters;
+using Shopper.Extensions.Configurations;
 
 namespace Shopper
 {
@@ -13,14 +15,14 @@ namespace Shopper
         public static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.ColoredConsole(restrictedToMinimumLevel: LogEventLevel.Information)
+                .WriteTo.ColoredConsole(LogEventLevel.Information)
                 .CreateLogger();
 
             var host = CreateHostBuilder(args).Build();
             try
             {
                 Log.Logger.Information("************* Starting Application *************");
-                host.Run();
+                host.SeedDatabase().Run();
             }
             catch (Exception e)
             {

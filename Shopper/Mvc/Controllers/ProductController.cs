@@ -45,6 +45,9 @@ namespace Shopper.Mvc.Controllers
         {
             var product = await _productService
                 .FindByIdAsyncQ(id)
+                .Include(p => p.ProductType)
+                .ThenInclude(pt => pt.ProductCategory)
+                .ThenInclude(pt => pt.ProductGroup)
                 .Include(p => p.Images)
                 .Include(p => p.Attributes)
                 .Include(p => p.ProductType)

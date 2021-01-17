@@ -32,6 +32,20 @@ namespace Shopper.Services.Implementations
                 .ToListAsync();
         }
 
+        public async Task<StockExpiryModel> GetThisYearStockExpiryCountAsync()
+        {
+            var query = _dbContext.Skus
+                .AsNoTracking()
+                .Include(sku => sku.Expiration)
+                .Where(sku => sku.Date >= DateTime.Now.AddYears(-1));
+            return new StockExpiryModel
+            {
+                LowStockCount = await query.CountAsync(sku => sku.RemainingQuantity <= sku.LowStockAmount && sku.LowStockAmount != null),
+                OutOfStockCount = await query.CountAsync(sku => sku.RemainingQuantity == 0 && sku.LowStockAmount != null),
+                ExpiredCount = await query.CountAsync(sku => sku.Expiration.ExpirationDate.Date <= DateTime.Now.Date),
+            };
+        }
+
         public async Task<List<Expenditure>> GetThisYearExpenditure()
         {
             return await _dbContext.Expenditures

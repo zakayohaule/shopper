@@ -1,8 +1,5 @@
 ﻿@using Shopper.Mvc.ViewModels
 @using Shared.Mvc.Enums
-@using Shopper.Extensions.Helpers
-@using System.Collections
-@using Newtonsoft.Json
 @model Shopper.Mvc.ViewModels.DashboardModel
 @{
     var model = Model;
@@ -49,35 +46,141 @@
     </style>
 }
 
-<th:permission name="summary_view">
-    <!-- Left col -->
-    <section class="col-lg-12 connectedSortable">
-        <!-- Custom tabs (Charts with tabs)-->
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-chart-pie mr-1"></i>
-                    Summary
-                </h3>
-                <div class="card-tools">
-                    <ul class="nav nav-pills ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#today-summary" data-toggle="tab">Today</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#week-summary" data-toggle="tab">This Week</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#month-summary" data-toggle="tab">This Month</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#annual-summary" data-toggle="tab">This Year</a>
-                        </li>
-                    </ul>
+<!-- Info boxes -->
+<section class="col-lg-12 connectedSortable">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                Low Stock And Expiry Summary
+            </h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-warning elevation-1">
+                            <i class="fas fa-arrow-down"></i>
+                        </span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Low Stock</span>
+                            <h5 class="info-box-number">
+                                @Model.StockExpiryModel.LowStockCount
+                            </h5>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
                 </div>
-            </div><!-- /.card-header -->
-            <div class="card-body">
-                <div class="tab-content p-0">
+                <!-- /.col -->
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-danger elevation-1">
+                            <i class="far fa-times-circle"></i>
+                        </span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Out of Stock</span>
+                            <h5 class="info-box-number">
+                                @Model.StockExpiryModel.OutOfStockCount
+                            </h5>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+
+                <!-- fix for small devices only -->
+                <div class="clearfix hidden-md-up"></div>
+
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-warning elevation-1">
+                            <i class="far fa-clock"></i>
+                        </span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">About To Expire</span>
+                            <small class="info-box-number">
+                                Comming Soon
+                            </small>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-danger elevation-1">
+                            <i class="fas fa-biohazard"></i>
+                        </span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Expired</span>
+                            <h5 class="info-box-number">
+                                @Model.StockExpiryModel.ExpiredCount
+                            </h5>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+    </div>
+</section>
+<!-- Left col -->
+<section class="col-lg-12 connectedSortable">
+    <!-- Custom tabs (Charts with tabs)-->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-chart-pie mr-1"></i>
+                Summary
+            </h3>
+
+            <div class="card-tools">
+                &nbsp;
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="card-tools">
+                <ul class="nav nav-pills ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#today-summary" data-toggle="tab">Today</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#week-summary" data-toggle="tab">This Week</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#month-summary" data-toggle="tab">This Month</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#annual-summary" data-toggle="tab">This Year</a>
+                    </li>
+                </ul>
+            </div>
+        </div><!-- /.card-header -->
+        <div class="card-body">
+            <div class="tab-content p-0">
+
+                <th:permission name="summary_view">
                     <!-- Morris chart - Sales -->
                     <div class="chart tab-pane active" id="today-summary">
                         <th:partial name="_Summary" model="model.Summaries.SingleOrDefault(s => s.SummaryType == SummaryType.Today)"/>
@@ -92,12 +195,12 @@
                     <div class="chart tab-pane" id="annual-summary">
                         <th:partial name="_Summary" model="model.Summaries.SingleOrDefault(s => s.SummaryType == SummaryType.Year)"/>
                     </div>
-                </div>
-            </div><!-- /.card-body -->
-        </div>
-        <!-- /.card -->
-    </section>
-</th:permission>
+                </th:permission>
+            </div>
+        </div><!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</section>
 <div class="col-lg-12 chart-summary" id="today-chart">
     <th:partial name="_Chart" model="todayChartModel"/>
 </div>

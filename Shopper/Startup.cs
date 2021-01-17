@@ -19,6 +19,7 @@ using Shopper.Extensions.Configurations;
 [assembly: AspMvcPartialViewLocationFormat(@"~\Mvc\Views\Shared\{0}.cshtml")]
 [assembly: AspMvcPartialViewLocationFormat(@"~\Mvc\Views\Shared\Partials\{0}.cshtml")]
 [assembly: AspMvcPartialViewLocationFormat(@"~\Mvc\Views\Shared\Partials\Components\{0}.cshtml")]
+
 namespace Shopper
 {
     // @todo Add a suggestion feature;
@@ -53,24 +54,8 @@ namespace Shopper
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(
-            IApplicationBuilder app,
-            [FromServices] UserManager<AppUser> userManager,
-            [FromServices] ApplicationDbContext dbContext,
-            [FromServices] AdminAppDbContext adminAppDbContext,
-            [FromServices] IPasswordHasher<AppUser> passwordHasher,
-            [FromServices] ILogger logger,
-            [FromServices] IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app)
         {
-            //If you want to initialize the database, go to appSettings.json and set "Database.Seed" to true;
-            var seedDatabase = Configuration.GetSection("Database").GetValue<bool?>("Seed") ?? false;
-            if (seedDatabase)
-            {
-                logger.Information("********** Seeding database *************");
-                app.InitializeDatabase(dbContext,adminAppDbContext, userManager,passwordHasher, logger, Configuration, serviceProvider);
-            }
-            app.UpdateRoleClaims(dbContext, logger);
-
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -91,10 +76,7 @@ namespace Shopper
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSerilogRequestLogging();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
         }
     }
 }

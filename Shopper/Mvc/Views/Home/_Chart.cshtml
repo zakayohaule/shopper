@@ -17,11 +17,11 @@
             break;
         case SummaryType.Week:
             currentName = "This week";
-            previousName = "Last week";
+            previousName = "Last Week";
             query = query.Where(s => s.SaleInvoice.Date.WithinThisWeek());
             break;
         case SummaryType.Month:
-            currentName = "This month";
+            currentName = "This Month";
             previousName = "Last month";
             query = query.Where(s => s.SaleInvoice.Date.Month == DateTime.Now.Month);
             break;
@@ -38,16 +38,27 @@
                 <div class="card-header border-0">
                     <div class="d-flex justify-content-between">
                         <h3 class="card-title">
+                            <i class="fas fa-chart-line mr-1"></i>
                             @currentName Sales
                         </h3>
-                        <h4 class="pull-right" id="@Model.ChartId-percentage-div">
-                            <span id="@Model.ChartId-percentage">
+                        <div class="card-tools">
+                            <span id="@Model.ChartId-percentage-div">
+                                <span id="@Model.ChartId-percentage">
+                                </span>
+                                @if (!previousName.IsNullOrEmpty())
+                                {
+                                    <sub style="font-size: 12px">Since @previousName</sub>
+                                }
                             </span>
-                            @if (!previousName.IsNullOrEmpty())
-                            {
-                                <sub style="font-size: 12px">Since @previousName</sub>
-                            }
-                        </h4>
+
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+
+                        </div>
                         @* <a href="javascript:void(0);">View Report</a> *@
                     </div>
                 </div>
@@ -83,12 +94,12 @@
                 <div class="card-header border-0">
                     <h3 class="card-title">Most Selling Products</h3>
                     <div class="card-tools">
-                        <a href="#" class="btn btn-tool btn-sm">
-                            <i class="fas fa-download"></i>
-                        </a>
-                        <a href="#" class="btn btn-tool btn-sm">
-                            <i class="fas fa-bars"></i>
-                        </a>
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="card-body table-responsive p-0">
@@ -108,7 +119,10 @@
                             {
                                 <tr>
                                     <td>
-                                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
+                                        @if (!product.Key.ImagePath.IsNullOrEmpty())
+                                        {
+                                            <img class="table-avatar" style="border-radius: 15%; display: inline; width: 2.5rem" src="@product.Key.ImagePath.LoadProductImageThumbnail(ViewContext.HttpContext)" alt="">
+                                        }
                                         @product.Key.Name
                                     </td>
                                     <td>
@@ -134,12 +148,12 @@
                 <div class="card-header border-0">
                     <h3 class="card-title">Most Profitable Products</h3>
                     <div class="card-tools">
-                        <a href="#" class="btn btn-tool btn-sm">
-                            <i class="fas fa-download"></i>
-                        </a>
-                        <a href="#" class="btn btn-tool btn-sm">
-                            <i class="fas fa-bars"></i>
-                        </a>
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="card-body table-responsive p-0">
@@ -159,7 +173,10 @@
                             {
                                 <tr>
                                     <td>
-                                        <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
+                                        @if (!product.Key.ImagePath.IsNullOrEmpty())
+                                        {
+                                            <img class="table-avatar" style="border-radius: 15%; display: inline; width: 2.5rem" src="@product.Key.ImagePath.LoadProductImageThumbnail(ViewContext.HttpContext)" alt="">
+                                        }
                                         @product.Key.Name
                                     </td>
                                     <td>

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using Shopper.Database;
 
 namespace Shopper.Migrations
 {
@@ -10,8 +9,7 @@ namespace Shopper.Migrations
             migrationBuilder.AddColumn<uint>(
                 name: "product_id",
                 table: "sales",
-                nullable: false,
-                defaultValue: 0u);
+                nullable: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_sales_product_id",
@@ -24,7 +22,7 @@ namespace Shopper.Migrations
                 column: "product_id",
                 principalTable: "products",
                 principalColumn: "id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -10,7 +10,7 @@ namespace Shared.Mvc.Entities
         public ulong SkuId { get; set; }
 
         [Column("product_id")]
-        public uint ProductId { get; set; }
+        public uint? ProductId { get; set; }
 
         [Column("sale_invoice_id")]
         public ulong SaleInvoiceId { get; set; }

@@ -47,100 +47,102 @@
 }
 
 <!-- Info boxes -->
-<section class="col-lg-12 connectedSortable">
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">
-                Low Stock And Expiry Summary
-            </h3>
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                </button>
+<th:permission name="stock_and_expiration_summary_view">
+    <section class="col-lg-12 connectedSortable">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    Low Stock And Expiry Summary
+                </h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-warning elevation-1">
+                                <i class="fas fa-arrow-down"></i>
+                            </span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Low Stock</span>
+                                <h5 class="info-box-number">
+                                    @Model.StockExpiryModel.LowStockCount
+                                </h5>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-danger elevation-1">
+                                <i class="far fa-times-circle"></i>
+                            </span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Out of Stock</span>
+                                <h5 class="info-box-number">
+                                    @Model.StockExpiryModel.OutOfStockCount
+                                </h5>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+
+                    <!-- fix for small devices only -->
+                    <div class="clearfix hidden-md-up"></div>
+
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-warning elevation-1">
+                                <i class="far fa-clock"></i>
+                            </span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">About To Expire</span>
+                                <small class="info-box-number">
+                                    Comming Soon
+                                </small>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-danger elevation-1">
+                                <i class="fas fa-biohazard"></i>
+                            </span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Expired</span>
+                                <h5 class="info-box-number">
+                                    @Model.StockExpiryModel.ExpiredCount
+                                </h5>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
             </div>
         </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-warning elevation-1">
-                            <i class="fas fa-arrow-down"></i>
-                        </span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">Low Stock</span>
-                            <h5 class="info-box-number">
-                                @Model.StockExpiryModel.LowStockCount
-                            </h5>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                </div>
-                <!-- /.col -->
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3">
-                        <span class="info-box-icon bg-danger elevation-1">
-                            <i class="far fa-times-circle"></i>
-                        </span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">Out of Stock</span>
-                            <h5 class="info-box-number">
-                                @Model.StockExpiryModel.OutOfStockCount
-                            </h5>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                </div>
-                <!-- /.col -->
-
-                <!-- fix for small devices only -->
-                <div class="clearfix hidden-md-up"></div>
-
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3">
-                        <span class="info-box-icon bg-warning elevation-1">
-                            <i class="far fa-clock"></i>
-                        </span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">About To Expire</span>
-                            <small class="info-box-number">
-                                Comming Soon
-                            </small>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                </div>
-                <!-- /.col -->
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3">
-                        <span class="info-box-icon bg-danger elevation-1">
-                            <i class="fas fa-biohazard"></i>
-                        </span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">Expired</span>
-                            <h5 class="info-box-number">
-                                @Model.StockExpiryModel.ExpiredCount
-                            </h5>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                    <!-- /.info-box -->
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
-        </div>
-    </div>
-</section>
+    </section>
+</th:permission>
 <!-- Left col -->
 <section class="col-lg-12 connectedSortable">
     <!-- Custom tabs (Charts with tabs)-->

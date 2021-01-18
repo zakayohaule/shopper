@@ -9,8 +9,8 @@ using Shopper.Database;
 namespace Shopper.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210117152347_AddProductIdInSalesModel")]
-    partial class AddProductIdInSalesModel
+    [Migration("20210118065806_AddUserIdInExpenseTable")]
+    partial class AddUserIdInExpenseTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -128,11 +128,17 @@ namespace Shopper.Migrations
                         .HasColumnName("updated_at")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<long?>("UserId")
+                        .HasColumnName("user_id")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ExpenditureTypeId");
 
                     b.HasIndex("TenantId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("expenditures");
                 });
@@ -858,7 +864,7 @@ namespace Shopper.Migrations
                         .HasColumnName("price")
                         .HasColumnType("int unsigned");
 
-                    b.Property<uint>("ProductId")
+                    b.Property<uint?>("ProductId")
                         .HasColumnName("product_id")
                         .HasColumnType("int unsigned");
 
@@ -1213,6 +1219,10 @@ namespace Shopper.Migrations
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Shared.Mvc.Entities.Identity.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Shared.Mvc.Entities.ExpenditureType", b =>
@@ -1411,10 +1421,8 @@ namespace Shopper.Migrations
             modelBuilder.Entity("Shared.Mvc.Entities.Sale", b =>
                 {
                     b.HasOne("Shared.Mvc.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Sales")
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("Shared.Mvc.Entities.SaleInvoice", "SaleInvoice")
                         .WithMany("Sales")

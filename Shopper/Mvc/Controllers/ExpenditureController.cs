@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Shared.Mvc.Entities;
 using Shopper.Attributes;
+using Shopper.Extensions.Helpers;
 using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
 
@@ -51,6 +52,7 @@ namespace Shopper.Mvc.Controllers
                 Description = formModel.Description
             };
 
+            expenditure.UserId = HttpContext.GetUserId();
             expenditure = await _expenditureService.CreateAsync(expenditure);
             if (expenditure == null)
             {

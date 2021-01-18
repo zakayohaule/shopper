@@ -195,6 +195,7 @@ namespace Shopper.Database.Seeders
                     Module = businessInfoManagement
                 },
                 new Permission {Name = "summary_view", DisplayName = "View Summaries", Module = dashboard},
+                new Permission {Name = "stock_and_expiration_summary_view", DisplayName = "View Stock And Expiration Summaries", Module = dashboard},
                 new Permission {Name = "sales_graph", DisplayName = "View Sales Graphs", Module = dashboard},
                 new Permission
                 {

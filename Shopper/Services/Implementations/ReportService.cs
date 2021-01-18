@@ -26,8 +26,7 @@ namespace Shopper.Services.Implementations
             return await _dbContext.Sales
                 .AsNoTracking()
                 .Include(s => s.SaleInvoice)
-                .Include(s => s.Sku)
-                .ThenInclude(s => s.Product)
+                .Include(s => s.Product)
                 .Where(s => s.SaleInvoice.Date > DateTime.Now.AddMonths(-11) && s.IsConfirmed)
                 .ToListAsync();
         }

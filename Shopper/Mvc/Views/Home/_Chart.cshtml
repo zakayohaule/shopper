@@ -111,22 +111,23 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @if (query.Count() > 0)
+                        @if (query.Any())
                         {
-                            @foreach (var product in query
-                                .GroupBy(s => s.Sku.Product)
-                                .OrderByDescending(grouping => grouping.Sum(sale => sale.Sku.Sales.Sum(s => s.Quantity))).Take(10))
+                            @foreach (var prodSales in query
+                                .GroupBy(s => s.ProductId)
+                                .Select(group => new {group.First().Product, Sales = group})
+                                .OrderByDescending(arg => arg.Sales.Sum(s => s.Quantity)).Take(10))
                             {
                                 <tr>
                                     <td>
-                                        @if (!product.Key.ImagePath.IsNullOrEmpty())
+                                        @if (!prodSales.Product.ImagePath.IsNullOrEmpty())
                                         {
-                                            <img class="table-avatar" style="border-radius: 15%; display: inline; width: 2.5rem" src="@product.Key.ImagePath.LoadProductImageThumbnail(ViewContext.HttpContext)" alt="">
+                                            <img class="table-avatar" style="border-radius: 15%; display: inline; width: 2.5rem" src="@prodSales.Product.ImagePath.LoadProductImageThumbnail(ViewContext.HttpContext)" alt="">
                                         }
-                                        @product.Key.Name
+                                        @prodSales.Product.Name
                                     </td>
                                     <td>
-                                        @product.Sum(sale => sale.Sku.Sales.Sum(s => s.Quantity))
+                                        @prodSales.Sales.Sum(s => s.Quantity)
                                     </td>
                                 </tr>
                             }
@@ -165,22 +166,23 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @if (query.Count() > 0)
+                        @if (query.Any())
                         {
-                            @foreach (var product in query
-                                .GroupBy(s => s.Sku.Product)
-                                .OrderByDescending(grouping => grouping.Sum(sale => sale.Sku.Sales.Sum(s => s.Quantity * s.Profit))).Take(10))
+                            @foreach (var prodSales in query
+                                .GroupBy(s => s.ProductId)
+                                .Select(group => new {group.First().Product, Sales = group})
+                                .OrderByDescending(arg => arg.Sales.Sum(s => s.Quantity*s.Profit)).Take(10))
                             {
                                 <tr>
                                     <td>
-                                        @if (!product.Key.ImagePath.IsNullOrEmpty())
+                                        @if (!prodSales.Product.ImagePath.IsNullOrEmpty())
                                         {
-                                            <img class="table-avatar" style="border-radius: 15%; display: inline; width: 2.5rem" src="@product.Key.ImagePath.LoadProductImageThumbnail(ViewContext.HttpContext)" alt="">
+                                            <img class="table-avatar" style="border-radius: 15%; display: inline; width: 2.5rem" src="@prodSales.Product.ImagePath.LoadProductImageThumbnail(ViewContext.HttpContext)" alt="">
                                         }
-                                        @product.Key.Name
+                                        @prodSales.Product.Name
                                     </td>
                                     <td>
-                                        @product.Sum(sale => sale.Sku.Sales.Sum(s => s.Quantity * s.Profit)).ToString("N0")
+                                        @prodSales.Sales.Sum(s => s.Quantity * s.Profit).ToString("N0")
                                     </td>
                                 </tr>
                             }

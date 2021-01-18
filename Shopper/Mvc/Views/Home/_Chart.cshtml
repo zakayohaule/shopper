@@ -179,6 +179,10 @@
                                         {
                                             <img class="table-avatar" style="border-radius: 15%; display: inline; width: 2.5rem" src="@prodSales.Product.ImagePath.LoadProductImageThumbnail(ViewContext.HttpContext)" alt="">
                                         }
+                                        else
+                                        {
+                                            <th:img asp-append-version="true" src="/images/no-image-2.jpg" class="table-avatar"/>
+                                        }
                                         @prodSales.Product.Name
                                     </td>
                                     <td>

@@ -9,6 +9,7 @@ namespace Shopper.Mvc.ViewModels
         public List<DashboardSummary> Summaries { get; set; }
         public SummaryType SummaryType { get; set; }
         public List<Sale> Sales { get; set; }
+        public StockExpiryModel StockExpiryModel { get; set; }
         public List<Expenditure> Expenditures { get; set; }
     }
 }

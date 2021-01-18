@@ -1,10 +1,18 @@
 ﻿@model Shopper.Mvc.ViewModels.SaleFormViewModel;
 
 <th:form class="form-horizontal" asp-action="AddToCart" asp-controller="Sale">
-    @foreach (var price in Model.SkuPrices)
-    {
-        <span id="price-for-@price.Value" hidden>@price.Text</span>
-    }
+    <div id="hidden-prices" hidden>
+        @foreach (var price in Model.SkuPrices)
+        {
+            <span id="price-for-@price.Value" hidden>@price.Text</span>
+        }
+    </div>
+    <div id="hidden-discounts" hidden>
+        @foreach (var discount in Model.MaximumDiscounts)
+        {
+            <span id="discount-for-@discount.Value" hidden>@discount.Text</span>
+        }
+    </div>
     <th:input asp-for="Id" value="@Model.Id" hidden></th:input>
     <div class="form-group row">
         <th:label asp-for="SkuId" class="col-sm-3 col-form-label">Stock Item</th:label>
@@ -22,6 +30,7 @@
         <th:label asp-for="Price" class="col-sm-3 col-form-label"></th:label>
         <div class="col-sm-9">
             <th:input asp-for="Price" type="text" id="price" class="form-control profit" onkeyup="formatNumber(event)"></th:input>
+            <span id="maximum-discount"></span>
         </div>
     </div>
     <div class="form-group row">

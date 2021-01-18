@@ -34,6 +34,9 @@ namespace Shared.Mvc.Entities
         public List<Sku> Skus { get; set; }
 
         [InverseProperty("Product")]
+        public List<Sale> Sales { get; set; }
+
+        [InverseProperty("Product")]
         public ICollection<ProductAttribute> Attributes { get; set; }
 
         [InverseProperty("Product")]

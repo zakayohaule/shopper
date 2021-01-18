@@ -12,6 +12,7 @@ namespace Shopper.Mvc.ViewModels
         public List<SelectListItem> Skus { get; set; }
 
         public List<SelectListItem> SkuPrices { get; set; }
+        public List<SelectListItem> MaximumDiscounts { get; set; }
 
         [Required] public ulong SkuId { get; set; }
 
@@ -20,6 +21,5 @@ namespace Shopper.Mvc.ViewModels
         public int Quantity { get; set; } = 1;
 
         [Required] public string Price { get; set; }
-        public string SellingPrice { get; set; }
     }
 }

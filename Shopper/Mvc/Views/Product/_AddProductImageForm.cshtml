@@ -1,21 +1,39 @@
 @using IdentityServer4.Extensions
 @model Shopper.Mvc.ViewModels.ImagesUploadModel;
 @{
-    var imageLabel = !Model.CurrentImageName.IsNullOrEmpty() ? "Change main image" : "Choose main image";
-    var imageName = !Model.CurrentImageName.IsNullOrEmpty() ? Model.CurrentImageName : "Choose main image";
+    var imageLabel = !Model.CurrentImageName.IsNullOrEmpty() ? "Change main photo" : "Choose main photo";
+    var imageName = !Model.CurrentImageName.IsNullOrEmpty() ? Model.CurrentImageName : "Choose main photo";
 }
-<div class="form-group" id="images">
-    <fieldset>
-        <legend>@imageLabel</legend>
-        <div class="custom-file">
-            <th:input asp-for="MainImage" class="custom-file-input" id="exampleInputFile"></th:input>
-            <label class="custom-file-label" for="exampleInputFile">@imageName</label>
-        </div>
-    </fieldset>
-</div>
+
+@if (Model.CurrentImageName.IsNullOrEmpty())
+{
+    <div class="form-group" id="images">
+        <fieldset>
+            <legend>@imageLabel</legend>
+            <div class="custom-file">
+                <th:input asp-for="MainImage" class="custom-file-input" id="product-photo"></th:input>
+                <label class="custom-file-label" for="product-photo">@imageName</label>
+            </div>
+        </fieldset>
+    </div>
+}
+else
+{
+    <div class="form-group" id="images">
+        <fieldset>
+            <legend>Upload another photo</legend>
+            <div class="custom-file">
+                <th:input asp-for="Images" class="custom-file-input" id="product-photo"></th:input>
+                <label class="custom-file-label" for="product-photo">Upload photo</label>
+            </div>
+        </fieldset>
+    </div>
+}
+
 @{
     var totalImages = Model.ImagesCount;
 }
+@*
 @if (totalImages > 0)
 {
     <fieldset>
@@ -25,17 +43,18 @@
             var id = "exampleInputFile-" + i;
             var imageNumber = 4 - (totalImages - i);
             <div class="form-group">
-                @* <div class="input-group"> *@
+                $1$ <div class="input-group"> #1#
                 <label for="@id">Image @imageNumber</label>
                 <div class="custom-file">
                     <th:input asp-for="Images" class="custom-file-input" id=@id></th:input>
                     <label class="custom-file-label" for=@id>Choose image</label>
                 </div>
-                @* </div> *@
+                $1$ </div> #1#
             </div>
         }
     </fieldset>
 }
+*@
 
 <div class="form-group col-12 text-right">
     <button type="submit" class="btn btn-primary" name="button">Submit</button>

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shopper.Database;
 
 namespace Shopper.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210117072406_RemoveReceiveLowStockAlertMigration")]
+    partial class RemoveReceiveLowStockAlertMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,17 +128,11 @@ namespace Shopper.Migrations
                         .HasColumnName("updated_at")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<long?>("UserId")
-                        .HasColumnName("user_id")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ExpenditureTypeId");
 
                     b.HasIndex("TenantId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("expenditures");
                 });
@@ -862,10 +858,6 @@ namespace Shopper.Migrations
                         .HasColumnName("price")
                         .HasColumnType("int unsigned");
 
-                    b.Property<uint?>("ProductId")
-                        .HasColumnName("product_id")
-                        .HasColumnType("int unsigned");
-
                     b.Property<long>("Profit")
                         .HasColumnName("profit")
                         .HasColumnType("bigint");
@@ -892,8 +884,6 @@ namespace Shopper.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.HasIndex("SaleInvoiceId");
 
@@ -1217,10 +1207,6 @@ namespace Shopper.Migrations
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Shared.Mvc.Entities.Identity.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Shared.Mvc.Entities.ExpenditureType", b =>
@@ -1418,10 +1404,6 @@ namespace Shopper.Migrations
 
             modelBuilder.Entity("Shared.Mvc.Entities.Sale", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Product", "Product")
-                        .WithMany("Sales")
-                        .HasForeignKey("ProductId");
-
                     b.HasOne("Shared.Mvc.Entities.SaleInvoice", "SaleInvoice")
                         .WithMany("Sales")
                         .HasForeignKey("SaleInvoiceId")

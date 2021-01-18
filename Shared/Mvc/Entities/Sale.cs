@@ -9,6 +9,9 @@ namespace Shared.Mvc.Entities
         [Column("sku_id")]
         public ulong SkuId { get; set; }
 
+        [Column("product_id")]
+        public uint? ProductId { get; set; }
+
         [Column("sale_invoice_id")]
         public ulong SaleInvoiceId { get; set; }
 
@@ -26,6 +29,9 @@ namespace Shared.Mvc.Entities
 
         [ForeignKey(nameof(SkuId))]
         public Sku Sku { get; set; }
+
+        [ForeignKey(nameof(ProductId))]
+        public Product Product { get; set; }
 
         [ForeignKey(nameof(SaleInvoiceId))]
         public SaleInvoice SaleInvoice { get; set; }

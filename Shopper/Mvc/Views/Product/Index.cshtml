@@ -1,4 +1,6 @@
 ﻿@using Shopper.Mvc.ViewModels
+@using Shopper.Extensions.Helpers
+@using IdentityServer4.Extensions
 @model List<Product>;
 
 @{
@@ -35,7 +37,7 @@
     <div class="card-header">
         <th:permission name="product_add">
             <a href="" data-toggle="modal" data-target="#add-product" class="btn btn-sm btn-primary float-right" title="Add User">
-                <i class="fas fa-user-plus"> Add</i>
+                Add Product
             </a>
         </th:permission>
     </div>
@@ -47,7 +49,7 @@
             <tr>
                 <th style="width: 10px;">#</th>
                 <th>Name</th>
-                <th>Category</th>
+                <th>Type</th>
                 <th>Attributes</th>
                 @if (Model.Any(p => p.HasExpiration))
                 {
@@ -67,7 +69,13 @@
                 index++;
                 <tr>
                     <td>@index</td>
-                    <td>@product.Name</td>
+                    <td>
+                        @if (!product.ImagePath.IsNullOrEmpty())
+                        {
+                            <img class="table-avatar" style="border-radius: 15%; display: inline; width: 2.5rem" src="@product.ImagePath.LoadProductImageThumbnail(ViewContext.HttpContext)" alt="">
+                        }
+                        @product.Name
+                    </td>
                     <td>@product.ProductType.Name</td>
                     <td>@string.Join(", ", product.Attributes.Select(att => att.Attribute.Name))</td>
                     @if (Model.Any(p => p.HasExpiration))

@@ -9,5 +9,5 @@
     <th:a asp-controller="Product" asp-action="DeleteMainImage" asp-route-id="@product.Id" class="delete-image" hidden>
     </th:a>
     <i class="fas fa-edit edit-image" hidden onclick="openImageEditModal('@Url.Action("UpdateMainImage", "Product", new {id = product.Id})')"></i>
-    <th:img asp-append-version="true" src="@product.ImagePath.LoadProductImage(ViewContext.HttpContext)" alt="Product Image"/>
+    <th:img asp-append-version="true" src="@product.ImagePath.LoadProductImageThumbnail(ViewContext.HttpContext)" alt="Product Image"/>
 </div>

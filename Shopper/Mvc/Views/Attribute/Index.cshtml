@@ -16,7 +16,7 @@
     <div class="card-header">
         <th:permission name="attribute_add">
             <a href="" data-toggle="modal" data-target="#add-attribute" class="btn btn-sm btn-primary float-right" title="Add Attribute">
-                <i class="fas fa-user-plus"> Add</i>
+                Add Attribute
             </a>
 
 
@@ -54,38 +54,47 @@
             @{
                 int index = 0;
             }
-            @foreach (var att in Model)
+            @if (Model.Count() > 0)
             {
-                index++;
-                <tr>
-                    <td>@index</td>
-                    <td>@att.Name</td>
-                    <td>
-                        <th:permission name="attribute_option_view">
-                            <th:a asp-controller="AttributeOption" asp-action="Index" asp-route-attributeId="@att.Id" title="Attribute Options" class="btn btn-sm btn-default">
-                                <i class="fa fa-list-ul"></i>
-                            </th:a>
-                        </th:permission>
-                        <th:permission name="attribute_view">
-                            <a href="#" onclick="openEditModal('@Url.Action("EditAttributeModal", new {id = att.Id})',
+                foreach (var att in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>@index</td>
+                        <td>@att.Name</td>
+                        <td>
+                            <th:permission name="attribute_option_view">
+                                <th:a asp-controller="AttributeOption" asp-action="Index" asp-route-attributeId="@att.Id" title="Attribute Options" class="btn btn-sm btn-default">
+                                    <i class="fa fa-list-ul"></i>
+                                </th:a>
+                            </th:permission>
+                            <th:permission name="attribute_view">
+                                <a href="#" onclick="openEditModal('@Url.Action("EditAttributeModal", new {id = att.Id})',
                          '@Url.Action("Update", new {id = att.Id})',
                          'Edit Attribute')"
-                               class="btn btn-default btn-sm" title="Edit attribute">
-                                @* <span class="badge badge-warning" title="Edit attribute"> *@
-                                <i class="fas fa-edit"></i>
-                                @* </span> *@
-                            </a>
-                        </th:permission>
-                        <th:permission name="attribute_delete">
-                            <th:a asp-controller="Attribute"
-                                  asp-action="Delete"
-                                  asp-route-id="@att.Id" class="btn btn-default btn-sm btn-delete" title="Delete attribute">
-                                @* <span class="badge badge-danger" title="Delete attribute"> *@
-                                <i class="fas fa-trash"></i>
-                                @* </span> *@
-                            </th:a>
-                        </th:permission>
-                    </td>
+                                   class="btn btn-default btn-sm" title="Edit attribute">
+                                    @* <span class="badge badge-warning" title="Edit attribute"> *@
+                                    <i class="fas fa-edit"></i>
+                                    @* </span> *@
+                                </a>
+                            </th:permission>
+                            <th:permission name="attribute_delete">
+                                <th:a asp-controller="Attribute"
+                                      asp-action="Delete"
+                                      asp-route-id="@att.Id" class="btn btn-default btn-sm btn-delete" title="Delete attribute">
+                                    @* <span class="badge badge-danger" title="Delete attribute"> *@
+                                    <i class="fas fa-trash"></i>
+                                    @* </span> *@
+                                </th:a>
+                            </th:permission>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" class="text-center">No records found</td>
                 </tr>
             }
             </tbody>

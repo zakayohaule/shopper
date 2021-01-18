@@ -129,6 +129,8 @@ namespace Shopper.Mvc.Controllers
             var permissions = HttpContext.Request.Form["permissions"].ToList();
             await _roleService.SaveRolePermissionsAsync(role, permissions);
             await userClaimService.ReCacheUsersRoleClaims(role.Id);
+
+            ToastSuccess("Role's permission updated successfully!");
             return RedirectToAction(nameof(Index));
         }
 

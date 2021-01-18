@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using IdentityServer4.Extensions;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Shopper.Extensions.Helpers
 {
@@ -26,7 +29,14 @@ namespace Shopper.Extensions.Helpers
             {
                 return "kea";
             }
-            return $"/uploads/products/thumb_{tenant.Domain}/{imageName}";
+            var environment = context.RequestServices.GetRequiredService<IHostEnvironment>();
+            var wwwroot = $"{environment.ContentRootPath}/wwwroot";
+            var image = Path.Combine(wwwroot, $"uploads/products/{tenant.Domain}/thumbs/{imageName}");
+            if (File.Exists(image))
+            {
+                return $"/uploads/products/{tenant.Domain}/thumbs/{imageName}";
+            }
+            return $"/uploads/products/{tenant.Domain}/{imageName}";
         }
 
         public static string LoadTenantImage(this string imageName, HttpContext context)

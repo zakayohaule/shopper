@@ -29,13 +29,20 @@ namespace Shopper.Services.Implementations
             var tenant = _tenantIdentifierService.GetTenantFromRequest();
             var webRoot = $"{_hostEnvironment.ContentRootPath}/wwwroot";
             var imageUploadPath = @$"{webRoot}/uploads/products/{tenant.Domain.Split(".")[0]}/";
+            var imageThumbUploadPath = @$"{webRoot}/uploads/products/{tenant.Domain.Split(".")[0]}/thumbs";
             if (!Directory.Exists(imageUploadPath))
             {
                 Directory.CreateDirectory(imageUploadPath);
             }
+            if (!Directory.Exists(imageThumbUploadPath))
+            {
+                Directory.CreateDirectory(imageThumbUploadPath);
+            }
 
             var image = await Image.LoadAsync(formFile.OpenReadStream());
+            var thumb = await Image.LoadAsync(formFile.OpenReadStream());
             image.Mutate(x => x.Resize(500,380));
+            thumb.Mutate(x => x.Resize(110,90));
             var ext = formFile.FileName.Split(".")[1];
             if (ext.IsNullOrEmpty())
             {
@@ -43,6 +50,7 @@ namespace Shopper.Services.Implementations
             }
             var imageName = $"{DateTimeOffset.Now.ToUnixTimeSeconds().ToString()}.{ext}";
             await image.SaveAsync($"{imageUploadPath}/{imageName}");
+            await thumb.SaveAsync($"{imageUploadPath}/thumbs/{imageName}");
             return imageName;
         }
 

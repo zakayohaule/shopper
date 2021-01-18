@@ -107,7 +107,10 @@
                 @if (product.Skus.Any() && product.Attributes.Any())
                 {
                     <hr>
-                    <h4>Available Options</h4>
+                    <h4>
+                        Available Options
+                        <small>[@string.Join(", ", product.Attributes.Select(att => att.Attribute.Name))]</small>
+                    </h4>
                     <div class="btn-group btn-group-toggle">
                         @foreach (var skuAtt in product
                             .Skus
@@ -119,7 +122,7 @@
                         }
                     </div>
                 }
-                <ul class="list-group list-group-unbordered mb-3 col-6" >
+                <ul class="list-group list-group-unbordered mb-3 col-6">
                     <li class="list-group-item">
                         <b>Group</b> <a class="float-right">@product.ProductType.ProductCategory.ProductGroup.Name</a>
                     </li>

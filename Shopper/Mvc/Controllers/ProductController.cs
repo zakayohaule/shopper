@@ -50,6 +50,7 @@ namespace Shopper.Mvc.Controllers
                 .ThenInclude(pt => pt.ProductGroup)
                 .Include(p => p.Images)
                 .Include(p => p.Attributes)
+                .ThenInclude(p => p.Attribute)
                 .Include(p => p.ProductType)
                 .Include(p => p.Skus)
                 .ThenInclude(s => s.SkuAttributes)

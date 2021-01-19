@@ -50,6 +50,7 @@ namespace Shopper.Mvc.Controllers
             {
                 return NotFound("Invoice not found");
             }
+
             return View(invoice);
         }
 
@@ -110,7 +111,8 @@ namespace Shopper.Mvc.Controllers
         {
             try
             {
-                await _saleService.AddToInvoiceAsync(formViewModel, HttpContext.GetUserId(), HttpContext.GetCurrentTenant());
+                await _saleService.AddToInvoiceAsync(formViewModel, HttpContext.GetUserId(),
+                    HttpContext.GetCurrentTenant());
             }
             catch (OutOfStockException e)
             {

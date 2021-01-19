@@ -1,0 +1,50 @@
+@model List<Sale>
+@{
+    Layout = "_Layout";
+    var productSales = Model.GroupBy(s => s.ProductId)
+        .Select(group => new {group.First().Product, Sales = group})
+        .OrderByDescending(arg => arg.Sales.Sum(s => s.Profit * s.Quantity));
+}
+
+@section css {
+    <th:partial name="Partials/_DtCss"></th:partial>
+}
+
+<div class="card with-border">
+
+    <div class="card-body table-responsive p-3">
+        <table class="table table-sm table-hover dt-table">
+            <thead>
+            <tr>
+                <th style="width: 10px;">#</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Profit</th>
+                <th>Discount</th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                int index = 0;
+            }
+            @foreach (var prodSale in productSales)
+            {
+                index++;
+                <tr>
+                    <td>@index</td>
+                    <td>@prodSale.Product.Name</td>
+                    <td>@prodSale.Sales.Sum(s => s.Quantity).ToString("N0")</td>
+                    <td>@prodSale.Sales.Sum(s => s.Profit * s.Quantity).ToString("N0")</td>
+                    <td>@prodSale.Sales.Sum(s => s.Discount).ToString("N0")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+
+@section scripts
+{
+    <th:partial name="Partials/_DtJs"></th:partial>
+}

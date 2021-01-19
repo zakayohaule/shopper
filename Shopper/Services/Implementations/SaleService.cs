@@ -21,6 +21,13 @@ namespace Shopper.Services.Implementations
             _dbContext = dbContext;
         }
 
+        public async Task<List<Sale>> GetSalesReportAsync()
+        {
+            return await _dbContext.Sales
+                .Include(s => s.Product)
+                .ToListAsync();
+        }
+
         public async Task<List<SaleInvoice>> GetSaleInvoicesAsync()
         {
             return await _dbContext.SaleInvoices

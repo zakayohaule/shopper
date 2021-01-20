@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using Shared.Mvc.Entities.Identity;
+using Shopper.Mvc.Entities.Identity;
 
 namespace Shopper.Database.Seeders
 {

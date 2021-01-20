@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Shared.Mvc.Entities;
 using Shopper.Attributes;
 using Shopper.Extensions.Helpers;
+using Shopper.Mvc.Entities;
 using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
 

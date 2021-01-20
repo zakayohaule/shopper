@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities;
 using Shopper.Database;
+using Shopper.Mvc.Entities;
 using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
 
@@ -59,7 +58,7 @@ namespace Shopper.Services.Implementations
                 var att = productAttribute.Attribute;
                 select.Name = att.Name;
                 select.Id = att.Id;
-                var skuHasAttributes = sku.SkuAttributes.IsNotNull() && sku.SkuAttributes.Any();
+                var skuHasAttributes = sku.SkuAttributes != null && sku.SkuAttributes.Any();
                 select.Options = att.AttributeOptions.Select(ao => new SelectListItem
                 {
                     Selected = skuHasAttributes && sku.SkuAttributes.Any(ska => ska.AttributeOptionId.Equals(ao.Id)),
@@ -157,7 +156,7 @@ namespace Shopper.Services.Implementations
                 HasExpiration = newProduct.HasExpirationDate
             });
 
-            if (newProduct.Attributes.IsNotNull() && newProduct.Attributes.Any())
+            if (newProduct.Attributes != null && newProduct.Attributes.Any())
             {
                 var productAttributes = newProduct.Attributes.Select(attribute => new ProductAttribute
                     {AttributeId = attribute, Product = product.Entity,}).ToList();
@@ -181,7 +180,7 @@ namespace Shopper.Services.Implementations
             productToUpdate.ProductTypeId = productModel.ProductTypeId;
             productToUpdate.HasExpiration = productModel.HasExpirationDate;
             _dbContext.ProductAttributes.RemoveRange(productToUpdate.Attributes);
-            if (productModel.Attributes.IsNotNull() && productModel.Attributes.Any())
+            if (productModel.Attributes != null && productModel.Attributes.Any())
             {
                 productToUpdate.Attributes.Clear();
                 var productAttributes = productModel.Attributes.Select(attribute => new ProductAttribute
@@ -306,7 +305,7 @@ namespace Shopper.Services.Implementations
                 _dbContext.Products.Update(product);
             }
 
-            if (viewModel.Images.IsNotNull() && viewModel.Images.Count > 0)
+            if (viewModel.Images != null && viewModel.Images.Count > 0)
             {
                 foreach (var viewModelImage in viewModel.Images)
                 {

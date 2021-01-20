@@ -1,16 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using ShopperAdmin.Database;
-using ShopperAdmin.Extensions.Helpers;
-using Shared.Mvc.Entities;
-using Shared.Mvc.ViewModels;
-using ShopperAdmin.Services.Interfaces;
-using FluentEmail.Core;
-using Humanizer;
-using Microsoft.EntityFrameworkCore;
+﻿using FluentEmail.Core;
 using Microsoft.Extensions.Hosting;
+using ShopperAdmin.Database;
+using ShopperAdmin.Services.Interfaces;
 
 namespace ShopperAdmin.Services.Implementations
 {

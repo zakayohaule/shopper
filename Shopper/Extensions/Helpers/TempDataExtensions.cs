@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
-using Shared.Extensions.Helpers;
 
 namespace Shopper.Extensions.Helpers
 {
@@ -26,7 +25,7 @@ namespace Shopper.Extensions.Helpers
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             });
         }
-        
+
         public static ModelStateDictionary DeserializeModelState(this string serialisedErrorList)
         {
             var errorList = JsonConvert.DeserializeObject<List<ModelStateTransfer>>(serialisedErrorList);
@@ -42,7 +41,7 @@ namespace Shopper.Extensions.Helpers
             }
             return modelState;
         }
-        
+
         public static void Put<T>(this ITempDataDictionary tempData, string key, T value) where T : class
         {
             tempData[key] = JsonConvert.SerializeObject(value, Formatting.Indented, new JsonSerializerSettings
@@ -60,7 +59,7 @@ namespace Shopper.Extensions.Helpers
 
         public static void GetModelErrorsFromTempData(this ModelStateDictionary modelStateDictionary, TempDataDictionary tempData)
         {
-            Console.WriteLine("temp data is null: " + tempData["ModelState"].IsNull());
+            Console.WriteLine("temp data is null: " + tempData["ModelState"] == null);
             // var tempDateModelState = JsonConvert.DeserializeObject(tempData["ModelState"].ToString()) as ModelStateEntry;
             //
             // if (tempDateModelState == null)

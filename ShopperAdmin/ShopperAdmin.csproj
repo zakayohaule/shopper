@@ -10,10 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Database\ModelBuilders" />
         <Folder Include="Migrations" />
-        <Folder Include="Mvc\Entities" />
-        <Folder Include="Mvc\ViewModels" />
     </ItemGroup>
 
     <ItemGroup>

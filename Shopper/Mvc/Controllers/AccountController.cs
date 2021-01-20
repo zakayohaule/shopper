@@ -4,14 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities.Identity;
-using Shared.Mvc.ViewModels;
-using Shared.Mvc.ViewModels.Emails;
 using Shopper.Attributes;
-using Shopper.Database;
 using Shopper.Extensions.Helpers;
+using Shopper.Mvc.Entities.Identity;
+using Shopper.Mvc.ViewModels;
+using Shopper.Mvc.ViewModels.Emails;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Mvc.Controllers
@@ -50,7 +47,7 @@ namespace Shopper.Mvc.Controllers
         {
             var user = await _userManager.FindByEmailAsync(loginModel.Email);
             // var user = await _userService.FindByEmail(loginModel.Email);
-            if (user.IsNull() || !user.TenantId.Equals(HttpContext.GetCurrentTenant().Id))
+            if (user == null || !user.TenantId.Equals(HttpContext.GetCurrentTenant().Id))
             {
                 AddPageAlerts(PageAlertType.Error, "Invalid login credentials!");
                 return View();
@@ -78,7 +75,7 @@ namespace Shopper.Mvc.Controllers
                 var claims = _userClaimService.GetUserClaims(user.Id);
                 _userClaimService.CacheClaims(user.Id, claims);
 
-                if (returnTo.IsNotNull())
+                if (returnTo != null)
                 {
                     return LocalRedirect(returnTo);
                 }
@@ -130,7 +127,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> ForgotPassword(ForgotPasswordModel viewModel)
         {
             var user = await _userManager.FindByEmailAsync(viewModel.Email);
-            if (user.IsNull())
+            if (user == null)
             {
                 return NotFound();
             }
@@ -176,7 +173,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> ResetForgottenPassword(ResetPasswordModel viewModel)
         {
             var user = await _userManager.FindByEmailAsync(viewModel.Email);
-            if (user.IsNull())
+            if (user == null)
             {
                 return NotFound();
             }

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Linq.Expressions;
 using IdentityServer4.EntityFramework.Entities;
 using Microsoft.EntityFrameworkCore;
-using Shared.Mvc.Entities;
-using Shared.Mvc.Entities.BaseEntities;
-using Shared.Mvc.Entities.Identity;
-using Attribute = Shared.Mvc.Entities.Attribute;
+using Shopper.Mvc.Entities;
+using Shopper.Mvc.Entities.Identity;
+using Attribute = Shopper.Mvc.Entities.Attribute;
 
 namespace Shopper.Extensions.Configurations
 {
@@ -26,24 +24,6 @@ namespace Shopper.Extensions.Configurations
             builder.Entity<SaleInvoice>().HasQueryFilter(e => e.TenantId == tenantId);
             builder.Entity<Sku>().HasQueryFilter(e => e.TenantId == tenantId);
         }
-        /*public static void ApplyTenantQueryFilter(this ModelBuilder builder,Guid tenantId)
-
-        {
-            foreach (var entityType in builder.Model.GetEntityTypes())
-            {
-                var foundProperty = entityType.FindProperty("TenantId");
-
-                if (foundProperty != null)
-                {
-                    var newParam = Expression.Parameter(entityType.ClrType);
-
-                    var filter = Expression.Lambda(Expression.Equal(Expression.Property(newParam, "TenantId"),
-                        Expression.Constant(tenantId)), newParam);
-
-                    builder.Entity(entityType.ClrType).HasQueryFilter(filter);
-                }
-            }
-        }*/
 
         public static void CustomConfigureClientContext(this ModelBuilder builder)
         {

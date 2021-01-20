@@ -8,9 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Serilog;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities.Identity;
 using Shopper.Database;
+using Shopper.Mvc.Entities.Identity;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Services.Implementations
@@ -55,7 +54,7 @@ namespace Shopper.Services.Implementations
         {
             var claims = new List<string>();
             var user = _dbContext.Users.Find(userId);
-            if (user.IsNull())
+            if (user == null)
             {
                 return claims;
             }

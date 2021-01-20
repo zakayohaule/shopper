@@ -5,7 +5,6 @@
  using Microsoft.AspNetCore.Authorization;
  using Microsoft.AspNetCore.Mvc;
  using Serilog;
- using Shared.Mvc.ViewModels;
  using Shopper.Mvc.ViewModels;
  using Shopper.Services.Interfaces;
 

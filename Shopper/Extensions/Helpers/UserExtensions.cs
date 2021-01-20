@@ -2,13 +2,13 @@
  using System.IO;
  using System.Linq;
  using System.Security.Claims;
+ using IdentityServer4.Extensions;
  using Microsoft.AspNetCore.Http;
  using Microsoft.AspNetCore.Mvc.Rendering;
  using Microsoft.Extensions.DependencyInjection;
  using Microsoft.Extensions.Hosting;
  using Microsoft.IdentityModel.JsonWebTokens;
- using Shared.Extensions.Helpers;
- using Shared.Mvc.Entities;
+ using Shopper.Mvc.Entities;
  using Shopper.Services.Interfaces;
 
  namespace Shopper.Extensions.Helpers
@@ -21,7 +21,7 @@
                 .FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)
                 ?.Value;
 
-            if (userIdClaim.IsNull())
+            if (userIdClaim == null)
             {
                 userIdClaim = claimsPrincipal.Claims
                     .FirstOrDefault(claim => claim.Type == "sub")
@@ -71,7 +71,7 @@
         {
             var authorizationHeader = httpContext.Request.Headers["Authorization"];
 
-            if (authorizationHeader.IsNull())
+            if (authorizationHeader.IsNullOrEmpty())
             {
                 Console.WriteLine("No Authorization header");
                 return string.Empty;
@@ -79,7 +79,7 @@
 
             var bearerHeader = authorizationHeader.FirstOrDefault();
 
-            if (bearerHeader.IsNull())
+            if (bearerHeader == null)
             {
                 Console.WriteLine("Authorization header doesn't contain a bearer token");
                 return string.Empty;

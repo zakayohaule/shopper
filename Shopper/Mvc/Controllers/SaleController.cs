@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Shared.Common;
-using Shared.Extensions.Helpers;
 using Shopper.Attributes;
+using Shopper.Common;
 using Shopper.Extensions.Helpers;
 using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
@@ -93,7 +92,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> OpenSaleEditModal(ulong id)
         {
             var sale = await _saleService.FindSaleByIdAsync(id);
-            if (sale.IsNull())
+            if (sale == null)
             {
                 return NotFound();
             }
@@ -126,7 +125,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> UpdateSale(ulong id, SaleFormViewModel viewModel)
         {
             var sale = await _saleService.FindSaleByIdAsync(id);
-            if (sale.IsNull())
+            if (sale == null)
             {
                 return NotFound();
             }

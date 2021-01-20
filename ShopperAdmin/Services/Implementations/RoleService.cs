@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security;
 using System.Threading.Tasks;
-using ShopperAdmin.Database;
-using ShopperAdmin.Extensions.Helpers;
-using Shared.Mvc.Entities;
-using Shared.Mvc.ViewModels;
-using ShopperAdmin.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities.Identity;
+using Shared.Mvc.ViewModels;
+using ShopperAdmin.Database;
+using ShopperAdmin.Services.Interfaces;
 
 namespace ShopperAdmin.Services.Implementations
 {

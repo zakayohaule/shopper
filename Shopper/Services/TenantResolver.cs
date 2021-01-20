@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Shared.Common;
-using Shared.Mvc.Entities;
+using Shopper.Common;
 using Shopper.Database;
 using Shopper.Extensions.Helpers;
+using Shopper.Mvc.Entities;
 
 namespace Shopper.Services
 {

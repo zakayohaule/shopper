@@ -3,8 +3,6 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Shared.Mvc.Entities;
-using Shopper.Services;
 
 namespace Shopper.Extensions.Configurations
 {

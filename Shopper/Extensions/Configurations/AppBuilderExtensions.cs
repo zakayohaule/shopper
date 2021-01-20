@@ -1,15 +1,14 @@
 ﻿using System;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Shared.Mvc.Entities.Identity;
 using Shopper.Database;
 using Shopper.Database.Seeders;
+using Shopper.Mvc.Entities.Identity;
 using Shopper.Services;
 
 namespace Shopper.Extensions.Configurations

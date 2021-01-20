@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Shared.Common;
-using Shared.Mvc.Entities;
+using Shopper.Common;
 using Shopper.Database;
+using Shopper.Mvc.Entities;
 using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
 

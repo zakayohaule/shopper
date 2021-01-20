@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Extensions.Helpers;
-using ShopperAdmin.Attributes;
-using ShopperAdmin.Extensions.Helpers;
 using Shared.Mvc.Entities.Identity;
 using Shared.Mvc.ViewModels;
 using Shared.Mvc.ViewModels.Emails;
+using ShopperAdmin.Attributes;
+using ShopperAdmin.Extensions.Helpers;
 using ShopperAdmin.Services.Interfaces;
 
 namespace ShopperAdmin.Mvc.Controllers

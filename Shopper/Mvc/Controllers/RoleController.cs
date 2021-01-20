@@ -4,11 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities.Identity;
 using Shopper.Attributes;
-using Shopper.Database;
-using Shopper.Extensions.Helpers;
+using Shopper.Mvc.Entities.Identity;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Mvc.Controllers
@@ -63,7 +60,7 @@ namespace Shopper.Mvc.Controllers
         {
             var toUpdate = await _roleService.FindByIdAsync(id);
 
-            if (toUpdate.IsNull())
+            if (toUpdate == null)
             {
                 return NotFound();
             }
@@ -91,7 +88,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> Delete(long id)
         {
             var role = await _roleService.FindByIdAsync(id);
-            if (role.IsNull())
+            if (role == null)
             {
                 return NotFound();
             }
@@ -121,7 +118,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> SaveRolePermissions(long id, [FromServices] IUserClaimService userClaimService)
         {
             var role = await _roleService.FindByIdAsync(id);
-            if (role.IsNull())
+            if (role == null)
             {
                 return NotFound();
             }

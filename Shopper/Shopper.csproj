@@ -41,10 +41,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Shared\Shared.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Folder Include="Migrations" />
       <Folder Include="Migrations\AdminAppDb" />
         <None Include="wwwroot\*" />

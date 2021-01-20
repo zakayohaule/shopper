@@ -6,9 +6,8 @@ using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities;
 using Shopper.Attributes;
+using Shopper.Mvc.Entities;
 using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
 
@@ -57,7 +56,7 @@ namespace Shopper.Mvc.Controllers
             }
 
             var attributeOptionIds = await GetAttributeIdsFromViewModelAsync(skuViewModel);
-            if (attributeOptionIds.IsNull())
+            if (attributeOptionIds == null)
             {
                 return BadRequest();
             }
@@ -66,7 +65,7 @@ namespace Shopper.Mvc.Controllers
 
             var newSku = await _productService.AddProductToStockAsync(skuViewModel, attributeOptionIds);
 
-            if (newSku.IsNotNull())
+            if (newSku != null)
             {
                 ToastSuccess("Product added to stock successfully!");
             }
@@ -84,20 +83,20 @@ namespace Shopper.Mvc.Controllers
         {
             // @todo validate stock item quantity
             var sku = await _productService.FindSkuByIdAsync(id).SingleOrDefaultAsync();
-            if (sku.IsNull())
+            if (sku == null)
             {
                 return NotFound();
             }
 
             var attributeOptionIds = await GetAttributeIdsFromViewModelAsync(skuViewModel);
-            if (attributeOptionIds.IsNull())
+            if (attributeOptionIds == null)
             {
                 return BadRequest();
             }
 
             skuViewModel.Sku = GetSkuFromViewModel(skuViewModel);
             sku = await _productService.UpdateStockItemAsync(sku,skuViewModel, attributeOptionIds);
-            if (sku.IsNull())
+            if (sku == null)
             {
                 ToastError("Stock item could not be updated. Please try again or contact system administrator");
             }
@@ -142,7 +141,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> DeleteSku(ulong id)
         {
             var sku = await _productService.FindSkuByIdAsync(id).SingleOrDefaultAsync();
-            if (sku.IsNull())
+            if (sku == null)
             {
                 return NotFound();
             }

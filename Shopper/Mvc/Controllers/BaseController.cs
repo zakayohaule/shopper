@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Shared.Mvc.Entities;
-using Shared.Mvc.Enums;
-using Shared.Mvc.ViewModels;
+using Shopper.Mvc.Entities;
+using Shopper.Mvc.Enums;
+using Shopper.Mvc.ViewModels;
 
 namespace Shopper.Mvc.Controllers
 {

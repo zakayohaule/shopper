@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Shared.Mvc.Entities;
-using Shared.Mvc.Enums;
 using Shopper.Database;
 using Shopper.Extensions.Helpers;
+using Shopper.Mvc.Entities;
+using Shopper.Mvc.Enums;
 using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
 

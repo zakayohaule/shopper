@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Shared.Mvc.Entities.Identity;
+using Shopper.Mvc.Entities.Identity;
 
 namespace Shopper.Services.Implementations.ReplaceDefaults
 {

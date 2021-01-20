@@ -1,8 +1,7 @@
-@using Shared.Extensions.Helpers
 @{
     var partialName = ViewData["FormName"];
 
-    if (partialName.IsNull())
+    if (partialName == null)
     {
         throw new ArgumentNullException($"You must provide a ViewData value to specify the partial to use for editiing");
     }

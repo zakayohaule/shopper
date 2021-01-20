@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
-using Shared.Mvc.Entities;
 using Shared.Mvc.Entities.Identity;
 
 namespace ShopperAdmin.Database.Seeders

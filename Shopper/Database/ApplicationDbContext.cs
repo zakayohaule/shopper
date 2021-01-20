@@ -1,25 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Finbuckle.MultiTenant;
 using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyModel;
-using Shared.Mvc.Entities;
-using Shared.Mvc.Entities.BaseEntities;
-using Shared.Mvc.Entities.Identity;
-using Shopper.Extensions.Configurations;
-using Shopper.Extensions.Helpers;
+using Shopper.Mvc.Entities;
+using Shopper.Mvc.Entities.Identity;
 using Shopper.Services.Interfaces;
-using Attribute = Shared.Mvc.Entities.Attribute;
-using Module = Shared.Mvc.Entities.Identity.Module;
+using Attribute = Shopper.Mvc.Entities.Attribute;
 
 namespace Shopper.Database
 {
@@ -114,7 +105,7 @@ namespace Shopper.Database
         {
             Console.WriteLine("******************* This method is being called now! *******************");
             base.OnModelCreating(builder);
-            builder.ApplyConfigurationsFromAssembly(typeof(AppUser).Assembly);
+            builder.ApplyConfigurationsFromAssembly(typeof(Startup).Assembly);
             builder.Entity<AppUser>().HasQueryFilter(e => e.TenantId == Tenant.Id);
             builder.Entity<Role>().HasQueryFilter(e => e.TenantId == Tenant.Id);
             builder.Entity<Attribute>().HasQueryFilter(e => e.TenantId == Tenant.Id);

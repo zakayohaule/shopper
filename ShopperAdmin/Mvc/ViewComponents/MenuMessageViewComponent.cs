@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using Shared.Common;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities;

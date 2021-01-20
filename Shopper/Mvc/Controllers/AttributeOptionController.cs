@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities;
 using Shopper.Attributes;
+using Shopper.Mvc.Entities;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Mvc.Controllers
@@ -96,7 +95,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> Delete(ushort id)
         {
             var attributeOption = await _attributeOptionService.FindByIdAsync(id);
-            if (attributeOption.IsNull())
+            if (attributeOption == null)
             {
                 return NotFound();
             }

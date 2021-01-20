@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Mvc.Entities;
+using Shopper.Mvc.Entities;
 
 namespace Shopper.Mvc.ViewModels
 {

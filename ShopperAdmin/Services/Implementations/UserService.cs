@@ -9,11 +9,11 @@
  using PasswordGenerator;
  using Serilog;
  using Shared.Extensions.Helpers;
- using ShopperAdmin.Database;
- using ShopperAdmin.Extensions.Helpers;
  using Shared.Mvc.Entities.Identity;
  using Shared.Mvc.ViewModels;
  using Shared.Mvc.ViewModels.Emails;
+ using ShopperAdmin.Database;
+ using ShopperAdmin.Extensions.Helpers;
  using ShopperAdmin.Services.Interfaces;
 
  namespace ShopperAdmin.Services.Implementations
@@ -189,12 +189,6 @@
             username = username.Replace(" ", "");
             var existingCount = _dbContext.Users.Count(user => user.UserName.Contains(username));
             return existingCount == 0 ? username : $"{username}{existingCount}";
-        }
-
-        public bool UsersForInstitution(uint institutionId, HashSet<long> selectedUsers)
-        {
-            var users = GetAllUsers().Where(user => user.InstitutionId == institutionId).Select(user => user.Id).ToHashSet();
-            return selectedUsers.IsSubsetOf(users);
         }
     }
 }

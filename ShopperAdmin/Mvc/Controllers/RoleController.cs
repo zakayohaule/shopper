@@ -1,17 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using ShopperAdmin.Attributes;
-using ShopperAdmin.Database;
-using ShopperAdmin.Extensions.Helpers;
-using Shared.Mvc.Entities;
-using ShopperAdmin.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Shared.Extensions.Helpers;
 using Shared.Mvc.Entities.Identity;
+using ShopperAdmin.Attributes;
+using ShopperAdmin.Services.Interfaces;
 
 namespace ShopperAdmin.Mvc.Controllers
 {

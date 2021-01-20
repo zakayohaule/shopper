@@ -1,9 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Shared.Mvc.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace ShopperAdmin.Services.Interfaces
 {

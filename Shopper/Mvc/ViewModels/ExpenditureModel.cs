@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using Shared.Mvc.Entities;
 
 namespace Shopper.Mvc.ViewModels
 {

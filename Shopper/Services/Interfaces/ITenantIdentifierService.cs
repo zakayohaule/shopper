@@ -1,4 +1,4 @@
-using Shared.Mvc.Entities;
+using Shopper.Mvc.Entities;
 
 namespace Shopper.Services.Interfaces
 {

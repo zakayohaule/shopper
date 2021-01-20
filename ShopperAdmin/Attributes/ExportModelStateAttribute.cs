@@ -13,8 +13,8 @@ namespace ShopperAdmin.Attributes
             if (!modelState.IsValid)
             {
                 //Export if we are redirecting
-                if (filterContext.Result is RedirectResult 
-                    || filterContext.Result is RedirectToRouteResult 
+                if (filterContext.Result is RedirectResult
+                    || filterContext.Result is RedirectToRouteResult
                     || filterContext.Result is RedirectToActionResult)
                 {
                     var controller = filterContext.Controller as Controller;

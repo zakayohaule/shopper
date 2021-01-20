@@ -19,7 +19,7 @@ namespace Shopper.Migrations
                 .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Attribute", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Attribute", b =>
                 {
                     b.Property<ushort>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,7 +52,7 @@ namespace Shopper.Migrations
                     b.ToTable("attributes");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.AttributeOption", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.AttributeOption", b =>
                 {
                     b.Property<ushort>("Id")
                         .ValueGeneratedOnAdd()
@@ -91,7 +91,7 @@ namespace Shopper.Migrations
                     b.ToTable("attribute_options");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Expenditure", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Expenditure", b =>
                 {
                     b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()
@@ -137,7 +137,7 @@ namespace Shopper.Migrations
                     b.ToTable("expenditures");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.ExpenditureType", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.ExpenditureType", b =>
                 {
                     b.Property<ushort>("Id")
                         .ValueGeneratedOnAdd()
@@ -170,7 +170,7 @@ namespace Shopper.Migrations
                     b.ToTable("expenditure_types");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Expiration", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Expiration", b =>
                 {
                     b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()
@@ -209,7 +209,7 @@ namespace Shopper.Migrations
                     b.ToTable("expirations");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.AppUser", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.AppUser", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -317,7 +317,7 @@ namespace Shopper.Migrations
                     b.ToTable("users");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.Module", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.Module", b =>
                 {
                     b.Property<ushort>("Id")
                         .ValueGeneratedOnAdd()
@@ -346,7 +346,7 @@ namespace Shopper.Migrations
                     b.ToTable("modules");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.Permission", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.Permission", b =>
                 {
                     b.Property<ushort>("Id")
                         .ValueGeneratedOnAdd()
@@ -388,7 +388,7 @@ namespace Shopper.Migrations
                     b.ToTable("permissions");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.Role", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.Role", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -440,7 +440,7 @@ namespace Shopper.Migrations
                     b.ToTable("roles");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.RoleClaim", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.RoleClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -467,7 +467,7 @@ namespace Shopper.Migrations
                     b.ToTable("role_claims");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.UserClaim", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.UserClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -490,7 +490,7 @@ namespace Shopper.Migrations
                     b.ToTable("user_claims");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.UserLogin", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.UserLogin", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
@@ -512,7 +512,7 @@ namespace Shopper.Migrations
                     b.ToTable("user_logins");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.UserRole", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.UserRole", b =>
                 {
                     b.Property<long>("UserId")
                         .HasColumnName("user_id")
@@ -529,7 +529,7 @@ namespace Shopper.Migrations
                     b.ToTable("user_role");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.UserToken", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.UserToken", b =>
                 {
                     b.Property<long>("UserId")
                         .HasColumnName("user_id")
@@ -552,7 +552,7 @@ namespace Shopper.Migrations
                     b.ToTable("user_tokens");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.PriceType", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.PriceType", b =>
                 {
                     b.Property<ushort>("Id")
                         .ValueGeneratedOnAdd()
@@ -585,7 +585,7 @@ namespace Shopper.Migrations
                     b.ToTable("price_types");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Product", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Product", b =>
                 {
                     b.Property<uint>("Id")
                         .ValueGeneratedOnAdd()
@@ -636,7 +636,7 @@ namespace Shopper.Migrations
                     b.ToTable("products");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.ProductAttribute", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.ProductAttribute", b =>
                 {
                     b.Property<uint>("ProductId")
                         .HasColumnName("product_id")
@@ -663,7 +663,7 @@ namespace Shopper.Migrations
                     b.ToTable("product_attribute");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.ProductAttributeOption", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.ProductAttributeOption", b =>
                 {
                     b.Property<uint>("ProductId")
                         .HasColumnName("product_id")
@@ -690,7 +690,7 @@ namespace Shopper.Migrations
                     b.ToTable("product_attribute_options");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.ProductCategory", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.ProductCategory", b =>
                 {
                     b.Property<ushort>("Id")
                         .ValueGeneratedOnAdd()
@@ -732,7 +732,7 @@ namespace Shopper.Migrations
                     b.ToTable("product_categories");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.ProductGroup", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.ProductGroup", b =>
                 {
                     b.Property<ushort>("Id")
                         .ValueGeneratedOnAdd()
@@ -762,7 +762,7 @@ namespace Shopper.Migrations
                     b.ToTable("product_groups");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.ProductImage", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.ProductImage", b =>
                 {
                     b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()
@@ -801,7 +801,7 @@ namespace Shopper.Migrations
                     b.ToTable("product_images");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.ProductType", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.ProductType", b =>
                 {
                     b.Property<ushort>("Id")
                         .ValueGeneratedOnAdd()
@@ -834,7 +834,7 @@ namespace Shopper.Migrations
                     b.ToTable("product_types");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Sale", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Sale", b =>
                 {
                     b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()
@@ -894,7 +894,7 @@ namespace Shopper.Migrations
                     b.ToTable("sales");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.SaleInvoice", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.SaleInvoice", b =>
                 {
                     b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()
@@ -951,7 +951,7 @@ namespace Shopper.Migrations
                     b.ToTable("sale_invoices");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Sku", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Sku", b =>
                 {
                     b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()
@@ -1021,7 +1021,7 @@ namespace Shopper.Migrations
                     b.ToTable("skus");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.SkuAttribute", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.SkuAttribute", b =>
                 {
                     b.Property<ulong>("Id")
                         .ValueGeneratedOnAdd()
@@ -1061,7 +1061,7 @@ namespace Shopper.Migrations
                     b.ToTable("sku_attributes");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.SkuSellingPrice", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.SkuSellingPrice", b =>
                 {
                     b.Property<ushort>("PriceTypeId")
                         .HasColumnName("price_type_id")
@@ -1092,7 +1092,7 @@ namespace Shopper.Migrations
                     b.ToTable("sku_selling_prices");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Tenant", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Tenant", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1174,319 +1174,319 @@ namespace Shopper.Migrations
                     b.ToTable("tenants");
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Attribute", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Attribute", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                    b.HasOne("Shopper.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.AttributeOption", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.AttributeOption", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Attribute", "Attribute")
+                    b.HasOne("Shopper.Mvc.Entities.Attribute", "Attribute")
                         .WithMany("AttributeOptions")
                         .HasForeignKey("AttributeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                    b.HasOne("Shopper.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Expenditure", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Expenditure", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.ExpenditureType", "ExpenditureType")
+                    b.HasOne("Shopper.Mvc.Entities.ExpenditureType", "ExpenditureType")
                         .WithMany("ExpenditureTypes")
                         .HasForeignKey("ExpenditureTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                    b.HasOne("Shopper.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.ExpenditureType", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.ExpenditureType", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                    b.HasOne("Shopper.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Expiration", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Expiration", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Sku", "Sku")
+                    b.HasOne("Shopper.Mvc.Entities.Sku", "Sku")
                         .WithOne("Expiration")
-                        .HasForeignKey("Shared.Mvc.Entities.Expiration", "SkuId")
+                        .HasForeignKey("Shopper.Mvc.Entities.Expiration", "SkuId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                    b.HasOne("Shopper.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.AppUser", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.AppUser", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                    b.HasOne("Shopper.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.Permission", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.Permission", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Identity.Module", "Module")
+                    b.HasOne("Shopper.Mvc.Entities.Identity.Module", "Module")
                         .WithMany("Permissions")
                         .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.Role", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.Role", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                    b.HasOne("Shopper.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.RoleClaim", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.RoleClaim", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Identity.Role", "Role")
+                    b.HasOne("Shopper.Mvc.Entities.Identity.Role", "Role")
                         .WithMany("RoleClaims")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.UserClaim", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.UserClaim", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Identity.AppUser", "User")
+                    b.HasOne("Shopper.Mvc.Entities.Identity.AppUser", "User")
                         .WithMany("Claims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.UserLogin", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.UserLogin", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Identity.AppUser", "User")
+                    b.HasOne("Shopper.Mvc.Entities.Identity.AppUser", "User")
                         .WithMany("Logins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.UserRole", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.UserRole", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Identity.Role", "Role")
+                    b.HasOne("Shopper.Mvc.Entities.Identity.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Mvc.Entities.Identity.AppUser", "User")
+                    b.HasOne("Shopper.Mvc.Entities.Identity.AppUser", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.UserToken", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Identity.UserToken", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Identity.AppUser", "User")
+                    b.HasOne("Shopper.Mvc.Entities.Identity.AppUser", "User")
                         .WithMany("Tokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.PriceType", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.PriceType", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                    b.HasOne("Shopper.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Product", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Product", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.ProductType", "ProductType")
+                    b.HasOne("Shopper.Mvc.Entities.ProductType", "ProductType")
                         .WithMany("Products")
                         .HasForeignKey("ProductTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                    b.HasOne("Shopper.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.ProductAttribute", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.ProductAttribute", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Attribute", "Attribute")
+                    b.HasOne("Shopper.Mvc.Entities.Attribute", "Attribute")
                         .WithMany()
                         .HasForeignKey("AttributeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Mvc.Entities.Product", "Product")
+                    b.HasOne("Shopper.Mvc.Entities.Product", "Product")
                         .WithMany("Attributes")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.ProductAttributeOption", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.ProductAttributeOption", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.AttributeOption", "AttributeOption")
+                    b.HasOne("Shopper.Mvc.Entities.AttributeOption", "AttributeOption")
                         .WithMany()
                         .HasForeignKey("AttributeOptionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Mvc.Entities.Product", "Product")
+                    b.HasOne("Shopper.Mvc.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.ProductCategory", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.ProductCategory", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.ProductCategory", "ParentCategory")
+                    b.HasOne("Shopper.Mvc.Entities.ProductCategory", "ParentCategory")
                         .WithMany("ChildCategories")
                         .HasForeignKey("ParentCategoryId");
 
-                    b.HasOne("Shared.Mvc.Entities.ProductGroup", "ProductGroup")
+                    b.HasOne("Shopper.Mvc.Entities.ProductGroup", "ProductGroup")
                         .WithMany("ProductCategories")
                         .HasForeignKey("ProductGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.ProductImage", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.ProductImage", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Product", "Product")
+                    b.HasOne("Shopper.Mvc.Entities.Product", "Product")
                         .WithMany("Images")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                    b.HasOne("Shopper.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.ProductType", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.ProductType", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.ProductCategory", "ProductCategory")
+                    b.HasOne("Shopper.Mvc.Entities.ProductCategory", "ProductCategory")
                         .WithMany()
                         .HasForeignKey("ProductCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Sale", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Sale", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.SaleInvoice", "SaleInvoice")
+                    b.HasOne("Shopper.Mvc.Entities.SaleInvoice", "SaleInvoice")
                         .WithMany("Sales")
                         .HasForeignKey("SaleInvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Mvc.Entities.Sku", "Sku")
+                    b.HasOne("Shopper.Mvc.Entities.Sku", "Sku")
                         .WithMany("Sales")
                         .HasForeignKey("SkuId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                    b.HasOne("Shopper.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.SaleInvoice", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.SaleInvoice", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                    b.HasOne("Shopper.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Mvc.Entities.Identity.AppUser", "User")
+                    b.HasOne("Shopper.Mvc.Entities.Identity.AppUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Sku", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Sku", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.Product", "Product")
+                    b.HasOne("Shopper.Mvc.Entities.Product", "Product")
                         .WithMany("Skus")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                    b.HasOne("Shopper.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.SkuAttribute", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.SkuAttribute", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.AttributeOption", "Option")
+                    b.HasOne("Shopper.Mvc.Entities.AttributeOption", "Option")
                         .WithMany()
                         .HasForeignKey("AttributeOptionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Mvc.Entities.Sku", "Sku")
+                    b.HasOne("Shopper.Mvc.Entities.Sku", "Sku")
                         .WithMany("SkuAttributes")
                         .HasForeignKey("SkuId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Mvc.Entities.Tenant", "Tenant")
+                    b.HasOne("Shopper.Mvc.Entities.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.SkuSellingPrice", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.SkuSellingPrice", b =>
                 {
-                    b.HasOne("Shared.Mvc.Entities.PriceType", "PriceType")
+                    b.HasOne("Shopper.Mvc.Entities.PriceType", "PriceType")
                         .WithMany()
                         .HasForeignKey("PriceTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shared.Mvc.Entities.Sku", "Sku")
+                    b.HasOne("Shopper.Mvc.Entities.Sku", "Sku")
                         .WithMany()
                         .HasForeignKey("SkuId")
                         .OnDelete(DeleteBehavior.Cascade)

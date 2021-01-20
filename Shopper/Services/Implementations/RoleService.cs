@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities.Identity;
-using Shared.Mvc.ViewModels;
 using Shopper.Database;
+using Shopper.Mvc.Entities.Identity;
+using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Services.Implementations
@@ -93,7 +92,7 @@ namespace Shopper.Services.Implementations
         {
             await _dbContext.Entry(role).Collection(r => r.RoleClaims).LoadAsync();
             List<string> added;
-            if (role.RoleClaims.IsNotNull())
+            if (role.RoleClaims != null)
             {
                 var currentRolePermissions = role.RoleClaims.Select(claim => claim.ClaimValue).ToList();
 

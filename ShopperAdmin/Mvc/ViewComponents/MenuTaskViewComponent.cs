@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Mvc.Entities;
+using ShopperAdmin.Mvc.Entities;
 
 namespace ShopperAdmin.Mvc.ViewComponents
 {

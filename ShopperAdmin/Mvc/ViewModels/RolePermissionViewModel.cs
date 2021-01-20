@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Shared.Mvc.Entities;
+using ShopperAdmin.Mvc.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Mvc.Entities.Identity;
+using ShopperAdmin.Mvc.Entities.Identity;
 
 namespace Shared.Mvc.ViewModels
 {

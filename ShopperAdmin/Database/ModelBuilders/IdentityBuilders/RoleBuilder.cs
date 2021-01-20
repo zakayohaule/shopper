@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Shared.Mvc.Entities.Identity;
+using ShopperAdmin.Mvc.Entities.Identity;
 
-namespace Shared.Database.ModelBuilders.IdentityBuilders
+namespace ShopperAdmin.Database.ModelBuilders.IdentityBuilders
 {
     public class RoleBuilder : IEntityTypeConfiguration<Role>
     {

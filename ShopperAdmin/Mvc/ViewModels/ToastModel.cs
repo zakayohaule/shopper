@@ -1,4 +1,4 @@
-using Shared.Mvc.Enums;
+using ShopperAdmin.Mvc.Enums;
 
 namespace Shared.Mvc.ViewModels
 {

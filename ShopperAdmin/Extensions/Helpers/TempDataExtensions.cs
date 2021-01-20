@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
-using Shared.Extensions.Helpers;
 
 namespace ShopperAdmin.Extensions.Helpers
 {
@@ -60,7 +59,7 @@ namespace ShopperAdmin.Extensions.Helpers
 
         public static void GetModelErrorsFromTempData(this ModelStateDictionary modelStateDictionary, TempDataDictionary tempData)
         {
-            Console.WriteLine("temp data is null: " + tempData["ModelState"].IsNull());
+            Console.WriteLine("temp data is null: " + tempData["ModelState"] == null);
             // var tempDateModelState = JsonConvert.DeserializeObject(tempData["ModelState"].ToString()) as ModelStateEntry;
             //
             // if (tempDateModelState == null)

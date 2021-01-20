@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
-namespace Shared.Mvc.Entities.Identity
+namespace ShopperAdmin.Mvc.Entities.Identity
 {
     [Table("user_claims")]
     public class UserClaim : IdentityUserClaim<long>

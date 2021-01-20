@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
-using Shared.Mvc.Entities.Identity;
+using ShopperAdmin.Mvc.Entities.Identity;
 
-namespace Shared.Mvc.Entities.Identity
+namespace ShopperAdmin.Mvc.Entities.Identity
 {
     [Table("user_logins")]
     public class UserLogin : IdentityUserLogin<long>

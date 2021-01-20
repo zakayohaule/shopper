@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Shared.Mvc.Entities.Identity
+namespace ShopperAdmin.Mvc.Entities.Identity
 {
     [Table("roles")]
     public class Role : IdentityRole<long>

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
-namespace Shared.Mvc.Entities.Identity
+namespace ShopperAdmin.Mvc.Entities.Identity
 {
     [Table("role_claims")]
     public class RoleClaim : IdentityRoleClaim<long>
@@ -14,7 +14,7 @@ namespace Shared.Mvc.Entities.Identity
 
         [Column("claim_value")] public override string ClaimValue { get; set; }
 
-        [ForeignKey(nameof(RoleId))] 
+        [ForeignKey(nameof(RoleId))]
         public Role Role { get; set; }
     }
 }

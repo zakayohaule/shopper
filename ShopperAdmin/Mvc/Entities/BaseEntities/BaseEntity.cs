@@ -4,19 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 
-namespace Shared.Mvc.Entities.BaseEntities
+namespace ShopperAdmin.Mvc.Entities.BaseEntities
 {
     public class BaseEntity<T>
     {
         [Column("id")]
         [Key]
         public T Id { get; set; }
-
-        [Column("tenant_id")]
-        public Guid TenantId { get; set; }
-
-        [ForeignKey(nameof(TenantId))]
-        public Tenant Tenant { get; set; }
 
         [Column("created_at")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

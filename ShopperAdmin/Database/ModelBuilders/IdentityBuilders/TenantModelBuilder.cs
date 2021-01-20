@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Shared.Mvc.Entities;
-using Shared.Mvc.Enums;
+using ShopperAdmin.Mvc.Entities;
+using ShopperAdmin.Mvc.Entities;
+using ShopperAdmin.Mvc.Enums;
 
-namespace Shared.Database.ModelBuilders.IdentityBuilders
+namespace ShopperAdmin.Database.ModelBuilders.IdentityBuilders
 {
     public class TenantModelBuilder : IEntityTypeConfiguration<Tenant>
     {

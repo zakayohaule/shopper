@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Shared.Mvc.Entities.Identity;
-using Shared.Mvc.ViewModels;
+using ShopperAdmin.Mvc.Entities.Identity;
+using ShopperAdmin.Mvc.ViewModels;
 
 namespace ShopperAdmin.Services.Interfaces
 {

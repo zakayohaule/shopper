@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities.Identity;
+using ShopperAdmin.Extensions.Helpers;
+using ShopperAdmin.Mvc.Entities.Identity;
 using ShopperAdmin.Attributes;
 using ShopperAdmin.Services.Interfaces;
 
@@ -66,7 +66,7 @@ namespace ShopperAdmin.Mvc.Controllers
         {
             var toUpdate = await _roleService.FindByIdAsync(id);
 
-            if (toUpdate.IsNull())
+            if (toUpdate == null)
             {
                 return NotFound();
             }
@@ -88,7 +88,7 @@ namespace ShopperAdmin.Mvc.Controllers
         public async Task<IActionResult> Delete(long id)
         {
             var role = await _roleService.FindByIdAsync(id);
-            if (role.IsNull())
+            if (role == null)
             {
                 return NotFound();
             }
@@ -118,7 +118,7 @@ namespace ShopperAdmin.Mvc.Controllers
         public async Task<IActionResult> SaveRolePermissions(long id)
         {
             var role = await _roleService.FindByIdAsync(id);
-            if (role.IsNull())
+            if (role == null)
             {
                 return NotFound();
             }

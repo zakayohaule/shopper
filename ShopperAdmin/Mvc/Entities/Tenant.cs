@@ -1,12 +1,13 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using Shared.Mvc.Entities.BaseEntities;
-using Shared.Mvc.Enums;
+using ShopperAdmin.Mvc.Entities.BaseEntities;
+using ShopperAdmin.Mvc.Entities.BaseEntities;
+using ShopperAdmin.Mvc.Enums;
 
-namespace Shared.Mvc.Entities
+namespace ShopperAdmin.Mvc.Entities
 {
     [Table("tenants")]
-    public class Tenant : NoTenantBaseEntity<Guid>
+    public class Tenant : BaseEntity<Guid>
     {
         [Column("name")] public string Name { get; set; }
 

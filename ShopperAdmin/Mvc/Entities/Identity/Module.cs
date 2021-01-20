@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using Shared.Mvc.Entities.BaseEntities;
+using ShopperAdmin.Mvc.Entities.BaseEntities;
+using ShopperAdmin.Mvc.Entities.BaseEntities;
 
-namespace Shared.Mvc.Entities.Identity
+namespace ShopperAdmin.Mvc.Entities.Identity
 {
     [Table("modules")]
-    public class Module : NoTenantBaseEntity<ushort>
+    public class Module : BaseEntity<ushort>
     {
         [Column("name")] public string Name { get; set; }
 

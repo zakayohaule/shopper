@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Common;
-using Shared.Mvc.Entities;
+using ShopperAdmin.Mvc.Entities;
 using ShopperAdmin.Services.Interfaces;
 
 namespace ShopperAdmin.Mvc.ViewComponents
@@ -9,7 +9,7 @@ namespace ShopperAdmin.Mvc.ViewComponents
     public class SidebarViewComponent : ViewComponent
     {
         private IUserClaimService _userClaimService;
-        
+
         public SidebarViewComponent(IUserClaimService userClaimService)
         {
             _userClaimService = userClaimService;

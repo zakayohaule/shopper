@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Shared.Mvc.Entities.Identity;
+using ShopperAdmin.Mvc.Entities.Identity;
 
 namespace ShopperAdmin.Database
 {

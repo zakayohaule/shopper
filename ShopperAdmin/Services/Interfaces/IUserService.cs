@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Shared.Mvc.Entities.Identity;
-using Shared.Mvc.ViewModels;
-using Shared.Mvc.ViewModels.Emails;
+using ShopperAdmin.Mvc.Entities.Identity;
+using ShopperAdmin.Mvc.ViewModels;
+using ShopperAdmin.Mvc.ViewModels.Emails;
 
 namespace ShopperAdmin.Services.Interfaces
 {

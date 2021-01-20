@@ -20,7 +20,7 @@ namespace ShopperAdmin.Migrations
                 .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.AppUser", b =>
+            modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Identity.AppUser", b =>
             {
                 b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
@@ -122,7 +122,7 @@ namespace ShopperAdmin.Migrations
                 b.ToTable("users");
             });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.Module", b =>
+            modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Identity.Module", b =>
             {
                 b.Property<short>("Id")
                     .ValueGeneratedOnAdd()
@@ -141,7 +141,7 @@ namespace ShopperAdmin.Migrations
                 b.ToTable("modules");
             });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.Permission", b =>
+            modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Identity.Permission", b =>
             {
                 b.Property<ushort>("Id")
                     .ValueGeneratedOnAdd()
@@ -173,7 +173,7 @@ namespace ShopperAdmin.Migrations
                 b.ToTable("permissions");
             });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.Role", b =>
+            modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Identity.Role", b =>
             {
                 b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
@@ -222,7 +222,7 @@ namespace ShopperAdmin.Migrations
                 b.ToTable("roles");
             });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.RoleClaim", b =>
+            modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Identity.RoleClaim", b =>
             {
                 b.Property<int>("Id")
                     .ValueGeneratedOnAdd()
@@ -249,7 +249,7 @@ namespace ShopperAdmin.Migrations
                 b.ToTable("role_claims");
             });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.UserClaim", b =>
+            modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Identity.UserClaim", b =>
             {
                 b.Property<int>("Id")
                     .ValueGeneratedOnAdd()
@@ -272,7 +272,7 @@ namespace ShopperAdmin.Migrations
                 b.ToTable("user_claims");
             });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.UserLogin", b =>
+            modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Identity.UserLogin", b =>
             {
                 b.Property<string>("LoginProvider")
                     .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
@@ -294,7 +294,7 @@ namespace ShopperAdmin.Migrations
                 b.ToTable("user_logins");
             });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.UserRole", b =>
+            modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Identity.UserRole", b =>
             {
                 b.Property<long>("UserId")
                     .HasColumnName("user_id")
@@ -311,7 +311,7 @@ namespace ShopperAdmin.Migrations
                 b.ToTable("user_role");
             });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.UserToken", b =>
+            modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Identity.UserToken", b =>
             {
                 b.Property<long>("UserId")
                     .HasColumnName("user_id")
@@ -334,60 +334,60 @@ namespace ShopperAdmin.Migrations
                 b.ToTable("user_tokens");
             });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.Permission", b =>
+            modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Identity.Permission", b =>
             {
-                b.HasOne("Shared.Mvc.Entities.Identity.Module", "Module")
+                b.HasOne("ShopperAdmin.Mvc.Entities.Identity.Module", "Module")
                     .WithMany("Permissions")
                     .HasForeignKey("ModuleId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
             });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.RoleClaim", b =>
+            modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Identity.RoleClaim", b =>
             {
-                b.HasOne("Shared.Mvc.Entities.Identity.Role", "Role")
+                b.HasOne("ShopperAdmin.Mvc.Entities.Identity.Role", "Role")
                     .WithMany("RoleClaims")
                     .HasForeignKey("RoleId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
             });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.UserClaim", b =>
+            modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Identity.UserClaim", b =>
             {
-                b.HasOne("Shared.Mvc.Entities.Identity.AppUser", "User")
+                b.HasOne("ShopperAdmin.Mvc.Entities.Identity.AppUser", "User")
                     .WithMany("Claims")
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
             });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.UserLogin", b =>
+            modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Identity.UserLogin", b =>
             {
-                b.HasOne("Shared.Mvc.Entities.Identity.AppUser", "User")
+                b.HasOne("ShopperAdmin.Mvc.Entities.Identity.AppUser", "User")
                     .WithMany("Logins")
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
             });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.UserRole", b =>
+            modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Identity.UserRole", b =>
             {
-                b.HasOne("Shared.Mvc.Entities.Identity.Role", "Role")
+                b.HasOne("ShopperAdmin.Mvc.Entities.Identity.Role", "Role")
                     .WithMany("UserRoles")
                     .HasForeignKey("RoleId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
-                b.HasOne("Shared.Mvc.Entities.Identity.AppUser", "User")
+                b.HasOne("ShopperAdmin.Mvc.Entities.Identity.AppUser", "User")
                     .WithMany("UserRoles")
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
             });
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Identity.UserToken", b =>
+            modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Identity.UserToken", b =>
             {
-                b.HasOne("Shared.Mvc.Entities.Identity.AppUser", "User")
+                b.HasOne("ShopperAdmin.Mvc.Entities.Identity.AppUser", "User")
                     .WithMany("Tokens")
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)

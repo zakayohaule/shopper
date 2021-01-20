@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities.Identity;
-using Shared.Mvc.ViewModels;
+using ShopperAdmin.Extensions.Helpers;
+using ShopperAdmin.Mvc.Entities.Identity;
+using ShopperAdmin.Mvc.ViewModels;
 using ShopperAdmin.Database;
 using ShopperAdmin.Services.Interfaces;
 
@@ -97,7 +97,7 @@ namespace ShopperAdmin.Services.Implementations
         {
             await _dbContext.Entry(role).Collection(r => r.RoleClaims).LoadAsync();
             List<string> added;
-            if (role.RoleClaims.IsNotNull())
+            if (role.RoleClaims != null)
             {
                 var currentRolePermissions = role.RoleClaims.Select(claim => claim.ClaimValue).ToList();
 

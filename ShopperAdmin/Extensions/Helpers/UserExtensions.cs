@@ -2,13 +2,13 @@
  using System.IO;
  using System.Linq;
  using System.Security.Claims;
+ using IdentityServer4.Extensions;
  using Microsoft.AspNetCore.Http;
  using Microsoft.AspNetCore.Mvc.Rendering;
  using Microsoft.Extensions.DependencyInjection;
  using Microsoft.Extensions.Hosting;
  using Microsoft.IdentityModel.JsonWebTokens;
- using Shared.Extensions.Helpers;
- using Shared.Mvc.Entities;
+ using ShopperAdmin.Mvc.Entities;
  using ShopperAdmin.Services.Interfaces;
 
  namespace ShopperAdmin.Extensions.Helpers
@@ -21,7 +21,7 @@
                 .FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)
                 ?.Value;
 
-            if (userIdClaim.IsNull())
+            if (userIdClaim == null)
             {
                 userIdClaim = claimsPrincipal.Claims
                     .FirstOrDefault(claim => claim.Type == "sub")
@@ -48,7 +48,7 @@
             var institutionId = claimsPrincipal.Claims
                 .FirstOrDefault(claim => claim.Type == "InstitutionId")
                 ?.Value;
-            return institutionId == null ? (uint) 0 : uint.Parse(institutionId);
+            return institutionId == null ? 0 : uint.Parse(institutionId);
         }
 
         public static string GetUserEmail(this ClaimsPrincipal claimsPrincipal)
@@ -71,7 +71,7 @@
         {
             var authorizationHeader = httpContext.Request.Headers["Authorization"];
 
-            if (authorizationHeader.IsNull())
+            if (authorizationHeader.IsNullOrEmpty())
             {
                 Console.WriteLine("No Authorization header");
                 return string.Empty;
@@ -79,7 +79,7 @@
 
             var bearerHeader = authorizationHeader.FirstOrDefault();
 
-            if (bearerHeader.IsNull())
+            if (bearerHeader == null)
             {
                 Console.WriteLine("Authorization header doesn't contain a bearer token");
                 return string.Empty;

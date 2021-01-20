@@ -1,30 +1,10 @@
-﻿using System;
-using IdentityServer4.EntityFramework.Entities;
+﻿using IdentityServer4.EntityFramework.Entities;
 using Microsoft.EntityFrameworkCore;
-using Shared.Mvc.Entities;
-using Shared.Mvc.Entities.Identity;
-using Attribute = Shared.Mvc.Entities.Attribute;
 
 namespace ShopperAdmin.Extensions.Configurations
 {
     public static class ModelBuilderExtensions
     {
-        public static void ApplyTenantQueryFilter(this ModelBuilder builder,Guid tenantId)
-
-        {
-            builder.Entity<AppUser>().HasQueryFilter(e => e.TenantId == tenantId);
-            builder.Entity<Role>().HasQueryFilter(e => e.TenantId == tenantId);
-            builder.Entity<Attribute>().HasQueryFilter(e => e.TenantId == tenantId);
-            builder.Entity<AttributeOption>().HasQueryFilter(e => e.TenantId == tenantId);
-            builder.Entity<Expenditure>().HasQueryFilter(e => e.TenantId == tenantId);
-            builder.Entity<ExpenditureType>().HasQueryFilter(e => e.TenantId == tenantId);
-            builder.Entity<PriceType>().HasQueryFilter(e => e.TenantId == tenantId);
-            builder.Entity<Product>().HasQueryFilter(e => e.TenantId == tenantId);
-            builder.Entity<Sale>().HasQueryFilter(e => e.TenantId == tenantId);
-            builder.Entity<SaleInvoice>().HasQueryFilter(e => e.TenantId == tenantId);
-            builder.Entity<Sku>().HasQueryFilter(e => e.TenantId == tenantId);
-        }
-
         public static void CustomConfigureClientContext(this ModelBuilder builder)
         {
             builder.Entity<Client>(client =>

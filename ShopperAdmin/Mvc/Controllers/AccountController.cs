@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities.Identity;
-using Shared.Mvc.ViewModels;
-using Shared.Mvc.ViewModels.Emails;
+using ShopperAdmin.Extensions.Helpers;
+using ShopperAdmin.Mvc.Entities.Identity;
+using ShopperAdmin.Mvc.ViewModels;
+using ShopperAdmin.Mvc.ViewModels.Emails;
 using ShopperAdmin.Attributes;
 using ShopperAdmin.Extensions.Helpers;
 using ShopperAdmin.Services.Interfaces;
@@ -48,7 +48,7 @@ namespace ShopperAdmin.Mvc.Controllers
         {
             var user = await _userManager.FindByEmailAsync(loginModel.Email);
             // return Ok(loginModel);
-            if (user.IsNull())
+            if (user == null)
             {
                 AddPageAlerts(PageAlertType.Error, "Invalid login credentials!");
                 return View();
@@ -76,7 +76,7 @@ namespace ShopperAdmin.Mvc.Controllers
                 var claims = _userClaimService.GetUserClaims(user.Id);
                 _userClaimService.CacheClaims(user.Id, claims);
 
-                if (returnTo.IsNotNull())
+                if (returnTo != null)
                 {
                     return LocalRedirect(returnTo);
                 }
@@ -128,7 +128,7 @@ namespace ShopperAdmin.Mvc.Controllers
         public async Task<IActionResult> ForgotPassword(ForgotPasswordModel viewModel)
         {
             var user = await _userManager.FindByEmailAsync(viewModel.Email);
-            if (user.IsNull())
+            if (user == null)
             {
                 return NotFound();
             }
@@ -174,7 +174,7 @@ namespace ShopperAdmin.Mvc.Controllers
         public async Task<IActionResult> ResetForgottenPassword(ResetPasswordModel viewModel)
         {
             var user = await _userManager.FindByEmailAsync(viewModel.Email);
-            if (user.IsNull())
+            if (user == null)
             {
                 return NotFound();
             }
@@ -243,7 +243,7 @@ namespace ShopperAdmin.Mvc.Controllers
 
             await _signInManager.SignOutAsync();
 
-            
+
             AddPageAlerts(PageAlertType.Success, "Your password has been reset successfully, Please login!");
             return View(nameof(Login));
         }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Shared.Mvc.Entities.Identity;
+using ShopperAdmin.Mvc.Entities.Identity;
 using ShopperAdmin.Services.Implementations;
 using ShopperAdmin.Services.Implementations.ReplaceDefaults;
 using ShopperAdmin.Services.Interfaces;

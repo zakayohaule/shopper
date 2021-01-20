@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Shared.Mvc.Entities.BaseEntities;
+using ShopperAdmin.Mvc.Entities.BaseEntities;
 
-namespace Shared.Mvc.Entities.Identity
+namespace ShopperAdmin.Mvc.Entities.Identity
 {
     [Table(("permissions"))]
-    public class Permission : NoTenantBaseEntity<ushort>
+    public class Permission : BaseEntity<ushort>
     {
         [Column("name")] public string Name { get; set; }
 

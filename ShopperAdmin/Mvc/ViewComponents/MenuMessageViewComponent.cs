@@ -2,8 +2,8 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Common;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities;
+using ShopperAdmin.Extensions.Helpers;
+using ShopperAdmin.Mvc.Entities;
 
 namespace ShopperAdmin.Mvc.ViewComponents
 {

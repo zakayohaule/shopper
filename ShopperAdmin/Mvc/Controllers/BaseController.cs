@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Mvc.Entities;
+using ShopperAdmin.Mvc.Entities;
 
 namespace ShopperAdmin.Mvc.Controllers
 {
@@ -9,7 +9,7 @@ namespace ShopperAdmin.Mvc.Controllers
     {
         [ViewData]
         public string Title { get; set; } = "ShopperAdmin";
-        
+
         internal void AddBreadcrumb(string displayName, string urlPath)
         {
             List<Message> messages;

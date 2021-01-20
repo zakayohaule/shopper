@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Serilog;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities.Identity;
+using ShopperAdmin.Extensions.Helpers;
+using ShopperAdmin.Mvc.Entities.Identity;
 using ShopperAdmin.Services.Interfaces;
 
 namespace ShopperAdmin.Services.Implementations
@@ -48,12 +48,12 @@ namespace ShopperAdmin.Services.Implementations
         {
             var claims = new List<string>();
             var user = _userManager.FindByIdAsync(userId.ToString()).Result;
-            if (user.IsNull())
+            if (user == null)
             {
                 return claims;
             }
             var userRoles = _userManager.GetRolesAsync(user).Result.ToList();
-            
+
             userRoles.ForEach(roleName =>
             {
                 Console.WriteLine(roleName);

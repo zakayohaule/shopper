@@ -2,7 +2,7 @@
  using Microsoft.AspNetCore.Authorization;
  using Microsoft.AspNetCore.Mvc;
  using Serilog;
- using Shared.Mvc.ViewModels;
+ using ShopperAdmin.Mvc.ViewModels;
 
  namespace ShopperAdmin.Mvc.Controllers
 {
@@ -14,7 +14,7 @@
         {
             _logger = logger;
         }
-        
+
         public IActionResult Index()
         {
             AddPageHeader("Dashboard");

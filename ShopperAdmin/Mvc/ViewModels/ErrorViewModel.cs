@@ -1,6 +1,6 @@
 using System;
 
-namespace Shared.Mvc.ViewModels
+namespace ShopperAdmin.Mvc.ViewModels
 {
     public class ErrorViewModel
     {

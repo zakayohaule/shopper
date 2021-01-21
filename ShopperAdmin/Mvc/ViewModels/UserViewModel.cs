@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ShopperAdmin.Mvc.Entities.Identity;
 
-namespace Shared.Mvc.ViewModels
+namespace ShopperAdmin.Mvc.ViewModels
 {
     public class UserViewModel
     {

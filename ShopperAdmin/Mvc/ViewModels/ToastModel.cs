@@ -1,6 +1,6 @@
 using ShopperAdmin.Mvc.Enums;
 
-namespace Shared.Mvc.ViewModels
+namespace ShopperAdmin.Mvc.ViewModels
 {
     public class ToastModel
     {

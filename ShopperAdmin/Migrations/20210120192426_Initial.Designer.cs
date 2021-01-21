@@ -2,53 +2,22 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShopperAdmin.Database;
 
 namespace ShopperAdmin.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210120192426_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Database", b =>
-                {
-                    b.Property<short>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
-                        .HasColumnType("smallint");
-
-                    b.Property<string>("ConnectionString")
-                        .HasColumnName("connection_string")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("created_at")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Name")
-                        .HasColumnName("name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnName("updated_at")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ConnectionString")
-                        .IsUnique();
-
-                    b.ToTable("databases");
-                });
 
             modelBuilder.Entity("ShopperAdmin.Mvc.Entities.Identity.AppUser", b =>
                 {

@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using ShopperAdmin.Mvc.Entities.BaseEntities;
-using ShopperAdmin.Mvc.Entities.BaseEntities;
 using ShopperAdmin.Mvc.Enums;
 
 namespace ShopperAdmin.Mvc.Entities

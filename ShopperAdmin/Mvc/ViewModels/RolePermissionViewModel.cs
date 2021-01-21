@@ -3,7 +3,7 @@ using ShopperAdmin.Mvc.Entities;
 using Microsoft.AspNetCore.Mvc;
 using ShopperAdmin.Mvc.Entities.Identity;
 
-namespace Shared.Mvc.ViewModels
+namespace ShopperAdmin.Mvc.ViewModels
 {
     [Bind("RoleClaims")]
     public class RolePermissionViewModel

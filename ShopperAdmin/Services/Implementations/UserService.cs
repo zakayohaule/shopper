@@ -8,12 +8,11 @@
  using Microsoft.Extensions.Hosting;
  using PasswordGenerator;
  using Serilog;
+ using ShopperAdmin.Database;
  using ShopperAdmin.Extensions.Helpers;
  using ShopperAdmin.Mvc.Entities.Identity;
  using ShopperAdmin.Mvc.ViewModels;
  using ShopperAdmin.Mvc.ViewModels.Emails;
- using ShopperAdmin.Database;
- using ShopperAdmin.Extensions.Helpers;
  using ShopperAdmin.Services.Interfaces;
 
  namespace ShopperAdmin.Services.Implementations

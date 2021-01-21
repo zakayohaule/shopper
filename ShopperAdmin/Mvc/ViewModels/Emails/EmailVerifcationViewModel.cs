@@ -1,4 +1,4 @@
-﻿namespace Shared.Mvc.ViewModels.Emails
+﻿namespace ShopperAdmin.Mvc.ViewModels.Emails
 {
     public class EmailVerificationViewModel
     {

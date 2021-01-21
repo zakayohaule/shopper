@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ShopperAdmin.Mvc.Entities;
 using ShopperAdmin.Mvc.Entities.Identity;
 
 namespace ShopperAdmin.Database
@@ -21,11 +22,11 @@ namespace ShopperAdmin.Database
         public override DbSet<UserClaim> UserClaims { get; set; }
         public override DbSet<UserLogin> UserLogins { get; set; }
         public override DbSet<UserToken> UserTokens { get; set; }
-
-
         //custom entities
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Module> Modules { get; set; }
+
+        public DbSet<Tenant> Tenants { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -36,7 +37,7 @@ namespace ShopperAdmin.Database
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.ApplyConfigurationsFromAssembly(typeof(AppUser).Assembly);
+            builder.ApplyConfigurationsFromAssembly(typeof(Startup).Assembly);
         }
 
         public Task<int> SaveChangesAsync()

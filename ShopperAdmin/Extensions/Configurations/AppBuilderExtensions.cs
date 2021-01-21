@@ -1,8 +1,13 @@
 ﻿using System;
 using System.IO;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
+using ShopperAdmin.Database;
+using ShopperAdmin.Database.Seeders;
+using ShopperAdmin.Mvc.Entities.Identity;
 
 namespace ShopperAdmin.Extensions.Configurations
 {
@@ -10,26 +15,23 @@ namespace ShopperAdmin.Extensions.Configurations
     {
         public static IHost SeedDatabase(this IHost host)
         {
-            /*using (var scope = host.Services.CreateScope())
+            using (var scope = host.Services.CreateScope())
             {
                 var dbContext = scope.GetService<ApplicationDbContext>();
-                var adminAppDbContext = scope.GetService<AdminAppDbContext>();
-                var passwordHasher = scope.GetService<IPasswordHasher<AppUser>>();
                 var userManager = scope.GetService<UserManager<AppUser>>();
                 var logger = scope.GetService<ILogger>();
-                var serviceProvider = scope.GetService<IServiceProvider>();
                 var configuration = host.GetService<IConfiguration>();
 
                 var seedDatabase = configuration.GetSection("Database").GetValue<bool?>("Seed") ?? false;
                 if (seedDatabase)
                 {
                     logger.Information("********** Seeding database *************");
-                    DatabaseSeeder.Seed(dbContext, adminAppDbContext, passwordHasher, userManager, logger, serviceProvider);
+                    DatabaseSeeder.Seed(dbContext,userManager, logger);
                 }
                 ModulesSeeder.Seed(dbContext, logger);
                 PermissionsSeeder.Seed(dbContext, logger);
                 RoleClaimsSeeder.Seed(dbContext, logger);
-            }*/
+            }
 
             return host;
         }

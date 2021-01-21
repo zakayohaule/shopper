@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Shared.Mvc.ViewModels
+namespace ShopperAdmin.Mvc.ViewModels
 {
     public class ChangePasswordModel
     {

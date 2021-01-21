@@ -4,12 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ShopperAdmin.Attributes;
 using ShopperAdmin.Extensions.Helpers;
 using ShopperAdmin.Mvc.Entities.Identity;
 using ShopperAdmin.Mvc.ViewModels;
 using ShopperAdmin.Mvc.ViewModels.Emails;
-using ShopperAdmin.Attributes;
-using ShopperAdmin.Extensions.Helpers;
 using ShopperAdmin.Services.Interfaces;
 
 namespace ShopperAdmin.Mvc.Controllers

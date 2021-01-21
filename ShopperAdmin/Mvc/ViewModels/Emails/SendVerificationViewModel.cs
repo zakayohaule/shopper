@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Shared.Mvc.ViewModels.Emails
+namespace ShopperAdmin.Mvc.ViewModels.Emails
 {
     public class SendVerificationViewModel
     {

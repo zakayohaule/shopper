@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using ShopperAdmin.Mvc.Entities.BaseEntities;
-using ShopperAdmin.Mvc.Entities.BaseEntities;
 
 namespace ShopperAdmin.Mvc.Entities.Identity
 {

@@ -12,9 +12,9 @@ namespace ShopperAdmin.Database.Seeders
             var modules = new List<Module>
             {
                 new Module {Name = "User Management"},
-                new Module {Name = "Institution Management"},
                 new Module {Name = "Role Management"},
-                new Module {Name = "Software Management"},
+                new Module {Name = "Database Management"},
+                new Module {Name = "Tenant Management"},
             }.ToList();
 
             modules.ForEach(pg =>

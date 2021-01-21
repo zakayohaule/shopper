@@ -50,12 +50,6 @@ namespace ShopperAdmin.Mvc.Entities.Identity
 
         [Column("has_reset_password")] public bool HasResetPassword { get; set; } = false;
 
-        [Column("tenant_id")]
-        public Guid TenantId { get; set; }
-
-        [ForeignKey(nameof(TenantId))]
-        public Tenant Tenant { get; set; }
-
         [Column("created_at")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [BindNever]

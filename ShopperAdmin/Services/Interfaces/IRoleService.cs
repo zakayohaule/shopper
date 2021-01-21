@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ShopperAdmin.Mvc.Entities.Identity;
 using ShopperAdmin.Mvc.ViewModels;
+using ShopperAdmin.Mvc.Entities.Identity;
 
 namespace ShopperAdmin.Services.Interfaces
 {

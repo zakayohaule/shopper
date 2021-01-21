@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ADMIN APP</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <th:environment names="Development">
+        <th:link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css"/>
+        <th:link rel="stylesheet" href="~/lib/font-awesome/css/all.css"/>
+        <th:link rel="stylesheet" href="~/lib/ionicons/css/ionicons.css"/>
+
+        <th:link rel="stylesheet" href="~/css/animation.css"/>
+        <th:link rel="stylesheet" href="~/lib/admin-lte/dist/css/adminlte.min.css" asp-append-version="true"/>
+
+    </th:environment>
+    <th:environment names="Staging,Production">
+        <th:link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" asp-append-version="true"/>
+        <th:link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" asp-append-version="true"/>
+        <th:link rel="stylesheet" href="~/lib/ionicons/css/ionicons.min.css" asp-append-version="true"/>
+
+        <th:link rel="stylesheet" href="~/css/animation.css" asp-append-version="true"/>
+        <th:link rel="stylesheet" href="~/lib/admin-lte/dist/css/adminlte.min.css" asp-append-version="true"/>
+        @* <th:link rel="stylesheet" href="~/css/login.css" asp-append-version="true" /> *@
+
+    </th:environment>
+
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+    @*<div class="login-logo">
+        <b>@tenant.Name.ToUpper()</b>
+    </div>*@
+    <!-- /.login-logo -->
+    <div class="card">
+        <div class="card-body login-card-body">
+            @await Component.InvokeAsync("PageAlert")
+            @RenderBody()
+        </div>
+        <!-- /.login-card-body -->
+    </div>
+</div>
+<th:environment names="Development">
+    <th:script src="~/lib/jquery/jquery.js" asp-append-version="true"></th:script>
+    <th:script src="~/lib/bootstrap/js/bootstrap.js" asp-append-version="true"></th:script>
+    <th:script src="~/lib/admin-lte/dist/js/adminlte.js" asp-append-version="true"></th:script>
+    <th:script src="~/js/site.js" asp-append-version="true"></th:script>
+</th:environment>
+<th:environment names="Staging,Production">
+    <th:script src="~/lib/jquery/jquery.min.js" asp-append-version="true"></th:script>
+    <th:script src="~/lib/bootstrap/js/bootstrap.min.js" asp-append-version="true"></th:script>
+    <th:script src="~/lib/admin-lte/dist/js/adminlte.min.js" asp-append-version="true"></th:script>
+    <th:script src="~/js/site.min.js" asp-append-version="true"></th:script>
+</th:environment>
+
+@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+<script >
+function showPassword(togglePassword,passwordFieldId){
+    console.log($(this));
+    const password = $('#'+passwordFieldId);
+        const type = password.prop('type') === 'password' ? 'text' : 'password';
+        password.prop('type', type);
+        // toggle the eye slash icon
+        togglePassword.classList.toggle('fa-eye-slash');
+    }
+</script>
+
+</body>
+</html>

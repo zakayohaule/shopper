@@ -1,0 +1,28 @@
+﻿@if (Model == "verified")
+{
+    <div class="alert alert-info">
+        <strong><p>Your email has been verified. Please login with the password that was sent in your verification email!</p></strong>
+    </div>
+}
+@if (Model == "unverified")
+{
+    <div class="alert alert-warning">
+        <strong>
+            <p>Your email has not been verified.!</p>
+            <p>
+                If you didn't receive a verification email,
+                <strong>
+                    <th:a asp-controller="Account" asp-action="VerificationEmail">click here to resend</th:a>
+                </strong>
+            </p>
+        </strong>
+    </div>
+}
+@if (Model == "sent")
+{
+    <div class="alert alert-info">
+        <strong>
+            <p>A verification link and a password has been sent to your email, please check your email to verify your email!</p>
+        </strong>
+    </div>
+}

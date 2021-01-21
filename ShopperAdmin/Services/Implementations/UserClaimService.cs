@@ -9,7 +9,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using ShopperAdmin.Database;
-using ShopperAdmin.Extensions.Helpers;
 using ShopperAdmin.Mvc.Entities.Identity;
 using ShopperAdmin.Services.Interfaces;
 

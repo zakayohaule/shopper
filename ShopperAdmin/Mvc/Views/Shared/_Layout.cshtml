@@ -8,12 +8,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 |  @ViewData["Title"]?.ToString() </title>
+    <title>Shopper | @ViewData["Title"]?.ToString() </title>
     <!-- Tell the browser to be responsive to screen width -->
     <th:environment names="Development">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+        <th:link rel="stylesheet" href="~/css/google-fonts.css"></th:link>
         <th:link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.css"></th:link>
         <th:link rel="stylesheet" href="~/lib/ionicons/css/ionicons.css"></th:link>
+        <th:link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css"></th:link>
         <th:link rel="stylesheet" href="~/dist/css/adminlte.css"></th:link>
         @* <th:link rel="stylesheet" href="~/css/site.css"></th:link> *@
     </th:environment>
@@ -21,22 +22,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
         <th:link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css" asp-append-version="true"></th:link>
         <th:link rel="stylesheet" href="~/lib/ionicons/css/ionicons.min.css" asp-append-version="true"></th:link>
+        <th:link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" asp-append-version="true"></th:link>
         <th:link rel="stylesheet" href="~/dist/css/adminlte.min.css" asp-append-version="true"></th:link>
         @* <th:link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"></th:link> *@
     </th:environment>
 
-    <th:environment names="Development">
-        <th:script src="~/plugins/jquery/jquery.js" asp-append-version="true"></th:script>
-        <th:script src="~/plugins/bootstrap/js/bootstrap.bundle.js" asp-append-version="true"></th:script>
-        <th:script src="~/js/site.js" asp-append-version="true"></th:script>
-        <th:script src="~/dist/js/adminlte.js" asp-append-version="true"></th:script>
-    </th:environment>
-    <th:environment names="Staging,Production">
-        <th:script src="~/plugins/jquery/jquery.min.js" asp-append-version="true"></th:script>
-        <th:script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></th:script>
-        <th:script src="~/js/site.min.js" asp-append-version="true"></th:script>
-        <th:script src="~/dist/js/adminlte.js" asp-append-version="true"></th:script>
-    </th:environment>
+    @await RenderSectionAsync("css", false)
 
 </head>
 <!--
@@ -59,7 +50,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition sidebar-mini text-sm">
+<body class="hold-transition sidebar-mini skin-black">
 <div class="wrapper">
     <!-- Main Header -->
     @await Component.InvokeAsync("Header")
@@ -71,10 +62,10 @@ desired effect
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-0">
-                    <div class="col-sm-6">
+                    <div class="col-sm-8">
                         @await Component.InvokeAsync("PageHeader")
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         @await Component.InvokeAsync("Breadcrumb")
                     </div>
                 </div>
@@ -108,10 +99,23 @@ desired effect
 Both of these plugins are recommended to enhance the
 user experience. Slimscroll is required when using the
 fixed layout. -->
-@RenderSection("scripts", required: false)
-<script>
+
+<th:environment names="Development">
+    <th:script src="~/plugins/jquery/jquery.js" asp-append-version="true"></th:script>
+    <th:script src="~/plugins/bootstrap/js/bootstrap.bundle.js" asp-append-version="true"></th:script>
+    <th:script src="~/js/site.js" asp-append-version="true"></th:script>
+    <th:script src="~/dist/js/adminlte.js" asp-append-version="true"></th:script>
+</th:environment>
+<th:environment names="Staging,Production">
+    <th:script src="~/plugins/jquery/jquery.min.js" asp-append-version="true"></th:script>
+    <th:script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></th:script>
+    <th:script src="~/js/site.min.js" asp-append-version="true"></th:script>
+    <th:script src="~/dist/js/adminlte.min.js" asp-append-version="true"></th:script>
+</th:environment>
+@await RenderSectionAsync("scripts", required: false)
+@*<script>
         useSubmitClass();
         useDeleteConfirmation();
-    </script>
+</script>*@
 </body>
 </html>

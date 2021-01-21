@@ -61,13 +61,13 @@
             return await _dbContext
                 .Users
                 .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<AppUser> FindByEmail(string email)
         {
             return await _dbContext.Users
-                .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(user => String.Equals(user.Email, email, StringComparison.CurrentCultureIgnoreCase));
         }
 
@@ -83,13 +83,14 @@
 
         public async Task DeleteUserAsync(AppUser user)
         {
-            _dbContext.Users.Update(user);
+            _dbContext.Users.Remove(user);
             await _dbContext.SaveChangesAsync();
         }
 
         public void SendEmailVerificationEmail(EmailVerificationViewModel model)
         {
             var email = _fluentEmail
+                .SetFrom("amdmin@tzShopperAdmin.com")
                 .To(model.Email)
                 .Subject("Email Verification")
                 .UsingTemplateFromFile(_environment.GetEmailTemplate("EmailVerification"), model)
@@ -114,7 +115,7 @@
                 .IncludeNumeric()
                 .IncludeUppercase()
                 .IncludeSpecial()
-                .Next();;
+                .Next();
         }
 
         public async Task<string> ChangePasswordAsync(AppUser user)
@@ -175,7 +176,7 @@
         {
             return _dbContext
                 .Users
-                .IgnoreQueryFilters().Any(user => user.Id == userId);
+                .Any(user => user.Id == userId);
         }
 
         public bool ExistsByUserName(string userName)
@@ -189,5 +190,11 @@
             var existingCount = _dbContext.Users.Count(user => user.UserName.Contains(username));
             return existingCount == 0 ? username : $"{username}{existingCount}";
         }
+
+        /*public bool UsersForInstitution(uint institutionId, HashSet<long> selectedUsers)
+        {
+            var users = GetAllUsers().Where(user => user.InstitutionId == institutionId).Select(user => user.Id).ToHashSet();
+            return selectedUsers.IsSubsetOf(users);
+        }*/
     }
 }

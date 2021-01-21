@@ -22,15 +22,15 @@ namespace ShopperAdmin.Mvc.ViewComponents
             var sidebars = new List<SidebarMenu>();
             var links = new List<SidebarMenu>();
 
-            if (_userClaimService.HasAnyPermission(userId, "role_view"))
+            if (_userClaimService.HasAnyPermission(userId, "user_view,role_view"))
             {
                 var userManagement = ModuleHelper.AddTree("User Management", "fa fa-users");
                 links = new List<SidebarMenu>();
 
-                // if (_userClaimService.HasPermission(userId, "user_view"))
-                // {
-                //     links.Add(ModuleHelper.AddModuleLink(name: "Users", url: Url.Action("Index", "User"), "fa fa-users"));
-                // }
+                if (_userClaimService.HasPermission(userId, "user_view"))
+                {
+                    links.Add(ModuleHelper.AddModuleLink(name: "Users", url: Url.Action("Index", "User"), "fa fa-users"));
+                }
 
                 if (_userClaimService.HasPermission(userId, "role_view"))
                 {
@@ -40,6 +40,8 @@ namespace ShopperAdmin.Mvc.ViewComponents
                 userManagement.TreeChild = links;
                 sidebars.Add(userManagement);
             }
+
+
             /*var userManagementModule = ModuleHelper.AddTree(name: "User Management", iconClassName: "fa fa-user");
             userManagementModule.TreeChild = new List<SidebarMenu>
             {

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ShopperAdmin.Mvc.Entities;
 using Microsoft.AspNetCore.Mvc;
 using ShopperAdmin.Mvc.Entities.Identity;
 

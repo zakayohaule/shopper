@@ -1,0 +1,31 @@
+@{
+    var partialName = ViewData["FormName"];
+
+    if (partialName == null)
+    {
+        throw new ArgumentNullException($"You must provide a ViewData value to specify the partial to use for editiing");
+    }
+    var enctype = "application/x-www-form-urlencoded";
+    if (ViewData["AllowFileUpload"] != null)
+    {
+        var allowFileUploads = (bool) ViewData["AllowFileUpload"];
+        enctype = allowFileUploads ? "multipart/form-data" : enctype;
+    }
+}
+<div class="modal fade" id="edit-modal">
+    <div class="modal-dialog modal-lg" id="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="edit-title">Edit Product</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <th:form class="" enctype="@enctype" id="edit-form" method="post">
+                    <th:partial name="@partialName" view-data="ViewData"/>
+                </th:form>
+            </div>
+        </div>
+    </div>
+</div>

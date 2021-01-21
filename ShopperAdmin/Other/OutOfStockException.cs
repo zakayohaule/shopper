@@ -1,6 +1,6 @@
 using System;
 
-namespace Shopper.Common
+namespace ShopperAdmin.Common
 {
     public class OutOfStockException : Exception
     {

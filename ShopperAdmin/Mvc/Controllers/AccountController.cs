@@ -42,16 +42,10 @@ namespace ShopperAdmin.Mvc.Controllers
             return View(new LoginModel());
         }
 
-        [HttpPost("login", Name = "login"), ValidateAntiForgeryToken, ValidateModel]
+        [HttpPost("login", Name = "login"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel loginModel, string returnTo)
         {
             var user = await _userManager.FindByEmailAsync(loginModel.Email);
-            // return Ok(loginModel);
-            if (user == null)
-            {
-                AddPageAlerts(PageAlertType.Error, "Invalid login credentials!");
-                return View();
-            }
 
             if (!user.EmailConfirmed)
             {
@@ -235,7 +229,8 @@ namespace ShopperAdmin.Mvc.Controllers
             {
                 passwordResetResult.Errors.ToList().ForEach(error =>
                 {
-                    ModelState.AddModelError(error.Code, error.Description);
+                    AddPageAlerts(PageAlertType.Error, error.Description);
+                    // ModelState.AddModelError(error.Code, error.Description);
                 });
                 return View();
             }

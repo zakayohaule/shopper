@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ShopperAdmin.Mvc.Entities;
+using ShopperAdmin.Mvc.Enums;
+using ShopperAdmin.Mvc.ViewModels;
 
 namespace ShopperAdmin.Mvc.Controllers
 {
     public class BaseController : Controller
     {
         [ViewData]
-        public string Title { get; set; } = "ShopperAdmin";
+        public string Title { get; set; } = "Shopper";
 
         internal void AddBreadcrumb(string displayName, string urlPath)
         {
@@ -23,8 +26,11 @@ namespace ShopperAdmin.Mvc.Controllers
                 messages = ViewBag.Breadcrumb as List<Message>;
             }
 
-            messages.Add(new Message { DisplayName = displayName, URLPath = urlPath });
-            ViewBag.Breadcrumb = messages;
+            if (messages != null)
+            {
+                messages.Add(new Message {DisplayName = displayName, URLPath = urlPath});
+                ViewBag.Breadcrumb = messages;
+            }
         }
 
         internal void AddPageHeader(string pageHeader = "", string pageDescription = "")
@@ -55,6 +61,40 @@ namespace ShopperAdmin.Mvc.Controllers
 
             messages.Add(new Message { Type = pageAlertType.ToString().ToLower(), ShortDesc = description });
             ViewBag.PageAlerts = messages;
+        }
+
+        internal void AddToast(ToastType type, string body)
+        {
+            TempData["Toast"] = JsonConvert.SerializeObject(new ToastModel
+            {
+                Type = type,
+                Body = body,
+            });
+        }
+
+        internal void ToastError(string body)
+        {
+            AddToast(ToastType.Error, body);
+        }
+
+        internal void ToastSuccess(string body)
+        {
+            AddToast(ToastType.Success, body);
+        }
+
+        internal void ToastWarning(string body)
+        {
+            AddToast(ToastType.Warning, body);
+        }
+
+        internal void ToastInfo(string body)
+        {
+            AddToast(ToastType.Info, body);
+        }
+
+        internal void ToastDanger(string body)
+        {
+            AddToast(ToastType.Error, body);
         }
     }
 }

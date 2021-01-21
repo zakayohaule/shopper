@@ -1,5 +1,3 @@
-using System;
-
 namespace ShopperAdmin.Mvc.ViewModels
 {
     public class ErrorViewModel

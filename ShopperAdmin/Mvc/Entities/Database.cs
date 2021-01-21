@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using ShopperAdmin.Mvc.Entities.BaseEntities;
 

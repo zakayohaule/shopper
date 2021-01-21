@@ -3,13 +3,10 @@
 @inject IWebHostEnvironment Environment;
 
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-dark-info elevation-4">
+<aside class="main-sidebar sidebar-mini sidebar-dark-lightblue elevation-4">
     <!-- Brand Logo -->
-    <a href="/" class="brand-link text-sm">
-        <th:img src="~/lib/admin-lte/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-                style="opacity: .8">
-        </th:img>
-        <span class="brand-text font-weight-light">App - @Environment.EnvironmentName</span>
+    <a href="/" class="brand-link navbar-lightblue">
+        <span class="brand-text font-weight-bolder">ADMIN APP</span>
     </a>
 
     <!-- sidebar: style can be found in sidebar.less -->
@@ -17,7 +14,7 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar nav-collapse-hide-child nav-child-indent nav-compact flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                @foreach (var menu in Model as IEnumerable<SidebarMenu>)
+                @foreach (var menu in Model)
                 {
                     if (menu.Type == SidebarMenuType.Header)
                     {
@@ -57,7 +54,8 @@
                     {
                         var active = string.Empty;
                         var menuopen = string.Empty;
-                        if (menu.TreeChild.Any(x => @Context.Request.Path.Value.Contains(x.URLPath)))
+                        var pathValue = Context.Request.Path.Value;
+                        if (menu.TreeChild.Any(x => pathValue.Contains(x.URLPath) && !pathValue.Contains("add-sale")))
                         {
                             active = "active";
                             menuopen = "menu-open";

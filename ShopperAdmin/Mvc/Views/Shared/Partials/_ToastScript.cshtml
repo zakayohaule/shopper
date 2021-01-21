@@ -1,0 +1,39 @@
+@using Newtonsoft.Json
+@{
+    ToastModel toastModel = null;
+    if (TempData["Toast"] != null)
+    {
+        toastModel = JsonConvert.DeserializeObject<ToastModel>(TempData["Toast"].ToString());
+    }
+}
+@if (toastModel != null)
+{
+    <th:script src="~/plugins/toastr/toastr.min.js"></th:script>
+    <script>
+        toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "3000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+    if ('@toastModel.Type.ToString()' === 'Success')
+        toastr.success('@toastModel.Body', "Success!");
+    if ('@toastModel.Type' === 'Info')
+        toastr.info('@toastModel.Body', "Info!");
+    if ('@toastModel.Type' === 'Warning')
+        toastr.warning('@toastModel.Body', "Warning!");
+    if ('@toastModel.Type' === 'Error' || '@toastModel.Type' === 'Danger')
+        toastr.error('@toastModel.Body', "Failed!");
+    </script>
+}

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
-using ShopperAdmin.Mvc.Entities.Identity;
 
 namespace ShopperAdmin.Mvc.Entities.Identity
 {

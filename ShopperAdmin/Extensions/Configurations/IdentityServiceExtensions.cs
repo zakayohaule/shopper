@@ -7,8 +7,8 @@
  using Microsoft.Extensions.DependencyInjection;
  using Microsoft.Extensions.Hosting;
  using Microsoft.IdentityModel.Tokens;
- using ShopperAdmin.Mvc.Entities.Identity;
  using ShopperAdmin.Database;
+ using ShopperAdmin.Mvc.Entities.Identity;
 
  namespace ShopperAdmin.Extensions.Configurations
 {

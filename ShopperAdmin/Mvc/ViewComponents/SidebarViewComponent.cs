@@ -41,7 +41,24 @@ namespace ShopperAdmin.Mvc.ViewComponents
                 sidebars.Add(userManagement);
             }
 
+            if (_userClaimService.HasAnyPermission(userId, "tenant_view,database_view"))
+            {
+                var tenantManagement = ModuleHelper.AddTree("Tenant Management", "fa fa-house");
+                links = new List<SidebarMenu>();
 
+                if (_userClaimService.HasPermission(userId, "database_view"))
+                {
+                    links.Add(ModuleHelper.AddModuleLink(name: "Databases", url: Url.Action("Index", "User")));
+                }
+
+                if (_userClaimService.HasPermission(userId, "tenant_view"))
+                {
+                    links.Add(ModuleHelper.AddModuleLink(name: "Tenants", Url.Action("Index", "Tenant")));
+                }
+
+                tenantManagement.TreeChild = links;
+                sidebars.Add(tenantManagement);
+            }
             /*var userManagementModule = ModuleHelper.AddTree(name: "User Management", iconClassName: "fa fa-user");
             userManagementModule.TreeChild = new List<SidebarMenu>
             {

@@ -17,6 +17,14 @@ namespace ShopperAdmin.Database.Seeders
                 .Modules
                 .SingleOrDefault(group => group.Name == "Role Management");
 
+            var databaseManagement = dbContext
+                .Modules
+                .SingleOrDefault(g => g.Name == "Database Management");
+
+            var tenantManagement = dbContext
+                .Modules
+                .SingleOrDefault(g => g.Name == "Tenant Management");
+
 
             var permissions = new List<Permission>
             {
@@ -29,8 +37,16 @@ namespace ShopperAdmin.Database.Seeders
                 new Permission {Name = "role_edit", DisplayName = "Edit Role", Module = roleManagement},
                 new Permission {Name = "role_view", DisplayName = "View Role", Module = roleManagement},
                 new Permission {Name = "role_delete", DisplayName = "Delete Role", Module = roleManagement},
-                new Permission
-                    {Name = "role_permission_view", DisplayName = "View Role Permissions", Module = roleManagement}
+                new Permission {Name = "role_permission_view", DisplayName = "View Role Permissions", Module = roleManagement},
+                new Permission {Name = "role_permissions_save", DisplayName = "Save A Role's Permissions", Module = roleManagement},
+                new Permission {Name = "database_add", DisplayName = "Create Database", Module = databaseManagement},
+                new Permission {Name = "database_edit", DisplayName = "Edit Database", Module = databaseManagement},
+                new Permission {Name = "database_view", DisplayName = "View Database", Module = databaseManagement},
+                new Permission {Name = "database_delete", DisplayName = "Delete Database", Module = databaseManagement},
+                new Permission {Name = "tenant_add", DisplayName = "Create Tenant", Module =tenantManagement},
+                new Permission {Name = "tenant_edit", DisplayName = "Edit Tenant", Module =tenantManagement},
+                new Permission {Name = "tenant_view", DisplayName = "View Tenant", Module =tenantManagement},
+                new Permission {Name = "tenant_delete", DisplayName = "Delete Tenant", Module =tenantManagement},
             }.ToList();
 
             permissions.ForEach(permission =>

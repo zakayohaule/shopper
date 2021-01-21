@@ -15,6 +15,7 @@ namespace ShopperAdmin.Extensions.Configurations
             services.AddSingleton<IEmailQueueService, EmailQueueService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<ITenantService, TenantService>();
             services.AddScoped<INotificationService, NotificationService>();
         }
 

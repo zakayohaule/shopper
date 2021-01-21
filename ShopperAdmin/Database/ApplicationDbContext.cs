@@ -27,6 +27,7 @@ namespace ShopperAdmin.Database
         public DbSet<Module> Modules { get; set; }
 
         public DbSet<Tenant> Tenants { get; set; }
+        public DbSet<Mvc.Entities.Database> Databases { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

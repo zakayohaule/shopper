@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using ShopperAdmin.Mvc.Entities.BaseEntities;
 using ShopperAdmin.Mvc.Enums;
@@ -33,5 +34,8 @@ namespace ShopperAdmin.Mvc.Entities
         [Column("valid_to")] public DateTime ValidTo { get; set; } = DateTime.Now.AddYears(1);
 
         public bool Active { get; set; } = true;
+
+        [InverseProperty("Tenant")]
+        public ICollection<TenantSubscription> TenantSubscriptions { get; set; }
     }
 }

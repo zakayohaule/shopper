@@ -12,11 +12,18 @@ namespace ShopperAdmin.Migrations
                 name: "modules",
                 columns: table => new
                 {
-                    id = table.Column<short>(nullable: false)
+                    id = table.Column<ushort>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    created_at = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    updated_at = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
                     name = table.Column<string>(nullable: true)
                 },
-                constraints: table => { table.PrimaryKey("PK_modules", x => x.id); });
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_modules", x => x.id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "roles",
@@ -31,10 +38,12 @@ namespace ShopperAdmin.Migrations
                     created_at = table.Column<DateTime>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     updated_at = table.Column<DateTime>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
-                    is_deleted = table.Column<bool>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
                 },
-                constraints: table => { table.PrimaryKey("PK_roles", x => x.id); });
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_roles", x => x.id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "users",
@@ -57,15 +66,17 @@ namespace ShopperAdmin.Migrations
                     lockout_end = table.Column<DateTimeOffset>(nullable: true),
                     lockout_enabled = table.Column<bool>(nullable: false),
                     access_failed_count = table.Column<int>(nullable: false),
-                    institution_id = table.Column<uint>(nullable: false),
+                    is_deleted = table.Column<bool>(nullable: false),
+                    has_reset_password = table.Column<bool>(nullable: false),
                     created_at = table.Column<DateTime>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     updated_at = table.Column<DateTime>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
-                    is_deleted = table.Column<bool>(nullable: false),
-                    has_reset_password = table.Column<bool>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn)
                 },
-                constraints: table => { table.PrimaryKey("PK_users", x => x.id); });
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_users", x => x.id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "permissions",
@@ -73,9 +84,13 @@ namespace ShopperAdmin.Migrations
                 {
                     id = table.Column<ushort>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    created_at = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    updated_at = table.Column<DateTime>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
                     name = table.Column<string>(nullable: true),
                     display_name = table.Column<string>(nullable: true),
-                    module_id = table.Column<short>(nullable: false)
+                    module_id = table.Column<ushort>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -101,7 +116,7 @@ namespace ShopperAdmin.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_role_claims", x => x.id);
-                    table.UniqueConstraint("AK_role_claims_role_id_claim_value", x => new {x.role_id, x.claim_value});
+                    table.UniqueConstraint("AK_role_claims_role_id_claim_value", x => new { x.role_id, x.claim_value });
                     table.ForeignKey(
                         name: "FK_role_claims_roles_role_id",
                         column: x => x.role_id,
@@ -142,7 +157,7 @@ namespace ShopperAdmin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_user_logins", x => new {x.LoginProvider, x.ProviderKey});
+                    table.PrimaryKey("PK_user_logins", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
                         name: "FK_user_logins_users_user_id",
                         column: x => x.user_id,
@@ -160,7 +175,7 @@ namespace ShopperAdmin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_user_role", x => new {x.user_id, x.role_id});
+                    table.PrimaryKey("PK_user_role", x => new { x.user_id, x.role_id });
                     table.ForeignKey(
                         name: "FK_user_role_roles_role_id",
                         column: x => x.role_id,
@@ -186,7 +201,7 @@ namespace ShopperAdmin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_user_tokens", x => new {x.user_id, x.login_provider, x.name});
+                    table.PrimaryKey("PK_user_tokens", x => new { x.user_id, x.login_provider, x.name });
                     table.ForeignKey(
                         name: "FK_user_tokens_users_user_id",
                         column: x => x.user_id,
@@ -219,15 +234,27 @@ namespace ShopperAdmin.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_roles_name",
-                table: "roles",
-                column: "name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "roles",
                 column: "normalized_name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tenants_code",
+                table: "tenants",
+                column: "code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tenants_domain",
+                table: "tenants",
+                column: "domain",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tenants_name",
+                table: "tenants",
+                column: "name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -264,6 +291,9 @@ namespace ShopperAdmin.Migrations
 
             migrationBuilder.DropTable(
                 name: "role_claims");
+
+            migrationBuilder.DropTable(
+                name: "tenants");
 
             migrationBuilder.DropTable(
                 name: "user_claims");

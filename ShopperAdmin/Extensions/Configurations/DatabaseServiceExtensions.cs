@@ -13,6 +13,7 @@ namespace ShopperAdmin.Extensions.Configurations
             {
                 builder.UseMySql(configuration.GetConnectionString("Default"));
             });
+            services.AddDbContext<TenantDbContext>();
             /*services.AddDbContext<AdminAppDbContext>(builder =>
             {
                 builder.UseMySql(configuration.GetConnectionString("AdminApp"));

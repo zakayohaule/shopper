@@ -28,11 +28,14 @@ namespace Shopper.Extensions.Configurations
                 var configuration = host.GetService<IConfiguration>();
 
                 var seedDatabase = configuration.GetSection("Database").GetValue<bool?>("Seed") ?? false;
+
                 if (seedDatabase)
                 {
                     logger.Information("********** Seeding database *************");
-                    DatabaseSeeder.Seed(dbContext, adminAppDbContext, passwordHasher, userManager, logger, serviceProvider);
+                    DatabaseSeeder.Seed(dbContext, adminAppDbContext, passwordHasher, userManager, logger,
+                        serviceProvider);
                 }
+
                 ModulesSeeder.Seed(dbContext, logger);
                 PermissionsSeeder.Seed(dbContext, logger);
                 RoleClaimsSeeder.Seed(dbContext, logger);

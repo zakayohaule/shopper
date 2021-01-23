@@ -115,6 +115,7 @@ namespace Shopper.Mvc.ViewComponents
                 sidebars.Add(productManagement);
             }
 
+            /*
             if (_userClaimService.HasAnyPermission(userId, "product_view"))
             {
                 var reports = ModuleHelper.AddTree("Reports");
@@ -123,6 +124,8 @@ namespace Shopper.Mvc.ViewComponents
                 reports.TreeChild = links;
                 sidebars.Add(reports);
             }
+            */
+
             return View(sidebars);
         }
 

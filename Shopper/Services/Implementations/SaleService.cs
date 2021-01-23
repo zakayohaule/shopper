@@ -213,7 +213,10 @@ namespace Shopper.Services.Implementations
         public async Task<string> GenerateInvoiceNumberAsync(string tenantCode)
         {
             var invoiceNumber = "";
-            var latestInvoice = await _dbContext.SaleInvoices.Where(si => si.CreatedAt.Date == DateTime.Today).OrderByDescending(si => si.CreatedAt)
+            var latestInvoice = await _dbContext.SaleInvoices
+                .AsNoTracking()
+                .Where(si => si.CreatedAt.Date == DateTime.Today)
+                .OrderByDescending(si => si.CreatedAt)
                 .FirstOrDefaultAsync();
             if (latestInvoice != null)
             {

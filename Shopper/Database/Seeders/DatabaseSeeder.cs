@@ -24,7 +24,7 @@ namespace Shopper.Database.Seeders
             // RoleSeeder.Seed(serviceProvider, dbContext, logger);
             // UsersSeeder.Seed(serviceProvider, dbContext,passwordHasher, userManager, logger);
 
-            FixWhenAfterMigrating(dbContext, logger);
+            // FixWhenAfterMigrating(dbContext, logger);
         }
 
         public static void FixWhenAfterMigrating(ApplicationDbContext dbContext, ILogger logger)

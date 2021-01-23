@@ -52,34 +52,43 @@
             @{
                 int index = 0;
             }
-            @foreach (var expenditureType in Model)
+            @if (Model.Count > 0)
             {
-                index++;
-                <tr>
-                    <td>@index</td>
-                    <td>@expenditureType.Name</td>
-                    <td>
-                        <th:permission name="expenditure_type_edit">
-                            <a href="#" onclick="openEditModal('@Url.Action("EditExpenditureTypeModal", new {id = expenditureType.Id})',
+                foreach (var expenditureType in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>@index</td>
+                        <td>@expenditureType.Name</td>
+                        <td>
+                            <th:permission name="expenditure_type_edit">
+                                <a href="#" onclick="openEditModal('@Url.Action("EditExpenditureTypeModal", new {id = expenditureType.Id})',
                                                      '@Url.Action("Update", new {id = expenditureType.Id})',
                                                      'Edit Expenditure Type')"
-                               class="btn btn-default btn-sm"
-                               title="Edit expenditure type">
-                                @* <span class="badge badge-warning" title="Edit expenditure type"> *@
-                                <i class="fas fa-edit"></i>
-                                @* </span> *@
-                            </a>
-                        </th:permission>
-                        <th:permission name="expenditure_type_delete">
-                            <th:a asp-controller="ExpenditureType"
-                                  asp-action="Delete"
-                                  asp-route-id="@expenditureType.Id" class="btn btn-default btn-sm btn-delete" title="Delete expenditure type">
-                                @* <span class="badge badge-danger" title="Delete expenditure type"> *@
-                                <i class="fas fa-trash"></i>
-                                @* </span> *@
-                            </th:a>
-                        </th:permission>
-                    </td>
+                                   class="btn btn-default btn-sm"
+                                   title="Edit expenditure type">
+                                    @* <span class="badge badge-warning" title="Edit expenditure type"> *@
+                                    <i class="fas fa-edit"></i>
+                                    @* </span> *@
+                                </a>
+                            </th:permission>
+                            <th:permission name="expenditure_type_delete">
+                                <th:a asp-controller="ExpenditureType"
+                                      asp-action="Delete"
+                                      asp-route-id="@expenditureType.Id" class="btn btn-default btn-sm btn-delete" title="Delete expenditure type">
+                                    @* <span class="badge badge-danger" title="Delete expenditure type"> *@
+                                    <i class="fas fa-trash"></i>
+                                    @* </span> *@
+                                </th:a>
+                            </th:permission>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" class="text-center">No records found</td>
                 </tr>
             }
             </tbody>

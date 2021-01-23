@@ -1,10 +1,13 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shopper.Database;
+using Shopper.Extensions.Helpers;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Mvc.Controllers
 {
+    [Authorize(AuthenticationSchemes = "jwt")]
     public class TestController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
@@ -20,7 +23,7 @@ namespace Shopper.Mvc.Controllers
         [HttpGet("test")]
         public IActionResult Test(string host)
         {
-            return Ok(Request.Protocol);
+            return Ok(HttpContext.GetCurrentTenant());
         }
     }
 }

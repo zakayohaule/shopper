@@ -17,7 +17,7 @@ namespace Shopper.Database.Seeders
             dbContext.SaveChanges();
         }
 
-        private static void UpdateRoleClaims(Role role, ILogger logger, ApplicationDbContext dbContext)
+        public static void UpdateRoleClaims(Role role, ILogger logger, ApplicationDbContext dbContext)
         {
             if (role == null)
             {

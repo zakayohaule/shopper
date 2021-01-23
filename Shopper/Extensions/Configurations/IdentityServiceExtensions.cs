@@ -9,6 +9,7 @@
  using Microsoft.IdentityModel.Tokens;
  using Shopper.Database;
  using Shopper.Mvc.Entities.Identity;
+ using Shopper.Other;
 
  namespace Shopper.Extensions.Configurations
 {
@@ -17,6 +18,7 @@
         public static void ConfigureIdentity(this IServiceCollection services, IWebHostEnvironment environment,
             IConfiguration configuration)
         {
+
             services.AddIdentity<AppUser, Role>(options =>
                 {
                     if (environment.IsDevelopment())
@@ -46,15 +48,20 @@
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddIdentityServer()
+                .AddInMemoryApiResources(IdentityConfig.Apis)
+                .AddInMemoryClients(IdentityConfig.Clients)
+                .AddDeveloperSigningCredential();
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddJwtBearer("jwt", options =>
                 {
                     options.Authority = "http://localhost:5000";
                     options.SaveToken = true;
 
-                    // @todo Remove this in production
+                    // todo Remove this in production
                     options.RequireHttpsMetadata = false;
-                    options.Audience = "egov_apis";
+                    options.Audience = "add_user";
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         // IssuerSigningKey = new SymmetricSecurityKey()
@@ -76,7 +83,7 @@
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(cookieExpiration);
                 options.LoginPath = "/account/login";
                 options.LogoutPath = "/account/logout";
-                options.ReturnUrlParameter = "return_to";
+                options.ReturnUrlParameter = "return-to";
             });
         }
     }

@@ -66,6 +66,7 @@ namespace Shopper
             app.UseStaticFiles();
             app.UseTenantResolver();
             app.UseRouting();
+            app.UseIdentityServer();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSerilogRequestLogging();

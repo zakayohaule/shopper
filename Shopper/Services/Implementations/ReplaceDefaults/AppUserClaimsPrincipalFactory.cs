@@ -34,7 +34,7 @@ namespace Shopper.Services.Implementations.ReplaceDefaults
 
             id.AddClaim(new Claim("FullName", user.FullName));
             id.AddClaim(new Claim("Email", email));
-            id.AddClaim(new Claim(Options.ClaimsIdentity.UserIdClaimType, userId));
+            id.AddClaim(new Claim("sub", userId));
             id.AddClaim(new Claim(Options.ClaimsIdentity.UserNameClaimType, userName));
             if (UserManager.SupportsUserSecurityStamp)
             {

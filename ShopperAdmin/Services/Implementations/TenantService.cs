@@ -1,55 +1,147 @@
-using IdentityServer4.Extensions;
-using IdentityServer4.Stores.Serialization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using IdentityModel.Client;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using ShopperAdmin.Database;
+using ShopperAdmin.Mvc.Entities;
+using ShopperAdmin.Mvc.Entities.Identity;
+using ShopperAdmin.Mvc.Entities.Tenants;
+using ShopperAdmin.Mvc.ViewModels;
 using ShopperAdmin.Services.Interfaces;
 
 namespace ShopperAdmin.Services.Implementations
 {
     public class TenantService : ITenantService
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ApplicationDbContext _dbContext;
+        private readonly TenantDbContext _tenantDbContext;
         private readonly IConfiguration _configuration;
 
-        public TenantService(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
+        public TenantService(ApplicationDbContext dbContext, TenantDbContext tenantDbContext,
+            IConfiguration configuration)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _dbContext = dbContext;
+            _tenantDbContext = tenantDbContext;
             _configuration = configuration;
         }
 
-        public string GetCurrentTenant()
+        public async Task<Tenant> FindByIdAsync(Guid id)
         {
-            var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext == null)
-            {
-                return _configuration.GetValue<string>("DefaultTenantDb");
-            }
-            if (!httpContext.User.IsAuthenticated())
-            {
-                return GetTenantFromSubDomain();
-            } 
-            return GetTenantFromSubDomain();
+            return await _dbContext.Tenants.FindAsync(id);
         }
 
-        private string GetTenantFromSubDomain()
+        public IQueryable<Tenant> GetTenantAsQueryable()
         {
-            var subDomain = string.Empty;
-            var host = _httpContextAccessor.HttpContext.Request.Host.Host;
+            return _dbContext.Tenants.AsQueryable();
+        }
 
-            if (!string.IsNullOrWhiteSpace(host))
+        public async Task<Tenant> CreateAsync(CreateTenantModel formModel)
+        {
+            try
             {
-                if (host.Contains("."))
+                await _dbContext.Database.BeginTransactionAsync();
+                var tenant = new Tenant
                 {
-                    subDomain = host.Split('.')[0];
+                    Active = true,
+                    Code = formModel.Code,
+                    Domain = formModel.Domain,
+                    Name = formModel.Name,
+                    ConnectionString = formModel.ConnectionString,
+                };
+
+                tenant = _dbContext.Tenants.Add(tenant).Entity;
+                await _dbContext.SaveChangesAsync();
+
+                _tenantDbContext.ConnectionString = tenant.ConnectionString;
+                await _tenantDbContext.Database.BeginTransactionAsync();
+                var tenantTenant = _tenantDbContext.Tenants.Add(tenant).Entity;
+                await _tenantDbContext.SaveChangesAsync();
+                _tenantDbContext.Database.CommitTransaction();
+                _dbContext.Database.CommitTransaction();
+
+                var client = await GetTenantAppClientAsync();
+                var tenantUrl = _configuration.GetValue<string>("TenantUrl").Replace("{sub}", tenantTenant.Domain);
+                var response = await client.PostAsync($"{tenantUrl}/create-tenant-user",
+                    new StringContent(JsonConvert.SerializeObject(formModel),
+                        Encoding.Default,
+                        "application/json"));
+                if (!response.IsSuccessStatusCode)
+                {
+                    _dbContext.Tenants.Remove(tenant);
+                    _tenantDbContext.Tenants.Remove(tenantTenant);
+                    await _dbContext.SaveChangesAsync();
+                    await _tenantDbContext.SaveChangesAsync();
+                    var content = await response.Content.ReadAsStringAsync();
+                    throw new Exception(content);
                 }
+
+                return tenant;
+            }
+            catch (Exception e)
+            {
+                if (_tenantDbContext.Database.CurrentTransaction != null)
+                {
+                    _tenantDbContext.Database.RollbackTransaction();
+                }
+
+                if (_dbContext.Database.CurrentTransaction != null)
+                {
+                    _dbContext.Database.RollbackTransaction();
+                }
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task DeleteAsync(Tenant tenant)
+        {
+            _tenantDbContext.ConnectionString = tenant.ConnectionString;
+            _tenantDbContext.Remove(tenant);
+            _dbContext.Tenants.Remove(tenant);
+            await _tenantDbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<HttpClient> GetTenantAppClientAsync()
+        {
+            var httpClient = new HttpClient();
+            var tenantUrl = _configuration.GetValue<string>("TenantUrl").Replace("{sub}.", "");
+            var disco = await httpClient.GetDiscoveryDocumentAsync(tenantUrl);
+            if (disco.IsError)
+            {
+                return null;
             }
 
-            if (string.IsNullOrEmpty(subDomain))
+            // request token
+            var tokenResponse = await httpClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
             {
-                subDomain = _configuration.GetValue<string>("DefaultTenantDb");
+                Address = disco.TokenEndpoint,
+                ClientId = _configuration.GetSection("ClientDetails")["ClientId"],
+                ClientSecret = _configuration.GetSection("ClientDetails")["Password"],
+                Scope = "add_user"
+            });
+
+            if (tokenResponse.IsError)
+            {
+                return null;
             }
-            return subDomain.Trim().ToLower();
+
+            httpClient.SetBearerToken(tokenResponse.AccessToken);
+            return httpClient;
+        }
+
+        public async Task<bool> CreateTenantUserAndRole(Tenant tenant, CreateTenantModel formModel)
+        {
+            var client = await GetTenantAppClientAsync();
+
+
+            return true;
         }
     }
 }

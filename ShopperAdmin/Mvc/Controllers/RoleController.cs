@@ -1,29 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using ShopperAdmin.Attributes;
-using ShopperAdmin.Database;
-using ShopperAdmin.Extensions.Helpers;
-using Shared.Mvc.Entities;
-using ShopperAdmin.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities.Identity;
+using Newtonsoft.Json;
+using ShopperAdmin.Attributes;
+using ShopperAdmin.Mvc.Entities.Identity;
+using ShopperAdmin.Services.Interfaces;
 
 namespace ShopperAdmin.Mvc.Controllers
 {
     [Route("roles")]
     [Authorize]
-    public class RoleController : Controller
+    public class RoleController : BaseController
     {
         private readonly IRoleService _roleService;
         private readonly RoleManager<Role> _roleManager;
 
-        [ViewData]
-        public string Title { get; set; } = "Roles";
 
         public RoleController(IRoleService roleService, RoleManager<Role> roleManager)
         {
@@ -32,60 +25,62 @@ namespace ShopperAdmin.Mvc.Controllers
         }
 
         // GET
-        [HttpGet(""), Permission("role_view")]
+        [HttpGet(""), Permission("role_view"), Toast]
         public IActionResult Index()
         {
-            var roles = _roleService.GetAllRoles().ToList();
+            Title = "Roles";
+            AddPageHeader("Role Management");
+            var roles = _roleService
+                .GetAllRoles()
+                .ToList();
 
             return View(roles);
         }
 
-        [HttpPost(""),Permission("role_add"), ValidateAntiForgeryToken,
-         /*ValidateModelWithRedirect()*/]
+        [HttpPost(""), Permission("role_add"), ValidateAntiForgeryToken,
+            /*ValidateModelWithRedirect()*/]
         public async Task<IActionResult> Create(Role role)
         {
-            IdentityResult result;
-            if (_roleService.ExistsByDisplayName(role.DisplayName))
+            role.Name = role.DisplayName.Replace(" ", "_").ToUpper();
+            var result = await _roleManager.CreateAsync(role);
+            if (result.Succeeded)
             {
-                var deleted = await _roleService.FindByDisplayName(role.DisplayName);
-                deleted.DisplayName = role.DisplayName;
-                result = await _roleManager.UpdateAsync(deleted);
+                ToastSuccess("Role created successfully!");
             }
             else
             {
-                var roleName = _roleService.GenerateRoleName(role.DisplayName);
-                role.Name = roleName;
-                result = await _roleManager.CreateAsync(role);
-            }
-            if (result.Succeeded)
-            {
-                return RedirectToAction(nameof(Index));
+                ToastError("Role could not be created! Please try again or contact administrator!");
             }
 
-            TempData["Error"] = "Role could not be created";
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpPost("{id}"),Permission("role_edit"), ValidateAntiForgeryToken, ]
+        [HttpPost("{id}"), Permission("role_edit"), ValidateAntiForgeryToken,]
         public async Task<IActionResult> Update(long id, Role role)
         {
             var toUpdate = await _roleService.FindByIdAsync(id);
 
-            if (toUpdate.IsNull())
+            if (toUpdate == null)
             {
                 return NotFound();
             }
 
+            if (_roleService.ExistsByDisplayName(role.DisplayName, id))
+            {
+                ToastError($"A role with the name '{role.DisplayName}', already exists");
+                return RedirectToAction(nameof(Index));
+            }
             toUpdate.DisplayName = role.DisplayName;
 
             var result = await _roleManager.UpdateAsync(toUpdate);
 
             if (result.Succeeded)
             {
+                ToastSuccess("Role updated successfully!");
                 return RedirectToAction(nameof(Index));
             }
 
-            TempData["Error"] = "Role could not be created";
+            ToastError("Role could not be updated");
             return RedirectToAction(nameof(Index));
         }
 
@@ -93,7 +88,7 @@ namespace ShopperAdmin.Mvc.Controllers
         public async Task<IActionResult> Delete(long id)
         {
             var role = await _roleService.FindByIdAsync(id);
-            if (role.IsNull())
+            if (role == null)
             {
                 return NotFound();
             }
@@ -111,28 +106,37 @@ namespace ShopperAdmin.Mvc.Controllers
             return View(rolePermissions);
         }
 
-        [AcceptVerbs("GET",Route = "validate-role-name", Name = "ValidateRoleDisplayName")]
-        public IActionResult ExistsByDisplayName(string displayName)
+        [AcceptVerbs("GET", Route = "validate-role-name", Name = "ValidateRoleDisplayName")]
+        public IActionResult ExistsByDisplayName(string displayName, long id)
         {
-            return _roleService.ExistsByDisplayName(displayName)
+            return _roleService.ExistsByDisplayName(displayName, id)
                 ? Json("A role with this name already exists")
                 : Json(true);
         }
 
-        [HttpPost("{id}/role-permissions")]
-        public async Task<IActionResult> SaveRolePermissions(long id)
+        [HttpPost("{id}/role-permissions"), Permission("role_permissions_save")]
+        public async Task<IActionResult> SaveRolePermissions(long id, [FromServices] IUserClaimService userClaimService)
         {
             var role = await _roleService.FindByIdAsync(id);
-            if (role.IsNull())
+            if (role == null)
             {
                 return NotFound();
             }
 
             var permissions = HttpContext.Request.Form["permissions"].ToList();
-
             await _roleService.SaveRolePermissionsAsync(role, permissions);
+            await userClaimService.ReCacheUsersRoleClaims(role.Id);
 
+            ToastSuccess("Role's permission updated successfully!");
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet("{id}/open-edit-modal"), Permission("role_edit")]
+        public async Task<JsonResult> EditRoleModal(long id)
+        {
+            var role = await _roleService.FindByIdAsync(id);
+
+            return Json(role, new JsonSerializerSettings{ContractResolver = null});
         }
     }
 }

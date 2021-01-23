@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Shared.Mvc.Entities;
-using Shared.Mvc.Enums;
+using Shopper.Mvc.Entities;
+using Shopper.Mvc.Enums;
 
 namespace Shopper.Mvc.ViewModels
 {

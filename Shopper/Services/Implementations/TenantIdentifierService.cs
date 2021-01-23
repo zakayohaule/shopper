@@ -1,13 +1,7 @@
-using System;
-using System.Linq;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.DependencyInjection;
-using Shared.Common;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities;
-using Shopper.Database;
+using Shopper.Common;
 using Shopper.Extensions.Helpers;
+using Shopper.Mvc.Entities;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Services.Implementations

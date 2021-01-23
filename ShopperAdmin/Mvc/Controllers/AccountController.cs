@@ -4,12 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Extensions.Helpers;
 using ShopperAdmin.Attributes;
 using ShopperAdmin.Extensions.Helpers;
-using Shared.Mvc.Entities.Identity;
-using Shared.Mvc.ViewModels;
-using Shared.Mvc.ViewModels.Emails;
+using ShopperAdmin.Mvc.Entities.Identity;
+using ShopperAdmin.Mvc.ViewModels;
+using ShopperAdmin.Mvc.ViewModels.Emails;
 using ShopperAdmin.Services.Interfaces;
 
 namespace ShopperAdmin.Mvc.Controllers
@@ -43,16 +42,10 @@ namespace ShopperAdmin.Mvc.Controllers
             return View(new LoginModel());
         }
 
-        [HttpPost("login", Name = "login"), ValidateAntiForgeryToken, ValidateModel]
+        [HttpPost("login", Name = "login"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel loginModel, string returnTo)
         {
             var user = await _userManager.FindByEmailAsync(loginModel.Email);
-            // return Ok(loginModel);
-            if (user.IsNull())
-            {
-                AddPageAlerts(PageAlertType.Error, "Invalid login credentials!");
-                return View();
-            }
 
             if (!user.EmailConfirmed)
             {
@@ -76,7 +69,7 @@ namespace ShopperAdmin.Mvc.Controllers
                 var claims = _userClaimService.GetUserClaims(user.Id);
                 _userClaimService.CacheClaims(user.Id, claims);
 
-                if (returnTo.IsNotNull())
+                if (returnTo != null)
                 {
                     return LocalRedirect(returnTo);
                 }
@@ -128,7 +121,7 @@ namespace ShopperAdmin.Mvc.Controllers
         public async Task<IActionResult> ForgotPassword(ForgotPasswordModel viewModel)
         {
             var user = await _userManager.FindByEmailAsync(viewModel.Email);
-            if (user.IsNull())
+            if (user == null)
             {
                 return NotFound();
             }
@@ -174,7 +167,7 @@ namespace ShopperAdmin.Mvc.Controllers
         public async Task<IActionResult> ResetForgottenPassword(ResetPasswordModel viewModel)
         {
             var user = await _userManager.FindByEmailAsync(viewModel.Email);
-            if (user.IsNull())
+            if (user == null)
             {
                 return NotFound();
             }
@@ -236,14 +229,15 @@ namespace ShopperAdmin.Mvc.Controllers
             {
                 passwordResetResult.Errors.ToList().ForEach(error =>
                 {
-                    ModelState.AddModelError(error.Code, error.Description);
+                    AddPageAlerts(PageAlertType.Error, error.Description);
+                    // ModelState.AddModelError(error.Code, error.Description);
                 });
                 return View();
             }
 
             await _signInManager.SignOutAsync();
 
-            
+
             AddPageAlerts(PageAlertType.Success, "Your password has been reset successfully, Please login!");
             return View(nameof(Login));
         }

@@ -1,58 +1,56 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using ShopperAdmin.Database;
-using ShopperAdmin.Database.Seeders;
-using Shared.Mvc.Entities;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
-using Shared.Mvc.Entities.Identity;
+using ShopperAdmin.Database;
+using ShopperAdmin.Database.Seeders;
+using ShopperAdmin.Mvc.Entities.Identity;
 
 namespace ShopperAdmin.Extensions.Configurations
 {
     public static class AppBuilderExtensions
     {
-        public static void InitializeDatabase(this IApplicationBuilder app,
-            ApplicationDbContext dbContext,
-            UserManager<AppUser> userManager,
-            ILogger logger)
+        public static IHost SeedDatabase(this IHost host)
         {
-            DatabaseSeeder.Seed(dbContext, userManager, logger);
-        }
-
-        public static void UpdateRoleClaims(this IApplicationBuilder app,
-            ApplicationDbContext dbContext,
-            ILogger logger)
-        {
-            ModulesSeeder.Seed(dbContext, logger);
-            PermissionsSeeder.Seed(dbContext, logger);
-            RoleClaimsSeeder.Seed(dbContext, logger);
-        }
-
-        public static void RefreshDatabase(this IApplicationBuilder app,
-            ApplicationDbContext dbContext,
-            ILogger logger)
-        {
-            var entities = dbContext.Model.GetEntityTypes().ToList();
-            dbContext.Database.ExecuteSqlRaw("SET FOREIGN_KEY_CHECKS = 0;");
-            entities.ForEach(type =>
+            using (var scope = host.Services.CreateScope())
             {
-                logger.Information($"Truncating table => {type.GetTableName()}");
-                // dbContext.Database.ExecuteSqlRaw($"truncate {type.GetTableName()};");
-            });
-            dbContext.Database.ExecuteSqlRaw("SET FOREIGN_KEY_CHECKS = 1;");
+                var dbContext = scope.GetService<ApplicationDbContext>();
+                var userManager = scope.GetService<UserManager<AppUser>>();
+                var logger = scope.GetService<ILogger>();
+                var configuration = host.GetService<IConfiguration>();
+
+                var seedDatabase = configuration.GetSection("Database").GetValue<bool?>("Seed") ?? false;
+                if (seedDatabase)
+                {
+                    logger.Information("********** Seeding database *************");
+                    DatabaseSeeder.Seed(dbContext,userManager, logger);
+                }
+                ModulesSeeder.Seed(dbContext, logger);
+                PermissionsSeeder.Seed(dbContext, logger);
+                RoleClaimsSeeder.Seed(dbContext, logger);
+            }
+
+            return host;
+        }
+
+        public static T GetService<T>(this IServiceScope scope)
+        {
+            return scope.ServiceProvider.GetRequiredService<T>();
+        }
+
+        public static T GetService<T>(this IHost host)
+        {
+            return host.Services.GetService<T>();
         }
 
         public static void ShowBanner()
         {
-            var file = new FileStream(@"C:\Users\user\RiderProjects\Shopper\ShopperAdmin\banner.txt"
-                ,FileMode.Open, FileAccess.Read,FileShare.ReadWrite);
-            
+            var file = new FileStream(@"C:\Users\user\RiderProjects\Shopper\Shopper\banner.txt"
+                , FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
             var reader = new StreamReader(file);
             while (!reader.EndOfStream)
             {
@@ -65,8 +63,14 @@ namespace ShopperAdmin.Extensions.Configurations
             var showBanner = configuration.GetValue<bool?>("ShowBanner") ?? false;
             if (showBanner)
             {
-                ShowBanner(); 
+                ShowBanner();
             }
         }
+
+        /*public static IApplicationBuilder UseTenantResolver(
+            this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<TenantMiddleware>();
+        }*/
     }
 }

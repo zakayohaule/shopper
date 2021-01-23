@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using Shared.Mvc.Entities.Identity;
+using Shopper.Mvc.Entities.Identity;
 
 namespace Shopper.Database.Seeders
 {
@@ -17,7 +17,7 @@ namespace Shopper.Database.Seeders
             dbContext.SaveChanges();
         }
 
-        private static void UpdateRoleClaims(Role role, ILogger logger, ApplicationDbContext dbContext)
+        public static void UpdateRoleClaims(Role role, ILogger logger, ApplicationDbContext dbContext)
         {
             if (role == null)
             {

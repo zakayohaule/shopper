@@ -1,16 +1,14 @@
 ﻿﻿using System;
-using System.Text;
-using ShopperAdmin.Database;
-using Shared.Mvc.Entities;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
- using Shared.Mvc.Entities.Identity;
+ using Microsoft.AspNetCore.Authentication.Cookies;
+ using Microsoft.AspNetCore.Hosting;
+ using Microsoft.AspNetCore.Http;
+ using Microsoft.AspNetCore.Identity;
+ using Microsoft.Extensions.Configuration;
+ using Microsoft.Extensions.DependencyInjection;
+ using Microsoft.Extensions.Hosting;
+ using Microsoft.IdentityModel.Tokens;
+ using ShopperAdmin.Database;
+ using ShopperAdmin.Mvc.Entities.Identity;
 
  namespace ShopperAdmin.Extensions.Configurations
 {
@@ -53,8 +51,8 @@ using Microsoft.IdentityModel.Tokens;
                 {
                     options.Authority = "http://localhost:5000";
                     options.SaveToken = true;
-                    
-                    // todo Remove this in production
+
+                    // @todo Remove this in production
                     options.RequireHttpsMetadata = false;
                     options.Audience = "egov_apis";
                     options.TokenValidationParameters = new TokenValidationParameters

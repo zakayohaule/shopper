@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using Shared.Mvc.Entities;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using ShopperAdmin.Mvc.Entities;
 
 namespace ShopperAdmin.Mvc.ViewComponents
 {

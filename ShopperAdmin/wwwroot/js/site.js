@@ -70,7 +70,7 @@ if (docCookies.hasItem("sidebarstate")) {
 
 /*global datatable defaults*/
 //$.extend(true, $.fn.dataTable.defaults, {
-   
+
 //});
 
 /* automatically defaults all submit button to be disabled */
@@ -87,6 +87,18 @@ function useDeleteConfirmation() {
         e.preventDefault();
 
         var choice = confirm("Are you sure you want to delete?");
+
+        if (choice) {
+            window.location.href = $(this).attr('href');
+        }
+    });
+}
+
+function useSubmitConfirmation() {
+    $('.btn-submit').on("click", function (e) {
+        e.preventDefault();
+        var action = $(this).attr('title').toLowerCase();
+        var choice = confirm("Are you sure you want to " + action + "?");
 
         if (choice) {
             window.location.href = $(this).attr('href');

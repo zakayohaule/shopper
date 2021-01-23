@@ -16,15 +16,15 @@ namespace Shopper.Extensions.Configurations
 
             if (environment.IsDevelopment())
             {
-                var smtpClient = new SmtpClient("smtp.gmail.com", 587)
-                {
-                    EnableSsl = true,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential("zackhaule@gmail.com", "@BoH0810"),
-                };
-                builder.AddSmtpSender(smtpClient);
-                // builder.AddMailtrapSender("51f7f8fd58db29", "3ef16ce8493234", "smtp.mailtrap.io", 2525);
+                // var smtpClient = new SmtpClient("smtp.gmail.com", 587)
+                // {
+                //     EnableSsl = true,
+                //     DeliveryMethod = SmtpDeliveryMethod.Network,
+                //     UseDefaultCredentials = false,
+                //     Credentials = new NetworkCredential("zackhaule@gmail.com", "@BoH0810"),
+                // };
+                // builder.AddSmtpSender(smtpClient);
+                builder.AddMailtrapSender("51f7f8fd58db29", "3ef16ce8493234", "smtp.mailtrap.io", 2525);
             }
             else
             {

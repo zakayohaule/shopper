@@ -19,7 +19,7 @@ namespace Shopper.Migrations.AdminAppDb
                 .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Shared.Mvc.Entities.Tenant", b =>
+            modelBuilder.Entity("Shopper.Mvc.Entities.Tenant", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

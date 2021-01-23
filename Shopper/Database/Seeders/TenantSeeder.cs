@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Serilog;
-using Shared.Mvc.Entities;
-using Shared.Mvc.Entities.Identity;
-using Shared.Mvc.Enums;
+using Shopper.Mvc.Entities;
+using Shopper.Mvc.Enums;
 
 namespace Shopper.Database.Seeders
 {

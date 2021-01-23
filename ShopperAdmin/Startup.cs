@@ -1,17 +1,11 @@
-using ShopperAdmin.Database;
-using ShopperAdmin.Extensions.Configurations;
-using Shared.Mvc.Entities;
 using JetBrains.Annotations;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Shared.Mvc.Entities.Identity;
+using ShopperAdmin.Extensions.Configurations;
 
 [assembly: AspMvcViewLocationFormat(@"~\Mvc\Views\{1}\{0}.cshtml")]
 [assembly: AspMvcViewLocationFormat(@"~\Mvc\Views\Shared\{0}.cshtml")]
@@ -28,8 +22,8 @@ namespace ShopperAdmin
             Environment = environment;
         }
 
-        public IConfiguration Configuration { get; }
-        public IWebHostEnvironment Environment { get; set; }
+        private IConfiguration Configuration { get; }
+        private IWebHostEnvironment Environment { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -54,22 +48,8 @@ namespace ShopperAdmin
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(
-            IApplicationBuilder app,
-            [FromServices] UserManager<AppUser> userManager,
-            [FromServices] ApplicationDbContext dbContext,
-            [FromServices] ILogger logger)
+        public void Configure(IApplicationBuilder app)
         {
-            //If you want to initialize the database, go to appSettings.json and set "Database.Seed" to true;
-            var seedDatabase = Configuration.GetSection("Database").GetValue<bool?>("Seed") ?? false;
-            if (seedDatabase)
-            {
-                logger.Information("********** Seeding database *************");
-                app.InitializeDatabase(dbContext, userManager, logger);
-            }
-
-            app.UpdateRoleClaims(dbContext, logger);
-
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -85,7 +65,6 @@ namespace ShopperAdmin
 
             // app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

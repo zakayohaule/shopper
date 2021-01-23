@@ -1,8 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Memory;
-using Shared.Common;
-using Shared.Mvc.Entities;
+using Shopper.Common;
 
 namespace Shopper.Services
 {

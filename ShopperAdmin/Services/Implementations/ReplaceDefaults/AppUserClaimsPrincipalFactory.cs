@@ -1,10 +1,8 @@
-﻿using System;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
-using Shared.Mvc.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Shared.Mvc.Entities.Identity;
+using ShopperAdmin.Mvc.Entities.Identity;
 
 namespace ShopperAdmin.Services.Implementations.ReplaceDefaults
 {
@@ -33,7 +31,7 @@ namespace ShopperAdmin.Services.Implementations.ReplaceDefaults
             var id = new ClaimsIdentity("Identity.Application", // REVIEW: Used to match Application scheme
                 Options.ClaimsIdentity.UserNameClaimType,
                 Options.ClaimsIdentity.RoleClaimType);
-            
+
             id.AddClaim(new Claim("FullName", user.FullName));
             id.AddClaim(new Claim("Email", email));
             // id.AddClaim(new Claim("InstitutionId", user.InstitutionId.ToString()));

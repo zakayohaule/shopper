@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Shared.Mvc.Entities;
+using Shopper.Mvc.Entities;
 using Shopper.Mvc.ViewModels;
 
 namespace Shopper.Services.Interfaces
 {
     public interface ISaleService
     {
+        public Task<List<Sale>> GetSalesReportAsync();
         public Task<List<SaleInvoice>> GetSaleInvoicesAsync();
         public Task<List<SelectListItem>> GetProductsSelectListItemsForSaleASync();
         public IQueryable<Sku> GetProductSkus(uint id);

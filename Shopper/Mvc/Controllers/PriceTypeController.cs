@@ -3,9 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities;
 using Shopper.Attributes;
+using Shopper.Mvc.Entities;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Mvc.Controllers
@@ -80,7 +79,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> Delete(ushort id)
         {
             var priceType = await _priceTypeService.FindByIdAsync(id);
-            if (priceType.IsNull())
+            if (priceType == null)
             {
                 return NotFound();
             }

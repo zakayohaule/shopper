@@ -1,0 +1,5 @@
+﻿@model UserViewModel
+
+<th:form class="" asp-controller="User" asp-action="UpdateUserRoles" asp-route-id="@Model.Id">
+    <th:partial name="_UserRolesForm" model="@Model.Roles.Select(r => r.Id).ToList()" view-data="ViewData"/>
+</th:form>

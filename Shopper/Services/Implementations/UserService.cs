@@ -8,12 +8,11 @@
  using Microsoft.Extensions.Hosting;
  using PasswordGenerator;
  using Serilog;
- using Shared.Extensions.Helpers;
- using Shared.Mvc.Entities.Identity;
- using Shared.Mvc.ViewModels;
- using Shared.Mvc.ViewModels.Emails;
  using Shopper.Database;
  using Shopper.Extensions.Helpers;
+ using Shopper.Mvc.Entities.Identity;
+ using Shopper.Mvc.ViewModels;
+ using Shopper.Mvc.ViewModels.Emails;
  using Shopper.Services.Interfaces;
 
  namespace Shopper.Services.Implementations
@@ -132,7 +131,7 @@
         {
             await _dbContext.Entry(user).Collection(r => r.UserRoles).LoadAsync();
             List<string> added;
-            if (user.UserRoles.IsNotNull())
+            if (user.UserRoles != null)
             {
                 var currentRoles = user.UserRoles.Select(role => role.RoleId.ToString()).ToList();
 

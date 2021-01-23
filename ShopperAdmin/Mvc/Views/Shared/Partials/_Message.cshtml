@@ -1,7 +1,4 @@
-﻿@using ShopperAdmin.Extensions.Helpers
-@using Shared.Extensions.Helpers
-
-@if (TempData["Success"].IsNotNull())
+﻿@if (TempData["Success"] != null)
 {
     <div class="alert alert-success icons-alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -10,7 +7,7 @@
         <p><strong>Success!</strong> @TempData["Success"]</p>
     </div>
 }
-@if (TempData["Info"].IsNotNull())
+@if (TempData["Info"] != null)
 {
     <div class="alert alert-info icons-alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -19,7 +16,7 @@
         <p><strong>Info!</strong> @TempData["Info"]</p>
     </div>
 }
-@if (TempData["Error"].IsNotNull())
+@if (TempData["Error"] != null)
 {
     <div class="alert alert-danger icons-alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">

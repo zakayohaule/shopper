@@ -1,0 +1,52 @@
+@model CreateTenantModel
+
+<fieldset>
+    <legend>Tenant Details</legend>
+
+    <div class="form-group col-lg-6 col-sm-12">
+        <th:label asp-for="Name"></th:label>
+        <th:input asp-for="Name" class="form-control"></th:input>
+        <th:span asp-validation-for="Name" class="text-danger"></th:span>
+    </div>
+
+    <div class="form-group col-lg-6 col-sm-12">
+        <th:label asp-for="ConnectionString"></th:label>
+        <th:input asp-for="ConnectionString" class="form-control"></th:input>
+        <th:span asp-validation-for="ConnectionString" class="text-danger"></th:span>
+    </div>
+
+    <div class="form-group col-lg-6 col-sm-12">
+        <th:label asp-for="Domain"></th:label>
+        <th:input asp-for="Domain" class="form-control"></th:input>
+        <th:span asp-validation-for="Domain" class="text-danger"></th:span>
+    </div>
+
+    <div class="form-group col-lg-6 col-sm-12">
+        <th:label asp-for="Code"></th:label>
+        <th:input asp-for="Code" class="form-control"></th:input>
+        <th:span asp-validation-for="Code" class="text-danger"></th:span>
+    </div>
+</fieldset>
+<br>
+<fieldset>
+    <legend>Default User</legend>
+    <div class="form-group col-lg-6 col-sm-12">
+        <th:label asp-for="AdminFullName"></th:label>
+        <th:input asp-for="AdminFullName" class="form-control"></th:input>
+        <th:span asp-validation-for="AdminFullName" class="text-danger"></th:span>
+    </div>
+    <div class="form-group col-lg-6 col-sm-12">
+        <th:label asp-for="AdminEmail"></th:label>
+        <th:input asp-for="AdminEmail" class="form-control"></th:input>
+        <th:span asp-validation-for="AdminEmail" class="text-danger"></th:span>
+    </div>
+    <div class="form-group col-lg-6 col-sm-12">
+        <th:label asp-for="RoleName"></th:label>
+        <th:input asp-for="RoleName" class="form-control"></th:input>
+        <th:span asp-validation-for="RoleName" class="text-danger"></th:span>
+    </div>
+</fieldset>
+
+<div class="form-group col-12 text-right">
+    <button type="submit" class="btn btn-primary" name="button">Submit</button>
+</div>

@@ -1,10 +1,9 @@
-﻿using Shared.Mvc.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using ShopperAdmin.Mvc.Entities.Identity;
 using ShopperAdmin.Services.Implementations;
 using ShopperAdmin.Services.Implementations.ReplaceDefaults;
 using ShopperAdmin.Services.Interfaces;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using Shared.Mvc.Entities.Identity;
 
 namespace ShopperAdmin.Extensions.Configurations
 {
@@ -14,16 +13,16 @@ namespace ShopperAdmin.Extensions.Configurations
         {
             services.AddHostedService<EmailSender>();
             services.AddSingleton<IEmailQueueService, EmailQueueService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<ITenantService, TenantService>();
+            services.AddScoped<INotificationService, NotificationService>();
         }
 
         public static void ReplaceDefaultServices(this IServiceCollection services)
         {
             services.AddScoped<IUserClaimsPrincipalFactory<AppUser>, AppUserClaimsPrincipalFactory>();
             services.AddScoped<IUserClaimService, UserClaimService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IRoleService, RoleService>();
-            services.AddScoped<INotificationService, NotificationService>();
-            services.AddScoped<ITenantService, TenantService>();
         }
     }
 }

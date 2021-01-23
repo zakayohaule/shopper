@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using Shared.Mvc.Entities;
+using Shopper.Mvc.Entities;
 
 namespace Shopper.Database
 {

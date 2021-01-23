@@ -10,6 +10,8 @@ namespace ShopperAdmin.Extensions.Configurations
     {
         public static void ConfigureMvc(this IServiceCollection services)
         {
+            // @todo create middleware to log request time
+
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
                 {

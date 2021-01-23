@@ -1,13 +1,11 @@
-﻿@using ShopperAdmin.Extensions.Helpers
-@using Shared.Extensions.Helpers
-@{
+﻿@{
     var title = ViewData["Modal-Title"] as string;
-    if (title.IsNull() || title?.Length == 0)
+    if (title == null || title?.Length == 0)
     {
         title = "Edit";
     }
     var size = ViewData["Modal-Size"] as string;
-    if (size.IsNull() || size?.Length == 0)
+    if (size == null || size?.Length == 0)
     {
         size = "";
     }
@@ -43,7 +41,7 @@
                 }
                 $("#edit-modal-body").html(response);
                 $("#edit-modal").modal("show");
-            } 
+            }
            })
     }
     </script>

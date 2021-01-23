@@ -1,0 +1,118 @@
+﻿@model List<UserViewModel>;
+
+@{
+    var newUser = new UserViewModel();
+    ViewData["FormName"] = "_UserForm";
+}
+
+@section css {
+    <th:partial name="Partials/_DtCss"></th:partial>
+    <!-- Toastr -->
+    <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
+
+    <!-- iCheck for checkboxes and radio inputs -->
+    <th:link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css"></th:link>
+}
+
+<div class="card card-default">
+    <div class="card-header">
+        <a href="" data-toggle="modal" data-target="#add-user" class="btn btn-sm btn-primary float-right" title="Add User">
+            Add User
+        </a>
+    </div>
+    <!-- /.card-header -->
+
+    <div class="card-body table-responsive p-3">
+        <table class="table table-hover table-sm dt-table">
+            <thead>
+            <tr>
+                <th style="width: 10px">#</th>
+                <th style="width: 150px">Full Name</th>
+                <th style="width: 150px">Email</th>
+                <th style="width: 150px">Roles</th>
+                <th style="width: 50px">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                int index = 0;
+            }
+            @foreach (var user in Model)
+            {
+                index++;
+                <tr>
+                    <td>@index</td>
+                    <td>@user.FullName</td>
+                    <td>@user.Email</td>
+                    <td>
+                        @string.Join(", ", user.Roles.Select(r => r.DisplayName))
+                    </td>
+                    <td>
+                        <a href="#" title="Assign roles" onclick="openFormModal('@Url.Action("UserRolesModal", new {id = user.Id})', 'Assign Roles')" class="btn btn-sm btn-default">
+                            @* <span class="badge badge-dark" data-toggle="tooltip"  > *@
+                            <i class="fas fa-users"></i>
+                            @* </span> *@
+                        </a>
+                        <a href="#" onclick="openEditModal('@Url.Action("EditUserModal", new {id = user.Id})',
+                         '@Url.Action("Update", "User", new {id = user.Id})',
+                         'Edit User',null)"
+                           title="Edit user"
+                           class="btn btn-sm btn-default">
+                            @* <span class="badge badge-warning" > *@
+                            <i class="fas fa-edit"></i>
+                            @* </span> *@
+                        </a>
+                        <th:a asp-controller="User"
+                              asp-action="Delete"
+                              asp-route-id="@user.Id" class="btn btn-default btn-sm btn-delete" title="Delete user">
+                            @* <span class="badge badge-danger" > *@
+                            <i class="fas fa-trash"></i>
+                            @* </span> *@
+                        </th:a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+
+
+    <div class="modal fade" id="add-user">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add User</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <th:form class="" asp-controller="User" asp-action="Create" method="post">
+                    <div class="modal-body">
+                        <th:partial name="_UserForm" model="newUser"/>
+                    </div>
+                </th:form>
+            </div>
+        </div>
+    </div>
+
+    <th:partial name="Partials/_EditModal" model="newUser" view-data="ViewData"/>
+    <th:partial name="Partials/_DynamicModalPopup" model="newUser" view-data="ViewData"/>
+</div>
+<!-- /.card -->
+
+@section scripts
+{
+    <th:partial name="Partials/_DtJs"></th:partial>
+    <th:partial name="_ValidationScriptsPartial"></th:partial>
+    <th:partial name="Partials/_ToastScript"></th:partial>
+    <th:script src="~/js/edit-form.js"></th:script>
+
+    <script>
+    $('#Email-Edit').attr("readonly", "readonly");
+    </script>
+    <script>
+                // useSubmitClass();
+                useDeleteConfirmation();
+        </script>
+}

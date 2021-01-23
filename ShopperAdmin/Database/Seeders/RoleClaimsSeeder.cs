@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
-using Shared.Mvc.Entities;
 using Serilog;
-using Shared.Mvc.Entities.Identity;
+using ShopperAdmin.Mvc.Entities.Identity;
 
 namespace ShopperAdmin.Database.Seeders
 {

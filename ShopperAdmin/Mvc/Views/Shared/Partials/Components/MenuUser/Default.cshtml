@@ -1,3 +1,23 @@
-﻿<th:form asp-controller="Account" asp-action="PostLogout" method="post">
+﻿@using ShopperAdmin.Extensions.Helpers
+@*<th:form asp-controller="Account" asp-action="PostLogout" method="post">
     <button class="btn btn-light">Sign out</button>
-</th:form>
+</th:form>*@
+
+<li class="nav-item dropdown">
+    <!-- Menu toggle button -->
+    <a class="nav-link" data-toggle="dropdown" href="#">
+        <th:auth>
+            <span class="mr-2">@User.GetUserFullName()</span>
+        </th:auth>
+        <i class="fas fa-arrow-down"></i>
+    </a>
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        <th:a asp-controller="Account" asp-action="ChangePassword" class="dropdown-item">
+            <i class="fas fa-key mr-2"></i> Change password
+        </th:a>
+        <div class="dropdown-divider"></div>
+        <th:a asp-controller="Account" asp-action="Logout" class="dropdown-item">
+            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+        </th:a>
+    </div>
+</li>

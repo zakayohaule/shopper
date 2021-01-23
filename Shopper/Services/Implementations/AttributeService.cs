@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shopper.Database;
 using Shopper.Services.Interfaces;
-using Attribute = Shared.Mvc.Entities.Attribute;
+using Attribute = Shopper.Mvc.Entities.Attribute;
 
 namespace Shopper.Services.Implementations
 {

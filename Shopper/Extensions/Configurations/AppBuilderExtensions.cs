@@ -1,15 +1,14 @@
 ﻿using System;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Shared.Mvc.Entities.Identity;
 using Shopper.Database;
 using Shopper.Database.Seeders;
+using Shopper.Mvc.Entities.Identity;
 using Shopper.Services;
 
 namespace Shopper.Extensions.Configurations
@@ -29,11 +28,14 @@ namespace Shopper.Extensions.Configurations
                 var configuration = host.GetService<IConfiguration>();
 
                 var seedDatabase = configuration.GetSection("Database").GetValue<bool?>("Seed") ?? false;
+
                 if (seedDatabase)
                 {
                     logger.Information("********** Seeding database *************");
-                    DatabaseSeeder.Seed(dbContext, adminAppDbContext, passwordHasher, userManager, logger, serviceProvider);
+                    DatabaseSeeder.Seed(dbContext, adminAppDbContext, passwordHasher, userManager, logger,
+                        serviceProvider);
                 }
+
                 ModulesSeeder.Seed(dbContext, logger);
                 PermissionsSeeder.Seed(dbContext, logger);
                 RoleClaimsSeeder.Seed(dbContext, logger);

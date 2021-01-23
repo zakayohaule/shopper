@@ -1,13 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using ShopperAdmin.Extensions.Configurations;
-using ShopperAdmin.Extensions.Helpers;
-using ShopperAdmin.Services.Interfaces;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.DependencyInjection;
+using ShopperAdmin.Extensions.Helpers;
 
 namespace ShopperAdmin.Mvc.TagHelpers
 {

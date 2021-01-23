@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using Shared.Mvc.Entities.Identity;
-using Shopper.Services.Interfaces;
+using Shopper.Mvc.Entities.Identity;
 
 namespace Shopper.Database.Seeders
 {

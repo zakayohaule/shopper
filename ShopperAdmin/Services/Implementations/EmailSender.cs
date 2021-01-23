@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using ShopperAdmin.Services.Interfaces;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using ShopperAdmin.Services.Interfaces;
 
 namespace ShopperAdmin.Services.Implementations
 {

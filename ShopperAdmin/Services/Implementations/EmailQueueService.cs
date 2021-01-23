@@ -1,12 +1,11 @@
 ﻿﻿using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
-using ShopperAdmin.Services.Interfaces;
-using FluentValidation.Validators;
-using Serilog;
+ using System.Collections.Concurrent;
+ using System.Threading;
+ using System.Threading.Tasks;
+ using Serilog;
+ using ShopperAdmin.Services.Interfaces;
 
-namespace ShopperAdmin.Services.Implementations
+ namespace ShopperAdmin.Services.Implementations
 {
     public class EmailQueueService : IEmailQueueService
     {

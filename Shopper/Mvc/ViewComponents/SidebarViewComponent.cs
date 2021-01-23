@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Common;
-using Shared.Mvc.Entities;
+using Shopper.Mvc.Entities;
+using Shopper.Other;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Mvc.ViewComponents
@@ -114,6 +114,18 @@ namespace Shopper.Mvc.ViewComponents
                 productManagement.TreeChild = links;
                 sidebars.Add(productManagement);
             }
+
+            /*
+            if (_userClaimService.HasAnyPermission(userId, "product_view"))
+            {
+                var reports = ModuleHelper.AddTree("Reports");
+                links = new List<SidebarMenu>();
+                links.Add(ModuleHelper.AddModuleLink("Sales", Url.Action("Sales", "Report")));
+                reports.TreeChild = links;
+                sidebars.Add(reports);
+            }
+            */
+
             return View(sidebars);
         }
 

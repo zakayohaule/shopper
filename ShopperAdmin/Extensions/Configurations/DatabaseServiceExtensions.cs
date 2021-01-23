@@ -1,7 +1,7 @@
-﻿using ShopperAdmin.Database;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ShopperAdmin.Database;
 
 namespace ShopperAdmin.Extensions.Configurations
 {
@@ -13,6 +13,11 @@ namespace ShopperAdmin.Extensions.Configurations
             {
                 builder.UseMySql(configuration.GetConnectionString("Default"));
             });
+            services.AddDbContext<TenantDbContext>();
+            /*services.AddDbContext<AdminAppDbContext>(builder =>
+            {
+                builder.UseMySql(configuration.GetConnectionString("AdminApp"));
+            });*/
         }
     }
 }

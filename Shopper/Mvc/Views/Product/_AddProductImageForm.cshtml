@@ -1,5 +1,5 @@
 @using IdentityServer4.Extensions
-@model Shopper.Mvc.ViewModels.ImagesUploadModel;
+@model ImagesUploadModel;
 @{
     var imageLabel = !Model.CurrentImageName.IsNullOrEmpty() ? "Change main photo" : "Choose main photo";
     var imageName = !Model.CurrentImageName.IsNullOrEmpty() ? Model.CurrentImageName : "Choose main photo";

@@ -1,22 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Serilog;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities.Identity;
+using ShopperAdmin.Database;
+using ShopperAdmin.Mvc.Entities.Identity;
 using ShopperAdmin.Services.Interfaces;
 
 namespace ShopperAdmin.Services.Implementations
 {
+    [Authorize]
     public class UserClaimService : IUserClaimService
     {
         private readonly IMemoryCache _memoryCache;
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly ApplicationDbContext _dbContext;
 
         private readonly ILogger _logger;
         // private readonly string _prefix = "PERMISSION";
@@ -24,13 +29,14 @@ namespace ShopperAdmin.Services.Implementations
         public UserClaimService(IMemoryCache memoryCache,
             UserManager<AppUser> userManager,
             RoleManager<Role> roleManager,
-            IConfiguration configuration, ILogger logger)
+            IConfiguration configuration, ILogger logger, ApplicationDbContext dbContext)
         {
             _memoryCache = memoryCache;
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             _logger = logger;
+            _dbContext = dbContext;
         }
 
 
@@ -47,17 +53,19 @@ namespace ShopperAdmin.Services.Implementations
         public List<string> GetUserClaims(long userId)
         {
             var claims = new List<string>();
-            var user = _userManager.FindByIdAsync(userId.ToString()).Result;
-            if (user.IsNull())
+            var user = _dbContext.Users.Find(userId);
+            if (user == null)
             {
                 return claims;
             }
+
             var userRoles = _userManager.GetRolesAsync(user).Result.ToList();
-            
+
             userRoles.ForEach(roleName =>
             {
                 Console.WriteLine(roleName);
-                var role = _roleManager.FindByNameAsync(roleName).Result;
+                // var role = _roleManager.FindByNameAsync(roleName).Result;
+                var role = _dbContext.Roles.FirstOrDefault(r => r.Name.Equals(roleName));
                 var roleClaims = _roleManager.GetClaimsAsync(role).Result;
                 claims.AddRange(roleClaims.Select(claim => claim.Value).ToList());
             });
@@ -67,17 +75,59 @@ namespace ShopperAdmin.Services.Implementations
 
         public bool HasPermission(long userId, string permission)
         {
-            if (_memoryCache.TryGetValue(userId, out List<string> userClaims)) return userClaims.Contains(permission);
+            if (_memoryCache.TryGetValue(userId, out List<string> userClaims))
+            {
+                return userClaims.Contains(permission);
+            }
+
             _logger.Information("******** re-caching user role claims");
             userClaims = GetUserClaims(userId);
             CacheClaims(userId, userClaims);
             return userClaims.Contains(permission);
         }
 
+        public bool HasAllPermissions(long userId, string permissions)
+        {
+            var permissionList = permissions.Split(",", StringSplitOptions.RemoveEmptyEntries);
+            return permissionList.All(perm => HasPermission(userId, perm));
+        }
+
+        public bool HasAnyPermission(long userId, string permissions)
+        {
+            var permissionList = permissions.Split(",", StringSplitOptions.RemoveEmptyEntries);
+            return permissionList.Any(perm => HasPermission(userId, perm));
+        }
+
+        public bool HasAllPermissions(long userId, IEnumerable<string> permissions)
+        {
+            return permissions.All(perm => HasPermission(userId, perm));
+        }
+
+        public bool HasAnyPermission(long userId, IEnumerable<string> permissions)
+        {
+            return permissions.Any(perm => HasPermission(userId, perm));
+        }
+
         public void RemoveClaims(long userId)
         {
-            _logger.Information("Removing user claims from memory cache before signing out user");
+            _logger.Information("Removing user claims from memory cache");
             _memoryCache.Remove(userId);
+        }
+
+        public async Task ReCacheUsersRoleClaims(long roleId)
+        {
+            var users = await _userManager.Users
+                .Include(user => user.UserRoles)
+                .Where(user => user.UserRoles.Any(ur => ur.RoleId.Equals(roleId)))
+                .ToListAsync();
+            foreach (var appUser in users)
+            {
+                if (!_memoryCache.TryGetValue(appUser.Id, out List<string> userClaims)) continue;
+                Console.WriteLine($"Role's permissions changed, re-caching {appUser.FullName}'s claims!");
+                RemoveClaims(appUser.Id);
+                userClaims = GetUserClaims(appUser.Id);
+                CacheClaims(appUser.Id, userClaims);
+            }
         }
     }
 }

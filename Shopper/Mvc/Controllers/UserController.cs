@@ -1,19 +1,18 @@
 ﻿    using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Newtonsoft.Json;
-using Serilog;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities.Identity;
-using Shared.Mvc.ViewModels;
-using Shared.Mvc.ViewModels.Emails;
-using Shopper.Attributes;
-using Shopper.Services.Interfaces;
+    using Serilog;
+    using Shopper.Attributes;
+    using Shopper.Mvc.Entities.Identity;
+    using Shopper.Mvc.ViewModels;
+    using Shopper.Mvc.ViewModels.Emails;
+    using Shopper.Services.Interfaces;
 
-namespace Shopper.Mvc.Controllers
+    namespace Shopper.Mvc.Controllers
 {
     [Route("users"), Authorize]
     public class UserController : BaseController
@@ -111,7 +110,7 @@ namespace Shopper.Mvc.Controllers
         {
             var user = await _userManager.FindByIdAsync(viewModel.Id.ToString());
 
-            if (user.IsNull())
+            if (user == null)
             {
                 return NotFound();
             }
@@ -139,7 +138,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> Delete(long id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
-            if (user.IsNull())
+            if (user == null)
             {
                 return NotFound();
             }
@@ -165,7 +164,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> UpdateUserRoles(long id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
-            if (user.IsNull())
+            if (user == null)
             {
                 return NotFound();
             }

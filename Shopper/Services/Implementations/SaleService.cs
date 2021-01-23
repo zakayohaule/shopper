@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Shared.Common;
-using Shared.Mvc.Entities;
+using Shopper.Common;
 using Shopper.Database;
+using Shopper.Mvc.Entities;
 using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
 
@@ -19,6 +19,13 @@ namespace Shopper.Services.Implementations
         public SaleService(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public async Task<List<Sale>> GetSalesReportAsync()
+        {
+            return await _dbContext.Sales
+                .Include(s => s.Product)
+                .ToListAsync();
         }
 
         public async Task<List<SaleInvoice>> GetSaleInvoicesAsync()
@@ -206,7 +213,10 @@ namespace Shopper.Services.Implementations
         public async Task<string> GenerateInvoiceNumberAsync(string tenantCode)
         {
             var invoiceNumber = "";
-            var latestInvoice = await _dbContext.SaleInvoices.Where(si => si.CreatedAt.Date == DateTime.Today).OrderByDescending(si => si.CreatedAt)
+            var latestInvoice = await _dbContext.SaleInvoices
+                .AsNoTracking()
+                .Where(si => si.CreatedAt.Date == DateTime.Today)
+                .OrderByDescending(si => si.CreatedAt)
                 .FirstOrDefaultAsync();
             if (latestInvoice != null)
             {

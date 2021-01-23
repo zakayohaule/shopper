@@ -1,15 +1,15 @@
 ﻿﻿using System;
-using System.IO;
-using System.Linq;
-using System.Security.Claims;
-using ShopperAdmin.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis.Text;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.JsonWebTokens;
- using Shared.Extensions.Helpers;
+ using System.IO;
+ using System.Linq;
+ using System.Security.Claims;
+ using IdentityServer4.Extensions;
+ using Microsoft.AspNetCore.Http;
+ using Microsoft.AspNetCore.Mvc.Rendering;
+ using Microsoft.Extensions.DependencyInjection;
+ using Microsoft.Extensions.Hosting;
+ using Microsoft.IdentityModel.JsonWebTokens;
+ using ShopperAdmin.Mvc.Entities;
+ using ShopperAdmin.Services.Interfaces;
 
  namespace ShopperAdmin.Extensions.Helpers
 {
@@ -21,7 +21,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
                 .FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)
                 ?.Value;
 
-            if (userIdClaim.IsNull())
+            if (userIdClaim == null)
             {
                 userIdClaim = claimsPrincipal.Claims
                     .FirstOrDefault(claim => claim.Type == "sub")
@@ -31,12 +31,12 @@ using Microsoft.IdentityModel.JsonWebTokens;
             long.TryParse(userIdClaim, out var userId);
             return userId;
         }
-        
+
         public static long GetUserId(this HttpContext httpContext)
         {
             return GetUserId(httpContext.User);
         }
-        
+
         public static bool HasPermission(this HttpContext httpContext, string permission)
         {
             var userClaimService = httpContext.RequestServices.GetRequiredService<IUserClaimService>();
@@ -48,9 +48,9 @@ using Microsoft.IdentityModel.JsonWebTokens;
             var institutionId = claimsPrincipal.Claims
                 .FirstOrDefault(claim => claim.Type == "InstitutionId")
                 ?.Value;
-            return institutionId == null ? (uint) 0 : uint.Parse(institutionId);
+            return institutionId == null ? 0 : uint.Parse(institutionId);
         }
-        
+
         public static string GetUserEmail(this ClaimsPrincipal claimsPrincipal)
         {
             var fullName = claimsPrincipal.Claims
@@ -58,7 +58,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
                 ?.Value;
             return fullName ?? string.Empty;
         }
-        
+
         public static string GetUserFullName(this ClaimsPrincipal claimsPrincipal)
         {
             var fullName = claimsPrincipal.Claims
@@ -66,20 +66,20 @@ using Microsoft.IdentityModel.JsonWebTokens;
                 ?.Value;
             return fullName ?? string.Empty;
         }
-        
+
         public static string GetBearerToken(this HttpContext httpContext)
         {
             var authorizationHeader = httpContext.Request.Headers["Authorization"];
 
-            if (authorizationHeader.IsNull())
+            if (authorizationHeader.IsNullOrEmpty())
             {
                 Console.WriteLine("No Authorization header");
                 return string.Empty;
             }
 
             var bearerHeader = authorizationHeader.FirstOrDefault();
-            
-            if (bearerHeader.IsNull())
+
+            if (bearerHeader == null)
             {
                 Console.WriteLine("Authorization header doesn't contain a bearer token");
                 return string.Empty;
@@ -94,7 +94,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
             Console.WriteLine("Getting the access token from the authorization header");
             return bearerHeader.Remove(0,7);
         }
-        
+
         public static string GetClientIdFromToken(this HttpContext httpContext)
         {
             var token = httpContext.GetBearerToken();
@@ -102,7 +102,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
             var clientId = tokenHandler.ReadJsonWebToken(token);
             return clientId.Claims.First(claim => claim.Type == "client_id").Value;
         }
-        
+
         public static string GetClientIdFromToken(this string accessToken)
         {
             var tokenHandler = new JsonWebTokenHandler();
@@ -124,20 +124,50 @@ using Microsoft.IdentityModel.JsonWebTokens;
             var request = httpContext.Request;
             return $"{request.Scheme}://{request.Host}{request.PathBase}";
         }
-        
+
         public static string GetEmailTemplate(this IHostEnvironment hostEnvironment, string templateName)
         {
             try
             {
                 var path = Path.GetFullPath(Path.Combine(hostEnvironment.ContentRootPath,
-                    $"Mvc/Views/Emails/{templateName}.cshtml"));
+                    $"wwwroot/emails/{templateName}.cshtml"));
                 return path;
             }
             catch (FileNotFoundException fileNotFoundException)
             {
-                throw new FileNotFoundException($"Email template '{templateName}' could not be found in the Mvc/Views/Emails directory");
+                throw new FileNotFoundException($"Email template '{templateName}' could not be found in the Mvc/Views/Emails directory: {fileNotFoundException.Message}");
             }
 
+        }
+
+        public static string GetSubdomain(this HttpContext httpContext)
+        {
+            var subDomain = string.Empty;
+            var host = httpContext.Request.Host.Host;
+
+            if (string.IsNullOrWhiteSpace(host)) return subDomain;
+            if (!host.Contains(".")) return subDomain;
+            var domainParts = host.Split(".");
+            if (domainParts.Length == 2 || domainParts.Length == 3)
+            {
+                subDomain = domainParts[0];
+            }
+            else
+            {
+                subDomain = domainParts[1];
+            }
+
+            return subDomain;
+        }
+
+        public static Tenant GetCurrentTenant(this ViewContext viewContext)
+        {
+            return viewContext.HttpContext.GetCurrentTenant();
+        }
+
+        public static Tenant GetCurrentTenant(this HttpContext httpContext)
+        {
+            return (Tenant) httpContext.Items["tenant"];
         }
     }
 }

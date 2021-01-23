@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Shared.Mvc.Entities.Identity;
+using Shopper.Mvc.Entities.Identity;
 using Shopper.Services;
 using Shopper.Services.Implementations;
 using Shopper.Services.Implementations.ReplaceDefaults;
@@ -14,11 +14,6 @@ namespace Shopper.Extensions.Configurations
         {
             services.AddHostedService<EmailSender>();
             services.AddSingleton<IEmailQueueService, EmailQueueService>();
-        }
-
-        public static void ReplaceDefaultServices(this IServiceCollection services)
-        {
-            services.AddScoped<IUserClaimsPrincipalFactory<AppUser>, AppUserClaimsPrincipalFactory>();
             services.AddScoped<IUserClaimService, UserClaimService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
@@ -39,6 +34,11 @@ namespace Shopper.Extensions.Configurations
             services.AddScoped<TenantResolver>();
             services.AddScoped<IBusinessService, BusinessService>();
             services.AddScoped<IReportService, ReportService>();
+        }
+
+        public static void ReplaceDefaultServices(this IServiceCollection services)
+        {
+            services.AddScoped<IUserClaimsPrincipalFactory<AppUser>, AppUserClaimsPrincipalFactory>();
         }
     }
 }

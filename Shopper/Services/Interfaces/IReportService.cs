@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Shared.Mvc.Entities;
+using Shopper.Mvc.Entities;
 using Shopper.Mvc.ViewModels;
 
 namespace Shopper.Services.Interfaces

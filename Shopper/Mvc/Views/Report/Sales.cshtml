@@ -1,0 +1,115 @@
+@model List<Sale>
+@{
+    Layout = "_Layout";
+    var productSales = Model.GroupBy(s => s.ProductId)
+        .Select(group => new {group.First().Product, Sales = group})
+        .OrderByDescending(arg => arg.Sales.Sum(s => s.Profit * s.Quantity));
+}
+
+@section css {
+    <th:partial name="Partials/_DtCss"></th:partial>
+}
+
+<div class="card with-border">
+
+    <div class="card-body table-responsive p-3">
+        <!--begin: Search Form-->
+        <form class="mb-15">
+            <div class="row mb-6">
+                <div class="col-lg-3 mb-lg-0 mb-6">
+                    <label>RecordID:</label>
+                    <input type="text" class="form-control datatable-input" placeholder="E.g: 4590" data-col-index="0"/>
+                </div>
+                <div class="col-lg-3 mb-lg-0 mb-6">
+                    <label>OrderID:</label>
+                    <input type="text" class="form-control datatable-input" placeholder="E.g: 37000-300" data-col-index="1"/>
+                </div>
+                <div class="col-lg-3 mb-lg-0 mb-6">
+                    <label>Country:</label>
+                    <select class="form-control datatable-input" data-col-index="2">
+                        <option value="">Select</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 mb-lg-0 mb-6">
+                    <label>Agent:</label>
+                    <input type="text" class="form-control datatable-input" placeholder="Agent ID or name" data-col-index="4"/>
+                </div>
+            </div>
+            <div class="row mb-8">
+                <div class="col-lg-3 mb-lg-0 mb-6">
+                    <label>Ship Date:</label>
+                    <div class="input-daterange input-group" id="kt_datepicker">
+                        <input type="text" class="form-control datatable-input" name="start" placeholder="From" data-col-index="5"/>
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="la la-ellipsis-h"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control datatable-input" name="end" placeholder="To" data-col-index="5"/>
+                    </div>
+                </div>
+                <div class="col-lg-3 mb-lg-0 mb-6">
+                    <label>Status:</label>
+                    <select class="form-control datatable-input" data-col-index="6">
+                        <option value="">Select</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 mb-lg-0 mb-6">
+                    <label>Type:</label>
+                    <select class="form-control datatable-input" data-col-index="7">
+                        <option value="">Select</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mt-8">
+                <div class="col-lg-12">
+                    <button class="btn btn-primary btn-primary--icon" id="kt_search">
+                        <span>
+                            <i class="la la-search"></i>
+                            <span>Search</span>
+                        </span>
+                    </button>&#160;&#160;
+                    <button class="btn btn-secondary btn-secondary--icon" id="kt_reset">
+                        <span>
+                            <i class="la la-close"></i>
+                            <span>Reset</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <table class="table table-sm table-hover dt-table">
+            <thead>
+            <tr>
+                <th style="width: 10px;">#</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Profit</th>
+                <th>Discount</th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                int index = 0;
+            }
+            @foreach (var prodSale in productSales)
+            {
+                index++;
+                <tr>
+                    <td>@index</td>
+                    <td>@prodSale.Product.Name</td>
+                    <td>@prodSale.Sales.Sum(s => s.Quantity).ToString("N0")</td>
+                    <td>@prodSale.Sales.Sum(s => s.Profit * s.Quantity).ToString("N0")</td>
+                    <td>@prodSale.Sales.Sum(s => s.Discount).ToString("N0")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+
+@section scripts
+{
+    <th:partial name="Partials/_DtJs"></th:partial>
+}

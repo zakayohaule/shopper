@@ -1,14 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Shopper.Database;
 using Shopper.Extensions.Helpers;
 using Shopper.Services.Interfaces;
 
 namespace Shopper.Mvc.Controllers
 {
+    [Authorize(AuthenticationSchemes = "jwt")]
     public class TestController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
@@ -22,24 +21,9 @@ namespace Shopper.Mvc.Controllers
         }
 
         [HttpGet("test")]
-        public async Task<IActionResult> Test(string host)
+        public IActionResult Test(string host)
         {
-            return Ok(Request.Protocol);
-            var subDomain = string.Empty;
-            if (host.Contains("."))
-            {
-                var domainParts = host.Split(".");
-                if (domainParts.Length == 2 || domainParts.Length == 3)
-                {
-                    subDomain = domainParts[0];
-                }
-                else
-                {
-                    subDomain = domainParts[1];
-                }
-            }
-
-            return Ok(subDomain);
+            return Ok(HttpContext.GetCurrentTenant());
         }
     }
 }

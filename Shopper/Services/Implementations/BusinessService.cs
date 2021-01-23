@@ -1,9 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Shared.Extensions.Helpers;
-using Shared.Mvc.Entities;
 using Shopper.Database;
+using Shopper.Mvc.Entities;
 using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
 
@@ -37,7 +36,7 @@ namespace Shopper.Services.Implementations
             tenant.PhoneNumber1 = formModel.Phone1;
             tenant.PhoneNumber2 = formModel.Phone2;
 
-            if (formModel.Image.IsNotNull())
+            if (formModel.Image != null)
             {
                 var logoPath = await _fileUploadService.UploadTenantLogo(formModel.Image);
                 tenant.LogoPath = logoPath;

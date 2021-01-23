@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Mvc.Entities;
+using Shopper.Mvc.Entities;
 
 namespace Shopper.Mvc.ViewComponents
 {
@@ -9,7 +9,7 @@ namespace Shopper.Mvc.ViewComponents
 
         public BreadcrumbViewComponent()
         {
-            
+
         }
 
         public IViewComponentResult Invoke(string filter)
@@ -18,7 +18,7 @@ namespace Shopper.Mvc.ViewComponents
             {
                 ViewBag.Breadcrumb = new List<Message>();
             }
-            
+
             return View(ViewBag.Breadcrumb as List<Message>);
         }
     }

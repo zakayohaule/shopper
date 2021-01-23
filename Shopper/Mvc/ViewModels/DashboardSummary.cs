@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using Shared.Mvc.Enums;
+using Shopper.Mvc.Enums;
 
 namespace Shopper.Mvc.ViewModels
 {

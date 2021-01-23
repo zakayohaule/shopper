@@ -1,17 +1,10 @@
-using System;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Shared.Mvc.Entities;
-using Shared.Mvc.Entities.Identity;
-using Shopper.Database;
 using Shopper.Extensions.Configurations;
 
 [assembly: AspMvcViewLocationFormat(@"~\Mvc\Views\{1}\{0}.cshtml")]
@@ -73,6 +66,7 @@ namespace Shopper
             app.UseStaticFiles();
             app.UseTenantResolver();
             app.UseRouting();
+            app.UseIdentityServer();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSerilogRequestLogging();

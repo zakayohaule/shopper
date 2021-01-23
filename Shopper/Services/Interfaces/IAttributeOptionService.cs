@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Shared.Mvc.Entities;
+using Shopper.Mvc.Entities;
 
 namespace Shopper.Services.Interfaces
 {

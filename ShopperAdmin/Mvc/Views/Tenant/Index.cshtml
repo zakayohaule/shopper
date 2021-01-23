@@ -1,0 +1,108 @@
+@using ShopperAdmin.Extensions.Helpers
+@model List<Tenant>
+
+@{
+    Layout = "_Layout";
+}
+
+
+@section css {
+    <th:partial name="Partials/_DtCss"></th:partial>
+    <th:link rel="stylesheet" href="~/plugins/select2-4.0.5/css/select2.min.css"></th:link>
+    <th:link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"></th:link>
+    <!-- Toastr -->
+    <th:link rel="stylesheet" href="~/plugins/toastr/toastr.min.css"></th:link>
+}
+
+<div class="card card-default">
+    <div class="card-header">
+        <th:permission name="tenant_add">
+            <th:a asp-action="Create"  class="btn btn-sm btn-primary float-right" title="Add Tenant">
+                Add Tenant
+            </th:a>
+        </th:permission>
+    </div>
+    <!-- /.card-header -->
+
+
+    <div class="card-body table-responsive p-3">
+        <table class="table table-sm table-hover dt-table">
+            <thead>
+            <tr>
+                <th style="width: 10px">#</th>
+                <th>Name</th>
+                <th>Domain</th>
+                <th>Connection String</th>
+                <th>Email</th>
+                <th>Subscription</th>
+                <th>Valid To</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                int index = 0;
+            }
+            @foreach (var tenant in Model)
+            {
+                index++;
+                <tr>
+                    <td>@index</td>
+                    <td>@tenant.Name</td>
+                    <td>@tenant.Domain</td>
+                    <td>@tenant.ConnectionString</td>
+                    <td>@tenant.Email</td>
+                    <td>@tenant.SubscriptionType</td>
+                    <td>@tenant.ValidTo.FormatWithSuffix()</td>
+                    <td>
+                    <th:permission name="tenant_edit">
+                            <a href="#" onclick="openEditModal('@Url.Action("Index", new {id = tenant.Id})',
+                                                     '@Url.Action("Index", new {id = tenant.Id})',
+                                                     'Edit Expenditure')"
+                               class="btn btn-default btn-sm"
+                               title="Edit product category">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </th:permission>
+                        <th:permission name="tenant_delete">
+                            <th:a asp-controller="Tenant"
+                                  asp-action="Delete"
+                                  asp-route-id="@tenant.Id" class="btn-delete">
+                                <span class="btn btn-default btn-sm" title="Delete product category">
+                                    <i class="fas fa-trash"></i>
+                                </span>
+                            </th:a>
+                        </th:permission>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->
+
+@*<th:permission name="tenant_edit">
+    <th:partial name="Partials/_EditModal" model="newExpenditure" view-data="ViewData"/>
+</th:permission>*@
+
+@section scripts
+{
+    <th:partial name="Partials/_DtJs"></th:partial>
+
+    <th:partial name="_ValidationScriptsPartial"></th:partial>
+    <th:partial name="Partials/_ToastScript"></th:partial>
+    <!-- Select2 -->
+    <th:script src="~/plugins/select2-4.0.5/js/select2.full.min.js"></th:script>
+
+    <th:script src="~/js/edit-form.js"></th:script>
+    <script >
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+              theme: 'bootstrap4'
+            })
+
+                useDeleteConfirmation();
+        </script>
+}

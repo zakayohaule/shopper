@@ -1,11 +1,11 @@
-﻿@model Shared.Mvc.ViewModels.LoginModel;
+﻿@model LoginModel;
 @{
     Layout = "_Layout ";
     var emailVerified = TempData["EmailVerification"] as string;
 }
 <th:partial name="_EmailVerificationMessage" model="emailVerified"></th:partial>
 
-<p class="login-box-msg">Sign in to start your session</p>
+<p class="login-box-msg">LOGIN</p>
 
 <th:form asp-controller="Account" asp-action="Login" asp-route-returnTo="@ViewContext.HttpContext.Request.Query["return_to"]" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -16,17 +16,17 @@
                 <span class="fas fa-envelope"></span>
             </div>
         </div>
-        <th:span asp-validation-for="Email" class="text-danger"></th:span>
     </div>
+    <th:span asp-validation-for="Email" class="text-danger"></th:span>
     <div class="input-group mb-3">
-        <th:input asp-for="Password" type="password" class="form-control" placeholder="Password"></th:input>
+        <th:input asp-for="Password" type="password" minLength="6" class="form-control" placeholder="Password"></th:input>
         <div class="input-group-append">
             <div class="input-group-text">
                 <span class="fas fa-lock"></span>
             </div>
         </div>
-        <th:span asp-validation-for="Password" class="text-danger"></th:span>
     </div>
+    <th:span asp-validation-for="Password" class="text-danger"></th:span>
     <div class="row">
         <div class="col-8">
             <div class="icheck-primary">

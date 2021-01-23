@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Shared.Extensions.Helpers;
 using Shopper.Attributes;
 using Shopper.Mvc.ViewModels;
 using Shopper.Services.Interfaces;
@@ -82,7 +81,7 @@ namespace Shopper.Mvc.Controllers
             var product = await _productService.CreateProductAsync(newProduct);
 
             // return Ok(newProduct);
-            if (product.IsNotNull())
+            if (product != null)
             {
                 ToastSuccess($"Product created successfully!");
             }
@@ -106,7 +105,7 @@ namespace Shopper.Mvc.Controllers
 
             var product = await _productService.FindByIdAsyncQ(formModel.Id).Include(p => p.Attributes)
                 .SingleOrDefaultAsync();
-            if (product.IsNull())
+            if (product == null)
             {
                 return NotFound($"Product with id {id} not found");
             }
@@ -170,7 +169,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> Delete(ushort id)
         {
             var product = await _productService.FindByIdAsync(id);
-            if (product.IsNull())
+            if (product == null)
             {
                 return NotFound();
             }
@@ -185,7 +184,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> AddImages(uint id, ImagesUploadModel model)
         {
             var product = await _productService.FindByIdAsync(id);
-            if (product.IsNull())
+            if (product == null)
             {
                 return NotFound();
             }
@@ -198,7 +197,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> DeleteMainImage(uint id)
         {
             var product = await _productService.FindByIdAsync(id);
-            if (product.IsNull())
+            if (product == null)
             {
                 return NotFound();
             }
@@ -212,7 +211,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> DeleteOtherImage(ulong id)
         {
             var image = await _productService.FindProductImageByIdAsync(id);
-            if (image.IsNull())
+            if (image == null)
             {
                 return NotFound();
             }
@@ -226,7 +225,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> UpdateMainImage(uint id, UpdateImageModel imageModel)
         {
             var product = await _productService.FindByIdAsync(id);
-            if (product.IsNull())
+            if (product == null)
             {
                 return NotFound();
             }
@@ -240,7 +239,7 @@ namespace Shopper.Mvc.Controllers
         public async Task<IActionResult> UpdateOtherImage(ulong id, UpdateImageModel imageModel)
         {
             var image = await _productService.FindProductImageByIdAsync(id);
-            if (image.IsNull())
+            if (image == null)
             {
                 return NotFound();
             }

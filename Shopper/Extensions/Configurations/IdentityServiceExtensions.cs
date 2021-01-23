@@ -56,7 +56,8 @@
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddJwtBearer("jwt", options =>
                 {
-                    options.Authority = "http://localhost:5000";
+                    var authority = configuration.GetValue<string>("TokenAuthority");
+                    options.Authority = authority;
                     options.SaveToken = true;
 
                     // todo Remove this in production

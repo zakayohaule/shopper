@@ -43,7 +43,7 @@ namespace Shopper
                 {
                     webBuilder.UseStartup<Startup>()
                         .UseKestrel(options => options.Limits.MaxRequestBodySize = null)
-                        .UseUrls("http://localhost:5050");
+                        .UseUrls("http://localhost:5000");
                 })
                 .ConfigureLogging(builder => builder.ClearProviders())
                 .UseSerilog((context, configuration) =>

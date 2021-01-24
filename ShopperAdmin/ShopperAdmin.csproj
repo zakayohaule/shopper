@@ -41,28 +41,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <_ContentIncludedByDefault Remove="Mvc\Views\User\Index.cshtml" />
-        <_ContentIncludedByDefault Remove="Mvc\Views\User\_EditUserModal.cshtml" />
-        <_ContentIncludedByDefault Remove="Mvc\Views\User\_UpdateUserRolesModal.cshtml" />
-        <_ContentIncludedByDefault Remove="Mvc\Views\User\_UserForm.cshtml" />
-        <_ContentIncludedByDefault Remove="Mvc\Views\User\_UserRolesForm.cshtml" />
-        <_ContentIncludedByDefault Remove="Views\Home\Index.cshtml" />
-        <_ContentIncludedByDefault Remove="Views\Home\Privacy.cshtml" />
-        <_ContentIncludedByDefault Remove="Views\Shared\Error.cshtml" />
-        <_ContentIncludedByDefault Remove="Views\Shared\_Layout.cshtml" />
-        <_ContentIncludedByDefault Remove="Views\Shared\_ValidationScriptsPartial.cshtml" />
-        <_ContentIncludedByDefault Remove="Views\_ViewImports.cshtml" />
-        <_ContentIncludedByDefault Remove="Views\_ViewStart.cshtml" />
-        <_ContentIncludedByDefault Remove="Mvc\Views\Shared\Partials\Components\Breadcrumb\Default.cshtml" />
-        <_ContentIncludedByDefault Remove="Mvc\Views\Shared\Partials\Components\ControlSidebar\Default.cshtml" />
-        <_ContentIncludedByDefault Remove="Mvc\Views\Shared\Partials\Components\Footer\Default.cshtml" />
-        <_ContentIncludedByDefault Remove="Mvc\Views\Shared\Partials\Components\Header\Default.cshtml" />
-        <_ContentIncludedByDefault Remove="Mvc\Views\Shared\Partials\Components\MenuMessage\Default.cshtml" />
-        <_ContentIncludedByDefault Remove="Mvc\Views\Shared\Partials\Components\MenuNotification\Default.cshtml" />
-        <_ContentIncludedByDefault Remove="Mvc\Views\Shared\Partials\Components\MenuTask\Default.cshtml" />
-        <_ContentIncludedByDefault Remove="Mvc\Views\Shared\Partials\Components\MenuUser\Default.cshtml" />
-        <_ContentIncludedByDefault Remove="Mvc\Views\Shared\Partials\Components\PageAlert\Default.cshtml" />
-        <_ContentIncludedByDefault Remove="Mvc\Views\Shared\Partials\Components\PageHeader\Default.cshtml" />
-        <_ContentIncludedByDefault Remove="Mvc\Views\Shared\Partials\Components\Sidebar\Default.cshtml" />
+      <_ContentIncludedByDefault Remove="site\web.config" />
+      <_ContentIncludedByDefault Remove="site\appsettings - Example.json" />
+      <_ContentIncludedByDefault Remove="site\appsettings.json" />
+      <_ContentIncludedByDefault Remove="site\bundleconfig.json" />
+      <_ContentIncludedByDefault Remove="site\ShopperAdmin.deps.json" />
+      <_ContentIncludedByDefault Remove="site\ShopperAdmin.runtimeconfig.json" />
+      <_ContentIncludedByDefault Remove="site\wwwroot\dist\js\.eslintrc.json" />
     </ItemGroup>
 </Project>

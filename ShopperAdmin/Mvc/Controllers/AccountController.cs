@@ -128,6 +128,7 @@ namespace ShopperAdmin.Mvc.Controllers
 
             var callBackUrl = await CreatePasswordResetCallbackUrlAsync(user);
             viewModel.ResetLink = callBackUrl;
+            viewModel.FullName = user.FullName;
             _userService.SendPasswordResetMail(viewModel);
 
             AddPageAlerts(PageAlertType.Success, "A password reset link has been sent to your email!");

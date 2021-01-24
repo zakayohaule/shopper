@@ -90,7 +90,7 @@
         public void SendEmailVerificationEmail(EmailVerificationViewModel model)
         {
             var email = _fluentEmail
-                .SetFrom("amdmin@tzshopper.com")
+                .SetFrom("admin@tzshopper.com")
                 .To(model.Email)
                 .Subject("Email Verification")
                 .UsingTemplateFromFile(_environment.GetEmailTemplate("EmailVerification"), model)

@@ -9,5 +9,7 @@ namespace Shopper.Mvc.ViewModels
         public string Email { get; set; }
 
         public string ResetLink { get; set; }
+
+        public string FullName { get; set; }
     }
 }

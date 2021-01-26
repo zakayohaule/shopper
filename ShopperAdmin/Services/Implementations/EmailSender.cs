@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -25,11 +26,18 @@ namespace ShopperAdmin.Services.Implementations
 
         public async Task SendEmailAsync(CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                var queuedMail = _emailQueueService.DequeueMail(cancellationToken);
+            _logger.Information("************ Dequeuing email for sending *****************");
+            var queuedMail = _emailQueueService.DequeueMail(cancellationToken);
 
+            try
+            {
+                _logger.Information("************ Sending email after dequeuing *****************");
                 await queuedMail;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message);
+                Console.WriteLine(e);
             }
         }
     }

@@ -4,15 +4,11 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using IdentityModel.Client;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ShopperAdmin.Database;
 using ShopperAdmin.Mvc.Entities;
-using ShopperAdmin.Mvc.Entities.Identity;
-using ShopperAdmin.Mvc.Entities.Tenants;
 using ShopperAdmin.Mvc.ViewModels;
 using ShopperAdmin.Services.Interfaces;
 
@@ -23,10 +19,10 @@ namespace ShopperAdmin.Services.Implementations
         private readonly ApplicationDbContext _dbContext;
         private readonly TenantDbContext _tenantDbContext;
         private readonly IConfiguration _configuration;
-        private readonly ILogger _logger;
+        private readonly ILogger<TenantService> _logger;
 
         public TenantService(ApplicationDbContext dbContext, TenantDbContext tenantDbContext,
-            IConfiguration configuration, ILogger logger)
+            IConfiguration configuration, ILogger<TenantService> logger)
         {
             _dbContext = dbContext;
             _tenantDbContext = tenantDbContext;
@@ -83,7 +79,7 @@ namespace ShopperAdmin.Services.Implementations
                         "application/json"));
                 if (!response.IsSuccessStatusCode)
                 {
-                    _logger.LogWarning($"********* Request was unsuccessfull ************");
+                    _logger.LogWarning($"********* Request was unsuccessful ************");
                     _dbContext.Tenants.Remove(tenant);
                     _tenantDbContext.Tenants.Remove(tenantTenant);
                     await _dbContext.SaveChangesAsync();

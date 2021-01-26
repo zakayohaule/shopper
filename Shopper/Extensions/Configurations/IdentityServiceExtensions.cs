@@ -60,7 +60,7 @@
                 {
                     var httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
                     var tenant = httpContextAccessor.HttpContext.GetCurrentTenant();
-                    var tenantUrl = configuration.GetValue<string>("TokenAuthority").Replace("{sub}", tenant.Domain);
+                    var tenantUrl = configuration.GetValue<string>("TokenAuthority").Replace("{sub}.", "");
 
                     options.Authority = tenantUrl;
                     options.SaveToken = true;
@@ -72,7 +72,8 @@
                     {
                         // IssuerSigningKey = new SymmetricSecurityKey()
                         ClockSkew = TimeSpan.Zero,
-                        ValidateIssuer = true,
+                        ValidIssuer = tenantUrl,
+                        ValidateIssuer = false,
                         ValidateLifetime = true,
                         RequireExpirationTime = true,
                         ValidateAudience = true,

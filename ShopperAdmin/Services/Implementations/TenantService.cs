@@ -152,6 +152,7 @@ namespace ShopperAdmin.Services.Implementations
                 throw new ArgumentNullException("Could not obtain access token from the tenant app");
             }
 
+            _logger.LogWarning($"*************** {tokenResponse.AccessToken} ***************");
             httpClient.SetBearerToken(tokenResponse.AccessToken);
             return httpClient;
         }

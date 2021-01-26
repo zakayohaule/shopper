@@ -124,7 +124,7 @@ namespace ShopperAdmin.Services.Implementations
             var disco = await httpClient.GetDiscoveryDocumentAsync(tenantUrl);
             if (disco.IsError)
             {
-                _logger.LogWarning($"*************** {disco.Error} ***************");
+                _logger.LogWarning($"*************** {disco.ErrorType} : {disco.Error} ***************");
                 _logger.LogWarning($"*************** There was an error when fetching the discovery document ***************");
                 throw new ArgumentNullException("Could not fetch the discovery document from the tenant app");
             }
@@ -140,6 +140,7 @@ namespace ShopperAdmin.Services.Implementations
 
             if (tokenResponse.IsError)
             {
+                _logger.LogWarning($"*************** {tokenResponse.Error}: {tokenResponse.ErrorDescription} ***************");
                 _logger.LogWarning($"*************** There was an error when fetching the access token ***************");
                 throw new ArgumentNullException("Could not obtain access token from the tenant app");
             }

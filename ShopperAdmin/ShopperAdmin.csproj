@@ -39,14 +39,4 @@
         <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
         <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="site\web.config" />
-      <_ContentIncludedByDefault Remove="site\appsettings - Example.json" />
-      <_ContentIncludedByDefault Remove="site\appsettings.json" />
-      <_ContentIncludedByDefault Remove="site\bundleconfig.json" />
-      <_ContentIncludedByDefault Remove="site\ShopperAdmin.deps.json" />
-      <_ContentIncludedByDefault Remove="site\ShopperAdmin.runtimeconfig.json" />
-      <_ContentIncludedByDefault Remove="site\wwwroot\dist\js\.eslintrc.json" />
-    </ItemGroup>
 </Project>

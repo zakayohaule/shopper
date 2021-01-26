@@ -7,6 +7,7 @@ using IdentityModel.Client;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ShopperAdmin.Database;
 using ShopperAdmin.Mvc.Entities;
@@ -22,13 +23,15 @@ namespace ShopperAdmin.Services.Implementations
         private readonly ApplicationDbContext _dbContext;
         private readonly TenantDbContext _tenantDbContext;
         private readonly IConfiguration _configuration;
+        private readonly ILogger _logger;
 
         public TenantService(ApplicationDbContext dbContext, TenantDbContext tenantDbContext,
-            IConfiguration configuration)
+            IConfiguration configuration, ILogger logger)
         {
             _dbContext = dbContext;
             _tenantDbContext = tenantDbContext;
             _configuration = configuration;
+            _logger = logger;
         }
 
         public async Task<Tenant> FindByIdAsync(Guid id)
@@ -45,6 +48,7 @@ namespace ShopperAdmin.Services.Implementations
         {
             try
             {
+                _logger.LogWarning("********* Starting Tenant Db Transaction ************");
                 await _dbContext.Database.BeginTransactionAsync();
                 var tenant = new Tenant
                 {
@@ -55,11 +59,15 @@ namespace ShopperAdmin.Services.Implementations
                     ConnectionString = formModel.ConnectionString,
                 };
 
+                _logger.LogWarning("********* Adding Tenant In Admin App ************");
                 tenant = _dbContext.Tenants.Add(tenant).Entity;
                 await _dbContext.SaveChangesAsync();
 
                 _tenantDbContext.ConnectionString = tenant.ConnectionString;
+                _logger.LogWarning("********* Starting Tenant Db Transaction ************");
                 await _tenantDbContext.Database.BeginTransactionAsync();
+
+                _logger.LogWarning("********* Adding Tenant In Tenant App ************");
                 var tenantTenant = _tenantDbContext.Tenants.Add(tenant).Entity;
                 await _tenantDbContext.SaveChangesAsync();
                 _tenantDbContext.Database.CommitTransaction();
@@ -67,12 +75,15 @@ namespace ShopperAdmin.Services.Implementations
 
                 var client = await GetTenantAppClientAsync();
                 var tenantUrl = _configuration.GetValue<string>("TenantUrl").Replace("{sub}", tenantTenant.Domain);
+                _logger.LogWarning($"********* This is the tenant URL = {tenantUrl} ************");
+                _logger.LogWarning($"********* Sending post request to the create tenant user url in tenant app ************");
                 var response = await client.PostAsync($"{tenantUrl}/create-tenant-user",
                     new StringContent(JsonConvert.SerializeObject(formModel),
                         Encoding.Default,
                         "application/json"));
                 if (!response.IsSuccessStatusCode)
                 {
+                    _logger.LogWarning($"********* Request was unsuccessfull ************");
                     _dbContext.Tenants.Remove(tenant);
                     _tenantDbContext.Tenants.Remove(tenantTenant);
                     await _dbContext.SaveChangesAsync();
@@ -81,6 +92,7 @@ namespace ShopperAdmin.Services.Implementations
                     throw new Exception(content);
                 }
 
+                _logger.LogWarning($"********* Request was successful, Return tenant ************");
                 return tenant;
             }
             catch (Exception e)

@@ -33,7 +33,7 @@ namespace Shopper.Services.Implementations
 
                 try
                 {
-                    _logger.Information("************ Sending email for sending after dequeuing *****************");
+                    _logger.Information("************ Sending email after dequeuing *****************");
                     await queuedMail;
                 }
                 catch (Exception e)

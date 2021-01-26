@@ -58,6 +58,11 @@
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddJwtBearer("jwt", options =>
                 {
+                    var tenantUrl = configuration.GetValue<string>("TokenAuthority").Replace("{sub}.", "");
+
+                    options.Authority = tenantUrl;
+                    options.SaveToken = true;
+
                     // todo Remove this in production
                     options.RequireHttpsMetadata = false;
                     options.Audience = "add_user";
@@ -65,6 +70,7 @@
                     {
                         // IssuerSigningKey = new SymmetricSecurityKey()
                         ClockSkew = TimeSpan.Zero,
+                        ValidIssuer = tenantUrl,
                         ValidateIssuer = false,
                         ValidateLifetime = true,
                         RequireExpirationTime = true,

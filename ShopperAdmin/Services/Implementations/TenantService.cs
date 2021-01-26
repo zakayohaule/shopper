@@ -121,7 +121,14 @@ namespace ShopperAdmin.Services.Implementations
             var httpClient = new HttpClient();
             var tenantUrl = _configuration.GetValue<string>("TenantUrl").Replace("{sub}", tenant.Domain);
             _logger.LogWarning($"*************** This is the tenant base url: {tenantUrl} ***************");
-            var disco = await httpClient.GetDiscoveryDocumentAsync(tenantUrl);
+            var disco = await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+            {
+                Address = tenantUrl,
+                Policy =
+                {
+                    RequireHttps = false
+                }
+            });
             if (disco.IsError)
             {
                 _logger.LogError($"*************** {disco.ErrorType} : {disco.Error} ***************");

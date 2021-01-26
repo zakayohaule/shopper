@@ -129,7 +129,8 @@ namespace Shopper.Mvc.Controllers
             var user = await _userManager.FindByEmailAsync(viewModel.Email);
             if (user == null)
             {
-                return NotFound();
+                AddPageAlerts(PageAlertType.Error, "Invalid email!");
+                return View();
             }
 
             var callBackUrl = await CreatePasswordResetCallbackUrlAsync(user);

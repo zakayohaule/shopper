@@ -69,7 +69,7 @@ namespace ShopperAdmin.Services.Implementations
                 _tenantDbContext.Database.CommitTransaction();
                 _dbContext.Database.CommitTransaction();
 
-                var client = await GetTenantAppClientAsync();
+                var client = await GetTenantAppClientAsync(tenantTenant);
                 var tenantUrl = _configuration.GetValue<string>("TenantUrl").Replace("{sub}", tenantTenant.Domain);
                 _logger.LogWarning($"********* This is the tenant URL = {tenantUrl} ************");
                 _logger.LogWarning($"********* Sending post request to the create tenant user url in tenant app ************");
@@ -116,16 +116,16 @@ namespace ShopperAdmin.Services.Implementations
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<HttpClient> GetTenantAppClientAsync()
+        public async Task<HttpClient> GetTenantAppClientAsync(Tenant tenant)
         {
             var httpClient = new HttpClient();
-            var tenantUrl = _configuration.GetValue<string>("TenantUrl").Replace("{sub}.", "");
+            var tenantUrl = _configuration.GetValue<string>("TenantUrl").Replace("{sub}", tenant.Domain);
             _logger.LogWarning($"*************** This is the tenant base url: {tenantUrl} ***************");
             var disco = await httpClient.GetDiscoveryDocumentAsync(tenantUrl);
             if (disco.IsError)
             {
                 _logger.LogWarning($"*************** There was an error when fetching the discovery document ***************");
-                return null;
+                throw new ArgumentNullException("Could not fetch the discovery document from the tenant app");
             }
 
             // request token
@@ -140,7 +140,7 @@ namespace ShopperAdmin.Services.Implementations
             if (tokenResponse.IsError)
             {
                 _logger.LogWarning($"*************** There was an error when fetching the access token ***************");
-                return null;
+                throw new ArgumentNullException("Could not obtain access token from the tenant app");
             }
 
             httpClient.SetBearerToken(tokenResponse.AccessToken);
@@ -149,9 +149,7 @@ namespace ShopperAdmin.Services.Implementations
 
         public async Task<bool> CreateTenantUserAndRole(Tenant tenant, CreateTenantModel formModel)
         {
-            var client = await GetTenantAppClientAsync();
-
-
+            var client = await GetTenantAppClientAsync(tenant);
             return true;
         }
     }

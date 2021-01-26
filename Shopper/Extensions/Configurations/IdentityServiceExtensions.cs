@@ -18,7 +18,6 @@
         public static void ConfigureIdentity(this IServiceCollection services, IWebHostEnvironment environment,
             IConfiguration configuration)
         {
-
             services.AddIdentity<AppUser, Role>(options =>
                 {
                     if (environment.IsDevelopment())

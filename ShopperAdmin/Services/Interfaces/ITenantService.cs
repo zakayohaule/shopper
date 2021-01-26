@@ -13,7 +13,7 @@ namespace ShopperAdmin.Services.Interfaces
         IQueryable<Tenant> GetTenantAsQueryable();
         Task<Tenant> CreateAsync(CreateTenantModel formModel);
         Task DeleteAsync(Tenant tenant);
-        Task<HttpClient> GetTenantAppClientAsync();
+        Task<HttpClient> GetTenantAppClientAsync(Tenant tenant);
         Task<bool> CreateTenantUserAndRole(Tenant tenant, CreateTenantModel formModel);
     }
 }

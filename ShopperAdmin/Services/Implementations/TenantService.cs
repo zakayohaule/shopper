@@ -120,9 +120,11 @@ namespace ShopperAdmin.Services.Implementations
         {
             var httpClient = new HttpClient();
             var tenantUrl = _configuration.GetValue<string>("TenantUrl").Replace("{sub}.", "");
+            _logger.LogWarning($"*************** This is the tenant base url: {tenantUrl} ***************");
             var disco = await httpClient.GetDiscoveryDocumentAsync(tenantUrl);
             if (disco.IsError)
             {
+                _logger.LogWarning($"*************** There was an error when fetching the discovery document ***************");
                 return null;
             }
 
@@ -137,6 +139,7 @@ namespace ShopperAdmin.Services.Implementations
 
             if (tokenResponse.IsError)
             {
+                _logger.LogWarning($"*************** There was an error when fetching the access token ***************");
                 return null;
             }
 

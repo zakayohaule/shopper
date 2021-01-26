@@ -41,10 +41,15 @@ namespace Shopper.Mvc.Controllers
         [HttpPost("create-tenant-user")]
         public async Task<IActionResult> CreateTenantUserAndRole([FromBody] CreateTenantUserModel formUserModel)
         {
+            _logger.Warning($"*************** Creating Tenant User ***************");
             var tenant = HttpContext.GetCurrentTenant();
             try
             {
+                _logger.Warning($"*************** The current tenant is: {tenant.Name} ***************");
+
                 var password = _userService.GenerateStrongPassword();
+
+                _logger.Warning($"*************** Generating strong password: {password} ***************");
 
                 var user = new AppUser
                 {
@@ -63,12 +68,9 @@ namespace Shopper.Mvc.Controllers
                         ModelState.AddModelError(error.Code, error.Description);
                     }
 
-                    TempData["ModelError"] = JsonConvert.SerializeObject(ModelState, Formatting.Indented,
-                        new JsonSerializerSettings
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        });
-                    return BadRequest(result.Errors.ToList().Select(error => error.Description));
+                    var errors = result.Errors.ToList().Select(error => error.Description);
+                    _logger.Error($"*************** Could not create user: {errors} ***************");
+                    return BadRequest(errors);
                 }
 
                 var newUser = await _userManager.FindByEmailAsync(user.Email);
@@ -87,6 +89,8 @@ namespace Shopper.Mvc.Controllers
                 };
 
                 TempData["EmailVerified"] = "sent";
+
+                _logger.Warning($"*************** Sending email verification mail ***************");
                 _userService.SendEmailVerificationEmail(emailVerificationModel);
 
                 var role = new Role();
@@ -95,7 +99,9 @@ namespace Shopper.Mvc.Controllers
                 result = await _roleManager.CreateAsync(role);
                 if (!result.Succeeded)
                 {
-                    return BadRequest(result.Errors.ToList().Select(r => r.Description));
+                    var errors = result.Errors.ToList().Select(r => r.Description);
+                    _logger.Error($"*************** Could not create role: {errors} ***************");
+                    return BadRequest(errors);
                 }
 
                 role = await _roleManager.FindByNameAsync(role.Name);
@@ -105,6 +111,7 @@ namespace Shopper.Mvc.Controllers
                     Role = role,
                     User = newUser
                 };
+                _logger.Warning($"***************  Assigning User The New Role ***************");
                 await _dbContext.UserRoles.AddAsync(userRole);
                 await _dbContext.SaveChangesAsync();
                 return Ok();

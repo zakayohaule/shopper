@@ -58,7 +58,7 @@
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddJwtBearer("jwt", options =>
                 {
-                    var tenantUrl = configuration.GetValue<string>("TokenAuthority").Replace("{sub}.", "");
+                    var tenantUrl = configuration.GetValue<string>("TokenAuthority");
 
                     options.Authority = tenantUrl;
                     options.SaveToken = true;

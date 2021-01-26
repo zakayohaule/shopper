@@ -8,6 +8,7 @@
  using Microsoft.Extensions.Hosting;
  using Microsoft.IdentityModel.Tokens;
  using Shopper.Database;
+ using Shopper.Extensions.Helpers;
  using Shopper.Mvc.Entities.Identity;
  using Shopper.Other;
 
@@ -18,6 +19,8 @@
         public static void ConfigureIdentity(this IServiceCollection services, IWebHostEnvironment environment,
             IConfiguration configuration)
         {
+            var serviceProvider = services.BuildServiceProvider();
+
             services.AddIdentity<AppUser, Role>(options =>
                 {
                     if (environment.IsDevelopment())
@@ -55,8 +58,11 @@
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddJwtBearer("jwt", options =>
                 {
-                    var authority = configuration.GetValue<string>("TokenAuthority");
-                    options.Authority = authority;
+                    var httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+                    var tenant = httpContextAccessor.HttpContext.GetCurrentTenant();
+                    var tenantUrl = configuration.GetValue<string>("TokenAuthority").Replace("{sub}", tenant.Domain);
+
+                    options.Authority = tenantUrl;
                     options.SaveToken = true;
 
                     // todo Remove this in production

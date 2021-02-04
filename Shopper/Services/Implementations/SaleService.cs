@@ -93,6 +93,7 @@ namespace Shopper.Services.Implementations
                 var sale = new Sale
                 {
                     Price = price,
+                    ProductId = sku.ProductId,
                     Quantity = formViewModel.Quantity,
                     SkuId = formViewModel.SkuId,
                     IsConfirmed = false,

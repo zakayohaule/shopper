@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
 using Shopper.Extensions.Configurations;
@@ -47,6 +48,7 @@ namespace Shopper
             services.RegisterServices();
 
             IdentityModelEventSource.ShowPII = true;
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,12 +69,14 @@ namespace Shopper
 
             // app.UseHttpsRedirection();
             app.UseStaticFiles();
+            // app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
             app.UseTenantResolver();
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSerilogRequestLogging();
+            // app.UseLocalization();
             app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
         }
     }

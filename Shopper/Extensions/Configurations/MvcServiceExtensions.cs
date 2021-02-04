@@ -1,5 +1,10 @@
 ﻿using System;
-using FluentValidation.AspNetCore;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Localization.Routing;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -12,15 +17,36 @@ namespace Shopper.Extensions.Configurations
         {
             // @todo create middleware to log request time
 
-            services.AddControllersWithViews()
+            // services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
+
+
+            services.AddControllersWithViews()/*
+                .AddViewLocalization(options => options.ResourcesPath = "Resources")
+                .AddDataAnnotationsLocalization()*/
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                })
-                .AddFluentValidation(configuration =>
-                {
-                    configuration.RegisterValidatorsFromAssemblyContaining<Startup>();
                 });
+
+
+            /*services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("sw")
+                };
+                options.RequestCultureProviders = new List<IRequestCultureProvider>
+                {
+                    new QueryStringRequestCultureProvider(),
+                    new CookieRequestCultureProvider()
+                };
+                options.FallBackToParentCultures = false;
+                options.FallBackToParentUICultures = false;
+                options.DefaultRequestCulture = new RequestCulture("en", "en");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });*/
 
             services.AddRouting(options => { options.LowercaseUrls = true; });
 
@@ -33,7 +59,6 @@ namespace Shopper.Extensions.Configurations
             });
 
             services.AddMemoryCache(options => options.ExpirationScanFrequency = TimeSpan.FromMinutes(30));
-
         }
     }
 }

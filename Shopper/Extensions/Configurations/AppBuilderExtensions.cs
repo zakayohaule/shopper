@@ -2,6 +2,7 @@
 using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -79,6 +80,17 @@ namespace Shopper.Extensions.Configurations
             this IApplicationBuilder builder)
         {
             return builder.UseMiddleware<TenantMiddleware>();
+        }
+
+        public static IApplicationBuilder UseLocalization(
+            this IApplicationBuilder builder)
+        {
+            var supportedCultures = new[] {"en", "sw"};
+            var localizationOptions = new RequestLocalizationOptions()
+                .SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+            return builder.UseRequestLocalization(localizationOptions);
         }
     }
 }

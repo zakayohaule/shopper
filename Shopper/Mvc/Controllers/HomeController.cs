@@ -3,7 +3,10 @@
  using System.Linq;
  using System.Threading.Tasks;
  using Microsoft.AspNetCore.Authorization;
+ using Microsoft.AspNetCore.Http;
+ using Microsoft.AspNetCore.Localization;
  using Microsoft.AspNetCore.Mvc;
+ using Microsoft.Extensions.Localization;
  using Serilog;
  using Shopper.Mvc.ViewModels;
  using Shopper.Services.Interfaces;
@@ -15,11 +18,13 @@
     {
         private readonly ILogger _logger;
         private readonly IReportService _reportService;
+        private readonly IStringLocalizer<HomeController> _localizer;
 
-        public HomeController(ILogger logger, IReportService reportService)
+        public HomeController(ILogger logger, IReportService reportService, IStringLocalizer<HomeController> localizer)
         {
             _logger = logger;
             _reportService = reportService;
+            _localizer = localizer;
         }
 
         public async Task<IActionResult> Index()
@@ -50,6 +55,18 @@
         public IActionResult Error()
         {
             return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
+        }
+
+        [HttpGet("change-culture")]
+        public IActionResult ChangeCulture(string culture)
+        {
+            Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName,
+                    CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)), new CookieOptions
+                    {
+                        Expires = DateTimeOffset.Now.AddDays(14)
+                    });
+
+            return Redirect(Request.Headers["Referer"]);
         }
     }
 }

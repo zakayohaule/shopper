@@ -1,5 +1,7 @@
 ﻿@using Shopper.Mvc.Enums
+@using Microsoft.AspNetCore.Mvc.Localization
 @model DashboardModel
+@inject IViewLocalizer Localizer;
 @{
     var model = Model;
     var weekChartModel = new ChartModel
@@ -71,7 +73,7 @@
                             </span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">Low Stock</span>
+                                <span class="info-box-text">@Localizer["LowStock"]</span>
                                 <h5 class="info-box-number">
                                     @Model.StockExpiryModel.LowStockCount
                                 </h5>

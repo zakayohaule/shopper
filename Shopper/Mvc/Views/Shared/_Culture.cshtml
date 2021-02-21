@@ -1,0 +1,46 @@
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
+@using Microsoft.AspNetCore.Builder
+@inject IViewLocalizer Localizer;
+@inject IOptions<RequestLocalizationOptions> LocOptions;
+
+
+@{
+    var culture = Context.Features.Get<IRequestCultureFeature>();
+    var cultureList = LocOptions.Value.SupportedCultures.Select(c => new SelectListItem
+    {
+        Text = Localizer.GetString(c.Name),
+        Value = c.Name
+    }).ToList();
+}
+<li class="nav-item dropdown">
+    <!-- Menu toggle button -->
+    <a class="nav-link" data-toggle="dropdown" href="#">
+        <th:auth>
+            <span class="mr-2">@Localizer.GetString(@culture.RequestCulture.UICulture.Name)</span>
+        </th:auth>
+        <i class="fas fa-language"></i>
+    </a>
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        @foreach (var selectListItem in cultureList)
+        {
+            <th:a asp-controller="Home" asp-action="ChangeCulture" asp-route-culture="@selectListItem.Value" class="dropdown-item">
+                @selectListItem.Text
+            </th:a>
+        }
+        @* <th:a asp-controller="Home" asp-action="ChangeCulture" class="dropdown-item"> *@
+        @*     <i class="fas fa-key mr-2"></i> Change password *@
+        @* </th:a> *@
+        @* <div class="dropdown-divider"></div> *@
+        @* <th:a asp-controller="Account" asp-action="Logout" class="dropdown-item"> *@
+        @*     <i class="fas fa-sign-out-alt mr-2"></i> Logout *@
+        @* </th:a> *@
+    </div>
+</li>
+@*<div>
+    <th:form asp-controller="Home" asp-action="ChangeCulture" method="post">
+        <th:select id="culture" name="culture" asp-for="@culture.RequestCulture.UICulture.Name" asp-items="@cultureList" onchange="this.form.submit();">
+        </th:select>
+    </th:form>
+</div>*@

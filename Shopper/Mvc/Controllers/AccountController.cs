@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Shopper.Attributes;
 using Shopper.Extensions.Helpers;
 using Shopper.Mvc.Entities.Identity;
@@ -21,14 +22,16 @@ namespace Shopper.Mvc.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IUserClaimService _userClaimService;
         private readonly IUserService _userService;
+        private readonly IStringLocalizer<AccountController> _localizer;
 
         public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
-            IUserClaimService userClaimService, IUserService userService)
+            IUserClaimService userClaimService, IUserService userService, IStringLocalizer<AccountController> localizer)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _userClaimService = userClaimService;
             _userService = userService;
+            _localizer = localizer;
         }
 
         [HttpGet("login", Name = "login")]
@@ -38,7 +41,8 @@ namespace Shopper.Mvc.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-
+            var login = _localizer["Login"];
+            // return Ok(login);
             return View(new LoginModel());
         }
 

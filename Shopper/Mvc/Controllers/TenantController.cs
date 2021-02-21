@@ -53,6 +53,7 @@ namespace Shopper.Mvc.Controllers
 
                 var user = new AppUser
                 {
+                    TenantId = tenant.Id,
                     Email = formUserModel.AdminEmail,
                     FullName = formUserModel.AdminFullName,
                     EmailConfirmed = false,

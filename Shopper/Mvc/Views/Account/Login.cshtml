@@ -1,11 +1,13 @@
-﻿@model LoginModel;
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model LoginModel;
+@inject IViewLocalizer Localizer;
 @{
     Layout = "_Layout ";
     var emailVerified = TempData["EmailVerification"] as string;
 }
 <th:partial name="_EmailVerificationMessage" model="emailVerified"></th:partial>
 
-<p class="login-box-msg">LOGIN</p>
+<p class="login-box-msg">@Localizer["Login"]</p>
 
 <th:form asp-controller="Account" asp-action="Login" asp-route-returnTo="@ViewContext.HttpContext.Request.Query["return_to"]" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>

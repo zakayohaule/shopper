@@ -1,4 +1,6 @@
+@using Shopper.Services.Interfaces
 @model DashboardSummary
+@inject ITranslator Translator
 @{
     var summary = Model;
 }
@@ -9,12 +11,12 @@
             <div class="inner">
                 <h3>@summary.ItemsSold</h3>
 
-                <p>Sold Items</p>
+                <p>@Translator["Sold Items"]</p>
             </div>
             <div class="icon">
                 <i class="ion ion-bag"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="#" class="small-box-footer">@Translator["More info"] <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <!-- ./col -->
@@ -24,12 +26,12 @@
             <div class="inner">
                 <h3>@summary.Sales.ToString("N0")/-</h3>
 
-                <p>Total Sales</p>
+                <p>@Translator["Total Sales"]</p>
             </div>
             <div class="icon">
                 <i class="ion ion-stats-bars"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="#" class="small-box-footer">@Translator["More info"] <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <!-- ./col -->
@@ -39,12 +41,12 @@
             <div class="inner">
                 <h3>@summary.Profit.ToString("N0")/-</h3>
 
-                <p>Net Profit (including expenses)</p>
+                <p>@Translator["Net Profit (including expenses)"]</p>
             </div>
             <div class="icon">
                 <i class="ion ion-person-add"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="#" class="small-box-footer">@Translator["More info"] <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <!-- ./col -->
@@ -54,12 +56,12 @@
             <div class="inner">
                 <h3>@summary.Expenditure.ToString("N0")/-</h3>
 
-                <p>Total Expenses</p>
+                <p>@Translator["Total Expenses"]</p>
             </div>
             <div class="icon">
                 <i class="ion ion-pie-graph"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="#" class="small-box-footer">@Translator["More info"] <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <!-- ./col -->

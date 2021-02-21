@@ -1,7 +1,9 @@
 @using Newtonsoft.Json
 @using Shopper.Extensions.Helpers
 @using Shopper.Mvc.Enums
+@using Shopper.Services.Interfaces
 @model ChartModel
+@inject ITranslator Translator
 @{
     var chartId = Model.ChartId;
     var allSales = Model.Sales;
@@ -32,7 +34,7 @@
             previousData.Add(yesterdaySale);
             dates.Add(i.ToString());
         }
-        dates[^1] += "HRS";
+        dates[^1] += Translator["hrs"];
     }
     if (Model.SummaryType == SummaryType.Week || Model.SummaryType == SummaryType.Month)
     {
@@ -58,7 +60,7 @@
             previousData.Add((int) lastWeekSale);
             dates.Add($"{date.DateWithSuffix()} {date.ToString("MMM")}");
         }
-        dates[0] = "today";
+        dates[0] = Translator["Today"].ToLower();
         dates.Reverse();
         currentData.Reverse();
         previousData.Reverse();

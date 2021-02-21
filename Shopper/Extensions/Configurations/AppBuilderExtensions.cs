@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Localization;
+using Newtonsoft.Json;
 using Serilog;
 using Shopper.Database;
 using Shopper.Database.Seeders;
@@ -91,6 +97,53 @@ namespace Shopper.Extensions.Configurations
                 .AddSupportedCultures(supportedCultures)
                 .AddSupportedUICultures(supportedCultures);
             return builder.UseRequestLocalization(localizationOptions);
+        }
+
+        public static IHost CacheTranslations(this IHost host)
+        {
+            using (var scope = host.Services.CreateScope())
+            {
+                var memoryCache = scope.GetService<IMemoryCache>();
+                var env = scope.GetService<IWebHostEnvironment>();
+                Console.WriteLine("**************** Start Caching Translations ********************8");
+                memoryCache.Set("sw", ReadLanguageFile(env, "sw"), new MemoryCacheEntryOptions().SetAbsoluteExpiration(DateTimeOffset.Now.AddYears(5)));
+                Console.WriteLine("**************** End Caching Translations ********************8");
+                var swTrans = memoryCache.Get<Dictionary<string, string>>("sw");
+
+                Console.WriteLine($"{swTrans}");
+            }
+
+            return host;
+        }
+
+        public static Dictionary<string, string> ReadLanguageFile(IWebHostEnvironment environment, string lang = null)
+        {
+            var contentRoot = environment.ContentRootPath;
+            var filePath = $"{contentRoot}/Translations/{lang}.json";
+            var trans  = JsonConvert
+                .DeserializeObject<Dictionary<string, string>>(File.ReadAllText(filePath));
+            // Console.WriteLine($"***************** Caching sw Translations *****************");
+            // foreach (var keyValuePair in trans)
+            // {
+            //     Console.WriteLine($"***************** {keyValuePair.Key} => {keyValuePair.Value} *****************");
+            // }
+
+            return trans;
+        }
+
+        public static IEnumerable<LocalizedString> GetLocalizedStringsFromLanguageFiles(IWebHostEnvironment environment, string lang = null)
+        {
+            var contentRoot = environment.ContentRootPath;
+            var filePath = $"{contentRoot}/Translations/{lang}.json";
+            var trans  = JsonConvert
+                .DeserializeObject<Dictionary<string, string>>(File.ReadAllText(filePath));
+            Console.WriteLine($"***************** Caching sw Translations *****************");
+            foreach (var keyValuePair in trans)
+            {
+                Console.WriteLine($"***************** {keyValuePair.Key} => {keyValuePair.Value} *****************");
+            }
+
+            return trans.Select(s => new LocalizedString(s.Key, s.Value));
         }
     }
 }

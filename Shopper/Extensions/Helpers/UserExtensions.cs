@@ -1,17 +1,17 @@
-﻿﻿using System;
- using System.IO;
- using System.Linq;
- using System.Security.Claims;
- using IdentityServer4.Extensions;
- using Microsoft.AspNetCore.Http;
- using Microsoft.AspNetCore.Mvc.Rendering;
- using Microsoft.Extensions.DependencyInjection;
- using Microsoft.Extensions.Hosting;
- using Microsoft.IdentityModel.JsonWebTokens;
- using Shopper.Mvc.Entities;
- using Shopper.Services.Interfaces;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Security.Claims;
+using IdentityServer4.Extensions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Shopper.Mvc.Entities;
+using Shopper.Services.Interfaces;
 
- namespace Shopper.Extensions.Helpers
+namespace Shopper.Extensions.Helpers
 {
     public static class UserExtensions
     {
@@ -27,6 +27,7 @@
                     .FirstOrDefault(claim => claim.Type == "sub")
                     ?.Value;
             }
+
             if (userIdClaim == null) return -1;
             long.TryParse(userIdClaim, out var userId);
             return userId;
@@ -92,7 +93,7 @@
             }
 
             Console.WriteLine("Getting the access token from the authorization header");
-            return bearerHeader.Remove(0,7);
+            return bearerHeader.Remove(0, 7);
         }
 
         public static string GetClientIdFromToken(this HttpContext httpContext)
@@ -135,9 +136,9 @@
             }
             catch (FileNotFoundException fileNotFoundException)
             {
-                throw new FileNotFoundException($"Email template '{templateName}' could not be found in the Mvc/Views/Emails directory: {fileNotFoundException.Message}");
+                throw new FileNotFoundException(
+                    $"Email template '{templateName}' could not be found in the Mvc/Views/Emails directory: {fileNotFoundException.Message}");
             }
-
         }
 
         public static string GetSubdomain(this HttpContext httpContext)
@@ -163,6 +164,17 @@
         public static Tenant GetCurrentTenant(this ViewContext viewContext)
         {
             return viewContext.HttpContext.GetCurrentTenant();
+        }
+
+        public static string GetCurrentLanguage(this ViewContext viewContext)
+        {
+            var lang = viewContext.HttpContext.Request.Cookies["lang"] ?? "en";
+            if (lang.Equals("sw"))
+            {
+                return "Kiswahili";
+            }
+
+            return "English";
         }
 
         public static Tenant GetCurrentTenant(this HttpContext httpContext)

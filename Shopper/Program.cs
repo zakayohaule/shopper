@@ -21,7 +21,9 @@ namespace Shopper
             try
             {
                 Log.Logger.Information("************* Starting Application *************");
-                host.SeedDatabase().Run();
+                host.SeedDatabase()
+                    .CacheTranslations()
+                    .Run();
             }
             catch (Exception e)
             {

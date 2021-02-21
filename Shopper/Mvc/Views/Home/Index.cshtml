@@ -1,7 +1,7 @@
-﻿@using Shopper.Mvc.Enums
-@using Microsoft.AspNetCore.Mvc.Localization
+﻿@using Shopper.Services.Interfaces
+@using Shopper.Mvc.Enums
 @model DashboardModel
-@inject IViewLocalizer Localizer;
+@inject ITranslator Translator;
 @{
     var model = Model;
     var weekChartModel = new ChartModel
@@ -53,7 +53,7 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">
-                    Low Stock And Expiry Summary
+                    @Translator["Low Stock And Expiry Summary"]
                 </h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -73,7 +73,7 @@
                             </span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">@Localizer["LowStock"]</span>
+                                <span class="info-box-text">@Translator["Low Stock"]</span>
                                 <h5 class="info-box-number">
                                     @Model.StockExpiryModel.LowStockCount
                                 </h5>
@@ -90,7 +90,7 @@
                             </span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">Out of Stock</span>
+                                <span class="info-box-text">@Translator["Out of Stock"]</span>
                                 <h5 class="info-box-number">
                                     @Model.StockExpiryModel.OutOfStockCount
                                 </h5>
@@ -111,9 +111,9 @@
                             </span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">About To Expire</span>
+                                <span class="info-box-text">@Translator["About To Expire"]</span>
                                 <small class="info-box-number">
-                                    Comming Soon
+                                    @Translator["Coming Soon"]
                                 </small>
                             </div>
                             <!-- /.info-box-content -->
@@ -128,7 +128,7 @@
                             </span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">Expired</span>
+                                <span class="info-box-text">@Translator["Expired"]</span>
                                 <h5 class="info-box-number">
                                     @Model.StockExpiryModel.ExpiredCount
                                 </h5>
@@ -151,7 +151,7 @@
         <div class="card-header">
             <h3 class="card-title">
                 <i class="fas fa-chart-pie mr-1"></i>
-                Summary
+                @Translator["Summary"]
             </h3>
 
             <div class="card-tools">
@@ -166,16 +166,16 @@
             <div class="card-tools">
                 <ul class="nav nav-pills ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#today-summary" data-toggle="tab">Today</a>
+                        <a class="nav-link active" href="#today-summary" data-toggle="tab">@Translator["Today"]</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#week-summary" data-toggle="tab">This Week</a>
+                        <a class="nav-link" href="#week-summary" data-toggle="tab">@Translator["This Week"]</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#month-summary" data-toggle="tab">This Month</a>
+                        <a class="nav-link" href="#month-summary" data-toggle="tab">@Translator["This Month"]</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#annual-summary" data-toggle="tab">This Year</a>
+                        <a class="nav-link" href="#annual-summary" data-toggle="tab">@Translator["This Year"]</a>
                     </li>
                 </ul>
             </div>

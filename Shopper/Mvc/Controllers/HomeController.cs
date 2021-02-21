@@ -6,7 +6,6 @@
  using Microsoft.AspNetCore.Http;
  using Microsoft.AspNetCore.Localization;
  using Microsoft.AspNetCore.Mvc;
- using Microsoft.Extensions.Localization;
  using Serilog;
  using Shopper.Mvc.ViewModels;
  using Shopper.Services.Interfaces;
@@ -18,13 +17,13 @@
     {
         private readonly ILogger _logger;
         private readonly IReportService _reportService;
-        private readonly IStringLocalizer<HomeController> _localizer;
+        private readonly ITranslator _translator;
 
-        public HomeController(ILogger logger, IReportService reportService, IStringLocalizer<HomeController> localizer)
+        public HomeController(ILogger logger, IReportService reportService, ITranslator translator)
         {
             _logger = logger;
             _reportService = reportService;
-            _localizer = localizer;
+            _translator = translator;
         }
 
         public async Task<IActionResult> Index()
@@ -45,7 +44,7 @@
             // return Ok(products);
             // return Ok(products.OrderByDescending(group => group.Sum(sale => sale.Quantity)).Select(group => group.Sum(sale => sale.Quantity)));
             // return Ok(sales.GroupBy(s => s.ProductId).ToList().Select((s, key) => s));
-            AddPageHeader($"Dashboard Summary ({DateTime.Now.AddMonths(-11).ToString("MMM yyyy")} - {DateTime.Now.ToString("MMM yyyy")})");
+            AddPageHeader($"{_translator["Dashboard Summary"]} ({DateTime.Now.AddMonths(-11).ToString("MMM yyyy")} - {DateTime.Now.ToString("MMM yyyy")})");
 
             // return Ok(dashboardModal.Sales.ToArray());
             return View(dashboardModal);
@@ -60,8 +59,8 @@
         [HttpGet("change-culture")]
         public IActionResult ChangeCulture(string culture)
         {
-            Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName,
-                    CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)), new CookieOptions
+            Response.Cookies.Append("lang",
+                    culture, new CookieOptions
                     {
                         Expires = DateTimeOffset.Now.AddDays(14)
                     });

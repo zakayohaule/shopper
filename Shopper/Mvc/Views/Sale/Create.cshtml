@@ -1,5 +1,6 @@
-﻿@model SaleViewModal;
-
+﻿@using Shopper.Services.Interfaces
+@model SaleViewModal;
+@inject ITranslator Translator
 @{
     var today = DateTime.Now;
     var productSelectItems = Model.ProductSelectListItems;
@@ -16,7 +17,7 @@
 <div class="card with-border">
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
-            <h3 class="card-title">Manage Sale</h3>
+            <h3 class="card-title"> @Translator["Manage Sale"] </h3>
             <span class="pull pull-right" style="font-weight: bolder">@today.ToLongDateString()</span>
         </div>
     </div>
@@ -36,12 +37,12 @@
                 <tr id="row_1">
                     <td>
                         <th:select class="form-control select2bs4" name="products" id="products" asp-items="productSelectItems">
-                            <option value="">-- Select Product --</option>
+                            <option value="">-- @Translator["Select Product"] --</option>
                         </th:select>
                     </td>
                     <td>
                         <button type="button" class="btn btn-primary" onclick="openSalesModal()">
-                            <i class="fa fa-cart-arrow-down"></i> Add To Cart
+                            <i class="fa fa-cart-arrow-down"></i> @Translator["Add To Cart"]
                         </button>
                     </td>
                 </tr>
@@ -54,10 +55,10 @@
                 <table class="table table-striped thead-dark">
                     <thead>
                     <tr>
-                        <th style="width: 35%">Name</th>
-                        <th style="width: 15%; text-align: center">Quantity</th>
-                        <th style="width: 15%; text-align: center">Unit Price</th>
-                        <th style="width: 25%; text-align: center">Amount</th>
+                        <th style="width: 35%">@Translator["Name"]</th>
+                        <th style="width: 15%; text-align: center"> @Translator["Quantity"] </th>
+                        <th style="width: 15%; text-align: center"> @Translator["Unit Price"] </th>
+                        <th style="width: 25%; text-align: center"> @Translator["Amount"] </th>
                         <th style="width: 10%; text-align: center"></th>
                     </tr>
                     </thead>
@@ -104,11 +105,11 @@
                 <div class="table-responsive">
                     <table class="table table-borderless">
                         <tr>
-                            <th style="font-weight: normal">Discount:</th>
+                            <th style="font-weight: normal"> @Translator["Discount"] :</th>
                             <td style="font-weight: bolder">@Model.TotalDiscount.ToString("N0")/=</td>
                         </tr>
                         <tr>
-                            <th style="font-weight: normal">Total:</th>
+                            <th style="font-weight: normal"> @Translator["Total"] :</th>
                             <td style="font-weight: bolder" id="total-amount">@Model.TotalAmount.ToString("N0")/=</td>
                         </tr>
                     </table>
@@ -122,8 +123,8 @@
             <th:form asp-controller="Sale" asp-action="SubmitPayment" asp-route-id="@Model.InvoiceId" class="form">
                 <div class="row">
                     <div class="col-sm-12 text-right">
-                        <button onclick="return confirm('Are you sure you want to cancel this payment?')" type="submit" class="btn btn-danger" name="action" value="cancel">Cancel</button>
-                        <button onclick="return confirm('Are you sure you want to submit this payment?')" type="submit" class="btn btn-success" name="action" value="submit">Sumbit Payment</button>
+                        <button onclick="return confirm('Are you sure you want to cancel this payment?')" type="submit" class="btn btn-danger" name="action" value="cancel"> @Translator["Cancel"] </button>
+                        <button onclick="return confirm('Are you sure you want to submit this payment?')" type="submit" class="btn btn-success" name="action" value="submit"> @Translator["Sumbit Payment"] </button>
                     </div>
                 </div>
             </th:form>

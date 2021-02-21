@@ -20,9 +20,9 @@ namespace Shopper.Extensions.Configurations
             // services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
 
 
-            services.AddControllersWithViews()/*
-                .AddViewLocalization(options => options.ResourcesPath = "Resources")
-                .AddDataAnnotationsLocalization()*/
+            services.AddControllersWithViews()
+                // .AddViewLocalization(options => options.ResourcesPath = "Resources")
+                // .AddDataAnnotationsLocalization()
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;

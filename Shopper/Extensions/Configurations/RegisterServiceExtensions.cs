@@ -34,6 +34,7 @@ namespace Shopper.Extensions.Configurations
             services.AddScoped<TenantResolver>();
             services.AddScoped<IBusinessService, BusinessService>();
             services.AddScoped<IReportService, ReportService>();
+            services.AddSingleton<ITranslator, Translator>();
         }
 
         public static void ReplaceDefaultServices(this IServiceCollection services)

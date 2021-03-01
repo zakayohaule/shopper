@@ -2,6 +2,7 @@
  using System.Diagnostics;
  using System.Linq;
  using System.Threading.Tasks;
+ using IdentityServer4.Extensions;
  using Microsoft.AspNetCore.Authorization;
  using Microsoft.AspNetCore.Http;
  using Microsoft.AspNetCore.Localization;
@@ -65,7 +66,12 @@
                         Expires = DateTimeOffset.Now.AddDays(14)
                     });
 
-            return Redirect(Request.Headers["Referer"]);
+            var redirectUrl = Request.Headers["Referer"];
+            if (redirectUrl.IsNullOrEmpty())
+            {
+                return RedirectToAction("Index");
+            }
+            return Redirect(redirectUrl);
         }
     }
 }

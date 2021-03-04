@@ -80,7 +80,7 @@ namespace Shopper.Services.Implementations
                 .Sum(s => (s.Quantity * s.Price));
             var profit = sales
                 .Where(s => s.SaleInvoice.Date.Date.IsToday())
-                .Sum(s => (s.Quantity * s.Profit));
+                .Sum(s => s.Quantity * s.Profit);
             var expenditure = expenditures
                 .Where(e => e.Date.Date.IsToday())
                 .Sum(e => e.Amount);

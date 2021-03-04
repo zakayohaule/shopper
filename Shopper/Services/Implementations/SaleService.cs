@@ -90,6 +90,7 @@ namespace Shopper.Services.Implementations
             {
                 await _dbContext.Database.BeginTransactionAsync();
                 var price = uint.Parse(formViewModel.Price.Replace(",", ""));
+                var profit = (int)price - (int)sku.BuyingPrice;
                 var sale = new Sale
                 {
                     Price = price,
@@ -100,7 +101,7 @@ namespace Shopper.Services.Implementations
                     Discount = sku.SellingPrice > price
                         ? (uint) ((sku.SellingPrice - price) * formViewModel.Quantity)
                         : 0,
-                    Profit = (price - sku.BuyingPrice) * formViewModel.Quantity
+                    Profit = profit * formViewModel.Quantity
                 };
                 SaleInvoice invoice = null;
                 if (await _dbContext.SaleInvoices.AnyAsync(si => !si.IsCompleted))

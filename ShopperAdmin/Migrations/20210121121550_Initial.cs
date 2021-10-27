@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -295,11 +295,11 @@ namespace ShopperAdmin.Migrations
                 table: "tenant_subscriptions",
                 column: "tenant_id");
 
-            migrationBuilder.CreateIndex(
+            /*migrationBuilder.CreateIndex(
                 name: "IX_tenants_code",
                 table: "tenants",
                 column: "code",
-                unique: true);
+                unique: true);*/
 
             migrationBuilder.CreateIndex(
                 name: "IX_tenants_domain",

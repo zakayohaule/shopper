@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -18,7 +18,7 @@ namespace Shopper.Migrations.AdminAppDb
                     updated_at = table.Column<DateTime>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
                     name = table.Column<string>(nullable: true),
-                    code = table.Column<string>(nullable: true),
+                    code = table.Column<string>(nullable: true, maxLength: 10),
                     email = table.Column<string>(nullable: true),
                     address = table.Column<string>(nullable: true),
                     phone_number_1 = table.Column<string>(nullable: true),

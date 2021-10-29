@@ -13,6 +13,7 @@ namespace Shopper.Database.Seeders
     {
         public static void Seed(IServiceProvider serviceProvider, ApplicationDbContext dbContext, ILogger logger)
         {
+            logger.Information("************ ROLE SEEDER ***************");
             var configuration = serviceProvider.GetRequiredService<IConfiguration>();
             var defaultSubdomain = configuration.GetValue<string>("DefaultSubdomain");
             var keaTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == $"kea");

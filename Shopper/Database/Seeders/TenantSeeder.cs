@@ -56,6 +56,7 @@ namespace Shopper.Database.Seeders
 
         public static void Seed(ApplicationDbContext dbContext,AdminAppDbContext adminAppDbContext, ILogger logger)
         {
+            logger.Information("************ TENANT SEEDER ***************");
             var tenants = adminAppDbContext.Tenants.ToList();
             tenants.ForEach(tenant =>
             {

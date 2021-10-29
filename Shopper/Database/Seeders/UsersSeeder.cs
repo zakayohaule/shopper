@@ -15,6 +15,7 @@ namespace Shopper.Database.Seeders
         public static void Seed(IServiceProvider serviceProvider, ApplicationDbContext dbContext, IPasswordHasher<AppUser> passwordHasher,
             UserManager<AppUser> userManager, ILogger logger)
         {
+            logger.Information("************ USER SEEDER ***************");
             var configuration = serviceProvider.GetRequiredService<IConfiguration>();
             var keaTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == $"kea");
             var localhostTenant = dbContext.Tenants.FirstOrDefault(t => t.Domain == $"zaks");

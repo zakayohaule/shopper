@@ -97,6 +97,7 @@ namespace Shopper.Database
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.StackTrace);
                 throw new Exception($"Could not connect to the specified tenant's database: {e.Message}");
             }
         }

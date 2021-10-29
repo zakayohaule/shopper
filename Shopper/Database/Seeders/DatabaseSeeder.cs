@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -17,12 +17,11 @@ namespace Shopper.Database.Seeders
             IServiceProvider serviceProvider)
         {
             // var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-            // ModulesSeeder.Seed(dbContext, logger);
+            ModulesSeeder.Seed(dbContext, logger);
             // PermissionsSeeder.Seed(dbContext, logger);
-            // TenantSeeder.Seed(adminAppDbContext,configuration, logger);
-            // TenantSeeder.Seed(dbContext,adminAppDbContext, logger);
-            // RoleSeeder.Seed(serviceProvider, dbContext, logger);
-            // UsersSeeder.Seed(serviceProvider, dbContext,passwordHasher, userManager, logger);
+            TenantSeeder.Seed(dbContext,adminAppDbContext, logger);
+            RoleSeeder.Seed(serviceProvider, dbContext, logger);
+            UsersSeeder.Seed(serviceProvider, dbContext,passwordHasher, userManager, logger);
 
             FixWhenAfterMigrating(dbContext, logger);
         }

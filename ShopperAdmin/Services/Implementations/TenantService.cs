@@ -52,7 +52,7 @@ namespace ShopperAdmin.Services.Implementations
                     Code = formModel.Code,
                     Domain = formModel.Domain,
                     Name = formModel.Name,
-                    ConnectionString = formModel.ConnectionString,
+                    ConnectionString = $"Server=localhost; Port=3306; Database={formModel.ConnectionString}; Uid=root; Allow User Variables=true",
                 };
 
                 _logger.LogWarning("********* Adding Tenant In Admin App ************");
@@ -66,6 +66,7 @@ namespace ShopperAdmin.Services.Implementations
                 _logger.LogWarning("********* Adding Tenant In Tenant App ************");
                 var tenantTenant = _tenantDbContext.Tenants.Add(tenant).Entity;
                 await _tenantDbContext.SaveChangesAsync();
+
                 _tenantDbContext.Database.CommitTransaction();
                 _dbContext.Database.CommitTransaction();
 
@@ -119,7 +120,7 @@ namespace ShopperAdmin.Services.Implementations
         public async Task<HttpClient> GetTenantAppClientAsync(Tenant tenant)
         {
             var httpClient = new HttpClient();
-            var tenantUrl = _configuration.GetValue<string>("TenantUrl").Replace("{sub}", tenant.Domain);
+            var tenantUrl = _configuration.GetValue<string>("TenantUrl").Replace("{sub}.", "");
             _logger.LogWarning($"*************** This is the tenant base url: {tenantUrl} ***************");
             var disco = await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
             {

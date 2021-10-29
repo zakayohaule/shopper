@@ -21,7 +21,7 @@ namespace Shopper.Extensions.Configurations
                     EnableSsl = true,
                     DeliveryMethod = SmtpDeliveryMethod.Network,
                     UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential("zackhaule@gmail.com", "@BoH0810"),
+                    Credentials = new NetworkCredential("zackhaule@gmail.com", "htadyzvbzablqwkz"),
                 };
                 builder.AddSmtpSender(smtpClient);
                 // builder.AddMailtrapSender("51f7f8fd58db29", "3ef16ce8493234", "smtp.mailtrap.io", 2525);

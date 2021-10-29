@@ -40,7 +40,7 @@ namespace Shopper.Extensions.Configurations
                 {
                     logger.Information("********** Seeding database *************");
                     DatabaseSeeder.Seed(dbContext, adminAppDbContext, passwordHasher, userManager, logger,
-                        serviceProvider);
+                        serviceProvider, configuration);
                 }
 
                 ModulesSeeder.Seed(dbContext, logger);

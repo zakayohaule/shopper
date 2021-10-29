@@ -10,6 +10,7 @@ namespace ShopperAdmin.Database.Seeders
     {
         public static void Seed(ApplicationDbContext dbContext, UserManager<AppUser> userManager, ILogger logger)
         {
+            logger.Information("*********** SEEDING USERS ****************");
             // var eGa = dbContext.Institutions.First(institution => institution.VoteCode == "TR97");
             var user = new AppUser
             {

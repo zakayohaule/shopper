@@ -9,6 +9,7 @@ namespace ShopperAdmin.Database.Seeders
     {
         public static void Seed(ApplicationDbContext dbContext, ILogger logger)
         {
+            logger.Information("*********** SEEDING ROLES ****************");
             var roles = new List<Role>
             {
                 new Role {Name = "Administrator", NormalizedName = "ADMINISTRATOR", DisplayName = "Administrator"}

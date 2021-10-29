@@ -19,7 +19,6 @@
         public static void ConfigureIdentity(this IServiceCollection services, IWebHostEnvironment environment,
             IConfiguration configuration)
         {
-            var serviceProvider = services.BuildServiceProvider();
 
             services.AddIdentity<AppUser, Role>(options =>
                 {

@@ -1,3 +1,4 @@
+/*
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +12,7 @@ namespace Shopper.Database.Seeders
     {
         public static void Seed(AdminAppDbContext adminDbContext,IConfiguration configuration, ILogger logger)
         {
-            var defaultConnectString = configuration.GetConnectionString("AdminApp");
+            var defaultConnectString = configuration.GetConnectionString("Default").Replace("{dbName}", "shopper");
             var tenants = new List<Tenant>
             {
                 new Tenant
@@ -71,3 +72,4 @@ namespace Shopper.Database.Seeders
         }
     }
 }
+*/

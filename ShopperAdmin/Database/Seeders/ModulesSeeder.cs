@@ -9,6 +9,7 @@ namespace ShopperAdmin.Database.Seeders
     {
         public static void Seed(ApplicationDbContext dbContext, ILogger logger)
         {
+            logger.Information("*********** SEEDING MODULES ****************");
             var modules = new List<Module>
             {
                 new Module {Name = "User Management"},

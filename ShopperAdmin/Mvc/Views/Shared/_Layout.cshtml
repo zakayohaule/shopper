@@ -1,4 +1,4 @@
-@using ShopperAdmin.Extensions.Helpers
+﻿@using ShopperAdmin.Extensions.Helpers
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -11,20 +11,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <title>Shopper | @ViewData["Title"]?.ToString() </title>
     <!-- Tell the browser to be responsive to screen width -->
     <th:environment names="Development">
-        <th:link rel="stylesheet" href="~/css/google-fonts.css" asp-append-version="true"></th:link>
-        <th:link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.css" asp-append-version="true"></th:link>
-        <th:link rel="stylesheet" href="~/lib/ionicons/css/ionicons.css" asp-append-version="true"></th:link>
-        <th:link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" asp-append-version="true"></th:link>
-        <th:link rel="stylesheet" href="~/css/adminlte.min.css" asp-append-version="true"></th:link>
+        <th:link rel="stylesheet" href="~/css/google-fonts.css"></th:link>
+        <th:link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.css"></th:link>
+        <th:link rel="stylesheet" href="~/lib/ionicons/css/ionicons.css"></th:link>
+        <th:link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css"></th:link>
+        <th:link rel="stylesheet" href="~/css/adminlte.css"></th:link>
         @* <th:link rel="stylesheet" href="~/css/site.css"></th:link> *@
     </th:environment>
     <th:environment names="Staging,Production">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-        <th:link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css" asp-append-version="true"></th:link>
-        <th:link rel="stylesheet" href="~/lib/ionicons/css/ionicons.min.css" asp-append-version="true"></th:link>
-        <th:link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" asp-append-version="true"></th:link>
-        <th:link rel="stylesheet" href="~/css/adminlte.min.css" asp-append-version="true"></th:link>
-        @* <th:link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"></th:link> *@
+        <th:link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css"></th:link>
+        <th:link rel="stylesheet" href="~/lib/ionicons/css/ionicons.min.css"></th:link>
+        <th:link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css"></th:link>
+        <th:link rel="stylesheet" href="~/dist/css/adminlte.css"></th:link>
+        @* <th:link rel="stylesheet" href="~/css/site.min.css"></th:link> *@
     </th:environment>
 
     @await RenderSectionAsync("css", false)
@@ -101,16 +101,16 @@ user experience. Slimscroll is required when using the
 fixed layout. -->
 
 <th:environment names="Development">
-    <th:script src="~/plugins/jquery/jquery.js" asp-append-version="true"></th:script>
-    <th:script src="~/plugins/bootstrap/js/bootstrap.bundle.js" asp-append-version="true"></th:script>
-    <th:script src="~/js/site.js" asp-append-version="true"></th:script>
-    <th:script src="~/dist/js/adminlte.js" asp-append-version="true"></th:script>
+    <th:script src="~/plugins/jquery/jquery.js"></th:script>
+    <th:script src="~/plugins/bootstrap/js/bootstrap.bundle.js"></th:script>
+    <th:script src="~/js/site.js"></th:script>
+    <th:script src="~/dist/js/adminlte.js"></th:script>
 </th:environment>
 <th:environment names="Staging,Production">
-    <th:script src="~/plugins/jquery/jquery.min.js" asp-append-version="true"></th:script>
-    <th:script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></th:script>
-    <th:script src="~/js/site.min.js" asp-append-version="true"></th:script>
-    <th:script src="~/dist/js/adminlte.min.js" asp-append-version="true"></th:script>
+    <th:script src="~/plugins/jquery/jquery.min.js"></th:script>
+    <th:script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></th:script>
+    <th:script src="~/js/site.min.js"></th:script>
+    <th:script src="~/dist/js/adminlte.min.js"></th:script>
 </th:environment>
 @await RenderSectionAsync("scripts", required: false)
 @*<script>

@@ -9,6 +9,7 @@ namespace ShopperAdmin.Database.Seeders
     {
         public static void Seed(ApplicationDbContext dbContext, ILogger logger)
         {
+            logger.Information("*********** SEEDING PERMISSIONS ****************");
             var newCount = 0;
             var userManagement = dbContext
                 .Modules

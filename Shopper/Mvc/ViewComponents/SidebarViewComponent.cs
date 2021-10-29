@@ -26,14 +26,17 @@ namespace Shopper.Mvc.ViewComponents
             var links = new List<SidebarMenu>();
 
             // sidebars.Add(ModuleHelper.AddHeader("  User Management"));
-            sidebars.Add(ModuleHelper.AddModuleLink(_translator["Dashboard"], Url.Action("Index", "Home"), "fa fa-home"));
+            sidebars.Add(ModuleHelper.AddModuleLink(_translator["Dashboard"],
+                Url.Action("Index", "Home"), "fa fa-home"));
             if (_userClaimService.HasPermission(userId, "sale_record"))
             {
-                sidebars.Add(ModuleHelper.AddModuleLink(_translator["Add Sale"], Url.Action("Create", "Sale"), "fas fa-shopping-cart"));
+                sidebars.Add(ModuleHelper.AddModuleLink(_translator["Add Sale"],
+                    Url.Action("Create", "Sale"), "fas fa-shopping-cart"));
             }
             if (_userClaimService.HasPermission(userId, "expenditure_add"))
             {
-                sidebars.Add(ModuleHelper.AddModuleLink(_translator["Expenditures"], Url.Action("Index", "Expenditure"), "fas fa-money-bill-wave"));
+                sidebars.Add(ModuleHelper.AddModuleLink(_translator["Expenditures"],
+                    Url.Action("Index", "Expenditure"), "fas fa-money-bill-wave"));
             }
 
             //User Management Module
@@ -44,12 +47,14 @@ namespace Shopper.Mvc.ViewComponents
 
                 if (_userClaimService.HasPermission(userId, "user_view"))
                 {
-                    links.Add(ModuleHelper.AddModuleLink(name: _translator["Users"], url: Url.Action("Index", "User"), "fa fa-users"));
+                    links.Add(ModuleHelper.AddModuleLink(name: _translator["Users"],
+                        url: Url.Action("Index", "User"), "fa fa-users"));
                 }
 
                 if (_userClaimService.HasPermission(userId, "role_view"))
                 {
-                    links.Add(ModuleHelper.AddModuleLink(name: _translator["Roles"], Url.Action("Index", "Role"), "fas fa-user-tag"));
+                    links.Add(ModuleHelper.AddModuleLink(name: _translator["Roles"],
+                        Url.Action("Index", "Role"), "fas fa-user-tag"));
                 }
 
                 userManagement.TreeChild = links;
@@ -58,14 +63,38 @@ namespace Shopper.Mvc.ViewComponents
 
 
             //Settings Settings Module
-            if (_userClaimService.HasAnyPermission(userId, "product_group_view,product_category_view,product_type_view,attribute_view,price_type_view"))
+            if (_userClaimService.HasAnyPermission(userId, "business_info_view, price_type_view," +
+                                                           " expenditure_type_view"))
             {
                 var settings = ModuleHelper.AddTree(_translator["Settings"], "fas fa-cog");
                 links = new List<SidebarMenu>();
                 if (_userClaimService.HasPermission(userId, "business_info_view"))
                 {
-                    links.Add(ModuleHelper.AddModuleLink(name:_translator["Business Info"], Url.Action("Show", "Business"), "fas fa-sitemap"));
+                    links.Add(ModuleHelper.AddModuleLink(name:_translator["Business Info"],
+                        Url.Action("Show", "Business"), "fas fa-sitemap"));
                 }
+                if (_userClaimService.HasPermission(userId, "price_type_view"))
+                {
+                    links.Add(ModuleHelper.AddModuleLink(_translator["Price Types"],
+                        Url.Action("Index", "PriceType")));
+                }
+                if (_userClaimService.HasPermission(userId, "expenditure_type_view"))
+                {
+                    links.Add(ModuleHelper.AddModuleLink(_translator["Expenditure Types"],
+                        Url.Action("Index", "ExpenditureType")));
+                }
+
+
+                settings.TreeChild = links;
+                sidebars.Add(settings);
+            }
+
+            // Product Management
+            if (_userClaimService.HasAnyPermission(userId, "product_group_view, product_category_view, product_type_view," +
+                                                           " product_view, stock_view, sale_view"))
+            {
+                var productManagement = ModuleHelper.AddTree(_translator["Product Management"]);
+                links = new List<SidebarMenu>();
                 if (_userClaimService.HasPermission(userId, "product_group_view"))
                 {
                     links.Add(ModuleHelper.AddModuleLink(name:_translator["Product Groups"], Url.Action("Index", "ProductGroup"), "fas fa-sitemap"));
@@ -82,25 +111,6 @@ namespace Shopper.Mvc.ViewComponents
                 {
                     links.Add(ModuleHelper.AddModuleLink(_translator["Product Attributes"], Url.Action("Index", "Attribute"), "fas fa-paint-brush"));
                 }
-                if (_userClaimService.HasPermission(userId, "price_type_view"))
-                {
-                    links.Add(ModuleHelper.AddModuleLink(_translator["Price Types"], Url.Action("Index", "PriceType")));
-                }
-                if (_userClaimService.HasPermission(userId, "expenditure_type_view"))
-                {
-                    links.Add(ModuleHelper.AddModuleLink(_translator["Expenditure Types"], Url.Action("Index", "ExpenditureType")));
-                }
-
-
-                settings.TreeChild = links;
-                sidebars.Add(settings);
-            }
-
-            // Product Management
-            if (_userClaimService.HasAnyPermission(userId, "product_view, stock_view, sale_view"))
-            {
-                var productManagement = ModuleHelper.AddTree(_translator["Product Management"]);
-                links = new List<SidebarMenu>();
                 if (_userClaimService.HasPermission(userId, "product_view"))
                 {
                     links.Add(ModuleHelper.AddModuleLink(_translator["Products"], Url.Action("Index", "Product"), "fas fa-tshirt"));

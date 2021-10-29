@@ -28,8 +28,13 @@ namespace ShopperAdmin.Extensions.Configurations
                     logger.Information("********** Seeding database *************");
                     DatabaseSeeder.Seed(dbContext,userManager, logger);
                 }
+
+                logger.Information("********* Updating application modules **********");
                 ModulesSeeder.Seed(dbContext, logger);
+                logger.Information("********* Updating application permissions **********");
                 PermissionsSeeder.Seed(dbContext, logger);
+
+                logger.Information("********* Updating application role claims **********");
                 RoleClaimsSeeder.Seed(dbContext, logger);
             }
 

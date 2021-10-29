@@ -94,8 +94,8 @@
                 .To(model.Email)
                 .Subject("Email Verification")
                 .UsingTemplateFromFile(_environment.GetEmailTemplate("EmailVerification"), model)
-                .SendAsync();
-            _emailQueueService.QueueMail(token => email);
+                .SendAsync().Result;
+            // _emailQueueService.QueueMail(token => email);
         }
 
         public void SendPasswordResetMail(ForgotPasswordModel forgotPassword)
@@ -104,8 +104,8 @@
                 .To(forgotPassword.Email)
                 .Subject("Reset Password Link")
                 .UsingTemplateFromFile(_environment.GetEmailTemplate("ForgotPasswordEmail"), forgotPassword)
-                .SendAsync();
-            _emailQueueService.QueueMail(token => email);
+                .SendAsync().Result;
+            // _emailQueueService.QueueMail(token => email);
         }
 
         public string GenerateStrongPassword()

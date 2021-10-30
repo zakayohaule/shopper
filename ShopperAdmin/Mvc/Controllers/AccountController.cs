@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using ShopperAdmin.Attributes;
 using ShopperAdmin.Extensions.Helpers;
 using ShopperAdmin.Mvc.Entities.Identity;
@@ -21,14 +22,16 @@ namespace ShopperAdmin.Mvc.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IUserClaimService _userClaimService;
         private readonly IUserService _userService;
+        private readonly IConfiguration configuration;
 
         public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
-            IUserClaimService userClaimService, IUserService userService)
+            IUserClaimService userClaimService, IUserService userService, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _userClaimService = userClaimService;
             _userService = userService;
+            this.configuration = configuration;
         }
 
         [HttpGet("login", Name = "login")]
@@ -265,13 +268,14 @@ namespace ShopperAdmin.Mvc.Controllers
             var callbackUrl = Url.Action("VerifyEmail", "Account", new {UserId = user.Id, Code = code},
                 protocol: HttpContext.Request.Scheme);
 
+            var appDomain = configuration["AppDomain"] ?? "localhost:5050";
             var emailVerificationModel = new EmailVerificationViewModel
             {
                 Email = user.Email,
                 Password = password,
                 UserId = user.Id,
                 UserName = user.FullName,
-                VerificationLink = callbackUrl
+                VerificationLink = callbackUrl.Replace("localhost:5050", appDomain)
             };
 
             TempData["EmailVerification"] = "sent";
@@ -304,7 +308,8 @@ namespace ShopperAdmin.Mvc.Controllers
             var callBackUrl = Url.Action("ResetForgottenPassword", "Account", new {user.Id, token},
                 HttpContext.Request.Scheme);
 
-            return callBackUrl;
+            var appDomain = configuration["AppDomain"] ?? "localhost:5050";
+            return callBackUrl.Replace("localhost:5050", appDomain);
         }
     }
 }

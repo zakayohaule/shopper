@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Shopper.Attributes;
 using Shopper.Extensions.Helpers;
@@ -26,9 +27,10 @@ namespace Shopper.Mvc.Controllers
         private readonly IUserService _userService;
         private readonly ITranslator _translator;
         private readonly IMemoryCache _memoryCache;
+        private readonly IConfiguration configuration;
 
         public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
-            IUserClaimService userClaimService, IUserService userService, ITranslator translator, IMemoryCache memoryCache)
+            IUserClaimService userClaimService, IUserService userService, ITranslator translator, IMemoryCache memoryCache, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -36,6 +38,7 @@ namespace Shopper.Mvc.Controllers
             _userService = userService;
             _translator = translator;
             _memoryCache = memoryCache;
+            this.configuration = configuration;
         }
 
         [HttpGet("login", Name = "login")]
@@ -279,13 +282,14 @@ namespace Shopper.Mvc.Controllers
             var callbackUrl = Url.Action("VerifyEmail", "Account", new {UserId = user.Id, Code = code},
                 protocol: HttpContext.Request.Scheme);
 
+            var appDomain = configuration["AppDomain"] ?? "localhost:5200";
             var emailVerificationModel = new EmailVerificationViewModel
             {
                 Email = user.Email,
                 Password = password,
                 UserId = user.Id,
                 UserName = user.FullName,
-                VerificationLink = callbackUrl
+                VerificationLink = callbackUrl.Replace("localhost:5200", appDomain)
             };
 
             TempData["EmailVerification"] = "sent";
@@ -318,7 +322,8 @@ namespace Shopper.Mvc.Controllers
             var callBackUrl = Url.Action("ResetForgottenPassword", "Account", new {user.Id, token},
                 HttpContext.Request.Scheme);
 
-            return callBackUrl;
+            var appDomain = configuration["AppDomain"] ?? "localhost:5200";
+            return callBackUrl.Replace("localhost:5200", appDomain);
         }
     }
 }

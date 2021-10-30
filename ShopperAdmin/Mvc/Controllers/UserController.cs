@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
     using Newtonsoft.Json;
     using Serilog;
     using ShopperAdmin.Attributes;
@@ -20,13 +21,15 @@
         private readonly IUserService _userService;
         private readonly UserManager<AppUser> _userManager;
         private readonly ILogger _logger;
+        private readonly IConfiguration configuration;
 
         public UserController(IUserService userService,
-            UserManager<AppUser> userManager, ILogger logger)
+            UserManager<AppUser> userManager, ILogger logger, IConfiguration configuration)
         {
             _userService = userService;
             _userManager = userManager;
             _logger = logger;
+            this.configuration = configuration;
             Title = "Users";
         }
 
@@ -88,13 +91,15 @@
             var callbackUrl = Url.Action("VerifyEmail", "Account", new {UserId = newUser.Id, Code = code},
                 protocol: HttpContext.Request.Scheme);
 
+            var appDomain = configuration["AppDomain"] ?? "localhost:5050";
+
             var emailVerificationModel = new EmailVerificationViewModel
             {
                 Email = newUser.Email,
                 Password = password,
                 UserId = newUser.Id,
                 UserName = newUser.FullName,
-                VerificationLink = callbackUrl
+                VerificationLink = callbackUrl.Replace("localhost:5050", appDomain)
             };
 
             TempData["EmailVerified"] = "sent";

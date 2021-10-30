@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Serilog;
 using Shopper.Database;
@@ -26,16 +27,17 @@ namespace Shopper.Mvc.Controllers
         private readonly RoleManager<Role> _roleManager;
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger _logger;
-
+        private readonly IConfiguration configuration;
 
         public TenantController(UserManager<AppUser> userManager, IUserService userService,
-            RoleManager<Role> roleManager, ApplicationDbContext dbContext, ILogger logger)
+            RoleManager<Role> roleManager, ApplicationDbContext dbContext, ILogger logger, IConfiguration configuration)
         {
             _userManager = userManager;
             _userService = userService;
             _roleManager = roleManager;
             _dbContext = dbContext;
             _logger = logger;
+            this.configuration = configuration;
         }
 
         [HttpPost("create-tenant-user")]
@@ -80,13 +82,14 @@ namespace Shopper.Mvc.Controllers
                 var callbackUrl = Url.Action("VerifyEmail", "Account", new {UserId = newUser.Id, Code = code},
                     protocol: HttpContext.Request.Scheme);
 
+                var appDomain = configuration["AppDomain"] ?? "localhost:5200";
                 var emailVerificationModel = new EmailVerificationViewModel
                 {
                     Email = newUser.Email,
                     Password = password,
                     UserId = newUser.Id,
                     UserName = newUser.FullName,
-                    VerificationLink = callbackUrl
+                    VerificationLink = callbackUrl.Replace("localhost:5200", appDomain)
                 };
 
                 TempData["EmailVerified"] = "sent";

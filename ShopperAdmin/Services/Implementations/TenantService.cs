@@ -52,7 +52,7 @@ namespace ShopperAdmin.Services.Implementations
                     Code = formModel.Code,
                     Domain = formModel.Domain,
                     Name = formModel.Name,
-                    ConnectionString = $"Server=localhost; Port=3306; Database={formModel.ConnectionString}; Uid=root; Allow User Variables=true",
+                    ConnectionString = formModel.ConnectionString,
                 };
 
                 _logger.LogWarning("********* Adding Tenant In Admin App ************");

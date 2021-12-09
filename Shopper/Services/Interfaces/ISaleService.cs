@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Shopper.Mvc.Entities;
 using Shopper.Mvc.ViewModels;
@@ -26,5 +27,7 @@ namespace Shopper.Services.Interfaces
         public Task<string> IsAvailableInStockAsync(int quantity, ulong skuId);
         public Task<SaleInvoice> CancelPaymentAsync(SaleInvoice invoice);
         IQueryable<Sale> GetSalesAsQueryable();
+        Task<List<SelectListItem>> GetProductAttributesAsync(uint productId);
+        Task<uint?> GetSkuPrice(ulong id);
     }
 }

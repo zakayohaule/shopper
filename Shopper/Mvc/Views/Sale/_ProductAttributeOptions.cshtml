@@ -1,0 +1,9 @@
+@using Shopper.Services.Interfaces
+@model List<SelectListItem>
+@inject ITranslator Translator
+
+<option value="">-- @Translator["Select Attribute"] --</option>
+@foreach (var item in Model)
+{
+    <option value="@item.Value">@item.Text</option>
+}

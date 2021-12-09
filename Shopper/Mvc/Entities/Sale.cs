@@ -1,5 +1,7 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Shopper.Mvc.Entities.BaseEntities;
+using Shopper.Mvc.Entities.Identity;
 
 namespace Shopper.Mvc.Entities
 {
@@ -18,6 +20,10 @@ namespace Shopper.Mvc.Entities
         [Column("price")]
         public uint Price { get; set; }
 
+        [Column("seller_id")]
+        [Required]
+        public long SellerId { get; set; }
+
         [Column("discount")] public uint Discount { get; set; } = 0;
 
         [Column("profit")] public long Profit { get; set; } = 0;
@@ -35,5 +41,8 @@ namespace Shopper.Mvc.Entities
 
         [ForeignKey(nameof(SaleInvoiceId))]
         public SaleInvoice SaleInvoice { get; set; }
+
+        [ForeignKey(nameof(SellerId))]
+        public AppUser Seller { get; set; }
     }
 }

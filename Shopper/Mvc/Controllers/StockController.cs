@@ -49,7 +49,6 @@ namespace Shopper.Mvc.Controllers
         [HttpPost(""), Permission("stock_add"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SkuViewFormModel skuViewModel)
         {
-            // return Ok(skuViewModel);
             if (!await _productService.ExistsByIdAsync(skuViewModel.ProductId))
             {
                 return NotFound("Product not found");

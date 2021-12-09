@@ -33,6 +33,12 @@ namespace Shopper.Mvc.ViewComponents
                 sidebars.Add(ModuleHelper.AddModuleLink(_translator["Add Sale"],
                     Url.Action("Create", "Sale"), "fas fa-shopping-cart"));
             }
+
+            if (_userClaimService.HasPermission(userId, "sale_my_sells"))
+            {
+                sidebars.Add(ModuleHelper.AddModuleLink(_translator["My Sales"],
+                    Url.Action("Create", "Sale"), "fas fa-shopping-cart"));
+            }
             if (_userClaimService.HasPermission(userId, "expenditure_add"))
             {
                 sidebars.Add(ModuleHelper.AddModuleLink(_translator["Expenditures"],

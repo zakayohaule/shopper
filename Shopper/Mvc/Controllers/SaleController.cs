@@ -88,6 +88,20 @@ namespace Shopper.Mvc.Controllers
             return PartialView("../Sale/_SalesFormModal", viewModel);
         }
 
+        [HttpGet("{id}/product-attributes"), Permission("sale_sell")]
+        public async Task<IActionResult> GetProductAttributes(uint id)
+        {
+            var attributes = await _saleService.GetProductAttributesAsync(id);
+            return PartialView("../Sale/_ProductAttributeOptions", attributes);
+        }
+
+        [HttpGet("{id}/price"), Permission("sale_sell")]
+        public async Task<uint?> GetSkuPrice(ulong id)
+        {
+            var price = await _saleService.GetSkuPrice(id);
+            return price;
+        }
+
         [HttpGet("{id}/open-sale-edit-modal"), Permission("sale_edit")]
         public async Task<IActionResult> OpenSaleEditModal(ulong id)
         {

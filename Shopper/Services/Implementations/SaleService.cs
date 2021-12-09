@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Shopper.Common;
@@ -98,16 +99,17 @@ namespace Shopper.Services.Implementations
                     Quantity = formViewModel.Quantity,
                     SkuId = formViewModel.SkuId,
                     IsConfirmed = false,
+                    SellerId = userId,
                     Discount = sku.SellingPrice > price
                         ? (uint) ((sku.SellingPrice - price) * formViewModel.Quantity)
                         : 0,
                     Profit = profit * formViewModel.Quantity
                 };
                 SaleInvoice invoice = null;
-                if (await _dbContext.SaleInvoices.AnyAsync(si => !si.IsCompleted))
+                if (await _dbContext.SaleInvoices.AnyAsync(si => !si.IsCompleted && si.UserId.Equals(userId)))
                 {
                     invoice = await _dbContext.SaleInvoices
-                        .FirstAsync(si => !si.IsCompleted);
+                        .FirstAsync(si => !si.IsCompleted && si.UserId.Equals(userId));
                 }
 
                 if (invoice == null)
@@ -291,6 +293,27 @@ namespace Shopper.Services.Implementations
         public IQueryable<Sale> GetSalesAsQueryable()
         {
             return _dbContext.Sales.AsQueryable();
+        }
+
+        public async Task<List<SelectListItem>> GetProductAttributesAsync(uint productId)
+        {
+            var skus = await GetProductSkus(productId)
+                .AsNoTracking()
+                .Include(sku => sku.SkuAttributes)
+                .ThenInclude(skuAtt => skuAtt.Option)
+                .ToListAsync();
+            return skus.Select(sku => new SelectListItem
+            {
+                Value = sku.Id.ToString(),
+                Text =
+                    $"[ {string.Join(" - ", sku.SkuAttributes.Select(skuAtt => skuAtt.Option.Name))} ] [ Qty: {sku.RemainingQuantity} ]"
+            }).ToList();
+        }
+
+        public async Task<uint?> GetSkuPrice(ulong id)
+        {
+            var sku = await _dbContext.Skus.FindAsync(id);
+            return sku?.SellingPrice;
         }
 
         public async Task<string> IsAvailableInStockAsync(int quantity, ulong skuId)
